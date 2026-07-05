@@ -1,12 +1,28 @@
+"use client";
+
 import Link from "next/link";
 import { ArrowLeft, ImagePlus, UserPlus } from "lucide-react";
+import { useActionState } from "react";
 
 import { Button, Card, SectionHeader } from "@/components/ui";
+import { createTripAction } from "@/features/trips/actions/trip-actions";
+import type { CreateTripActionState } from "@/features/trips/types/persisted-trip";
 
 const fieldClassName =
   "mt-2 h-11 w-full rounded-xl border border-border bg-background px-3.5 text-sm text-foreground shadow-xs outline-none transition-colors placeholder:text-muted-foreground focus:border-primary/40 focus:ring-2 focus:ring-primary/15";
 
-export function NewTripScreen() {
+const initialState: CreateTripActionState = { status: "idle" };
+
+type NewTripScreenProps = {
+  isSignedIn: boolean;
+};
+
+export function NewTripScreen({ isSignedIn }: NewTripScreenProps) {
+  const [state, formAction, isPending] = useActionState(
+    createTripAction,
+    initialState,
+  );
+
   return (
     <div className="mx-auto max-w-3xl">
       <Link
@@ -23,15 +39,16 @@ export function NewTripScreen() {
       />
 
       <Card padding="lg">
-        <form className="space-y-8" aria-label="New trip form">
+        <form action={formAction} className="space-y-8" aria-label="New trip form">
           <div className="grid gap-6 sm:grid-cols-2">
             <label className="text-sm font-medium text-foreground sm:col-span-2">
               Trip name
               <input
                 className={fieldClassName}
-                name="tripName"
+                name="title"
                 placeholder="e.g. Japan 2027"
                 type="text"
+                required
               />
             </label>
 
@@ -39,7 +56,7 @@ export function NewTripScreen() {
               Country
               <input
                 className={fieldClassName}
-                name="country"
+                name="destination"
                 placeholder="Where are you going?"
                 type="text"
               />
@@ -66,6 +83,15 @@ export function NewTripScreen() {
               <input className={fieldClassName} name="endDate" type="date" />
             </label>
           </div>
+
+          <label className="block text-sm font-medium text-foreground">
+            Description
+            <textarea
+              className="mt-2 min-h-28 w-full resize-none rounded-xl border border-border bg-background px-3.5 py-3 text-sm text-foreground shadow-xs outline-none transition-colors placeholder:text-muted-foreground focus:border-primary/40 focus:ring-2 focus:ring-primary/15"
+              name="description"
+              placeholder="What kind of journey are you planning?"
+            />
+          </label>
 
           <div>
             <p className="text-sm font-medium text-foreground">Cover image</p>
@@ -98,9 +124,26 @@ export function NewTripScreen() {
           </div>
 
           <div className="border-t border-border-subtle pt-6">
-            <p className="mb-4 text-sm text-muted">
-              Creating trips will be available after database setup.
-            </p>
+            {isSignedIn ? (
+              <p className="mb-4 text-sm text-muted">
+                Your trip and owner membership will be saved to your account.
+              </p>
+            ) : (
+              <div className="mb-4 rounded-xl bg-primary-subtle p-4 text-sm text-foreground">
+                <p>Sign in to create and save this trip.</p>
+                <div className="mt-2 flex gap-3 text-xs font-medium text-primary">
+                  <Link href="/login">Login</Link>
+                  <Link href="/register">Register</Link>
+                </div>
+              </div>
+            )}
+
+            {state.message ? (
+              <p role="alert" className="mb-4 rounded-xl bg-error-subtle px-3.5 py-3 text-sm text-error">
+                {state.message}
+              </p>
+            ) : null}
+
             <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
               <Link
                 href="/trips"
@@ -108,8 +151,8 @@ export function NewTripScreen() {
               >
                 Cancel
               </Link>
-              <Button type="button" size="md" disabled>
-                Create trip — preview only
+              <Button type="submit" size="md" disabled={!isSignedIn || isPending}>
+                {isPending ? "Creating trip…" : "Create trip"}
               </Button>
             </div>
           </div>

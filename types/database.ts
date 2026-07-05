@@ -1,8 +1,104 @@
-// TODO: After applying 001_initial_schema.sql, generate Supabase types with the
-// CLI or dashboard workflow and replace this temporary placeholder.
+// TODO: Replace these manually maintained table types with generated Supabase
+// types once the schema stabilizes and the generation workflow is configured.
 export type Database = {
   public: {
-    Tables: Record<string, never>;
+    Tables: {
+      profiles: {
+        Row: {
+          id: string;
+          email: string | null;
+          full_name: string | null;
+          avatar_url: string | null;
+          created_at: string | null;
+          updated_at: string | null;
+        };
+        Insert: {
+          id: string;
+          email?: string | null;
+          full_name?: string | null;
+          avatar_url?: string | null;
+          created_at?: string | null;
+          updated_at?: string | null;
+        };
+        Update: Partial<Database["public"]["Tables"]["profiles"]["Insert"]>;
+        Relationships: [];
+      };
+      trips: {
+        Row: {
+          id: string;
+          owner_id: string;
+          title: string;
+          destination: string | null;
+          start_date: string | null;
+          end_date: string | null;
+          cover_image_url: string | null;
+          status: "planning" | "upcoming" | "archived" | null;
+          description: string | null;
+          currency: string | null;
+          created_at: string | null;
+          updated_at: string | null;
+        };
+        Insert: {
+          id?: string;
+          owner_id: string;
+          title: string;
+          destination?: string | null;
+          start_date?: string | null;
+          end_date?: string | null;
+          cover_image_url?: string | null;
+          status?: "planning" | "upcoming" | "archived" | null;
+          description?: string | null;
+          currency?: string | null;
+          created_at?: string | null;
+          updated_at?: string | null;
+        };
+        Update: Partial<Database["public"]["Tables"]["trips"]["Insert"]>;
+        Relationships: [
+          {
+            foreignKeyName: "trips_owner_id_fkey";
+            columns: ["owner_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      trip_members: {
+        Row: {
+          id: string;
+          trip_id: string;
+          user_id: string;
+          role: "owner" | "editor" | "viewer";
+          status: "active" | "invited" | "pending";
+          created_at: string | null;
+        };
+        Insert: {
+          id?: string;
+          trip_id: string;
+          user_id: string;
+          role: "owner" | "editor" | "viewer";
+          status: "active" | "invited" | "pending";
+          created_at?: string | null;
+        };
+        Update: Partial<Database["public"]["Tables"]["trip_members"]["Insert"]>;
+        Relationships: [
+          {
+            foreignKeyName: "trip_members_trip_id_fkey";
+            columns: ["trip_id"];
+            isOneToOne: false;
+            referencedRelation: "trips";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "trip_members_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+    };
     Views: Record<string, never>;
     Functions: Record<string, never>;
     Enums: Record<string, never>;

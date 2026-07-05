@@ -15,7 +15,7 @@ type TripCardProps = {
   trip: Trip;
 };
 
-function formatDateRange(startDate: string, endDate: string): string {
+function formatDateRange(startDate: string | null, endDate: string | null): string {
   const formatter = new Intl.DateTimeFormat("en-US", {
     day: "numeric",
     month: "short",
@@ -23,7 +23,19 @@ function formatDateRange(startDate: string, endDate: string): string {
     timeZone: "UTC",
   });
 
-  return `${formatter.format(new Date(startDate))} – ${formatter.format(new Date(endDate))}`;
+  if (startDate && endDate) {
+    return `${formatter.format(new Date(startDate))} – ${formatter.format(new Date(endDate))}`;
+  }
+
+  if (startDate) {
+    return `From ${formatter.format(new Date(startDate))}`;
+  }
+
+  if (endDate) {
+    return `Until ${formatter.format(new Date(endDate))}`;
+  }
+
+  return "No dates yet";
 }
 
 function formatCurrency(amount: number, currency: string): string {
@@ -66,27 +78,40 @@ export function TripCard({ trip }: TripCardProps) {
             <div className="flex flex-wrap gap-x-4 gap-y-2">
               <span className="inline-flex items-center gap-2">
                 <Users className="size-4 text-muted-foreground" />
-                {trip.participants} travelers
+                {trip.participants === null
+                  ? "Travelers not connected"
+                  : `${trip.participants} travelers`}
               </span>
               <span className="inline-flex items-center gap-2">
                 <MapPin className="size-4 text-muted-foreground" />
-                {trip.placesCount} places
+                {trip.placesCount === null
+                  ? "Places not connected"
+                  : `${trip.placesCount} places`}
               </span>
             </div>
           </div>
 
-          <div className="space-y-2">
-            <div className="flex items-center justify-between text-xs">
+          {trip.progress === null ? (
+            <div className="flex items-center justify-between rounded-xl bg-surface px-3 py-2 text-xs">
               <span className="font-medium text-foreground">Trip preparation</span>
-              <span className="text-muted">{trip.progress}%</span>
+              <span className="text-muted">Planning</span>
             </div>
-            <Progress value={trip.progress} />
-          </div>
+          ) : (
+            <div className="space-y-2">
+              <div className="flex items-center justify-between text-xs">
+                <span className="font-medium text-foreground">Trip preparation</span>
+                <span className="text-muted">{trip.progress}%</span>
+              </div>
+              <Progress value={trip.progress} />
+            </div>
+          )}
 
           <div className="border-t border-border-subtle pt-4">
             <p className="text-xs text-muted">Cost per person</p>
             <p className="mt-0.5 text-lg font-semibold tracking-tight text-foreground">
-              {formatCurrency(trip.costPerPerson, trip.currency)}
+              {trip.costPerPerson === null
+                ? "Budget not set"
+                : formatCurrency(trip.costPerPerson, trip.currency)}
             </p>
           </div>
         </div>

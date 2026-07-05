@@ -2,18 +2,19 @@
 
 import { useMemo, useState } from "react";
 
+import { TripsAccessNotice } from "@/features/trips/components/TripsAccessNotice";
 import { TripsFilters } from "@/features/trips/components/TripsFilters";
 import { TripsGrid } from "@/features/trips/components/TripsGrid";
 import { TripsHeader } from "@/features/trips/components/TripsHeader";
 import { TripsStats } from "@/features/trips/components/TripsStats";
-import { mockTrips } from "@/features/trips/data/mock-trips";
 import type { Trip, TripFilter } from "@/features/trips/types/trip";
 
 type TripsScreenProps = {
-  trips?: Trip[];
+  trips: Trip[];
+  mode?: "saved" | "demo" | "fallback";
 };
 
-export function TripsScreen({ trips = mockTrips }: TripsScreenProps) {
+export function TripsScreen({ trips, mode = "saved" }: TripsScreenProps) {
   const [activeFilter, setActiveFilter] = useState<TripFilter>("all");
 
   const filteredTrips = useMemo(
@@ -27,6 +28,7 @@ export function TripsScreen({ trips = mockTrips }: TripsScreenProps) {
   return (
     <div className="space-y-8">
       <TripsHeader />
+      {mode !== "saved" ? <TripsAccessNotice mode={mode} /> : null}
       <TripsStats trips={trips} />
       <TripsFilters activeFilter={activeFilter} onFilterChange={setActiveFilter} />
       <TripsGrid trips={filteredTrips} />

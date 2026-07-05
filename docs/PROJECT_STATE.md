@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 16 — Database Schema Foundation
+Sprint 17 — Persist Trips
 
 Status: IN PROGRESS
 
@@ -167,6 +167,13 @@ Status: IN PROGRESS
 - Settings authentication status added
 - Existing application routes remain public
 
+### Sprint 16 — Database Schema Foundation
+- Initial Supabase migration created and applied manually
+- Core Travora tables created
+- Row Level Security policies added
+- Profile creation and timestamp triggers added
+- Database schema documentation added
+
 ## MVP Mock Modules Completed
 
 - Dashboard
@@ -182,11 +189,11 @@ Status: IN PROGRESS
 
 ## Known Limitations
 
-- Mock data only
+- Trips persist for signed-in users; other modules still use mock data
 - Authentication foundation only; application routes remain public
-- Database migration has not been applied yet
-- No persistence
-- Forms are preview-only
+- Database migration has been applied manually
+- Persistence is currently limited to Trips
+- Forms outside the persisted Trips flow are preview-only
 - Map is placeholder only
 - Sharing/invitations are mock-only
 
@@ -196,9 +203,9 @@ Status: IN PROGRESS
 - Environment variable example added
 - Typed browser and server clients prepared
 - Authentication implemented in the Auth Foundation sprint
-- No database implemented
-- No persistence implemented
-- Mock data is still used everywhere
+- Database schema applied in the Database Schema Foundation sprint
+- Trip persistence added in the Persist Trips sprint
+- Mock data is still used outside Trips
 
 ## Auth Foundation
 
@@ -217,8 +224,16 @@ Status: IN PROGRESS
 - Core application tables planned
 - Row Level Security policies added
 - Auth profile creation trigger added
-- Application still uses mock data everywhere
-- Migration still needs to be applied manually in Supabase
+- Migration applied manually in Supabase
+- Application modules still use mock data unless explicitly connected
+
+## Persist Trips
+
+- Trips read from Supabase for signed-in users
+- New Trip creates `trips` and owner `trip_members` rows
+- Signed-out users still see demo trips with Login and Register links
+- Other travel modules continue using mock data
+- Persisted Trip Detail currently provides a basic overview only
 
 ## Tech Stack
 
@@ -284,22 +299,22 @@ Principles:
 
 ## Next Task
 
-Task #016 — Database Schema Foundation
+Task #017 — Persist Trips
 
 Goal:
 
-Prepare the initial Supabase schema and security policies without changing app data behavior.
+Persist trip creation and listing while keeping the remaining mock MVP intact.
 
-The foundation includes:
+The task includes:
 
-- Core Travora tables and relationships
-- Row Level Security policies
-- Profile creation trigger
-- Updated timestamp triggers
-- Manual migration documentation
+- Supabase-backed trip listing for signed-in users
+- Server-side trip creation
+- Owner membership creation with rollback fallback
+- Signed-out demo mode
+- Basic persisted Trip Detail overview
 
 Important:
 
 Continue using mock data everywhere.
 
-Do not replace mock data, add UI persistence, or protect application routes yet.
+Do not persist other modules or protect application routes yet.
