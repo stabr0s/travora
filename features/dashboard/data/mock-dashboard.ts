@@ -2,14 +2,14 @@ import type { DashboardData } from "@/features/dashboard/types/dashboard";
 
 export const mockDashboardData: DashboardData = {
   user: {
-    name: "Alex",
+    name: "Kamil",
   },
   nextTrip: {
     id: "trip-1",
-    title: "Tokyo & Kyoto",
-    country: "Japan",
-    startDate: "2026-04-12",
-    endDate: "2026-04-22",
+    title: "Trip to Jordan",
+    country: "Jordan",
+    startDate: "2026-11-06",
+    endDate: "2026-06-13",
     participants: 4,
     costPerPerson: 2450,
     currency: "USD",
