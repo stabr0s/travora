@@ -1,5 +1,4 @@
 import {
-  BedDouble,
   CircleDollarSign,
   Luggage,
   Users,
@@ -10,15 +9,10 @@ import type { TripDetailTabId } from "@/features/trip-detail/types/trip-detail";
 
 type PlaceholderTabId = Exclude<
   TripDetailTabId,
-  "overview" | "places" | "map" | "plan"
+  "overview" | "places" | "map" | "plan" | "reservations"
 >;
 
 const sectionDetails = {
-  reservations: {
-    title: "Reservations",
-    description: "Flights, stays, tickets, and transport bookings will be organized here.",
-    icon: BedDouble,
-  },
   budget: {
     title: "Trip budget",
     description: "Track expected costs, payments, and the estimated cost per traveler.",
@@ -34,7 +28,7 @@ const sectionDetails = {
     description: "Travelers, invitations, and trip roles will be managed in this section.",
     icon: Users,
   },
-} satisfies Record<PlaceholderTabId, { title: string; description: string; icon: typeof BedDouble }>;
+} satisfies Record<PlaceholderTabId, { title: string; description: string; icon: typeof CircleDollarSign }>;
 
 type TripSectionPlaceholderProps = {
   section: PlaceholderTabId;

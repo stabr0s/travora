@@ -8,6 +8,7 @@ import { EmptyState } from "@/components/ui";
 import { MapSection } from "@/features/map";
 import { PlacesSection } from "@/features/places";
 import { PlannerSection } from "@/features/planner";
+import { ReservationsSection } from "@/features/reservations";
 import { TripHero } from "@/features/trip-detail/components/TripHero";
 import { TripOverview } from "@/features/trip-detail/components/TripOverview";
 import { TripSectionPlaceholder } from "@/features/trip-detail/components/TripSectionPlaceholder";
@@ -54,6 +55,8 @@ export function TripDetailScreen({ tripId }: TripDetailScreenProps) {
         <MapSection tripId={tripId} />
       ) : activeTab === "plan" ? (
         <PlannerSection tripId={tripId} />
+      ) : activeTab === "reservations" ? (
+        <ReservationsSection tripId={tripId} />
       ) : (
         <TripSectionPlaceholder section={activeTab} />
       )}

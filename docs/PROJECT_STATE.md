@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 8 — Map Shell
+Sprint 9 — Reservations Module
 
 Status: IN PROGRESS
 
@@ -95,6 +95,16 @@ Status: IN PROGRESS
 - Add plan item preview UI created
 - Mock planner data added for every trip
 
+### Sprint 8 — Map Shell
+- Map workspace integrated with Trip Detail
+- Map statistics created
+- Local map filters created
+- Route summary created
+- Premium map canvas placeholder created
+- Visual mock pins and route line created
+- Synchronized map places list created
+- Mock map data added for every trip
+
 ## Tech Stack
 
 - Next.js 16
@@ -158,23 +168,23 @@ Principles:
 
 ## Next Task
 
-Task #008 — Map Shell
+Task #009 — Reservations Module
 
 Goal:
 
-Create the visual map preview inside the Trip Detail screen.
+Create the reservations workspace inside the Trip Detail screen.
 
-The Map Shell should include:
+The Reservations module should include:
 
-- Map statistics
-- Local point filters
-- Route summary
-- Premium map canvas placeholder
-- Visual mock pins and route line
-- Places list synchronized with filters
+- Reservation statistics
+- Reservation type and payment filters
+- Detailed reservation cards
+- Settlement preview
+- Add reservation preview UI
+- Mock reservations for every trip
 
 Important:
 
 Use mock data only.
 
-Do not implement persistence, database, authentication, Supabase, MapLibre, map tiles, geocoding, or routing APIs yet.
+Do not implement persistence, database, authentication, Supabase, payments, file uploads, real settlements, or form submission yet.
