@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 13 — MVP Stabilization
+Sprint 14 — Supabase Foundation
 
 Status: IN PROGRESS
 
@@ -143,6 +143,14 @@ Status: IN PROGRESS
 - Invite participant preview UI created
 - Mock participants added for every trip
 
+### Sprint 13 — MVP Stabilization
+- Major application routes audited
+- Trip Detail tabs audited
+- Preview-only forms made consistent
+- Dashboard date and New Trip action corrected
+- Dead placeholder references removed
+- Lint, typecheck, and production build validated
+
 ## MVP Mock Modules Completed
 
 - Dashboard
@@ -166,11 +174,22 @@ Status: IN PROGRESS
 - Map is placeholder only
 - Sharing/invitations are mock-only
 
+## Supabase Foundation
+
+- Supabase packages installed
+- Environment variable example added
+- Typed browser and server clients prepared
+- No authentication implemented
+- No database implemented
+- No persistence implemented
+- Mock data is still used everywhere
+
 ## Tech Stack
 
 - Next.js 16
 - TypeScript
 - Tailwind CSS
+- Supabase client foundation
 - Cursor
 - GitHub
 - pnpm
@@ -229,22 +248,22 @@ Principles:
 
 ## Next Task
 
-Task #013 — MVP Stabilization
+Task #014 — Supabase Foundation
 
 Goal:
 
-Stabilize the completed mock MVP before backend integration.
+Prepare the Supabase client foundation without changing application behavior.
 
-The stabilization pass should include:
+The foundation includes:
 
-- Route and Trip Detail tab audit
-- Small UI and wording consistency fixes
-- Preview-only form consistency
-- TypeScript and lint cleanup
-- Documentation update
+- Supabase browser client helper
+- Supabase server client helper
+- Lazy environment validation
+- Placeholder database type
+- Environment setup documentation
 
 Important:
 
-Use mock data only.
+Continue using mock data everywhere.
 
-Do not implement persistence, database, authentication, Supabase, real APIs, or form submission yet.
+Do not implement persistence, database schema, authentication, protected routes, or Supabase queries yet.
