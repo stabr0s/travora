@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Plane } from "lucide-react";
 
 import { EmptyState } from "@/components/ui";
+import { MapSection } from "@/features/map";
 import { PlacesSection } from "@/features/places";
 import { PlannerSection } from "@/features/planner";
 import { TripHero } from "@/features/trip-detail/components/TripHero";
@@ -49,6 +50,8 @@ export function TripDetailScreen({ tripId }: TripDetailScreenProps) {
         <TripOverview trip={trip} />
       ) : activeTab === "places" ? (
         <PlacesSection tripId={tripId} />
+      ) : activeTab === "map" ? (
+        <MapSection tripId={tripId} />
       ) : activeTab === "plan" ? (
         <PlannerSection tripId={tripId} />
       ) : (

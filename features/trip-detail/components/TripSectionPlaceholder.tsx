@@ -2,7 +2,6 @@ import {
   BedDouble,
   CircleDollarSign,
   Luggage,
-  Map,
   Users,
 } from "lucide-react";
 
@@ -11,15 +10,10 @@ import type { TripDetailTabId } from "@/features/trip-detail/types/trip-detail";
 
 type PlaceholderTabId = Exclude<
   TripDetailTabId,
-  "overview" | "places" | "plan"
+  "overview" | "places" | "map" | "plan"
 >;
 
 const sectionDetails = {
-  map: {
-    title: "Trip map",
-    description: "Your places and routes will appear on an interactive map in a future sprint.",
-    icon: Map,
-  },
   reservations: {
     title: "Reservations",
     description: "Flights, stays, tickets, and transport bookings will be organized here.",
@@ -40,7 +34,7 @@ const sectionDetails = {
     description: "Travelers, invitations, and trip roles will be managed in this section.",
     icon: Users,
   },
-} satisfies Record<PlaceholderTabId, { title: string; description: string; icon: typeof Map }>;
+} satisfies Record<PlaceholderTabId, { title: string; description: string; icon: typeof BedDouble }>;
 
 type TripSectionPlaceholderProps = {
   section: PlaceholderTabId;

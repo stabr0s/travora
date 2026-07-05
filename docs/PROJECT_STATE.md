@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 7 — Planner Module
+Sprint 8 — Map Shell
 
 Status: IN PROGRESS
 
@@ -85,6 +85,16 @@ Status: IN PROGRESS
 - Add place preview UI created
 - Mock places added for every trip
 
+### Sprint 7 — Planner Module
+- Planner workspace integrated with Trip Detail
+- Planner statistics created
+- Horizontal day selector created
+- Ordered and scheduled day views created
+- Day load indicator created
+- Plan item timeline created
+- Add plan item preview UI created
+- Mock planner data added for every trip
+
 ## Tech Stack
 
 - Next.js 16
@@ -148,23 +158,23 @@ Principles:
 
 ## Next Task
 
-Task #007 — Planner Module
+Task #008 — Map Shell
 
 Goal:
 
-Create the daily planning workspace inside the Trip Detail screen.
+Create the visual map preview inside the Trip Detail screen.
 
-The Planner module should include:
+The Map Shell should include:
 
-- Planner statistics
-- Horizontal day selector
-- Ordered and scheduled day views
-- Day load indicator
-- Plan item timeline
-- Add plan item preview UI
+- Map statistics
+- Local point filters
+- Route summary
+- Premium map canvas placeholder
+- Visual mock pins and route line
+- Places list synchronized with filters
 
 Important:
 
 Use mock data only.
 
-Do not implement persistence, database, authentication, Supabase, maps, drag and drop, AI planning, or form submission yet.
+Do not implement persistence, database, authentication, Supabase, MapLibre, map tiles, geocoding, or routing APIs yet.
