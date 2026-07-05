@@ -1,0 +1,110 @@
+---
+description: Global project rules for Travora
+globs:
+alwaysApply: true
+---
+
+# Travora
+
+You are working on Travora, a modern travel planning web application.
+
+Before writing code:
+
+- Read the relevant files.
+- Understand existing architecture.
+- Never overwrite code without reason.
+- Explain your implementation plan before making changes.
+
+---
+
+# Tech Stack
+
+Framework:
+- Next.js 16 (App Router)
+
+Language:
+- TypeScript
+
+Styling:
+- Tailwind CSS
+
+Components:
+- shadcn/ui
+
+Icons:
+- Lucide React
+
+Database:
+- Supabase
+
+Maps:
+- MapLibre
+
+Hosting:
+- Vercel
+
+---
+
+# Coding Principles
+
+Always:
+
+- keep components small
+- write reusable code
+- use strict TypeScript
+- prefer composition over duplication
+- use async/await
+- create reusable hooks
+- split business logic from UI
+
+Never:
+
+- use any
+- duplicate code
+- hardcode colors
+- hardcode spacing
+- create files over ~200 lines
+- ignore TypeScript errors
+
+---
+
+# UI Principles
+
+Travora follows an Apple-inspired design.
+
+Requirements:
+
+- clean
+- modern
+- spacious
+- responsive
+- rounded corners
+- Inter font
+- minimal animations
+
+Desktop and mobile must both be supported.
+
+---
+
+# Workflow
+
+Before coding:
+
+1. Explain the implementation.
+2. List affected files.
+
+After coding:
+
+1. Explain changes.
+2. Mention possible improvements.
+3. Wait for confirmation before continuing.
+
+Never implement extra features that were not requested.
+
+---
+
+# Documentation
+
+Use the docs folder as the source of truth.
+
+If documentation conflicts with existing code, ask before changing architecture.
