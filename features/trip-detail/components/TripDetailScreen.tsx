@@ -8,12 +8,12 @@ import { EmptyState } from "@/components/ui";
 import { BudgetSection } from "@/features/budget";
 import { MapSection } from "@/features/map";
 import { PackingSection } from "@/features/packing";
+import { ParticipantsSection } from "@/features/participants";
 import { PlacesSection } from "@/features/places";
 import { PlannerSection } from "@/features/planner";
 import { ReservationsSection } from "@/features/reservations";
 import { TripHero } from "@/features/trip-detail/components/TripHero";
 import { TripOverview } from "@/features/trip-detail/components/TripOverview";
-import { TripSectionPlaceholder } from "@/features/trip-detail/components/TripSectionPlaceholder";
 import { TripTabs } from "@/features/trip-detail/components/TripTabs";
 import { getMockTripDetail } from "@/features/trip-detail/data/mock-trip-detail";
 import type { TripDetailTabId } from "@/features/trip-detail/types/trip-detail";
@@ -64,7 +64,7 @@ export function TripDetailScreen({ tripId }: TripDetailScreenProps) {
       ) : activeTab === "packing" ? (
         <PackingSection tripId={tripId} />
       ) : (
-        <TripSectionPlaceholder section={activeTab} />
+        <ParticipantsSection tripId={tripId} />
       )}
     </div>
   );

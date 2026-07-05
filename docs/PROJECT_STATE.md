@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 11 — Packing Module
+Sprint 12 — Participants Module
 
 Status: IN PROGRESS
 
@@ -124,6 +124,16 @@ Status: IN PROGRESS
 - Add expense preview UI created
 - Mock budget data added for every trip
 
+### Sprint 11 — Packing Module
+- Packing workspace integrated with Trip Detail
+- Packing statistics and progress created
+- Category filters created
+- Shared and private checklist created
+- Local checkbox preview created
+- Traveler assignment preview created
+- Add packing item preview UI created
+- Mock packing data added for every trip
+
 ## Tech Stack
 
 - Next.js 16
@@ -187,23 +197,23 @@ Principles:
 
 ## Next Task
 
-Task #011 — Packing Module
+Task #012 — Participants Module
 
 Goal:
 
-Create the packing workspace inside the Trip Detail screen.
+Create the participants workspace inside the Trip Detail screen.
 
-The Packing module should include:
+The Participants module should include:
 
-- Packing statistics and progress
-- Category filters
-- Shared and private checklist items
-- Local checkbox preview
-- Traveler assignment preview
-- Add packing item preview UI
+- Participant statistics
+- Participant cards
+- Role overview
+- Sharing preview
+- Invite participant preview UI
+- Mock participants for every trip
 
 Important:
 
 Use mock data only.
 
-Do not implement persistence, database, authentication, Supabase, real collaboration, user accounts, or form submission yet.
+Do not implement persistence, database, authentication, Supabase, real invitations, emails, permissions, collaboration, or form submission yet.
