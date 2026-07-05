@@ -6,6 +6,8 @@ import { Construction } from "lucide-react";
 import { EmptyState } from "@/components/ui";
 import { PlacesSection } from "@/features/places";
 import type { Place } from "@/features/places/types/place";
+import { PersistedPlannerSection } from "@/features/planner";
+import type { PersistedPlannerItem } from "@/features/planner/types/persisted-planner";
 import { PersistedTripHero } from "@/features/trip-detail/components/PersistedTripHero";
 import { PersistedTripOverview } from "@/features/trip-detail/components/PersistedTripOverview";
 import { TripTabs } from "@/features/trip-detail/components/TripTabs";
@@ -16,11 +18,12 @@ type PersistedTripDetailScreenProps = {
   trip: PersistedTrip;
   places: Place[];
   placesError?: string;
+  plannerItems: PersistedPlannerItem[];
+  plannerError?: string;
 };
 
-const moduleNames: Record<Exclude<TripDetailTabId, "overview" | "places">, string> = {
+const moduleNames: Record<Exclude<TripDetailTabId, "overview" | "places" | "plan">, string> = {
   map: "Map",
-  plan: "Plan",
   reservations: "Reservations",
   budget: "Budget",
   packing: "Packing",
@@ -31,6 +34,8 @@ export function PersistedTripDetailScreen({
   trip,
   places,
   placesError,
+  plannerItems,
+  plannerError,
 }: PersistedTripDetailScreenProps) {
   const [activeTab, setActiveTab] = useState<TripDetailTabId>("overview");
 
@@ -47,11 +52,17 @@ export function PersistedTripDetailScreen({
           mode="persisted"
           loadError={placesError}
         />
+      ) : activeTab === "plan" ? (
+        <PersistedPlannerSection
+          tripId={trip.id}
+          items={plannerItems}
+          loadError={plannerError}
+        />
       ) : (
         <EmptyState
           icon={Construction}
           title={`${moduleNames[activeTab]} will be connected next`}
-          description="This saved trip currently supports Overview and Places. The remaining modules still use the mock planning experience."
+          description="This saved trip currently supports Overview, Places, and Plan. The remaining modules will be connected in later tasks."
           className="min-h-80"
         />
       )}

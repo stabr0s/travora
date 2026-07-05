@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 18 — Persist Places
+Sprint 19 — Persist Planner
 
 Status: IN PROGRESS
 
@@ -181,6 +181,12 @@ Status: IN PROGRESS
 - Signed-out users retain access to demo trips
 - Persisted trip overview added
 
+### Sprint 18 — Persist Places
+- Persisted trips load places from Supabase
+- Add Place creates places for persisted trips
+- Mock trips retain the complete mock Places experience
+- No geocoding, image upload, or map picking added
+
 ## MVP Mock Modules Completed
 
 - Dashboard
@@ -196,10 +202,10 @@ Status: IN PROGRESS
 
 ## Known Limitations
 
-- Trips and Places persist for signed-in users; other modules still use mock data
+- Trips, Places, and Planner persist for signed-in users; other modules still use mock data
 - Authentication foundation only; application routes remain public
 - Database migration has been applied manually
-- Persistence is currently limited to Trips and Places
+- Persistence is currently limited to Trips, Places, and Planner
 - Forms outside the persisted Trips flow are preview-only
 - Map is placeholder only
 - Sharing/invitations are mock-only
@@ -211,8 +217,8 @@ Status: IN PROGRESS
 - Typed browser and server clients prepared
 - Authentication implemented in the Auth Foundation sprint
 - Database schema applied in the Database Schema Foundation sprint
-- Trip and Place persistence added in their persistence sprints
-- Mock data is still used outside Trips and Places
+- Trip, Place, and Planner persistence added in their persistence sprints
+- Mock data is still used outside Trips, Places, and Planner
 
 ## Auth Foundation
 
@@ -250,6 +256,16 @@ Status: IN PROGRESS
 - Other detail modules remain mock-based or show placeholders
 - No geocoding or map picking implemented
 - No image upload or image storage implemented
+
+## Persist Planner
+
+- Persisted trips load planner items from Supabase
+- Add Plan Item creates `planner_items` rows for persisted trips
+- Mock trips continue using the complete mock Planner and preview-only form
+- Planner items are grouped by date, with undated items shown as Unscheduled
+- No drag and drop or realtime collaboration implemented
+- Place linking is not implemented yet
+- Other detail modules remain mock-based or show placeholders
 
 ## Tech Stack
 
@@ -315,22 +331,22 @@ Principles:
 
 ## Next Task
 
-Task #018 — Persist Places
+Task #019 — Persist Planner
 
 Goal:
 
-Persist places for saved trips while preserving the full mock trip experience.
+Persist planner items for saved trips while preserving the full mock trip experience.
 
 The task includes:
 
-- Server-side Places queries and creation
-- Mock and persisted Places modes
-- Persisted Trip Detail tabs for Overview and Places
+- Server-side Planner queries and creation
+- Mock and persisted Planner modes
+- Persisted Trip Detail tabs for Overview, Places, and Plan
 - Friendly RLS-safe errors
-- Place cards with neutral missing-data states
+- Date grouping with an Unscheduled section
 
 Important:
 
-Continue using mock data everywhere.
+Continue using mock data in modules that have not been connected yet.
 
-Do not persist other detail modules or protect application routes yet.
+Do not add drag and drop, realtime collaboration, or protect application routes yet.

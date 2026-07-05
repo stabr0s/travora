@@ -146,6 +146,55 @@ export type Database = {
           },
         ];
       };
+      planner_items: {
+        Row: {
+          id: string;
+          trip_id: string;
+          place_id: string | null;
+          title: string;
+          description: string | null;
+          date: string | null;
+          start_time: string | null;
+          end_time: string | null;
+          type: string | null;
+          status: "planned" | "completed" | "cancelled" | null;
+          order_index: number | null;
+          created_at: string | null;
+          updated_at: string | null;
+        };
+        Insert: {
+          id?: string;
+          trip_id: string;
+          place_id?: string | null;
+          title: string;
+          description?: string | null;
+          date?: string | null;
+          start_time?: string | null;
+          end_time?: string | null;
+          type?: string | null;
+          status?: "planned" | "completed" | "cancelled" | null;
+          order_index?: number | null;
+          created_at?: string | null;
+          updated_at?: string | null;
+        };
+        Update: Partial<Database["public"]["Tables"]["planner_items"]["Insert"]>;
+        Relationships: [
+          {
+            foreignKeyName: "planner_items_trip_id_fkey";
+            columns: ["trip_id"];
+            isOneToOne: false;
+            referencedRelation: "trips";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "planner_items_place_id_fkey";
+            columns: ["place_id"];
+            isOneToOne: false;
+            referencedRelation: "places";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
     };
     Views: Record<string, never>;
     Functions: Record<string, never>;
