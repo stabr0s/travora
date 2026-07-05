@@ -1,6 +1,7 @@
 import { Settings } from "lucide-react";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, EmptyState, SectionHeader } from "@/components/ui";
+import { AuthStatus } from "@/features/auth";
 
 export default function SettingsPage() {
   return (
@@ -9,6 +10,8 @@ export default function SettingsPage() {
         title="Settings"
         description="Manage your account preferences and application settings."
       />
+
+      <AuthStatus />
 
       <div className="grid gap-4 sm:grid-cols-2">
         <Card>

@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 14 — Supabase Foundation
+Sprint 15 — Auth Foundation
 
 Status: IN PROGRESS
 
@@ -151,6 +151,14 @@ Status: IN PROGRESS
 - Dead placeholder references removed
 - Lint, typecheck, and production build validated
 
+### Sprint 14 — Supabase Foundation
+- Supabase packages installed
+- Environment variable example added
+- Lazy environment validation added
+- Typed browser client prepared
+- Typed server client prepared
+- Placeholder database type added
+
 ## MVP Mock Modules Completed
 
 - Dashboard
@@ -183,6 +191,17 @@ Status: IN PROGRESS
 - No database implemented
 - No persistence implemented
 - Mock data is still used everywhere
+
+## Auth Foundation
+
+- Login, register, and logout added
+- Supabase auth callback added
+- Next.js 16 proxy session refresh added
+- Settings authentication status added
+- Application routes are not protected yet
+- Mock data is still used everywhere
+- No database schema exists yet
+- No profiles or RLS implemented
 
 ## Tech Stack
 
@@ -248,22 +267,22 @@ Principles:
 
 ## Next Task
 
-Task #014 — Supabase Foundation
+Task #015 — Auth Foundation
 
 Goal:
 
-Prepare the Supabase client foundation without changing application behavior.
+Add Supabase email and password authentication without protecting mock MVP routes.
 
 The foundation includes:
 
-- Supabase browser client helper
-- Supabase server client helper
-- Lazy environment validation
-- Placeholder database type
-- Environment setup documentation
+- Login and registration
+- Logout server action
+- Supabase auth callback
+- Next.js 16 session refresh proxy
+- Settings authentication status
 
 Important:
 
 Continue using mock data everywhere.
 
-Do not implement persistence, database schema, authentication, protected routes, or Supabase queries yet.
+Do not implement persistence, database schema, profiles, RLS, OAuth, or protected routes yet.
