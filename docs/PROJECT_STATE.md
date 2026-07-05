@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 17 — Persist Trips
+Sprint 18 — Persist Places
 
 Status: IN PROGRESS
 
@@ -174,6 +174,13 @@ Status: IN PROGRESS
 - Profile creation and timestamp triggers added
 - Database schema documentation added
 
+### Sprint 17 — Persist Trips
+- Signed-in users load trips from Supabase
+- New Trip creates a trip and active owner membership
+- Trip creation handles RLS without insert returning
+- Signed-out users retain access to demo trips
+- Persisted trip overview added
+
 ## MVP Mock Modules Completed
 
 - Dashboard
@@ -189,10 +196,10 @@ Status: IN PROGRESS
 
 ## Known Limitations
 
-- Trips persist for signed-in users; other modules still use mock data
+- Trips and Places persist for signed-in users; other modules still use mock data
 - Authentication foundation only; application routes remain public
 - Database migration has been applied manually
-- Persistence is currently limited to Trips
+- Persistence is currently limited to Trips and Places
 - Forms outside the persisted Trips flow are preview-only
 - Map is placeholder only
 - Sharing/invitations are mock-only
@@ -204,8 +211,8 @@ Status: IN PROGRESS
 - Typed browser and server clients prepared
 - Authentication implemented in the Auth Foundation sprint
 - Database schema applied in the Database Schema Foundation sprint
-- Trip persistence added in the Persist Trips sprint
-- Mock data is still used outside Trips
+- Trip and Place persistence added in their persistence sprints
+- Mock data is still used outside Trips and Places
 
 ## Auth Foundation
 
@@ -234,6 +241,15 @@ Status: IN PROGRESS
 - Signed-out users still see demo trips with Login and Register links
 - Other travel modules continue using mock data
 - Persisted Trip Detail currently provides a basic overview only
+
+## Persist Places
+
+- Persisted trips load places from Supabase
+- Add Place creates `places` rows for persisted trips
+- Mock trips continue using mock places and preview-only creation
+- Other detail modules remain mock-based or show placeholders
+- No geocoding or map picking implemented
+- No image upload or image storage implemented
 
 ## Tech Stack
 
@@ -299,22 +315,22 @@ Principles:
 
 ## Next Task
 
-Task #017 — Persist Trips
+Task #018 — Persist Places
 
 Goal:
 
-Persist trip creation and listing while keeping the remaining mock MVP intact.
+Persist places for saved trips while preserving the full mock trip experience.
 
 The task includes:
 
-- Supabase-backed trip listing for signed-in users
-- Server-side trip creation
-- Owner membership creation with rollback fallback
-- Signed-out demo mode
-- Basic persisted Trip Detail overview
+- Server-side Places queries and creation
+- Mock and persisted Places modes
+- Persisted Trip Detail tabs for Overview and Places
+- Friendly RLS-safe errors
+- Place cards with neutral missing-data states
 
 Important:
 
 Continue using mock data everywhere.
 
-Do not persist other modules or protect application routes yet.
+Do not persist other detail modules or protect application routes yet.

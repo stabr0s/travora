@@ -98,6 +98,54 @@ export type Database = {
           },
         ];
       };
+      places: {
+        Row: {
+          id: string;
+          trip_id: string;
+          title: string;
+          category: string | null;
+          address: string | null;
+          city: string | null;
+          country: string | null;
+          latitude: number | null;
+          longitude: number | null;
+          status: "idea" | "planned" | "visited" | "rejected" | null;
+          priority: "must-see" | "recommended" | "optional" | null;
+          notes: string | null;
+          website_url: string | null;
+          image_url: string | null;
+          created_at: string | null;
+          updated_at: string | null;
+        };
+        Insert: {
+          id?: string;
+          trip_id: string;
+          title: string;
+          category?: string | null;
+          address?: string | null;
+          city?: string | null;
+          country?: string | null;
+          latitude?: number | null;
+          longitude?: number | null;
+          status?: "idea" | "planned" | "visited" | "rejected" | null;
+          priority?: "must-see" | "recommended" | "optional" | null;
+          notes?: string | null;
+          website_url?: string | null;
+          image_url?: string | null;
+          created_at?: string | null;
+          updated_at?: string | null;
+        };
+        Update: Partial<Database["public"]["Tables"]["places"]["Insert"]>;
+        Relationships: [
+          {
+            foreignKeyName: "places_trip_id_fkey";
+            columns: ["trip_id"];
+            isOneToOne: false;
+            referencedRelation: "trips";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
     };
     Views: Record<string, never>;
     Functions: Record<string, never>;

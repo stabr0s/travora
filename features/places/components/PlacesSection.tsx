@@ -1,18 +1,26 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useActionState, useMemo, useState } from "react";
 
+import { Card } from "@/components/ui";
+import { createPlaceAction } from "@/features/places/actions/place-actions";
 import { AddPlacePanel } from "@/features/places/components/AddPlacePanel";
 import { PlacesFilters } from "@/features/places/components/PlacesFilters";
 import { PlacesGrid } from "@/features/places/components/PlacesGrid";
 import { PlacesHeader } from "@/features/places/components/PlacesHeader";
 import { PlacesStats } from "@/features/places/components/PlacesStats";
 import { getMockPlacesByTripId } from "@/features/places/data/mock-places";
+import type { CreatePlaceActionState } from "@/features/places/types/persisted-place";
 import type { Place, PlaceFilter } from "@/features/places/types/place";
 
 type PlacesSectionProps = {
   tripId: string;
+  places?: Place[];
+  mode?: "mock" | "persisted";
+  loadError?: string;
 };
+
+const initialCreateState: CreatePlaceActionState = { status: "idle" };
 
 function filterPlaces(places: Place[], filter: PlaceFilter): Place[] {
   switch (filter) {
@@ -29,10 +37,22 @@ function filterPlaces(places: Place[], filter: PlaceFilter): Place[] {
   }
 }
 
-export function PlacesSection({ tripId }: PlacesSectionProps) {
+export function PlacesSection({
+  tripId,
+  places = [],
+  mode = "mock",
+  loadError,
+}: PlacesSectionProps) {
   const [activeFilter, setActiveFilter] = useState<PlaceFilter>("all");
   const [isAddPanelOpen, setIsAddPanelOpen] = useState(false);
-  const tripPlaces = useMemo(() => getMockPlacesByTripId(tripId), [tripId]);
+  const [createState, createAction, isPending] = useActionState(
+    createPlaceAction,
+    initialCreateState,
+  );
+  const tripPlaces = useMemo(
+    () => mode === "persisted" ? places : getMockPlacesByTripId(tripId),
+    [mode, places, tripId],
+  );
   const filteredPlaces = useMemo(
     () => filterPlaces(tripPlaces, activeFilter),
     [activeFilter, tripPlaces],
@@ -43,7 +63,18 @@ export function PlacesSection({ tripId }: PlacesSectionProps) {
       <PlacesHeader onAddPlace={() => setIsAddPanelOpen(true)} />
 
       {isAddPanelOpen ? (
-        <AddPlacePanel onClose={() => setIsAddPanelOpen(false)} />
+        <AddPlacePanel
+          tripId={tripId}
+          mode={mode}
+          actionState={createState}
+          formAction={createAction}
+          isPending={isPending}
+          onClose={() => setIsAddPanelOpen(false)}
+        />
+      ) : null}
+
+      {loadError ? (
+        <Card padding="sm" className="text-sm text-error">{loadError}</Card>
       ) : null}
 
       <PlacesStats places={tripPlaces} />
