@@ -1,12 +1,20 @@
+import { Luggage } from "lucide-react";
+
+import { EmptyState, SectionHeader } from "@/components/ui";
+
 export default function PackingPage() {
   return (
-    <section>
-      <h1 className="text-2xl font-semibold tracking-tight text-foreground">
-        Packing
-      </h1>
-      <p className="mt-2 text-muted">
-        Packing lists will appear here.
-      </p>
-    </section>
+    <>
+      <SectionHeader
+        title="Packing"
+        description="Shared and personal packing lists to prepare for every trip."
+      />
+
+      <EmptyState
+        icon={Luggage}
+        title="No packing lists"
+        description="Create a trip to start building shared and personal packing checklists."
+      />
+    </>
   );
 }

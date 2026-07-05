@@ -1,12 +1,20 @@
+import { Map } from "lucide-react";
+
+import { EmptyState, SectionHeader } from "@/components/ui";
+
 export default function MapPage() {
   return (
-    <section>
-      <h1 className="text-2xl font-semibold tracking-tight text-foreground">
-        Map
-      </h1>
-      <p className="mt-2 text-muted">
-        Trip maps and places will appear here.
-      </p>
-    </section>
+    <>
+      <SectionHeader
+        title="Map"
+        description="Visualize destinations, routes, and day-by-day plans on an interactive map."
+      />
+
+      <EmptyState
+        icon={Map}
+        title="Map view coming soon"
+        description="Select a trip to explore places, routes, and travel anchors on the map."
+      />
+    </>
   );
 }

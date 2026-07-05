@@ -12,10 +12,10 @@ export function AppLayout({ children }: AppLayoutProps) {
     <div className="flex min-h-screen bg-surface">
       <Sidebar />
 
-      <div className="flex min-h-screen flex-1 flex-col">
+      <div className="flex min-h-screen min-w-0 flex-1 flex-col">
         <TopBar />
 
-        <main className="flex-1 pb-20 md:pb-0">
+        <main className="flex-1 pb-24 md:pb-0">
           <PageContainer>{children}</PageContainer>
         </main>
 

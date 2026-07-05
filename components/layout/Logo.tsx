@@ -4,20 +4,23 @@ import { cn } from "@/lib/utils";
 
 type LogoProps = {
   className?: string;
+  compact?: boolean;
 };
 
-export function Logo({ className }: LogoProps) {
+export function Logo({ className, compact = false }: LogoProps) {
   return (
     <Link
       href="/dashboard"
-      className={cn("flex items-center gap-2", className)}
+      className={cn("group flex items-center gap-2.5", className)}
     >
-      <span className="flex size-8 items-center justify-center rounded-lg bg-primary text-sm font-bold text-primary-foreground">
+      <span className="flex size-9 items-center justify-center rounded-xl bg-primary text-sm font-bold text-primary-foreground shadow-sm transition-shadow group-hover:shadow-md">
         T
       </span>
-      <span className="text-lg font-semibold tracking-tight text-foreground">
-        Travora
-      </span>
+      {!compact ? (
+        <span className="text-lg font-semibold tracking-tight text-foreground">
+          Travora
+        </span>
+      ) : null}
     </Link>
   );
 }

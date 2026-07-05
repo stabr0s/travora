@@ -1,12 +1,32 @@
+import { MapPin, Plus } from "lucide-react";
+
+import { Button, EmptyState, SectionHeader } from "@/components/ui";
+
 export default function TripsPage() {
   return (
-    <section>
-      <h1 className="text-2xl font-semibold tracking-tight text-foreground">
-        Trips
-      </h1>
-      <p className="mt-2 text-muted">
-        Your travel plans will appear here.
-      </p>
-    </section>
+    <>
+      <SectionHeader
+        title="Trips"
+        description="All your travel plans in one organized place."
+        action={
+          <Button size="md">
+            <Plus className="size-4" />
+            New trip
+          </Button>
+        }
+      />
+
+      <EmptyState
+        icon={MapPin}
+        title="No trips planned"
+        description="Add a trip to begin collecting places, building itineraries, and sharing plans with others."
+        action={
+          <Button variant="outline" size="md">
+            <Plus className="size-4" />
+            Add trip
+          </Button>
+        }
+      />
+    </>
   );
 }

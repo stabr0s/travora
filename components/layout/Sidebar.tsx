@@ -11,12 +11,16 @@ export function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="hidden w-64 shrink-0 border-r border-border bg-background md:flex md:flex-col">
-      <div className="flex h-16 items-center border-b border-border px-6">
+    <aside className="hidden w-[var(--sidebar-width)] shrink-0 flex-col border-r border-border bg-background md:flex">
+      <div className="flex h-[var(--topbar-height)] items-center px-5">
         <Logo />
       </div>
 
-      <nav className="flex flex-1 flex-col gap-1 p-4">
+      <nav className="flex flex-1 flex-col gap-1 px-3 py-4">
+        <p className="mb-2 px-3 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+          Menu
+        </p>
+
         {sidebarNavigation.map((item) => {
           const isActive = pathname === item.href;
           const Icon = item.icon;
@@ -26,18 +30,31 @@ export function Sidebar() {
               key={item.href}
               href={item.href}
               className={cn(
-                "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors",
+                "group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-150",
                 isActive
-                  ? "bg-surface text-primary"
-                  : "text-muted hover:bg-surface hover:text-foreground",
+                  ? "bg-primary-subtle text-primary shadow-xs"
+                  : "text-muted hover:bg-surface hover:text-foreground active:bg-border-subtle",
               )}
             >
-              <Icon className="size-5 shrink-0" />
+              <Icon
+                className={cn(
+                  "size-[1.125rem] shrink-0 transition-colors",
+                  isActive ? "text-primary" : "text-muted-foreground group-hover:text-foreground",
+                )}
+                strokeWidth={isActive ? 2 : 1.75}
+              />
               {item.label}
             </Link>
           );
         })}
       </nav>
+
+      <div className="border-t border-border-subtle p-4">
+        <div className="rounded-xl bg-surface px-3 py-3">
+          <p className="text-xs font-medium text-foreground">Plan your next trip</p>
+          <p className="mt-0.5 text-xs text-muted">Start organizing destinations and routes.</p>
+        </div>
+      </div>
     </aside>
   );
 }

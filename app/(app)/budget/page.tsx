@@ -1,12 +1,21 @@
+import { Wallet } from "lucide-react";
+
+import { Badge, EmptyState, SectionHeader } from "@/components/ui";
+
 export default function BudgetPage() {
   return (
-    <section>
-      <h1 className="text-2xl font-semibold tracking-tight text-foreground">
-        Budget
-      </h1>
-      <p className="mt-2 text-muted">
-        Trip budgets and expenses will appear here.
-      </p>
-    </section>
+    <>
+      <SectionHeader
+        title="Budget"
+        description="Track costs per category and see spending per person at a glance."
+        action={<Badge variant="outline">Per person</Badge>}
+      />
+
+      <EmptyState
+        icon={Wallet}
+        title="No budget data"
+        description="Budget summaries will appear here once you add trips and reservations."
+      />
+    </>
   );
 }
