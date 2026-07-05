@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 12 — Participants Module
+Sprint 13 — MVP Stabilization
 
 Status: IN PROGRESS
 
@@ -134,6 +134,38 @@ Status: IN PROGRESS
 - Add packing item preview UI created
 - Mock packing data added for every trip
 
+### Sprint 12 — Participants Module
+- Participants workspace integrated with Trip Detail
+- Participant statistics created
+- Participant cards created
+- Roles overview created
+- Sharing preview created
+- Invite participant preview UI created
+- Mock participants added for every trip
+
+## MVP Mock Modules Completed
+
+- Dashboard
+- Trips
+- Trip Detail
+- Places
+- Planner
+- Map
+- Reservations
+- Budget
+- Packing
+- Participants
+
+## Known Limitations
+
+- Mock data only
+- No authentication
+- No database
+- No persistence
+- Forms are preview-only
+- Map is placeholder only
+- Sharing/invitations are mock-only
+
 ## Tech Stack
 
 - Next.js 16
@@ -197,23 +229,22 @@ Principles:
 
 ## Next Task
 
-Task #012 — Participants Module
+Task #013 — MVP Stabilization
 
 Goal:
 
-Create the participants workspace inside the Trip Detail screen.
+Stabilize the completed mock MVP before backend integration.
 
-The Participants module should include:
+The stabilization pass should include:
 
-- Participant statistics
-- Participant cards
-- Role overview
-- Sharing preview
-- Invite participant preview UI
-- Mock participants for every trip
+- Route and Trip Detail tab audit
+- Small UI and wording consistency fixes
+- Preview-only form consistency
+- TypeScript and lint cleanup
+- Documentation update
 
 Important:
 
 Use mock data only.
 
-Do not implement persistence, database, authentication, Supabase, real invitations, emails, permissions, collaboration, or form submission yet.
+Do not implement persistence, database, authentication, Supabase, real APIs, or form submission yet.

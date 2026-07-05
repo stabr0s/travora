@@ -9,7 +9,7 @@ export const mockDashboardData: DashboardData = {
     title: "Trip to Jordan",
     country: "Jordan",
     startDate: "2026-11-06",
-    endDate: "2026-06-13",
+    endDate: "2026-11-13",
     participants: 4,
     costPerPerson: 2450,
     currency: "USD",
@@ -49,7 +49,7 @@ export const mockDashboardData: DashboardData = {
       id: "action-1",
       label: "New trip",
       description: "Start a fresh itinerary",
-      href: "/trips",
+      href: "/trips/new",
       icon: "plus",
     },
     {

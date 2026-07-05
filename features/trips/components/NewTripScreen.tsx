@@ -97,16 +97,21 @@ export function NewTripScreen() {
             </button>
           </div>
 
-          <div className="flex flex-col-reverse gap-3 border-t border-border-subtle pt-6 sm:flex-row sm:justify-end">
-            <Link
-              href="/trips"
-              className="inline-flex h-10 items-center justify-center rounded-xl border border-border bg-background px-4 text-sm font-medium text-foreground shadow-xs transition-colors hover:bg-surface"
-            >
-              Cancel
-            </Link>
-            <Button type="button" size="md">
-              Create trip
-            </Button>
+          <div className="border-t border-border-subtle pt-6">
+            <p className="mb-4 text-sm text-muted">
+              Creating trips will be available after database setup.
+            </p>
+            <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+              <Link
+                href="/trips"
+                className="inline-flex h-10 items-center justify-center rounded-xl border border-border bg-background px-4 text-sm font-medium text-foreground shadow-xs transition-colors hover:bg-surface"
+              >
+                Cancel
+              </Link>
+              <Button type="button" size="md" disabled>
+                Create trip — preview only
+              </Button>
+            </div>
           </div>
         </form>
       </Card>

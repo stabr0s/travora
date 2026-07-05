@@ -19,7 +19,9 @@ export function AddPlacePanel({ onClose }: AddPlacePanelProps) {
           </span>
           <div>
             <h2 className="text-lg font-semibold tracking-tight text-foreground">Add a place</h2>
-            <p className="mt-1 text-sm text-muted">Capture the idea now. Saving will be connected later.</p>
+            <p className="mt-1 text-sm text-muted">
+              Adding places will be available after database setup.
+            </p>
           </div>
         </div>
         <Button variant="ghost" size="sm" onClick={onClose} aria-label="Close add place panel">
@@ -82,8 +84,12 @@ export function AddPlacePanel({ onClose }: AddPlacePanelProps) {
       </div>
 
       <div className="mt-6 flex flex-col-reverse gap-3 border-t border-border-subtle pt-5 sm:flex-row sm:justify-end">
-        <Button variant="outline" size="md" onClick={onClose}>Cancel</Button>
-        <Button size="md">Add place</Button>
+        <Button variant="outline" size="md" onClick={onClose}>
+          Cancel
+        </Button>
+        <Button size="md" disabled>
+          Add place — preview only
+        </Button>
       </div>
     </Card>
   );
