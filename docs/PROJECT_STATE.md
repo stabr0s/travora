@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 15 — Auth Foundation
+Sprint 16 — Database Schema Foundation
 
 Status: IN PROGRESS
 
@@ -159,6 +159,14 @@ Status: IN PROGRESS
 - Typed server client prepared
 - Placeholder database type added
 
+### Sprint 15 — Auth Foundation
+- Login and registration added
+- Logout server action added
+- Supabase auth callback added
+- Next.js 16 session refresh proxy added
+- Settings authentication status added
+- Existing application routes remain public
+
 ## MVP Mock Modules Completed
 
 - Dashboard
@@ -175,8 +183,8 @@ Status: IN PROGRESS
 ## Known Limitations
 
 - Mock data only
-- No authentication
-- No database
+- Authentication foundation only; application routes remain public
+- Database migration has not been applied yet
 - No persistence
 - Forms are preview-only
 - Map is placeholder only
@@ -187,7 +195,7 @@ Status: IN PROGRESS
 - Supabase packages installed
 - Environment variable example added
 - Typed browser and server clients prepared
-- No authentication implemented
+- Authentication implemented in the Auth Foundation sprint
 - No database implemented
 - No persistence implemented
 - Mock data is still used everywhere
@@ -200,8 +208,17 @@ Status: IN PROGRESS
 - Settings authentication status added
 - Application routes are not protected yet
 - Mock data is still used everywhere
-- No database schema exists yet
-- No profiles or RLS implemented
+- Database schema was not part of the Auth Foundation sprint
+- Profiles and RLS were deferred to the following sprint
+
+## Database Schema Foundation
+
+- Initial SQL migration added
+- Core application tables planned
+- Row Level Security policies added
+- Auth profile creation trigger added
+- Application still uses mock data everywhere
+- Migration still needs to be applied manually in Supabase
 
 ## Tech Stack
 
@@ -267,22 +284,22 @@ Principles:
 
 ## Next Task
 
-Task #015 — Auth Foundation
+Task #016 — Database Schema Foundation
 
 Goal:
 
-Add Supabase email and password authentication without protecting mock MVP routes.
+Prepare the initial Supabase schema and security policies without changing app data behavior.
 
 The foundation includes:
 
-- Login and registration
-- Logout server action
-- Supabase auth callback
-- Next.js 16 session refresh proxy
-- Settings authentication status
+- Core Travora tables and relationships
+- Row Level Security policies
+- Profile creation trigger
+- Updated timestamp triggers
+- Manual migration documentation
 
 Important:
 
 Continue using mock data everywhere.
 
-Do not implement persistence, database schema, profiles, RLS, OAuth, or protected routes yet.
+Do not replace mock data, add UI persistence, or protect application routes yet.

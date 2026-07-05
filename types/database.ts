@@ -1,4 +1,5 @@
-// TODO: Generate this type from Supabase after the database schema is created.
+// TODO: After applying 001_initial_schema.sql, generate Supabase types with the
+// CLI or dashboard workflow and replace this temporary placeholder.
 export type Database = {
   public: {
     Tables: Record<string, never>;
