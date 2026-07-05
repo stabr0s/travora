@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 6 — Places Module
+Sprint 7 — Planner Module
 
 Status: IN PROGRESS
 
@@ -77,6 +77,14 @@ Status: IN PROGRESS
 - Placeholder sections created for future modules
 - Mock trip detail data added
 
+### Sprint 6 — Places Module
+- Places workspace integrated with Trip Detail
+- Place statistics created
+- Place filters created
+- Responsive place cards grid created
+- Add place preview UI created
+- Mock places added for every trip
+
 ## Tech Stack
 
 - Next.js 16
@@ -140,22 +148,23 @@ Principles:
 
 ## Next Task
 
-Task #006 — Places Module
+Task #007 — Planner Module
 
 Goal:
 
-Create the places workspace inside the Trip Detail screen.
+Create the daily planning workspace inside the Trip Detail screen.
 
-The Places module should include:
+The Planner module should include:
 
-- Place statistics
-- Status and priority filters
-- Responsive place cards grid
-- Add place UI
-- Mock places for each trip
+- Planner statistics
+- Horizontal day selector
+- Ordered and scheduled day views
+- Day load indicator
+- Plan item timeline
+- Add plan item preview UI
 
 Important:
 
 Use mock data only.
 
-Do not implement persistence, database, authentication, Supabase, maps, geocoding, or form submission yet.
+Do not implement persistence, database, authentication, Supabase, maps, drag and drop, AI planning, or form submission yet.

@@ -1,6 +1,5 @@
 import {
   BedDouble,
-  CalendarRange,
   CircleDollarSign,
   Luggage,
   Map,
@@ -10,18 +9,16 @@ import {
 import { EmptyState } from "@/components/ui";
 import type { TripDetailTabId } from "@/features/trip-detail/types/trip-detail";
 
-type PlaceholderTabId = Exclude<TripDetailTabId, "overview" | "places">;
+type PlaceholderTabId = Exclude<
+  TripDetailTabId,
+  "overview" | "places" | "plan"
+>;
 
 const sectionDetails = {
   map: {
     title: "Trip map",
     description: "Your places and routes will appear on an interactive map in a future sprint.",
     icon: Map,
-  },
-  plan: {
-    title: "Daily plan",
-    description: "Build each day around places, reservations, and fixed travel anchors.",
-    icon: CalendarRange,
   },
   reservations: {
     title: "Reservations",
