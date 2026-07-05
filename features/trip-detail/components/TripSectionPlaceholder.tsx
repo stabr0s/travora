@@ -4,21 +4,15 @@ import {
   CircleDollarSign,
   Luggage,
   Map,
-  MapPin,
   Users,
 } from "lucide-react";
 
 import { EmptyState } from "@/components/ui";
 import type { TripDetailTabId } from "@/features/trip-detail/types/trip-detail";
 
-type PlaceholderTabId = Exclude<TripDetailTabId, "overview">;
+type PlaceholderTabId = Exclude<TripDetailTabId, "overview" | "places">;
 
 const sectionDetails = {
-  places: {
-    title: "Places workspace",
-    description: "Saved attractions, restaurants, hotels, and ideas will live here.",
-    icon: MapPin,
-  },
   map: {
     title: "Trip map",
     description: "Your places and routes will appear on an interactive map in a future sprint.",
@@ -49,7 +43,7 @@ const sectionDetails = {
     description: "Travelers, invitations, and trip roles will be managed in this section.",
     icon: Users,
   },
-} satisfies Record<PlaceholderTabId, { title: string; description: string; icon: typeof MapPin }>;
+} satisfies Record<PlaceholderTabId, { title: string; description: string; icon: typeof Map }>;
 
 type TripSectionPlaceholderProps = {
   section: PlaceholderTabId;

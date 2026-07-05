@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 5 — Trip Detail Shell
+Sprint 6 — Places Module
 
 Status: IN PROGRESS
 
@@ -66,6 +66,16 @@ Status: IN PROGRESS
 - New trip card created
 - New trip form UI created
 - Mock trip data added
+
+### Sprint 5 — Trip Detail Shell
+- Dynamic trip detail route created
+- Premium trip hero created
+- Trip workspace tabs created
+- Overview summary cards created
+- Planning progress created
+- Timeline preview created
+- Placeholder sections created for future modules
+- Mock trip detail data added
 
 ## Tech Stack
 
@@ -130,23 +140,22 @@ Principles:
 
 ## Next Task
 
-Task #005 — Trip Detail Shell
+Task #006 — Places Module
 
 Goal:
 
-Create the main workspace shell for a single trip.
+Create the places workspace inside the Trip Detail screen.
 
-The Trip Detail shell should include:
+The Places module should include:
 
-- Trip hero
-- Trip section tabs
-- Overview summary
-- Planning progress
-- Timeline preview
-- Placeholder sections for future modules
+- Place statistics
+- Status and priority filters
+- Responsive place cards grid
+- Add place UI
+- Mock places for each trip
 
 Important:
 
 Use mock data only.
 
-Do not implement persistence, database, authentication, Supabase, maps, or advanced planning logic yet.
+Do not implement persistence, database, authentication, Supabase, maps, geocoding, or form submission yet.
