@@ -8,6 +8,8 @@ import { PlacesSection } from "@/features/places";
 import type { Place } from "@/features/places/types/place";
 import { PersistedPlannerSection } from "@/features/planner";
 import type { PersistedPlannerItem } from "@/features/planner/types/persisted-planner";
+import { PersistedReservationsSection } from "@/features/reservations";
+import type { PersistedReservation } from "@/features/reservations/types/persisted-reservation";
 import { PersistedTripHero } from "@/features/trip-detail/components/PersistedTripHero";
 import { PersistedTripOverview } from "@/features/trip-detail/components/PersistedTripOverview";
 import { TripTabs } from "@/features/trip-detail/components/TripTabs";
@@ -20,11 +22,12 @@ type PersistedTripDetailScreenProps = {
   placesError?: string;
   plannerItems: PersistedPlannerItem[];
   plannerError?: string;
+  reservations: PersistedReservation[];
+  reservationsError?: string;
 };
 
-const moduleNames: Record<Exclude<TripDetailTabId, "overview" | "places" | "plan">, string> = {
+const moduleNames: Record<Exclude<TripDetailTabId, "overview" | "places" | "plan" | "reservations">, string> = {
   map: "Map",
-  reservations: "Reservations",
   budget: "Budget",
   packing: "Packing",
   participants: "Participants",
@@ -36,6 +39,8 @@ export function PersistedTripDetailScreen({
   placesError,
   plannerItems,
   plannerError,
+  reservations,
+  reservationsError,
 }: PersistedTripDetailScreenProps) {
   const [activeTab, setActiveTab] = useState<TripDetailTabId>("overview");
 
@@ -58,11 +63,17 @@ export function PersistedTripDetailScreen({
           items={plannerItems}
           loadError={plannerError}
         />
+      ) : activeTab === "reservations" ? (
+        <PersistedReservationsSection
+          tripId={trip.id}
+          reservations={reservations}
+          loadError={reservationsError}
+        />
       ) : (
         <EmptyState
           icon={Construction}
           title={`${moduleNames[activeTab]} will be connected next`}
-          description="This saved trip currently supports Overview, Places, and Plan. The remaining modules will be connected in later tasks."
+          description="This saved trip currently supports Overview, Places, Plan, and Reservations. The remaining modules will be connected in later tasks."
           className="min-h-80"
         />
       )}

@@ -6,6 +6,7 @@ import {
 import { mapPersistedPlaceToPlace } from "@/features/places/data/place-mappers";
 import { getPlacesForTrip } from "@/features/places/services/places-service";
 import { getPlannerItemsForTrip } from "@/features/planner/services/planner-service";
+import { getReservationsForTrip } from "@/features/reservations/services/reservations-service";
 import { getTripById } from "@/features/trips/services/trips-service";
 import { isUuid } from "@/lib/validation/is-uuid";
 
@@ -27,9 +28,10 @@ export default async function TripDetailPage({ params }: TripDetailPageProps) {
   const persistedTrip = await getTripById(id);
 
   if (persistedTrip.data) {
-    const [persistedPlaces, persistedPlanner] = await Promise.all([
+    const [persistedPlaces, persistedPlanner, persistedReservations] = await Promise.all([
       getPlacesForTrip(id),
       getPlannerItemsForTrip(id),
+      getReservationsForTrip(id),
     ]);
 
     return (
@@ -39,6 +41,8 @@ export default async function TripDetailPage({ params }: TripDetailPageProps) {
         placesError={persistedPlaces.error?.message}
         plannerItems={persistedPlanner.data || []}
         plannerError={persistedPlanner.error?.message}
+        reservations={persistedReservations.data || []}
+        reservationsError={persistedReservations.error?.message}
       />
     );
   }

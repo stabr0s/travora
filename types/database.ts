@@ -195,6 +195,54 @@ export type Database = {
           },
         ];
       };
+      reservations: {
+        Row: {
+          id: string;
+          trip_id: string;
+          type: string | null;
+          title: string;
+          provider: string | null;
+          reservation_number: string | null;
+          start_date: string | null;
+          end_date: string | null;
+          location: string | null;
+          total_price: number | null;
+          currency: string | null;
+          status: "paid" | "deposit" | "unpaid" | null;
+          payer_name: string | null;
+          notes: string | null;
+          created_at: string | null;
+          updated_at: string | null;
+        };
+        Insert: {
+          id?: string;
+          trip_id: string;
+          type?: string | null;
+          title: string;
+          provider?: string | null;
+          reservation_number?: string | null;
+          start_date?: string | null;
+          end_date?: string | null;
+          location?: string | null;
+          total_price?: number | null;
+          currency?: string | null;
+          status?: "paid" | "deposit" | "unpaid" | null;
+          payer_name?: string | null;
+          notes?: string | null;
+          created_at?: string | null;
+          updated_at?: string | null;
+        };
+        Update: Partial<Database["public"]["Tables"]["reservations"]["Insert"]>;
+        Relationships: [
+          {
+            foreignKeyName: "reservations_trip_id_fkey";
+            columns: ["trip_id"];
+            isOneToOne: false;
+            referencedRelation: "trips";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
     };
     Views: Record<string, never>;
     Functions: Record<string, never>;
