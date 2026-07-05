@@ -1,5 +1,4 @@
 import {
-  Luggage,
   Users,
 } from "lucide-react";
 
@@ -8,21 +7,16 @@ import type { TripDetailTabId } from "@/features/trip-detail/types/trip-detail";
 
 type PlaceholderTabId = Exclude<
   TripDetailTabId,
-  "overview" | "places" | "map" | "plan" | "reservations" | "budget"
+  "overview" | "places" | "map" | "plan" | "reservations" | "budget" | "packing"
 >;
 
 const sectionDetails = {
-  packing: {
-    title: "Packing lists",
-    description: "Shared and private packing checklists will help everyone get ready.",
-    icon: Luggage,
-  },
   participants: {
     title: "Participants",
     description: "Travelers, invitations, and trip roles will be managed in this section.",
     icon: Users,
   },
-} satisfies Record<PlaceholderTabId, { title: string; description: string; icon: typeof Luggage }>;
+} satisfies Record<PlaceholderTabId, { title: string; description: string; icon: typeof Users }>;
 
 type TripSectionPlaceholderProps = {
   section: PlaceholderTabId;

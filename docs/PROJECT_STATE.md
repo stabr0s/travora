@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 10 — Budget Module
+Sprint 11 — Packing Module
 
 Status: IN PROGRESS
 
@@ -114,6 +114,16 @@ Status: IN PROGRESS
 - Add reservation preview UI created
 - Mock reservation data added for every trip
 
+### Sprint 10 — Budget Module
+- Budget workspace integrated with Trip Detail
+- Budget statistics created
+- Budget progress and per-person summary created
+- Category breakdown created
+- Expense cards created
+- Settlement summary created
+- Add expense preview UI created
+- Mock budget data added for every trip
+
 ## Tech Stack
 
 - Next.js 16
@@ -177,24 +187,23 @@ Principles:
 
 ## Next Task
 
-Task #010 — Budget Module
+Task #011 — Packing Module
 
 Goal:
 
-Create the budget workspace inside the Trip Detail screen.
+Create the packing workspace inside the Trip Detail screen.
 
-The Budget module should include:
+The Packing module should include:
 
-- Budget statistics
-- Per-person cost summary
-- Budget progress
-- Category breakdown
-- Expense cards
-- Settlement summary
-- Add expense preview UI
+- Packing statistics and progress
+- Category filters
+- Shared and private checklist items
+- Local checkbox preview
+- Traveler assignment preview
+- Add packing item preview UI
 
 Important:
 
 Use mock data only.
 
-Do not implement persistence, database, authentication, Supabase, payments, currency APIs, real settlements, or form submission yet.
+Do not implement persistence, database, authentication, Supabase, real collaboration, user accounts, or form submission yet.
