@@ -8,9 +8,9 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 3 — Dashboard
+Sprint 4 — Trips Module
 
-Status: READY TO START
+Status: IN PROGRESS
 
 ## Completed
 
@@ -47,6 +47,16 @@ Status: READY TO START
 - Application shell visually improved
 - Apple + Travel design direction applied
 - Desktop and mobile responsiveness improved
+
+### Sprint 3 — Dashboard
+- Dashboard screen created
+- Welcome hero created
+- Next trip card created
+- Quick actions created
+- Stats cards created
+- Recent places created
+- Upcoming reservations placeholder created
+- Mock dashboard data added
 
 ## Tech Stack
 
@@ -111,23 +121,23 @@ Principles:
 
 ## Next Task
 
-Task #003 — Dashboard
+Task #004 — Trips Module
 
 Goal:
 
-Create the first real dashboard screen for Travora.
+Create the trips overview and the new trip form UI.
 
-The dashboard should include:
+The Trips module should include:
 
-- Welcome hero
-- Next trip card
-- Quick actions
-- Stats cards
-- Recent places
-- Upcoming reservations placeholder
+- Trips header
+- Trip statistics
+- Status filters
+- Trip cards grid
+- New trip card
+- New trip form UI
 
 Important:
 
 Use mock data only.
 
-Do not implement database, authentication, Supabase, or business logic yet.
+Do not implement form persistence, database, authentication, Supabase, or business logic yet.
