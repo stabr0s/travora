@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 20 — Persist Reservations
+Sprint 21 — Persist Budget
 
 Status: IN PROGRESS
 
@@ -193,6 +193,12 @@ Status: IN PROGRESS
 - Mock trips retain the complete mock Planner experience
 - No drag and drop, realtime collaboration, or place linking added
 
+### Sprint 20 — Persist Reservations
+- Persisted trips load reservations from Supabase
+- Add Reservation creates reservations for persisted trips
+- Mock trips retain the complete mock Reservations experience
+- No uploads, payments, or settlement logic added
+
 ## MVP Mock Modules Completed
 
 - Dashboard
@@ -208,11 +214,11 @@ Status: IN PROGRESS
 
 ## Known Limitations
 
-- Trips, Places, Planner, and Reservations persist for signed-in users; other modules still use mock data
+- Trips, Places, Planner, Reservations, and Budget persist for signed-in users; other modules still use mock data
 - Authentication foundation only; application routes remain public
 - Database migration has been applied manually
-- Persistence is currently limited to Trips, Places, Planner, and Reservations
-- Forms outside the persisted Trips flow are preview-only
+- Persistence is currently limited to Trips, Places, Planner, Reservations, and Budget
+- Forms in modules not yet connected to persistence remain preview-only
 - Map is placeholder only
 - Sharing/invitations are mock-only
 
@@ -223,8 +229,8 @@ Status: IN PROGRESS
 - Typed browser and server clients prepared
 - Authentication implemented in the Auth Foundation sprint
 - Database schema applied in the Database Schema Foundation sprint
-- Trip, Place, Planner, and Reservations persistence added in their persistence sprints
-- Mock data is still used outside Trips, Places, Planner, and Reservations
+- Trip, Place, Planner, Reservations, and Budget persistence added in their persistence sprints
+- Mock data is still used outside Trips, Places, Planner, Reservations, and Budget
 
 ## Auth Foundation
 
@@ -282,6 +288,17 @@ Status: IN PROGRESS
 - No payment processing implemented
 - No real settlement logic implemented
 - Other detail modules remain mock-based or show placeholders
+
+## Persist Budget
+
+- Persisted trips load budget expenses from Supabase
+- Add Expense creates `budget_expenses` rows for persisted trips
+- Mock trips continue using mock budget data and preview-only creation
+- Multi-currency totals and categories are grouped by currency
+- No payments or currency conversion implemented
+- No real settlement logic implemented
+- Budget is not automatically synchronized with reservations
+- Remaining detail modules stay mock-based or show placeholders
 
 ## Tech Stack
 
@@ -347,22 +364,22 @@ Principles:
 
 ## Next Task
 
-Task #020 — Persist Reservations
+Task #021 — Persist Budget
 
 Goal:
 
-Persist reservations for saved trips while preserving the full mock trip experience.
+Persist budget expenses for saved trips while preserving the full mock trip experience.
 
 The task includes:
 
-- Server-side Reservations queries and creation
-- Mock and persisted Reservations modes
-- Persisted Trip Detail tabs for Overview, Places, Plan, and Reservations
+- Server-side Budget expense queries and creation
+- Mock and persisted Budget modes
+- Persisted Trip Detail tabs for Overview, Places, Plan, Reservations, and Budget
 - Friendly RLS-safe errors
-- Reservation cards that only show available data
+- Currency-scoped totals and category breakdowns
 
 Important:
 
 Continue using mock data in modules that have not been connected yet.
 
-Do not add uploads, payment processing, settlement logic, or protect application routes yet.
+Do not add payments, currency conversion, settlement logic, or protect application routes yet.

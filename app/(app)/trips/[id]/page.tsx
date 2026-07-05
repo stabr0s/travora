@@ -3,6 +3,7 @@ import {
   PersistedTripDetailScreen,
   TripDetailScreen,
 } from "@/features/trip-detail";
+import { getBudgetExpensesForTrip } from "@/features/budget/services/budget-service";
 import { mapPersistedPlaceToPlace } from "@/features/places/data/place-mappers";
 import { getPlacesForTrip } from "@/features/places/services/places-service";
 import { getPlannerItemsForTrip } from "@/features/planner/services/planner-service";
@@ -28,10 +29,11 @@ export default async function TripDetailPage({ params }: TripDetailPageProps) {
   const persistedTrip = await getTripById(id);
 
   if (persistedTrip.data) {
-    const [persistedPlaces, persistedPlanner, persistedReservations] = await Promise.all([
+    const [persistedPlaces, persistedPlanner, persistedReservations, persistedBudget] = await Promise.all([
       getPlacesForTrip(id),
       getPlannerItemsForTrip(id),
       getReservationsForTrip(id),
+      getBudgetExpensesForTrip(id),
     ]);
 
     return (
@@ -43,6 +45,8 @@ export default async function TripDetailPage({ params }: TripDetailPageProps) {
         plannerError={persistedPlanner.error?.message}
         reservations={persistedReservations.data || []}
         reservationsError={persistedReservations.error?.message}
+        budgetExpenses={persistedBudget.data || []}
+        budgetError={persistedBudget.error?.message}
       />
     );
   }

@@ -243,6 +243,48 @@ export type Database = {
           },
         ];
       };
+      budget_expenses: {
+        Row: {
+          id: string;
+          trip_id: string;
+          category: string | null;
+          title: string;
+          amount: number;
+          currency: string | null;
+          paid_by_name: string | null;
+          participants_count: number | null;
+          status: "paid" | "deposit" | "unpaid" | null;
+          expense_date: string | null;
+          notes: string | null;
+          created_at: string | null;
+          updated_at: string | null;
+        };
+        Insert: {
+          id?: string;
+          trip_id: string;
+          category?: string | null;
+          title: string;
+          amount: number;
+          currency?: string | null;
+          paid_by_name?: string | null;
+          participants_count?: number | null;
+          status?: "paid" | "deposit" | "unpaid" | null;
+          expense_date?: string | null;
+          notes?: string | null;
+          created_at?: string | null;
+          updated_at?: string | null;
+        };
+        Update: Partial<Database["public"]["Tables"]["budget_expenses"]["Insert"]>;
+        Relationships: [
+          {
+            foreignKeyName: "budget_expenses_trip_id_fkey";
+            columns: ["trip_id"];
+            isOneToOne: false;
+            referencedRelation: "trips";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
     };
     Views: Record<string, never>;
     Functions: Record<string, never>;

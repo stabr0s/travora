@@ -4,6 +4,8 @@ import { useState } from "react";
 import { Construction } from "lucide-react";
 
 import { EmptyState } from "@/components/ui";
+import { PersistedBudgetSection } from "@/features/budget";
+import type { PersistedBudgetExpense } from "@/features/budget/types/persisted-budget";
 import { PlacesSection } from "@/features/places";
 import type { Place } from "@/features/places/types/place";
 import { PersistedPlannerSection } from "@/features/planner";
@@ -24,11 +26,12 @@ type PersistedTripDetailScreenProps = {
   plannerError?: string;
   reservations: PersistedReservation[];
   reservationsError?: string;
+  budgetExpenses: PersistedBudgetExpense[];
+  budgetError?: string;
 };
 
-const moduleNames: Record<Exclude<TripDetailTabId, "overview" | "places" | "plan" | "reservations">, string> = {
+const moduleNames: Record<Exclude<TripDetailTabId, "overview" | "places" | "plan" | "reservations" | "budget">, string> = {
   map: "Map",
-  budget: "Budget",
   packing: "Packing",
   participants: "Participants",
 };
@@ -41,6 +44,8 @@ export function PersistedTripDetailScreen({
   plannerError,
   reservations,
   reservationsError,
+  budgetExpenses,
+  budgetError,
 }: PersistedTripDetailScreenProps) {
   const [activeTab, setActiveTab] = useState<TripDetailTabId>("overview");
 
@@ -69,11 +74,17 @@ export function PersistedTripDetailScreen({
           reservations={reservations}
           loadError={reservationsError}
         />
+      ) : activeTab === "budget" ? (
+        <PersistedBudgetSection
+          tripId={trip.id}
+          expenses={budgetExpenses}
+          loadError={budgetError}
+        />
       ) : (
         <EmptyState
           icon={Construction}
           title={`${moduleNames[activeTab]} will be connected next`}
-          description="This saved trip currently supports Overview, Places, Plan, and Reservations. The remaining modules will be connected in later tasks."
+          description="This saved trip currently supports Overview, Places, Plan, Reservations, and Budget. The remaining modules will be connected in later tasks."
           className="min-h-80"
         />
       )}
