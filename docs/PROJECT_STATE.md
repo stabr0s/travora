@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 9 — Reservations Module
+Sprint 10 — Budget Module
 
 Status: IN PROGRESS
 
@@ -105,6 +105,15 @@ Status: IN PROGRESS
 - Synchronized map places list created
 - Mock map data added for every trip
 
+### Sprint 9 — Reservations Module
+- Reservations workspace integrated with Trip Detail
+- Reservation statistics created
+- Reservation filters created
+- Detailed reservation cards created
+- Settlement preview created
+- Add reservation preview UI created
+- Mock reservation data added for every trip
+
 ## Tech Stack
 
 - Next.js 16
@@ -168,23 +177,24 @@ Principles:
 
 ## Next Task
 
-Task #009 — Reservations Module
+Task #010 — Budget Module
 
 Goal:
 
-Create the reservations workspace inside the Trip Detail screen.
+Create the budget workspace inside the Trip Detail screen.
 
-The Reservations module should include:
+The Budget module should include:
 
-- Reservation statistics
-- Reservation type and payment filters
-- Detailed reservation cards
-- Settlement preview
-- Add reservation preview UI
-- Mock reservations for every trip
+- Budget statistics
+- Per-person cost summary
+- Budget progress
+- Category breakdown
+- Expense cards
+- Settlement summary
+- Add expense preview UI
 
 Important:
 
 Use mock data only.
 
-Do not implement persistence, database, authentication, Supabase, payments, file uploads, real settlements, or form submission yet.
+Do not implement persistence, database, authentication, Supabase, payments, currency APIs, real settlements, or form submission yet.

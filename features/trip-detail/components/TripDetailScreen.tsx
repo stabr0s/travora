@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Plane } from "lucide-react";
 
 import { EmptyState } from "@/components/ui";
+import { BudgetSection } from "@/features/budget";
 import { MapSection } from "@/features/map";
 import { PlacesSection } from "@/features/places";
 import { PlannerSection } from "@/features/planner";
@@ -57,6 +58,8 @@ export function TripDetailScreen({ tripId }: TripDetailScreenProps) {
         <PlannerSection tripId={tripId} />
       ) : activeTab === "reservations" ? (
         <ReservationsSection tripId={tripId} />
+      ) : activeTab === "budget" ? (
+        <BudgetSection tripId={tripId} />
       ) : (
         <TripSectionPlaceholder section={activeTab} />
       )}

@@ -1,5 +1,4 @@
 import {
-  CircleDollarSign,
   Luggage,
   Users,
 } from "lucide-react";
@@ -9,15 +8,10 @@ import type { TripDetailTabId } from "@/features/trip-detail/types/trip-detail";
 
 type PlaceholderTabId = Exclude<
   TripDetailTabId,
-  "overview" | "places" | "map" | "plan" | "reservations"
+  "overview" | "places" | "map" | "plan" | "reservations" | "budget"
 >;
 
 const sectionDetails = {
-  budget: {
-    title: "Trip budget",
-    description: "Track expected costs, payments, and the estimated cost per traveler.",
-    icon: CircleDollarSign,
-  },
   packing: {
     title: "Packing lists",
     description: "Shared and private packing checklists will help everyone get ready.",
@@ -28,7 +22,7 @@ const sectionDetails = {
     description: "Travelers, invitations, and trip roles will be managed in this section.",
     icon: Users,
   },
-} satisfies Record<PlaceholderTabId, { title: string; description: string; icon: typeof CircleDollarSign }>;
+} satisfies Record<PlaceholderTabId, { title: string; description: string; icon: typeof Luggage }>;
 
 type TripSectionPlaceholderProps = {
   section: PlaceholderTabId;
