@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 4 — Trips Module
+Sprint 5 — Trip Detail Shell
 
 Status: IN PROGRESS
 
@@ -57,6 +57,15 @@ Status: IN PROGRESS
 - Recent places created
 - Upcoming reservations placeholder created
 - Mock dashboard data added
+
+### Sprint 4 — Trips Module
+- Trips overview screen created
+- Trip statistics created
+- Status filters created
+- Responsive trip cards grid created
+- New trip card created
+- New trip form UI created
+- Mock trip data added
 
 ## Tech Stack
 
@@ -121,23 +130,23 @@ Principles:
 
 ## Next Task
 
-Task #004 — Trips Module
+Task #005 — Trip Detail Shell
 
 Goal:
 
-Create the trips overview and the new trip form UI.
+Create the main workspace shell for a single trip.
 
-The Trips module should include:
+The Trip Detail shell should include:
 
-- Trips header
-- Trip statistics
-- Status filters
-- Trip cards grid
-- New trip card
-- New trip form UI
+- Trip hero
+- Trip section tabs
+- Overview summary
+- Planning progress
+- Timeline preview
+- Placeholder sections for future modules
 
 Important:
 
 Use mock data only.
 
-Do not implement form persistence, database, authentication, Supabase, or business logic yet.
+Do not implement persistence, database, authentication, Supabase, maps, or advanced planning logic yet.
