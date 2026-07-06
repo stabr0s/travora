@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 24 — Persist Participants
+Sprint 25 — MVP Backend Stabilization
 
 Status: IN PROGRESS
 
@@ -217,6 +217,12 @@ Status: IN PROGRESS
 - Mock packing retains local preview-only behavior
 - No realtime collaboration or private permission logic added
 
+### Sprint 24 — Persist Participants
+- Persisted trips load participants through limited profile-access RPCs
+- Owners can add existing users and manage non-owner members
+- Non-owner participant views remain read-only
+- No real email invitations, invite tokens, or public sharing added
+
 ## MVP Mock Modules Completed
 
 - Dashboard
@@ -238,7 +244,7 @@ Status: IN PROGRESS
 - Persistence includes Trips, Places, Planner, Reservations, Budget, Packing, and Participants
 - Forms in modules not yet connected to persistence remain preview-only
 - Map is placeholder only
-- Sharing/invitations are mock-only
+- Real email invitations and public sharing are not implemented
 
 ## Supabase Foundation
 
@@ -349,6 +355,33 @@ Status: IN PROGRESS
 - No real email invitations, invite tokens, service-role usage, or realtime collaboration added
 - Map remains a placeholder
 
+## MVP Backend Stabilization
+
+- Persisted MVP modules reviewed for consistency
+- Services and server actions audited
+- Safe error handling and development-only diagnostics reviewed
+- RLS policies and participant RPC usage reviewed
+- Loading errors no longer appear together with misleading empty states
+- Mock trip behavior remains unchanged
+- No new product features were added
+- Map remains a placeholder
+- The next likely task is Map persistence or sharing/public links
+
+## Manual Backend Test Checklist
+
+- Login and logout
+- Create a persisted trip and verify its owner membership
+- Open persisted Trip Detail and every connected tab
+- Places: create, edit, and delete
+- Planner: create, edit, and delete
+- Reservations: create, edit, and delete
+- Budget: create, edit, and delete
+- Packing: create, edit, delete, and toggle packed state
+- Participants: owner adds an existing user, edits them, and removes a non-owner
+- Open a mock trip and confirm the full mock experience still works
+- Refresh after mutations and confirm data persists
+- Verify representative rows directly in Supabase
+
 ## Tech Stack
 
 - Next.js 16
@@ -413,21 +446,21 @@ Principles:
 
 ## Next Task
 
-Task #024 — Persist Participants
+Task #025 — MVP Backend Stabilization
 
 Goal:
 
-Persist trip participants and owner-managed membership roles.
+Stabilize the persisted MVP backend and UI integration.
 
 The task includes:
 
-- Limited participant/profile RPC access
-- Participant listing from `trip_members` and `profiles`
-- Owner-only add, edit, and remove actions
-- Read-only participant view for non-owners
+- Audit persisted services and server actions
+- Review safe errors, RLS, RPCs, and manual database types
+- Correct persisted error and empty states
+- Document the backend MVP manual test checklist
 
 Important:
 
-Mock Participants remains preview-only.
+Mock trip behavior remains unchanged.
 
-Do not add email delivery, invite tokens, public sharing, or realtime collaboration yet.
+Do not add new product features; Map remains a placeholder.

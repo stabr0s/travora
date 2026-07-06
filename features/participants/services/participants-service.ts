@@ -143,8 +143,12 @@ export async function updateParticipant(
   if (trip?.owner_id !== user.id) return { data: null, error: { code: "OWNER_REQUIRED", message: "Only the trip owner can edit participants." } };
   const { data: member, error: memberError } = await supabase.from("trip_members")
     .select("role").eq("id", input.memberId).eq("trip_id", input.tripId).maybeSingle();
-  if (memberError) logParticipantsError("participant role check failed", memberError);
-  if (!member || member.role === "owner") {
+  if (memberError) {
+    logParticipantsError("participant role check failed", memberError);
+    return { data: null, error: { code: "UPDATE_FAILED", message: "We couldn't load participant details." } };
+  }
+  if (!member) return { data: null, error: { code: "INVALID_RECORD", message: "This participant is not available." } };
+  if (member.role === "owner") {
     return { data: null, error: { code: "UPDATE_FAILED", message: "The trip owner's role cannot be changed." } };
   }
 
@@ -174,8 +178,12 @@ export async function removeParticipant(
   if (trip?.owner_id !== user.id) return { data: null, error: { code: "OWNER_REQUIRED", message: "Only the trip owner can remove participants." } };
   const { data: member, error: memberError } = await supabase.from("trip_members")
     .select("role").eq("id", input.memberId).eq("trip_id", input.tripId).maybeSingle();
-  if (memberError) logParticipantsError("participant remove check failed", memberError);
-  if (!member || member.role === "owner") {
+  if (memberError) {
+    logParticipantsError("participant remove check failed", memberError);
+    return { data: null, error: { code: "DELETE_FAILED", message: "We couldn't load participant details." } };
+  }
+  if (!member) return { data: null, error: { code: "INVALID_RECORD", message: "This participant is not available." } };
+  if (member.role === "owner") {
     return { data: null, error: { code: "DELETE_FAILED", message: "The trip owner cannot be removed." } };
   }
 

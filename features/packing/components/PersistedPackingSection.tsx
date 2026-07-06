@@ -99,10 +99,7 @@ export function PersistedPackingSection({ tripId, items, loadError }: PersistedP
           onClose={() => setIsPanelOpen(false)}
         />
       ) : null}
-      {loadError ? <Card padding="sm" className="text-sm text-error">{loadError}</Card> : null}
-      {message?.message ? <Card padding="sm" className={message.status === "error" ? "text-sm text-error" : "text-sm text-success"}>{message.message}</Card> : null}
-
-      {!items.length ? (
+      {loadError ? <Card padding="sm" className="text-sm text-error">{loadError}</Card> : !items.length ? (
         <EmptyState
           icon={Luggage}
           title="No packing items yet"
@@ -111,6 +108,7 @@ export function PersistedPackingSection({ tripId, items, loadError }: PersistedP
         />
       ) : (
         <>
+          {message?.message ? <Card padding="sm" className={message.status === "error" ? "text-sm text-error" : "text-sm text-success"}>{message.message}</Card> : null}
           <PackingStats items={uiItems} />
           <PackingProgressCard totalItems={items.length} packedItems={packedCount} />
           <PackingCategoryTabs categories={categories} items={uiItems} activeCategory={activeCategory} onCategoryChange={setActiveCategory} />

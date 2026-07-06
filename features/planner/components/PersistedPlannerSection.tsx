@@ -80,10 +80,7 @@ export function PersistedPlannerSection({
         />
       ) : null}
 
-      {loadError ? <Card padding="sm" className="text-sm text-error">{loadError}</Card> : null}
-      {message?.message ? <Card padding="sm" className={message.status === "error" ? "text-sm text-error" : "text-sm text-success"}>{message.message}</Card> : null}
-
-      {!items.length ? (
+      {loadError ? <Card padding="sm" className="text-sm text-error">{loadError}</Card> : !items.length ? (
         <EmptyState
           icon={CalendarDays}
           title="No plan items yet"
@@ -92,6 +89,7 @@ export function PersistedPlannerSection({
         />
       ) : (
         <div className="space-y-8">
+          {message?.message ? <Card padding="sm" className={message.status === "error" ? "text-sm text-error" : "text-sm text-success"}>{message.message}</Card> : null}
           {groups.map(([date, groupItems]) => (
             <div key={date} className="space-y-3">
               <div className="flex items-baseline justify-between gap-4 border-b border-border-subtle pb-2">

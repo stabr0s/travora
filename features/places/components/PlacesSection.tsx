@@ -90,21 +90,20 @@ export function PlacesSection({
 
       {loadError ? (
         <Card padding="sm" className="text-sm text-error">{loadError}</Card>
-      ) : null}
-      {message?.message ? <Card padding="sm" className={message.status === "error" ? "text-sm text-error" : "text-sm text-success"}>{message.message}</Card> : null}
-
-      <PlacesStats places={tripPlaces} />
-      <PlacesFilters
-        activeFilter={activeFilter}
-        onFilterChange={setActiveFilter}
-      />
-      <PlacesGrid
-        places={filteredPlaces}
-        onAddPlace={openAddPanel}
-        isPending={isPending}
-        onEditPlace={mode === "persisted" ? handleEdit : undefined}
-        onDeletePlace={mode === "persisted" ? handleDelete : undefined}
-      />
+      ) : (
+        <>
+          {message?.message ? <Card padding="sm" className={message.status === "error" ? "text-sm text-error" : "text-sm text-success"}>{message.message}</Card> : null}
+          <PlacesStats places={tripPlaces} />
+          <PlacesFilters activeFilter={activeFilter} onFilterChange={setActiveFilter} />
+          <PlacesGrid
+            places={filteredPlaces}
+            onAddPlace={openAddPanel}
+            isPending={isPending}
+            onEditPlace={mode === "persisted" ? handleEdit : undefined}
+            onDeletePlace={mode === "persisted" ? handleDelete : undefined}
+          />
+        </>
+      )}
     </section>
   );
 }

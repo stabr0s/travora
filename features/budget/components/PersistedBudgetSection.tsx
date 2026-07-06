@@ -83,10 +83,7 @@ export function PersistedBudgetSection({ tripId, expenses, loadError }: Persiste
           onClose={() => setIsAddPanelOpen(false)}
         />
       ) : null}
-      {loadError ? <Card padding="sm" className="text-sm text-error">{loadError}</Card> : null}
-      {message?.message ? <Card padding="sm" className={message.status === "error" ? "text-sm text-error" : "text-sm text-success"}>{message.message}</Card> : null}
-
-      {!expenses.length ? (
+      {loadError ? <Card padding="sm" className="text-sm text-error">{loadError}</Card> : !expenses.length ? (
         <EmptyState
           icon={WalletCards}
           title="No expenses yet"
@@ -95,6 +92,7 @@ export function PersistedBudgetSection({ tripId, expenses, loadError }: Persiste
         />
       ) : (
         <>
+          {message?.message ? <Card padding="sm" className={message.status === "error" ? "text-sm text-error" : "text-sm text-success"}>{message.message}</Card> : null}
           <PersistedBudgetStats totals={summaries.totals} />
           <PersistedBudgetCategoryBreakdown categories={summaries.categories} />
           <section className="space-y-3" aria-label="Saved expenses">

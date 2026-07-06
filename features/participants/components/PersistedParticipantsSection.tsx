@@ -85,13 +85,7 @@ export function PersistedParticipantsSection({
           onClose={() => setIsPanelOpen(false)}
         />
       ) : null}
-      {loadError ? <Card padding="sm" className="text-sm text-error">{loadError}</Card> : null}
-      {message?.message ? <Card padding="sm" className={message.status === "error" ? "text-sm text-error" : "text-sm text-success"}>{message.message}</Card> : null}
-      {!canManage ? (
-        <Card padding="sm" className="text-sm text-muted">Participant management is available only to the trip owner. Your access is read-only.</Card>
-      ) : null}
-
-      {!participants.length ? (
+      {loadError ? <Card padding="sm" className="text-sm text-error">{loadError}</Card> : !participants.length ? (
         <EmptyState
           icon={Users}
           title="No participants available"
@@ -99,6 +93,10 @@ export function PersistedParticipantsSection({
         />
       ) : (
         <>
+          {message?.message ? <Card padding="sm" className={message.status === "error" ? "text-sm text-error" : "text-sm text-success"}>{message.message}</Card> : null}
+          {!canManage ? (
+            <Card padding="sm" className="text-sm text-muted">Participant management is available only to the trip owner. Your access is read-only.</Card>
+          ) : null}
           <ParticipantsStats participants={statsParticipants} />
           <div className="grid gap-5 lg:grid-cols-2">
             {participants.map((participant) => (
@@ -114,7 +112,7 @@ export function PersistedParticipantsSection({
           </div>
         </>
       )}
-      <RolesOverviewCard />
+      {!loadError ? <RolesOverviewCard /> : null}
     </section>
   );
 }

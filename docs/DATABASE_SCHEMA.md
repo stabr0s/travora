@@ -6,8 +6,10 @@ This document describes the initial Supabase schema prepared in
 Participant profile access is extended by
 `supabase/migrations/002_participant_profile_access.sql`.
 
-The migration is a foundation only. Travora still reads all trip-planning data
-from local mock files.
+Travora supports two data modes. The four demo trip IDs continue reading local
+mock data, while persisted UUID trips use Supabase for Trips, Places, Planner,
+Reservations, Budget, Packing, and Participants. Map remains a visual
+placeholder, and Dashboard is not yet backed by complete persisted analytics.
 
 ## Tables
 
@@ -30,9 +32,9 @@ from local mock files.
   planner item and clears its `place_id`.
 - Deleting a trip cascades to its module data and memberships.
 
-The owner is represented by `trips.owner_id`. The migration intentionally does
-not create an automatic owner membership row. A future trip creation workflow
-may add that row explicitly when persistence is implemented.
+The owner is represented by `trips.owner_id`. The database does not create an
+automatic owner membership row; the current trip creation service inserts the
+active owner membership explicitly.
 
 ## Automatic timestamps
 
@@ -108,11 +110,12 @@ initial migration is not designed to be rerun over an existing schema.
 ## Current limitations
 
 - The migration has not been applied automatically by this repository.
-- The application still uses mock data for every travel module.
-- No UI persistence or feature-module database queries exist yet.
+- Demo trip IDs intentionally continue using mock data.
+- Persisted UUID trips use Supabase for all current detail modules except Map.
+- Dashboard does not yet provide complete persisted analytics.
 - Application routes are not protected.
 - Storage, realtime collaboration, and file uploads are not configured.
-- The TypeScript `Database` type remains a placeholder.
+- The TypeScript `Database` type is still maintained manually.
 
 After applying the migration, generate Supabase TypeScript definitions with the
 Supabase CLI or the dashboard-supported workflow before adding application data

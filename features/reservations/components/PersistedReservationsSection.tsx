@@ -63,10 +63,7 @@ export function PersistedReservationsSection({
           onClose={() => setIsAddPanelOpen(false)}
         />
       ) : null}
-      {loadError ? <Card padding="sm" className="text-sm text-error">{loadError}</Card> : null}
-      {message?.message ? <Card padding="sm" className={message.status === "error" ? "text-sm text-error" : "text-sm text-success"}>{message.message}</Card> : null}
-
-      {!reservations.length ? (
+      {loadError ? <Card padding="sm" className="text-sm text-error">{loadError}</Card> : !reservations.length ? (
         <EmptyState
           icon={ReceiptText}
           title="No reservations yet"
@@ -75,6 +72,7 @@ export function PersistedReservationsSection({
         />
       ) : (
         <>
+          {message?.message ? <Card padding="sm" className={message.status === "error" ? "text-sm text-error" : "text-sm text-success"}>{message.message}</Card> : null}
           <ReservationsFilters activeFilter={activeFilter} onFilterChange={setActiveFilter} />
           {filteredReservations.length ? (
             <div className="grid gap-5 xl:grid-cols-2">
