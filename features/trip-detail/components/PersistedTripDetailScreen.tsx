@@ -6,6 +6,8 @@ import { Construction } from "lucide-react";
 import { EmptyState } from "@/components/ui";
 import { PersistedBudgetSection } from "@/features/budget";
 import type { PersistedBudgetExpense } from "@/features/budget/types/persisted-budget";
+import { PersistedPackingSection } from "@/features/packing";
+import type { PersistedPackingItem } from "@/features/packing/types/persisted-packing";
 import { PlacesSection } from "@/features/places";
 import type { PersistedPlace } from "@/features/places/types/persisted-place";
 import { PersistedPlannerSection } from "@/features/planner";
@@ -28,11 +30,12 @@ type PersistedTripDetailScreenProps = {
   reservationsError?: string;
   budgetExpenses: PersistedBudgetExpense[];
   budgetError?: string;
+  packingItems: PersistedPackingItem[];
+  packingError?: string;
 };
 
-const moduleNames: Record<Exclude<TripDetailTabId, "overview" | "places" | "plan" | "reservations" | "budget">, string> = {
+const moduleNames: Record<Exclude<TripDetailTabId, "overview" | "places" | "plan" | "reservations" | "budget" | "packing">, string> = {
   map: "Map",
-  packing: "Packing",
   participants: "Participants",
 };
 
@@ -46,6 +49,8 @@ export function PersistedTripDetailScreen({
   reservationsError,
   budgetExpenses,
   budgetError,
+  packingItems,
+  packingError,
 }: PersistedTripDetailScreenProps) {
   const [activeTab, setActiveTab] = useState<TripDetailTabId>("overview");
 
@@ -80,11 +85,17 @@ export function PersistedTripDetailScreen({
           expenses={budgetExpenses}
           loadError={budgetError}
         />
+      ) : activeTab === "packing" ? (
+        <PersistedPackingSection
+          tripId={trip.id}
+          items={packingItems}
+          loadError={packingError}
+        />
       ) : (
         <EmptyState
           icon={Construction}
           title={`${moduleNames[activeTab]} will be connected next`}
-          description="This saved trip currently supports Overview, Places, Plan, Reservations, and Budget. The remaining modules will be connected in later tasks."
+          description="This saved trip currently supports Overview, Places, Plan, Reservations, Budget, and Packing. The remaining modules will be connected in later tasks."
           className="min-h-80"
         />
       )}

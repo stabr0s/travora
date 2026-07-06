@@ -285,6 +285,44 @@ export type Database = {
           },
         ];
       };
+      packing_items: {
+        Row: {
+          id: string;
+          trip_id: string;
+          name: string;
+          category: string | null;
+          assigned_to_name: string | null;
+          is_shared: boolean | null;
+          is_packed: boolean | null;
+          priority: "essential" | "recommended" | "optional" | null;
+          notes: string | null;
+          created_at: string | null;
+          updated_at: string | null;
+        };
+        Insert: {
+          id?: string;
+          trip_id: string;
+          name: string;
+          category?: string | null;
+          assigned_to_name?: string | null;
+          is_shared?: boolean | null;
+          is_packed?: boolean | null;
+          priority?: "essential" | "recommended" | "optional" | null;
+          notes?: string | null;
+          created_at?: string | null;
+          updated_at?: string | null;
+        };
+        Update: Partial<Database["public"]["Tables"]["packing_items"]["Insert"]>;
+        Relationships: [
+          {
+            foreignKeyName: "packing_items_trip_id_fkey";
+            columns: ["trip_id"];
+            isOneToOne: false;
+            referencedRelation: "trips";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
     };
     Views: Record<string, never>;
     Functions: Record<string, never>;

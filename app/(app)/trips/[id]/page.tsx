@@ -4,6 +4,7 @@ import {
   TripDetailScreen,
 } from "@/features/trip-detail";
 import { getBudgetExpensesForTrip } from "@/features/budget/services/budget-service";
+import { getPackingItemsForTrip } from "@/features/packing/services/packing-service";
 import { getPlacesForTrip } from "@/features/places/services/places-service";
 import { getPlannerItemsForTrip } from "@/features/planner/services/planner-service";
 import { getReservationsForTrip } from "@/features/reservations/services/reservations-service";
@@ -28,11 +29,12 @@ export default async function TripDetailPage({ params }: TripDetailPageProps) {
   const persistedTrip = await getTripById(id);
 
   if (persistedTrip.data) {
-    const [persistedPlaces, persistedPlanner, persistedReservations, persistedBudget] = await Promise.all([
+    const [persistedPlaces, persistedPlanner, persistedReservations, persistedBudget, persistedPacking] = await Promise.all([
       getPlacesForTrip(id),
       getPlannerItemsForTrip(id),
       getReservationsForTrip(id),
       getBudgetExpensesForTrip(id),
+      getPackingItemsForTrip(id),
     ]);
 
     return (
@@ -46,6 +48,8 @@ export default async function TripDetailPage({ params }: TripDetailPageProps) {
         reservationsError={persistedReservations.error?.message}
         budgetExpenses={persistedBudget.data || []}
         budgetError={persistedBudget.error?.message}
+        packingItems={persistedPacking.data || []}
+        packingError={persistedPacking.error?.message}
       />
     );
   }

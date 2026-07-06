@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 22 — Manage Persisted Records
+Sprint 23 — Persist Packing
 
 Status: IN PROGRESS
 
@@ -205,6 +205,12 @@ Status: IN PROGRESS
 - Multi-currency totals remain separated by currency
 - Mock trips retain the complete mock Budget experience
 
+### Sprint 22 — Manage Persisted Records
+- Persisted Places, Planner Items, Reservations, and Budget Expenses can be edited and deleted
+- Mutations respect existing trip RLS policies
+- Mock trip modules remain preview-only
+- No schema changes, bulk actions, undo, history, or realtime added
+
 ## MVP Mock Modules Completed
 
 - Dashboard
@@ -220,10 +226,10 @@ Status: IN PROGRESS
 
 ## Known Limitations
 
-- Trips, Places, Planner, Reservations, and Budget persist for signed-in users; other modules still use mock data
+- Trips, Places, Planner, Reservations, Budget, and Packing persist for signed-in users; other modules still use mock data
 - Authentication foundation only; application routes remain public
 - Database migration has been applied manually
-- Persistence is currently limited to Trips, Places, Planner, Reservations, and Budget
+- Persistence is currently limited to Trips, Places, Planner, Reservations, Budget, and Packing
 - Forms in modules not yet connected to persistence remain preview-only
 - Map is placeholder only
 - Sharing/invitations are mock-only
@@ -235,8 +241,8 @@ Status: IN PROGRESS
 - Typed browser and server clients prepared
 - Authentication implemented in the Auth Foundation sprint
 - Database schema applied in the Database Schema Foundation sprint
-- Trip, Place, Planner, Reservations, and Budget persistence added in their persistence sprints
-- Mock data is still used outside Trips, Places, Planner, Reservations, and Budget
+- Trip, Place, Planner, Reservations, Budget, and Packing persistence added in their persistence sprints
+- Mock data is still used outside Trips, Places, Planner, Reservations, Budget, and Packing
 
 ## Auth Foundation
 
@@ -316,6 +322,16 @@ Status: IN PROGRESS
 - No bulk actions, undo, history, audit log, or realtime collaboration added
 - No database schema or RLS changes were required
 
+## Persist Packing
+
+- Persisted trips load packing items from Supabase
+- Add Packing Item creates `packing_items` rows
+- Persisted packing items can be edited and deleted
+- Checkbox changes persist the `is_packed` state
+- Mock trips continue using mock packing data and local checkbox preview
+- No realtime collaboration or per-user private permissions implemented
+- Participants remains a placeholder for persisted trips
+
 ## Tech Stack
 
 - Next.js 16
@@ -380,22 +396,21 @@ Principles:
 
 ## Next Task
 
-Task #022 — Manage Persisted Records
+Task #023 — Persist Packing
 
 Goal:
 
-Add edit and delete management for persisted trip records.
+Persist packing items and checklist progress for saved trips.
 
 The task includes:
 
-- Server-side update and delete operations for Places
-- Server-side update and delete operations for Planner Items
-- Server-side update and delete operations for Reservations
-- Server-side update and delete operations for Budget Expenses
-- Confirmed delete actions and reusable Add/Edit forms
+- Server-side Packing CRUD operations
+- Persisted checkbox state
+- Packing statistics, progress, and category filters
+- Add/Edit form and confirmed delete action
 
 Important:
 
-Mock trip modules remain preview-only.
+Mock Packing remains local and preview-only.
 
-Do not add bulk actions, undo, history, realtime collaboration, or schema changes yet.
+Do not add participant persistence, realtime collaboration, or private permission logic yet.
