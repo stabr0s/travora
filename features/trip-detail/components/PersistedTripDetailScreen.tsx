@@ -7,7 +7,7 @@ import { EmptyState } from "@/components/ui";
 import { PersistedBudgetSection } from "@/features/budget";
 import type { PersistedBudgetExpense } from "@/features/budget/types/persisted-budget";
 import { PlacesSection } from "@/features/places";
-import type { Place } from "@/features/places/types/place";
+import type { PersistedPlace } from "@/features/places/types/persisted-place";
 import { PersistedPlannerSection } from "@/features/planner";
 import type { PersistedPlannerItem } from "@/features/planner/types/persisted-planner";
 import { PersistedReservationsSection } from "@/features/reservations";
@@ -20,7 +20,7 @@ import type { PersistedTrip } from "@/features/trips/types/persisted-trip";
 
 type PersistedTripDetailScreenProps = {
   trip: PersistedTrip;
-  places: Place[];
+  places: PersistedPlace[];
   placesError?: string;
   plannerItems: PersistedPlannerItem[];
   plannerError?: string;

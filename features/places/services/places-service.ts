@@ -3,8 +3,10 @@ import { randomUUID } from "node:crypto";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import type {
   CreatePlaceInput,
+  DeletePlaceInput,
   PersistedPlace,
   PlacesServiceResult,
+  UpdatePlaceInput,
 } from "@/features/places/types/persisted-place";
 import { isUuid } from "@/lib/validation/is-uuid";
 import type { Database } from "@/types/database";
@@ -144,4 +146,63 @@ export async function createPlace(
   };
 
   return { data: place || fallbackPlace, error: null };
+}
+
+export async function updatePlace(
+  input: UpdatePlaceInput,
+): Promise<PlacesServiceResult<PersistedPlace>> {
+  if (!isUuid(input.tripId)) {
+    return { data: null, error: { code: "INVALID_TRIP", message: "This saved trip is not available." } };
+  }
+  if (!isUuid(input.id) || !input.title.trim()) {
+    return { data: null, error: { code: "INVALID_RECORD", message: "Choose a valid place and enter its name." } };
+  }
+
+  const { supabase, user } = await getAuthContext();
+  if (!user) return { data: null, error: { code: "AUTH_REQUIRED", message: "Sign in to edit places." } };
+
+  const payload: Database["public"]["Tables"]["places"]["Update"] = {
+    title: input.title.trim(),
+    category: input.category || null,
+    address: input.address || null,
+    city: input.city || null,
+    country: input.country || null,
+    status: input.status || null,
+    priority: input.priority || null,
+    notes: input.notes || null,
+    website_url: input.websiteUrl || null,
+  };
+  const { error } = await supabase.from("places").update(payload)
+    .eq("id", input.id).eq("trip_id", input.tripId);
+
+  if (error) {
+    logPlacesError("place update failed", error);
+    return { data: null, error: { code: "UPDATE_FAILED", message: "We couldn't update this place." } };
+  }
+
+  const { data, error: readError } = await supabase.from("places").select("*")
+    .eq("id", input.id).eq("trip_id", input.tripId).maybeSingle();
+  if (readError || !data) {
+    if (readError) logPlacesError("updated place readback failed", readError);
+    return { data: null, error: { code: "UPDATE_FAILED", message: "We couldn't confirm the place update." } };
+  }
+  return { data, error: null };
+}
+
+export async function deletePlace(
+  input: DeletePlaceInput,
+): Promise<PlacesServiceResult<null>> {
+  if (!isUuid(input.tripId)) return { data: null, error: { code: "INVALID_TRIP", message: "This saved trip is not available." } };
+  if (!isUuid(input.id)) return { data: null, error: { code: "INVALID_RECORD", message: "This place is not available." } };
+
+  const { supabase, user } = await getAuthContext();
+  if (!user) return { data: null, error: { code: "AUTH_REQUIRED", message: "Sign in to delete places." } };
+
+  const { error } = await supabase.from("places").delete()
+    .eq("id", input.id).eq("trip_id", input.tripId);
+  if (error) {
+    logPlacesError("place delete failed", error);
+    return { data: null, error: { code: "DELETE_FAILED", message: "We couldn't delete this place." } };
+  }
+  return { data: null, error: null };
 }

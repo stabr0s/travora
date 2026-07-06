@@ -1,7 +1,14 @@
+"use client";
+
+import { useActionState } from "react";
 import { MapPin, X } from "lucide-react";
 
 import { Button, Card } from "@/components/ui";
-import type { CreatePlaceActionState } from "@/features/places/types/persisted-place";
+import { createPlaceAction, updatePlaceAction } from "@/features/places/actions/place-actions";
+import type {
+  CreatePlaceActionState,
+  PersistedPlace,
+} from "@/features/places/types/persisted-place";
 
 const fieldClassName =
   "mt-2 h-11 w-full rounded-xl border border-border bg-background px-3.5 text-sm text-foreground shadow-xs outline-none transition-colors placeholder:text-muted-foreground focus:border-primary/40 focus:ring-2 focus:ring-primary/15";
@@ -9,26 +16,30 @@ const fieldClassName =
 type AddPlacePanelProps = {
   tripId: string;
   mode: "mock" | "persisted";
-  actionState: CreatePlaceActionState;
-  formAction: (payload: FormData) => void;
-  isPending: boolean;
+  place?: PersistedPlace | null;
   onClose: () => void;
 };
+
+const initialState: CreatePlaceActionState = { status: "idle" };
 
 export function AddPlacePanel({
   tripId,
   mode,
-  actionState,
-  formAction,
-  isPending,
+  place,
   onClose,
 }: AddPlacePanelProps) {
   const isPersisted = mode === "persisted";
+  const isEditing = Boolean(place);
+  const [actionState, formAction, isPending] = useActionState(
+    isEditing ? updatePlaceAction : createPlaceAction,
+    initialState,
+  );
 
   return (
     <Card padding="md" className="border-primary/15 shadow-md">
       <form action={isPersisted ? formAction : undefined}>
         <input type="hidden" name="tripId" value={tripId} />
+        {place ? <input type="hidden" name="recordId" value={place.id} /> : null}
 
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-start gap-3">
@@ -36,15 +47,15 @@ export function AddPlacePanel({
               <MapPin className="size-5 text-primary" />
             </span>
             <div>
-              <h2 className="text-lg font-semibold tracking-tight text-foreground">Add a place</h2>
+              <h2 className="text-lg font-semibold tracking-tight text-foreground">{isEditing ? "Edit place" : "Add a place"}</h2>
               <p className="mt-1 text-sm text-muted">
                 {isPersisted
-                  ? "Save a place to this trip. Map features will be connected later."
+                  ? isEditing ? "Update this saved place." : "Save a place to this trip. Map features will be connected later."
                   : "This is a preview. Mock trips do not save places."}
               </p>
             </div>
           </div>
-          <Button variant="ghost" size="sm" onClick={onClose} aria-label="Close add place panel">
+          <Button type="button" variant="ghost" size="sm" onClick={onClose} aria-label="Close add place panel">
             <X className="size-4" />
           </Button>
         </div>
@@ -52,23 +63,23 @@ export function AddPlacePanel({
         <div className="mt-6 grid gap-5 sm:grid-cols-2">
           <label className="text-sm font-medium text-foreground sm:col-span-2">
             Place name
-            <input className={fieldClassName} name="title" type="text" placeholder="e.g. Senso-ji Temple" required={isPersisted} />
+            <input className={fieldClassName} defaultValue={place?.title} name="title" type="text" placeholder="e.g. Senso-ji Temple" required={isPersisted} />
           </label>
           <label className="text-sm font-medium text-foreground">
             City
-            <input className={fieldClassName} name="city" type="text" placeholder="Tokyo" />
+            <input className={fieldClassName} defaultValue={place?.city || ""} name="city" type="text" placeholder="Tokyo" />
           </label>
           <label className="text-sm font-medium text-foreground">
             Country
-            <input className={fieldClassName} name="country" type="text" placeholder="Japan" />
+            <input className={fieldClassName} defaultValue={place?.country || ""} name="country" type="text" placeholder="Japan" />
           </label>
           <label className="text-sm font-medium text-foreground sm:col-span-2">
             Address
-            <input className={fieldClassName} name="address" type="text" placeholder="Optional street address" />
+            <input className={fieldClassName} defaultValue={place?.address || ""} name="address" type="text" placeholder="Optional street address" />
           </label>
           <label className="text-sm font-medium text-foreground">
             Category
-            <select className={fieldClassName} defaultValue="attraction" name="category">
+            <select className={fieldClassName} defaultValue={place?.category || "attraction"} name="category">
               <option value="attraction">Attraction</option>
               <option value="restaurant">Restaurant</option>
               <option value="viewpoint">Viewpoint</option>
@@ -81,7 +92,7 @@ export function AddPlacePanel({
           </label>
           <label className="text-sm font-medium text-foreground">
             Priority
-            <select className={fieldClassName} defaultValue="recommended" name="priority">
+            <select className={fieldClassName} defaultValue={place?.priority || "recommended"} name="priority">
               <option value="must-see">Must see</option>
               <option value="recommended">Recommended</option>
               <option value="optional">Optional</option>
@@ -89,7 +100,7 @@ export function AddPlacePanel({
           </label>
           <label className="text-sm font-medium text-foreground">
             Status
-            <select className={fieldClassName} defaultValue="idea" name="status">
+            <select className={fieldClassName} defaultValue={place?.status || "idea"} name="status">
               <option value="idea">Idea</option>
               <option value="planned">Planned</option>
               <option value="visited">Visited</option>
@@ -98,13 +109,14 @@ export function AddPlacePanel({
           </label>
           <label className="text-sm font-medium text-foreground">
             Website
-            <input className={fieldClassName} name="websiteUrl" type="url" placeholder="https://" />
+            <input className={fieldClassName} defaultValue={place?.website_url || ""} name="websiteUrl" type="url" placeholder="https://" />
           </label>
           <label className="text-sm font-medium text-foreground sm:col-span-2">
             Notes
             <textarea
               className="mt-2 min-h-28 w-full resize-none rounded-xl border border-border bg-background px-3.5 py-3 text-sm text-foreground shadow-xs outline-none transition-colors placeholder:text-muted-foreground focus:border-primary/40 focus:ring-2 focus:ring-primary/15"
               name="notes"
+              defaultValue={place?.notes || ""}
               placeholder="What makes this place worth adding?"
             />
           </label>
@@ -122,9 +134,9 @@ export function AddPlacePanel({
         ) : null}
 
         <div className="mt-6 flex flex-col-reverse gap-3 border-t border-border-subtle pt-5 sm:flex-row sm:justify-end">
-          <Button variant="outline" size="md" onClick={onClose}>Cancel</Button>
+          <Button type="button" variant="outline" size="md" onClick={onClose}>Cancel</Button>
           <Button type={isPersisted ? "submit" : "button"} size="md" disabled={!isPersisted || isPending}>
-            {isPersisted ? (isPending ? "Saving place…" : "Save place") : "Preview only"}
+            {isPersisted ? (isPending ? "Saving place…" : isEditing ? "Update place" : "Save place") : "Preview only"}
           </Button>
         </div>
       </form>

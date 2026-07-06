@@ -1,10 +1,10 @@
 "use client";
 
-import { useActionState, useMemo, useState } from "react";
+import { useMemo, useState, useTransition } from "react";
 import { CalendarDays, Plus } from "lucide-react";
 
 import { Button, Card, EmptyState, SectionHeader } from "@/components/ui";
-import { createPlannerItemAction } from "@/features/planner/actions/planner-actions";
+import { deletePlannerItemAction } from "@/features/planner/actions/planner-actions";
 import { PersistedAddPlanItemPanel } from "@/features/planner/components/PersistedAddPlanItemPanel";
 import { PersistedPlanItemCard } from "@/features/planner/components/PersistedPlanItemCard";
 import type {
@@ -17,8 +17,6 @@ type PersistedPlannerSectionProps = {
   items: PersistedPlannerItem[];
   loadError?: string;
 };
-
-const initialCreateState: CreatePlannerItemActionState = { status: "idle" };
 
 function formatDate(value: string) {
   return new Intl.DateTimeFormat("en-US", {
@@ -35,10 +33,9 @@ export function PersistedPlannerSection({
   loadError,
 }: PersistedPlannerSectionProps) {
   const [isAddPanelOpen, setIsAddPanelOpen] = useState(false);
-  const [createState, createAction, isPending] = useActionState(
-    createPlannerItemAction,
-    initialCreateState,
-  );
+  const [editingItem, setEditingItem] = useState<PersistedPlannerItem | null>(null);
+  const [message, setMessage] = useState<CreatePlannerItemActionState | null>(null);
+  const [isPending, startTransition] = useTransition();
   const groups = useMemo(() => {
     const grouped = new Map<string, PersistedPlannerItem[]>();
 
@@ -50,6 +47,16 @@ export function PersistedPlannerSection({
     return Array.from(grouped.entries());
   }, [items]);
 
+  function openAddPanel() {
+    setEditingItem(null);
+    setIsAddPanelOpen(true);
+  }
+
+  function handleDelete(item: PersistedPlannerItem) {
+    if (!window.confirm(`Delete “${item.title}”? This cannot be undone.`)) return;
+    startTransition(async () => setMessage(await deletePlannerItemAction(tripId, item.id)));
+  }
+
   return (
     <section className="space-y-6">
       <SectionHeader
@@ -57,7 +64,7 @@ export function PersistedPlannerSection({
         description="Organize dated activities and keep flexible ideas ready for later."
         className="mb-0"
         action={
-          <Button size="md" onClick={() => setIsAddPanelOpen(true)}>
+          <Button size="md" onClick={openAddPanel}>
             <Plus className="size-4" />
             Add item
           </Button>
@@ -66,22 +73,22 @@ export function PersistedPlannerSection({
 
       {isAddPanelOpen ? (
         <PersistedAddPlanItemPanel
+          key={editingItem?.id || "new"}
           tripId={tripId}
-          actionState={createState}
-          formAction={createAction}
-          isPending={isPending}
+          item={editingItem}
           onClose={() => setIsAddPanelOpen(false)}
         />
       ) : null}
 
       {loadError ? <Card padding="sm" className="text-sm text-error">{loadError}</Card> : null}
+      {message?.message ? <Card padding="sm" className={message.status === "error" ? "text-sm text-error" : "text-sm text-success"}>{message.message}</Card> : null}
 
       {!items.length ? (
         <EmptyState
           icon={CalendarDays}
           title="No plan items yet"
           description="Start shaping this trip by adding a dated activity or an unscheduled idea."
-          action={<Button onClick={() => setIsAddPanelOpen(true)}>Add first item</Button>}
+          action={<Button onClick={openAddPanel}>Add first item</Button>}
         />
       ) : (
         <div className="space-y-8">
@@ -96,7 +103,15 @@ export function PersistedPlannerSection({
                 </span>
               </div>
               <div className="space-y-3">
-                {groupItems.map((item) => <PersistedPlanItemCard key={item.id} item={item} />)}
+                {groupItems.map((item) => (
+                  <PersistedPlanItemCard
+                    key={item.id}
+                    item={item}
+                    isPending={isPending}
+                    onEdit={(selected) => { setEditingItem(selected); setIsAddPanelOpen(true); }}
+                    onDelete={handleDelete}
+                  />
+                ))}
               </div>
             </div>
           ))}

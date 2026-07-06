@@ -17,6 +17,10 @@ export type CreateBudgetExpenseInput = {
   notes?: string;
 };
 
+export type UpdateBudgetExpenseInput = CreateBudgetExpenseInput & { id: string };
+
+export type DeleteBudgetExpenseInput = { tripId: string; id: string };
+
 export type CurrencyTotal = {
   currency: string;
   total: number;
@@ -36,7 +40,14 @@ export type BudgetServiceResult<T> =
   | {
       data: null;
       error: {
-        code: "AUTH_REQUIRED" | "INVALID_TRIP" | "LOAD_FAILED" | "CREATE_FAILED";
+        code:
+          | "AUTH_REQUIRED"
+          | "INVALID_TRIP"
+          | "INVALID_RECORD"
+          | "LOAD_FAILED"
+          | "CREATE_FAILED"
+          | "UPDATE_FAILED"
+          | "DELETE_FAILED";
         message: string;
       };
     };

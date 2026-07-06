@@ -1,6 +1,6 @@
 import { CalendarDays, Clock3, MapPin, Wallet } from "lucide-react";
 
-import { Badge, Card } from "@/components/ui";
+import { Badge, Button, Card } from "@/components/ui";
 import type {
   Place,
   PlacePriority,
@@ -29,6 +29,9 @@ const statusDetails: Record<
 
 type PlaceCardProps = {
   place: Place;
+  isPending?: boolean;
+  onDelete?: (place: Place) => void;
+  onEdit?: (place: Place) => void;
 };
 
 function formatDuration(minutes: number): string {
@@ -51,7 +54,7 @@ function formatCost(cost: number, currency: string | null): string {
       }).format(cost);
 }
 
-export function PlaceCard({ place }: PlaceCardProps) {
+export function PlaceCard({ place, isPending, onDelete, onEdit }: PlaceCardProps) {
   const priority = place.priority ? priorityDetails[place.priority] : null;
   const status = place.status ? statusDetails[place.status] : null;
   const location = [place.city, place.country].filter(Boolean).join(", ");
@@ -127,6 +130,12 @@ export function PlaceCard({ place }: PlaceCardProps) {
               In the plan
             </span>
             ) : null}
+          </div>
+        ) : null}
+        {onEdit && onDelete ? (
+          <div className="flex gap-2 border-t border-border-subtle pt-4">
+            <Button size="sm" variant="outline" onClick={() => onEdit(place)} disabled={isPending}>Edit</Button>
+            <Button size="sm" variant="ghost" className="text-error" onClick={() => onDelete(place)} disabled={isPending}>Delete</Button>
           </div>
         ) : null}
       </div>

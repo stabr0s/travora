@@ -18,12 +18,23 @@ export type CreatePlannerItemInput = {
   orderIndex?: number;
 };
 
+export type UpdatePlannerItemInput = CreatePlannerItemInput & { id: string };
+
+export type DeletePlannerItemInput = { tripId: string; id: string };
+
 export type PlannerServiceResult<T> =
   | { data: T; error: null }
   | {
       data: null;
       error: {
-        code: "AUTH_REQUIRED" | "INVALID_TRIP" | "LOAD_FAILED" | "CREATE_FAILED";
+        code:
+          | "AUTH_REQUIRED"
+          | "INVALID_TRIP"
+          | "INVALID_RECORD"
+          | "LOAD_FAILED"
+          | "CREATE_FAILED"
+          | "UPDATE_FAILED"
+          | "DELETE_FAILED";
         message: string;
       };
     };

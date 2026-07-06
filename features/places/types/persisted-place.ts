@@ -18,12 +18,23 @@ export type CreatePlaceInput = {
   longitude?: number;
 };
 
+export type UpdatePlaceInput = CreatePlaceInput & { id: string };
+
+export type DeletePlaceInput = { tripId: string; id: string };
+
 export type PlacesServiceResult<T> =
   | { data: T; error: null }
   | {
       data: null;
       error: {
-        code: "AUTH_REQUIRED" | "INVALID_TRIP" | "LOAD_FAILED" | "CREATE_FAILED";
+        code:
+          | "AUTH_REQUIRED"
+          | "INVALID_TRIP"
+          | "INVALID_RECORD"
+          | "LOAD_FAILED"
+          | "CREATE_FAILED"
+          | "UPDATE_FAILED"
+          | "DELETE_FAILED";
         message: string;
       };
     };

@@ -4,7 +4,6 @@ import {
   TripDetailScreen,
 } from "@/features/trip-detail";
 import { getBudgetExpensesForTrip } from "@/features/budget/services/budget-service";
-import { mapPersistedPlaceToPlace } from "@/features/places/data/place-mappers";
 import { getPlacesForTrip } from "@/features/places/services/places-service";
 import { getPlannerItemsForTrip } from "@/features/planner/services/planner-service";
 import { getReservationsForTrip } from "@/features/reservations/services/reservations-service";
@@ -39,7 +38,7 @@ export default async function TripDetailPage({ params }: TripDetailPageProps) {
     return (
       <PersistedTripDetailScreen
         trip={persistedTrip.data}
-        places={(persistedPlaces.data || []).map(mapPersistedPlaceToPlace)}
+        places={persistedPlaces.data || []}
         placesError={persistedPlaces.error?.message}
         plannerItems={persistedPlanner.data || []}
         plannerError={persistedPlanner.error?.message}

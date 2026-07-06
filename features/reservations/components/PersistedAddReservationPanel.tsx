@@ -1,38 +1,57 @@
+"use client";
+
+import { useActionState } from "react";
 import { ReceiptText, X } from "lucide-react";
 
 import { Button, Card } from "@/components/ui";
-import type { CreateReservationActionState } from "@/features/reservations/types/persisted-reservation";
+import {
+  createReservationAction,
+  updateReservationAction,
+} from "@/features/reservations/actions/reservation-actions";
+import type {
+  CreateReservationActionState,
+  PersistedReservation,
+} from "@/features/reservations/types/persisted-reservation";
 
 const fieldClassName =
   "mt-2 h-11 w-full rounded-xl border border-border bg-background px-3.5 text-sm text-foreground shadow-xs outline-none transition-colors placeholder:text-muted-foreground focus:border-primary/40 focus:ring-2 focus:ring-primary/15";
 
 type PersistedAddReservationPanelProps = {
   tripId: string;
-  actionState: CreateReservationActionState;
-  formAction: (payload: FormData) => void;
-  isPending: boolean;
+  reservation?: PersistedReservation | null;
   onClose: () => void;
 };
 
+const initialState: CreateReservationActionState = { status: "idle" };
+
+function toLocalDateTime(value?: string | null) {
+  return value ? new Date(value).toISOString().slice(0, 16) : "";
+}
+
 export function PersistedAddReservationPanel({
   tripId,
-  actionState,
-  formAction,
-  isPending,
+  reservation,
   onClose,
 }: PersistedAddReservationPanelProps) {
+  const isEditing = Boolean(reservation);
+  const [actionState, formAction, isPending] = useActionState(
+    isEditing ? updateReservationAction : createReservationAction,
+    initialState,
+  );
+
   return (
     <Card padding="md" className="border-primary/15 shadow-md">
       <form action={formAction}>
         <input type="hidden" name="tripId" value={tripId} />
+        {reservation ? <input type="hidden" name="recordId" value={reservation.id} /> : null}
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-start gap-3">
             <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary-subtle">
               <ReceiptText className="size-5 text-primary" />
             </span>
             <div>
-              <h2 className="text-lg font-semibold tracking-tight text-foreground">Add reservation</h2>
-              <p className="mt-1 text-sm text-muted">Save the essential booking details for this trip.</p>
+              <h2 className="text-lg font-semibold tracking-tight text-foreground">{isEditing ? "Edit reservation" : "Add reservation"}</h2>
+              <p className="mt-1 text-sm text-muted">{isEditing ? "Update this saved booking." : "Save the essential booking details for this trip."}</p>
             </div>
           </div>
           <Button type="button" variant="ghost" size="sm" onClick={onClose} aria-label="Close add reservation panel">
@@ -43,7 +62,7 @@ export function PersistedAddReservationPanel({
         <div className="mt-6 grid gap-5 sm:grid-cols-2">
           <label className="text-sm font-medium text-foreground">
             Type
-            <select className={fieldClassName} defaultValue="flight" name="type">
+            <select className={fieldClassName} defaultValue={reservation?.type || "flight"} name="type">
               <option value="flight">Flight</option><option value="hotel">Hotel</option>
               <option value="car">Car</option><option value="ticket">Ticket</option>
               <option value="insurance">Insurance</option><option value="transport">Transport</option>
@@ -52,52 +71,52 @@ export function PersistedAddReservationPanel({
           </label>
           <label className="text-sm font-medium text-foreground">
             Title
-            <input className={fieldClassName} name="title" type="text" placeholder="e.g. Flight to Tokyo" required />
+            <input className={fieldClassName} defaultValue={reservation?.title} name="title" type="text" placeholder="e.g. Flight to Tokyo" required />
           </label>
           <label className="text-sm font-medium text-foreground">
             Provider
-            <input className={fieldClassName} name="provider" type="text" placeholder="Airline, hotel, or company" />
+            <input className={fieldClassName} defaultValue={reservation?.provider || ""} name="provider" type="text" placeholder="Airline, hotel, or company" />
           </label>
           <label className="text-sm font-medium text-foreground">
             Reservation number
-            <input className={fieldClassName} name="reservationNumber" type="text" placeholder="Optional reference" />
+            <input className={fieldClassName} defaultValue={reservation?.reservation_number || ""} name="reservationNumber" type="text" placeholder="Optional reference" />
           </label>
           <label className="text-sm font-medium text-foreground">
             Start date
-            <input className={fieldClassName} name="startDate" type="datetime-local" />
+            <input className={fieldClassName} defaultValue={toLocalDateTime(reservation?.start_date)} name="startDate" type="datetime-local" />
           </label>
           <label className="text-sm font-medium text-foreground">
             End date
-            <input className={fieldClassName} name="endDate" type="datetime-local" />
+            <input className={fieldClassName} defaultValue={toLocalDateTime(reservation?.end_date)} name="endDate" type="datetime-local" />
           </label>
           <label className="text-sm font-medium text-foreground sm:col-span-2">
             Location
-            <input className={fieldClassName} name="location" type="text" placeholder="Airport, hotel, or venue" />
+            <input className={fieldClassName} defaultValue={reservation?.location || ""} name="location" type="text" placeholder="Airport, hotel, or venue" />
           </label>
           <label className="text-sm font-medium text-foreground">
             Price
-            <input className={fieldClassName} name="totalPrice" type="number" min="0" step="0.01" placeholder="0" />
+            <input className={fieldClassName} defaultValue={reservation?.total_price ?? ""} name="totalPrice" type="number" min="0" step="0.01" placeholder="0" />
           </label>
           <label className="text-sm font-medium text-foreground">
             Currency
-            <select className={fieldClassName} defaultValue="EUR" name="currency">
+            <select className={fieldClassName} defaultValue={reservation?.currency || "EUR"} name="currency">
               <option value="EUR">EUR</option><option value="USD">USD</option>
               <option value="PLN">PLN</option><option value="JPY">JPY</option>
             </select>
           </label>
           <label className="text-sm font-medium text-foreground">
             Status
-            <select className={fieldClassName} defaultValue="unpaid" name="status">
+            <select className={fieldClassName} defaultValue={reservation?.status || "unpaid"} name="status">
               <option value="unpaid">Unpaid</option><option value="deposit">Deposit</option><option value="paid">Paid</option>
             </select>
           </label>
           <label className="text-sm font-medium text-foreground">
             Payer
-            <input className={fieldClassName} name="payerName" type="text" placeholder="Traveler name" />
+            <input className={fieldClassName} defaultValue={reservation?.payer_name || ""} name="payerName" type="text" placeholder="Traveler name" />
           </label>
           <label className="text-sm font-medium text-foreground sm:col-span-2">
             Notes
-            <textarea className="mt-2 min-h-28 w-full resize-none rounded-xl border border-border bg-background px-3.5 py-3 text-sm text-foreground shadow-xs outline-none transition-colors placeholder:text-muted-foreground focus:border-primary/40 focus:ring-2 focus:ring-primary/15" name="notes" placeholder="Booking details or reminders" />
+            <textarea className="mt-2 min-h-28 w-full resize-none rounded-xl border border-border bg-background px-3.5 py-3 text-sm text-foreground shadow-xs outline-none transition-colors placeholder:text-muted-foreground focus:border-primary/40 focus:ring-2 focus:ring-primary/15" defaultValue={reservation?.notes || ""} name="notes" placeholder="Booking details or reminders" />
           </label>
         </div>
 
@@ -109,7 +128,7 @@ export function PersistedAddReservationPanel({
 
         <div className="mt-6 flex flex-col-reverse gap-3 border-t border-border-subtle pt-5 sm:flex-row sm:justify-end">
           <Button type="button" variant="outline" size="md" onClick={onClose}>Cancel</Button>
-          <Button type="submit" size="md" disabled={isPending}>{isPending ? "Saving reservation…" : "Save reservation"}</Button>
+          <Button type="submit" size="md" disabled={isPending}>{isPending ? "Saving reservation…" : isEditing ? "Update reservation" : "Save reservation"}</Button>
         </div>
       </form>
     </Card>

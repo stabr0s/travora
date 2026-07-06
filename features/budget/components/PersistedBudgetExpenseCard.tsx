@@ -1,9 +1,14 @@
 import { CalendarDays, UserRound, Users } from "lucide-react";
 
-import { Badge, Card } from "@/components/ui";
+import { Badge, Button, Card } from "@/components/ui";
 import type { PersistedBudgetExpense } from "@/features/budget/types/persisted-budget";
 
-type PersistedBudgetExpenseCardProps = { expense: PersistedBudgetExpense };
+type PersistedBudgetExpenseCardProps = {
+  expense: PersistedBudgetExpense;
+  isPending?: boolean;
+  onDelete: (expense: PersistedBudgetExpense) => void;
+  onEdit: (expense: PersistedBudgetExpense) => void;
+};
 
 const statusDetails = {
   paid: { label: "Paid", variant: "success" as const },
@@ -28,7 +33,7 @@ function formatDate(date: string) {
   }).format(new Date(`${date}T00:00:00Z`));
 }
 
-export function PersistedBudgetExpenseCard({ expense }: PersistedBudgetExpenseCardProps) {
+export function PersistedBudgetExpenseCard({ expense, isPending, onDelete, onEdit }: PersistedBudgetExpenseCardProps) {
   const status = statusDetails[expense.status || "paid"];
   const currency = expense.currency || "EUR";
   const participants = Math.max(expense.participants_count || 1, 1);
@@ -48,6 +53,10 @@ export function PersistedBudgetExpenseCard({ expense }: PersistedBudgetExpenseCa
             {expense.expense_date ? <span className="inline-flex items-center gap-1.5"><CalendarDays className="size-3.5" />{formatDate(expense.expense_date)}</span> : null}
           </div>
           {expense.notes ? <p className="mt-3 text-xs leading-relaxed text-muted">{expense.notes}</p> : null}
+          <div className="mt-4 flex gap-2 border-t border-border-subtle pt-3">
+            <Button size="sm" variant="outline" onClick={() => onEdit(expense)} disabled={isPending}>Edit</Button>
+            <Button size="sm" variant="ghost" className="text-error" onClick={() => onDelete(expense)} disabled={isPending}>Delete</Button>
+          </div>
         </div>
         <div className="shrink-0 sm:text-right">
           <p className="text-xl font-semibold tracking-tight text-foreground">{formatCurrency(expense.amount, currency)}</p>

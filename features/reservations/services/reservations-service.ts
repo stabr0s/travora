@@ -2,8 +2,10 @@ import { randomUUID } from "node:crypto";
 
 import type {
   CreateReservationInput,
+  DeleteReservationInput,
   PersistedReservation,
   ReservationsServiceResult,
+  UpdateReservationInput,
 } from "@/features/reservations/types/persisted-reservation";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { isUuid } from "@/lib/validation/is-uuid";
@@ -153,4 +155,66 @@ export async function createReservation(
   };
 
   return { data: reservation || fallbackReservation, error: null };
+}
+
+export async function updateReservation(
+  input: UpdateReservationInput,
+): Promise<ReservationsServiceResult<PersistedReservation>> {
+  if (!isUuid(input.tripId)) return { data: null, error: { code: "INVALID_TRIP", message: "This saved trip is not available." } };
+  if (!isUuid(input.id) || !input.title.trim()) {
+    return { data: null, error: { code: "INVALID_RECORD", message: "Choose a valid reservation and enter its title." } };
+  }
+  if (input.totalPrice !== undefined && (!Number.isFinite(input.totalPrice) || input.totalPrice < 0)) {
+    return { data: null, error: { code: "UPDATE_FAILED", message: "Enter a valid reservation price." } };
+  }
+
+  const { supabase, user } = await getAuthContext();
+  if (!user) return { data: null, error: { code: "AUTH_REQUIRED", message: "Sign in to edit reservations." } };
+
+  const payload: Database["public"]["Tables"]["reservations"]["Update"] = {
+    type: input.type || null,
+    title: input.title.trim(),
+    provider: input.provider || null,
+    reservation_number: input.reservationNumber || null,
+    start_date: input.startDate || null,
+    end_date: input.endDate || null,
+    location: input.location || null,
+    total_price: input.totalPrice ?? null,
+    currency: input.currency || "EUR",
+    status: input.status || "unpaid",
+    payer_name: input.payerName || null,
+    notes: input.notes || null,
+  };
+  const { error } = await supabase.from("reservations").update(payload)
+    .eq("id", input.id).eq("trip_id", input.tripId);
+  if (error) {
+    logReservationsError("reservation update failed", error);
+    return { data: null, error: { code: "UPDATE_FAILED", message: "We couldn't update this reservation." } };
+  }
+
+  const { data, error: readError } = await supabase.from("reservations").select("*")
+    .eq("id", input.id).eq("trip_id", input.tripId).maybeSingle();
+  if (readError || !data) {
+    if (readError) logReservationsError("updated reservation readback failed", readError);
+    return { data: null, error: { code: "UPDATE_FAILED", message: "We couldn't confirm the reservation update." } };
+  }
+  return { data, error: null };
+}
+
+export async function deleteReservation(
+  input: DeleteReservationInput,
+): Promise<ReservationsServiceResult<null>> {
+  if (!isUuid(input.tripId)) return { data: null, error: { code: "INVALID_TRIP", message: "This saved trip is not available." } };
+  if (!isUuid(input.id)) return { data: null, error: { code: "INVALID_RECORD", message: "This reservation is not available." } };
+
+  const { supabase, user } = await getAuthContext();
+  if (!user) return { data: null, error: { code: "AUTH_REQUIRED", message: "Sign in to delete reservations." } };
+
+  const { error } = await supabase.from("reservations").delete()
+    .eq("id", input.id).eq("trip_id", input.tripId);
+  if (error) {
+    logReservationsError("reservation delete failed", error);
+    return { data: null, error: { code: "DELETE_FAILED", message: "We couldn't delete this reservation." } };
+  }
+  return { data: null, error: null };
 }

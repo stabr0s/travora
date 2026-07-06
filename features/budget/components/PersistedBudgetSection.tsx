@@ -1,10 +1,10 @@
 "use client";
 
-import { useActionState, useMemo, useState } from "react";
+import { useMemo, useState, useTransition } from "react";
 import { WalletCards } from "lucide-react";
 
 import { Button, Card, EmptyState } from "@/components/ui";
-import { createBudgetExpenseAction } from "@/features/budget/actions/budget-actions";
+import { deleteBudgetExpenseAction } from "@/features/budget/actions/budget-actions";
 import { BudgetHeader } from "@/features/budget/components/BudgetHeader";
 import { PersistedAddExpensePanel } from "@/features/budget/components/PersistedAddExpensePanel";
 import { PersistedBudgetCategoryBreakdown } from "@/features/budget/components/PersistedBudgetCategoryBreakdown";
@@ -22,8 +22,6 @@ type PersistedBudgetSectionProps = {
   expenses: PersistedBudgetExpense[];
   loadError?: string;
 };
-
-const initialCreateState: CreateBudgetExpenseActionState = { status: "idle" };
 
 function calculateSummaries(expenses: PersistedBudgetExpense[]) {
   const totals = new Map<string, CurrencyTotal>();
@@ -59,39 +57,56 @@ function calculateSummaries(expenses: PersistedBudgetExpense[]) {
 
 export function PersistedBudgetSection({ tripId, expenses, loadError }: PersistedBudgetSectionProps) {
   const [isAddPanelOpen, setIsAddPanelOpen] = useState(false);
-  const [createState, createAction, isPending] = useActionState(
-    createBudgetExpenseAction,
-    initialCreateState,
-  );
+  const [editingExpense, setEditingExpense] = useState<PersistedBudgetExpense | null>(null);
+  const [message, setMessage] = useState<CreateBudgetExpenseActionState | null>(null);
+  const [isPending, startTransition] = useTransition();
   const summaries = useMemo(() => calculateSummaries(expenses), [expenses]);
+
+  function openAddPanel() {
+    setEditingExpense(null);
+    setIsAddPanelOpen(true);
+  }
+
+  function handleDelete(expense: PersistedBudgetExpense) {
+    if (!window.confirm(`Delete “${expense.title}”? This cannot be undone.`)) return;
+    startTransition(async () => setMessage(await deleteBudgetExpenseAction(tripId, expense.id)));
+  }
 
   return (
     <section className="space-y-6">
-      <BudgetHeader onAddExpense={() => setIsAddPanelOpen(true)} />
+      <BudgetHeader onAddExpense={openAddPanel} />
       {isAddPanelOpen ? (
         <PersistedAddExpensePanel
+          key={editingExpense?.id || "new"}
           tripId={tripId}
-          actionState={createState}
-          formAction={createAction}
-          isPending={isPending}
+          expense={editingExpense}
           onClose={() => setIsAddPanelOpen(false)}
         />
       ) : null}
       {loadError ? <Card padding="sm" className="text-sm text-error">{loadError}</Card> : null}
+      {message?.message ? <Card padding="sm" className={message.status === "error" ? "text-sm text-error" : "text-sm text-success"}>{message.message}</Card> : null}
 
       {!expenses.length ? (
         <EmptyState
           icon={WalletCards}
           title="No expenses yet"
           description="Add the first expense to start tracking trip costs."
-          action={<Button onClick={() => setIsAddPanelOpen(true)}>Add first expense</Button>}
+          action={<Button onClick={openAddPanel}>Add first expense</Button>}
         />
       ) : (
         <>
           <PersistedBudgetStats totals={summaries.totals} />
           <PersistedBudgetCategoryBreakdown categories={summaries.categories} />
           <section className="space-y-3" aria-label="Saved expenses">
-            {expenses.map((expense) => <PersistedBudgetExpenseCard key={expense.id} expense={expense} />)}
+            {expenses.map((expense) => (
+              <PersistedBudgetExpenseCard
+                key={expense.id}
+                expense={expense}
+                isPending={isPending}
+                onEdit={(selected) => { setEditingExpense(selected); setIsAddPanelOpen(true); }}
+                onDelete={handleDelete}
+              />
+            ))}
           </section>
         </>
       )}

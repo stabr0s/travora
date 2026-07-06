@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 21 — Persist Budget
+Sprint 22 — Manage Persisted Records
 
 Status: IN PROGRESS
 
@@ -199,6 +199,12 @@ Status: IN PROGRESS
 - Mock trips retain the complete mock Reservations experience
 - No uploads, payments, or settlement logic added
 
+### Sprint 21 — Persist Budget
+- Persisted trips load budget expenses from Supabase
+- Add Expense creates budget expenses for persisted trips
+- Multi-currency totals remain separated by currency
+- Mock trips retain the complete mock Budget experience
+
 ## MVP Mock Modules Completed
 
 - Dashboard
@@ -300,6 +306,16 @@ Status: IN PROGRESS
 - Budget is not automatically synchronized with reservations
 - Remaining detail modules stay mock-based or show placeholders
 
+## Manage Persisted Records
+
+- Persisted Places can be edited and deleted
+- Persisted Planner Items can be edited and deleted
+- Persisted Reservations can be edited and deleted
+- Persisted Budget Expenses can be edited and deleted
+- Mock trips remain preview-only and do not expose real edit/delete actions
+- No bulk actions, undo, history, audit log, or realtime collaboration added
+- No database schema or RLS changes were required
+
 ## Tech Stack
 
 - Next.js 16
@@ -364,22 +380,22 @@ Principles:
 
 ## Next Task
 
-Task #021 — Persist Budget
+Task #022 — Manage Persisted Records
 
 Goal:
 
-Persist budget expenses for saved trips while preserving the full mock trip experience.
+Add edit and delete management for persisted trip records.
 
 The task includes:
 
-- Server-side Budget expense queries and creation
-- Mock and persisted Budget modes
-- Persisted Trip Detail tabs for Overview, Places, Plan, Reservations, and Budget
-- Friendly RLS-safe errors
-- Currency-scoped totals and category breakdowns
+- Server-side update and delete operations for Places
+- Server-side update and delete operations for Planner Items
+- Server-side update and delete operations for Reservations
+- Server-side update and delete operations for Budget Expenses
+- Confirmed delete actions and reusable Add/Edit forms
 
 Important:
 
-Continue using mock data in modules that have not been connected yet.
+Mock trip modules remain preview-only.
 
-Do not add payments, currency conversion, settlement logic, or protect application routes yet.
+Do not add bulk actions, undo, history, realtime collaboration, or schema changes yet.

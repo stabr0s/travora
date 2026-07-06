@@ -6,11 +6,14 @@ import {
   XCircle,
 } from "lucide-react";
 
-import { Badge, Card } from "@/components/ui";
+import { Badge, Button, Card } from "@/components/ui";
 import type { PersistedPlannerItem } from "@/features/planner/types/persisted-planner";
 
 type PersistedPlanItemCardProps = {
   item: PersistedPlannerItem;
+  isPending?: boolean;
+  onDelete: (item: PersistedPlannerItem) => void;
+  onEdit: (item: PersistedPlannerItem) => void;
 };
 
 const statusDetails = {
@@ -23,7 +26,7 @@ function formatTime(value: string) {
   return value.slice(0, 5);
 }
 
-export function PersistedPlanItemCard({ item }: PersistedPlanItemCardProps) {
+export function PersistedPlanItemCard({ item, isPending, onDelete, onEdit }: PersistedPlanItemCardProps) {
   const status = statusDetails[item.status || "planned"];
   const StatusIcon = status.icon;
 
@@ -57,6 +60,10 @@ export function PersistedPlanItemCard({ item }: PersistedPlanItemCardProps) {
               {item.end_time ? ` – ${formatTime(item.end_time)}` : ""}
             </div>
           ) : null}
+          <div className="mt-4 flex gap-2 border-t border-border-subtle pt-3">
+            <Button size="sm" variant="outline" onClick={() => onEdit(item)} disabled={isPending}>Edit</Button>
+            <Button size="sm" variant="ghost" className="text-error" onClick={() => onDelete(item)} disabled={isPending}>Delete</Button>
+          </div>
         </div>
       </div>
     </Card>

@@ -1,10 +1,10 @@
 "use client";
 
-import { useActionState, useMemo, useState } from "react";
+import { useMemo, useState, useTransition } from "react";
 import { ReceiptText } from "lucide-react";
 
 import { Button, Card, EmptyState } from "@/components/ui";
-import { createReservationAction } from "@/features/reservations/actions/reservation-actions";
+import { deleteReservationAction } from "@/features/reservations/actions/reservation-actions";
 import { PersistedAddReservationPanel } from "@/features/reservations/components/PersistedAddReservationPanel";
 import { PersistedReservationCard } from "@/features/reservations/components/PersistedReservationCard";
 import { ReservationsFilters } from "@/features/reservations/components/ReservationsFilters";
@@ -17,8 +17,6 @@ type PersistedReservationsSectionProps = {
   reservations: PersistedReservation[];
   loadError?: string;
 };
-
-const initialCreateState: CreateReservationActionState = { status: "idle" };
 
 function filterReservations(reservations: PersistedReservation[], filter: ReservationFilter) {
   if (filter === "flights") return reservations.filter((item) => item.type === "flight");
@@ -36,35 +34,44 @@ export function PersistedReservationsSection({
 }: PersistedReservationsSectionProps) {
   const [activeFilter, setActiveFilter] = useState<ReservationFilter>("all");
   const [isAddPanelOpen, setIsAddPanelOpen] = useState(false);
-  const [createState, createAction, isPending] = useActionState(
-    createReservationAction,
-    initialCreateState,
-  );
+  const [editingReservation, setEditingReservation] = useState<PersistedReservation | null>(null);
+  const [message, setMessage] = useState<CreateReservationActionState | null>(null);
+  const [isPending, startTransition] = useTransition();
   const filteredReservations = useMemo(
     () => filterReservations(reservations, activeFilter),
     [activeFilter, reservations],
   );
 
+  function openAddPanel() {
+    setEditingReservation(null);
+    setIsAddPanelOpen(true);
+  }
+
+  function handleDelete(reservation: PersistedReservation) {
+    if (!window.confirm(`Delete “${reservation.title}”? This cannot be undone.`)) return;
+    startTransition(async () => setMessage(await deleteReservationAction(tripId, reservation.id)));
+  }
+
   return (
     <section className="space-y-6">
-      <ReservationsHeader onAddReservation={() => setIsAddPanelOpen(true)} />
+      <ReservationsHeader onAddReservation={openAddPanel} />
       {isAddPanelOpen ? (
         <PersistedAddReservationPanel
+          key={editingReservation?.id || "new"}
           tripId={tripId}
-          actionState={createState}
-          formAction={createAction}
-          isPending={isPending}
+          reservation={editingReservation}
           onClose={() => setIsAddPanelOpen(false)}
         />
       ) : null}
       {loadError ? <Card padding="sm" className="text-sm text-error">{loadError}</Card> : null}
+      {message?.message ? <Card padding="sm" className={message.status === "error" ? "text-sm text-error" : "text-sm text-success"}>{message.message}</Card> : null}
 
       {!reservations.length ? (
         <EmptyState
           icon={ReceiptText}
           title="No reservations yet"
           description="Save the first flight, stay, ticket, or transport booking for this trip."
-          action={<Button onClick={() => setIsAddPanelOpen(true)}>Add first reservation</Button>}
+          action={<Button onClick={openAddPanel}>Add first reservation</Button>}
         />
       ) : (
         <>
@@ -72,7 +79,13 @@ export function PersistedReservationsSection({
           {filteredReservations.length ? (
             <div className="grid gap-5 xl:grid-cols-2">
               {filteredReservations.map((reservation) => (
-                <PersistedReservationCard key={reservation.id} reservation={reservation} />
+                <PersistedReservationCard
+                  key={reservation.id}
+                  reservation={reservation}
+                  isPending={isPending}
+                  onEdit={(selected) => { setEditingReservation(selected); setIsAddPanelOpen(true); }}
+                  onDelete={handleDelete}
+                />
               ))}
             </div>
           ) : (

@@ -8,13 +8,22 @@ import type { Place } from "@/features/places/types/place";
 type PlacesGridProps = {
   places: Place[];
   onAddPlace: () => void;
+  isPending?: boolean;
+  onDeletePlace?: (place: Place) => void;
+  onEditPlace?: (place: Place) => void;
 };
 
-export function PlacesGrid({ places, onAddPlace }: PlacesGridProps) {
+export function PlacesGrid({ places, onAddPlace, isPending, onDeletePlace, onEditPlace }: PlacesGridProps) {
   return (
     <section className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
       {places.map((place) => (
-        <PlaceCard key={place.id} place={place} />
+        <PlaceCard
+          key={place.id}
+          place={place}
+          isPending={isPending}
+          onDelete={onDeletePlace}
+          onEdit={onEditPlace}
+        />
       ))}
 
       {places.length === 0 ? (
