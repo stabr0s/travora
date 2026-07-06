@@ -5,17 +5,17 @@ import { Card } from "@/components/ui";
 const roles = [
   {
     label: "Owner",
-    description: "Manages the trip, participants, and all planning details.",
+    description: "Full access. Can manage trip content and people.",
     icon: Crown,
   },
   {
     label: "Editor",
-    description: "Can add places, edit plans, and organize reservations.",
+    description: "Can add and edit trip content, but cannot manage people.",
     icon: Pencil,
   },
   {
     label: "Viewer",
-    description: "Can explore the trip without changing its content.",
+    description: "Can view the trip, but cannot make changes.",
     icon: Eye,
   },
 ];
@@ -28,8 +28,8 @@ export function RolesOverviewCard() {
           <ShieldCheck className="size-5 text-primary" />
         </span>
         <div>
-          <h2 className="font-semibold tracking-tight text-foreground">Roles overview</h2>
-          <p className="mt-1 text-sm text-muted">A preview of future trip access levels.</p>
+          <h2 className="font-semibold tracking-tight text-foreground">Trip access roles</h2>
+          <p className="mt-1 text-sm text-muted">Each person has one clear level of access.</p>
         </div>
       </div>
 

@@ -117,10 +117,10 @@ export async function addParticipant(
       return { data: null, error: { code: "CREATE_FAILED", message: "This user needs to create an account before they can be added." } };
     }
     if (error.message.includes("ALREADY_MEMBER")) {
-      return { data: null, error: { code: "CREATE_FAILED", message: "This user is already a trip participant." } };
+      return { data: null, error: { code: "CREATE_FAILED", message: "This person already has access to this trip." } };
     }
     if (error.message.includes("OWNER_REQUIRED")) {
-      return { data: null, error: { code: "OWNER_REQUIRED", message: "Only the trip owner can add participants." } };
+      return { data: null, error: { code: "OWNER_REQUIRED", message: "Only the trip owner can manage access." } };
     }
     return { data: null, error: { code: "CREATE_FAILED", message: "We couldn't add this participant." } };
   }
@@ -140,7 +140,7 @@ export async function updateParticipant(
     logParticipantsError("participant owner check failed", tripError);
     return { data: null, error: { code: "UPDATE_FAILED", message: "We couldn't confirm participant access." } };
   }
-  if (trip?.owner_id !== user.id) return { data: null, error: { code: "OWNER_REQUIRED", message: "Only the trip owner can edit participants." } };
+  if (trip?.owner_id !== user.id) return { data: null, error: { code: "OWNER_REQUIRED", message: "Only the trip owner can manage access." } };
   const { data: member, error: memberError } = await supabase.from("trip_members")
     .select("role").eq("id", input.memberId).eq("trip_id", input.tripId).maybeSingle();
   if (memberError) {
@@ -175,7 +175,7 @@ export async function removeParticipant(
     logParticipantsError("participant owner check failed", tripError);
     return { data: null, error: { code: "DELETE_FAILED", message: "We couldn't confirm participant access." } };
   }
-  if (trip?.owner_id !== user.id) return { data: null, error: { code: "OWNER_REQUIRED", message: "Only the trip owner can remove participants." } };
+  if (trip?.owner_id !== user.id) return { data: null, error: { code: "OWNER_REQUIRED", message: "Only the trip owner can manage access." } };
   const { data: member, error: memberError } = await supabase.from("trip_members")
     .select("role").eq("id", input.memberId).eq("trip_id", input.tripId).maybeSingle();
   if (memberError) {

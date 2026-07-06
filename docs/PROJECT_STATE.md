@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 27 — Hide Map + Permissions Hardening
+Sprint 28 — Trip Sharing UX
 
 Status: IN PROGRESS
 
@@ -237,6 +237,13 @@ Status: IN PROGRESS
 - Coordinate and map-order constraints documented in migration 003
 - No map tiles, geocoding, or routing added
 
+### Sprint 27 — Hide Map + Permissions Hardening
+- Map tab hidden without removing its code or data foundation
+- Owner/editor/viewer capabilities applied to persisted module controls
+- Viewer and unknown roles made read-only
+- Participant management kept owner-only
+- Existing RLS retained as final backend enforcement
+
 ## MVP Mock Modules Completed
 
 - Dashboard
@@ -403,6 +410,17 @@ Status: IN PROGRESS
 - RLS remains the final backend enforcement layer
 - No public links, invite tokens, or email invitations were added
 
+## Trip Sharing UX
+
+- Participants presents clearer trip sharing and access information
+- Owners can add existing registered Travora users by email
+- Owners can manage access for non-owner members
+- Editors and viewers see read-only people and access information
+- Owner, Editor, and Viewer role descriptions are clearer
+- Real email invitations are not implemented yet
+- Public share links and invite tokens are not implemented
+- No schema or RLS changes were required
+
 ## Manual Backend Test Checklist
 
 - Login and logout
@@ -482,20 +500,20 @@ Principles:
 
 ## Next Task
 
-Task #027 — Hide Map + Permissions Hardening
+Task #028 — Trip Sharing UX
 
 Goal:
 
-Hide the postponed Map workspace and align persisted controls with trip roles.
+Clarify sharing and access management around existing trip participants.
 
 The task includes:
 
-- Hide Map from Trip Detail without removing its code or schema
-- Keep owner/editor module editing controls available
-- Make persisted modules read-only for viewers and unknown roles
-- Keep participant management restricted to owners
+- Present Participants as the trip access center
+- Clarify owner, editor, and viewer capabilities
+- Improve adding an existing Travora user by email
+- Keep access management owner-only
 
 Important:
 
-RLS remains the final backend permission layer. No migrations, public links,
-invitations, or new dependencies are included.
+Existing `trip_members`, profiles, RPCs, and RLS remain unchanged. No email
+invitations, public links, invite tokens, or new dependencies are included.

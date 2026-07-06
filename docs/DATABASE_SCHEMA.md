@@ -109,6 +109,11 @@ Execute permission is revoked from `public` and granted only to
 functions do not use a service-role key, create profiles, send emails, or
 create invitation tokens.
 
+The Participants sharing UX uses these existing `trip_members`, `profiles`,
+and RPC foundations. Task 028 adds no schema or RLS changes: owners can add an
+existing registered user, while email invitations, invite tokens, and public
+share links remain unimplemented.
+
 ## Applying the migration manually
 
 1. Open the target Supabase project.

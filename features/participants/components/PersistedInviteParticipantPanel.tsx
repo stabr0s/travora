@@ -44,8 +44,8 @@ export function PersistedInviteParticipantPanel({
           <div className="flex items-start gap-3">
             <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary-subtle"><UserPlus className="size-5 text-primary" /></span>
             <div>
-              <h2 className="text-lg font-semibold tracking-tight text-foreground">{isEditing ? "Edit participant" : "Add participant"}</h2>
-              <p className="mt-1 text-sm text-muted">{isEditing ? "Update this member's trip access." : "Add an existing registered user by email."}</p>
+              <h2 className="text-lg font-semibold tracking-tight text-foreground">{isEditing ? "Edit trip access" : "Add existing Travora user"}</h2>
+              <p className="mt-1 text-sm text-muted">{isEditing ? "Update this person's role and access status." : "Add someone who already has a registered Travora account."}</p>
             </div>
           </div>
           <Button type="button" variant="ghost" size="sm" onClick={onClose} aria-label="Close participant panel"><X className="size-4" /></Button>
@@ -60,31 +60,33 @@ export function PersistedInviteParticipantPanel({
           ) : (
             <div className="rounded-xl bg-surface p-3.5 text-sm text-muted sm:col-span-2">{participant?.fullName || participant?.email || "Trip member"}</div>
           )}
-          <label className="text-sm font-medium text-foreground">
+          <label className="text-sm font-medium text-foreground sm:col-span-2">
             Role
             <select className={fieldClassName} defaultValue={participant?.role === "editor" ? "editor" : "viewer"} name="role">
               <option value="editor">Editor</option><option value="viewer">Viewer</option>
             </select>
           </label>
-          <label className="text-sm font-medium text-foreground">
-            Status
-            <select className={fieldClassName} defaultValue={participant?.status || "active"} name="status">
-              <option value="active">Active</option><option value="pending">Pending</option><option value="invited">Invited</option>
-            </select>
-          </label>
+          {isEditing ? (
+            <label className="text-sm font-medium text-foreground sm:col-span-2">
+              Access status
+              <select className={fieldClassName} defaultValue={participant?.status || "active"} name="status">
+                <option value="active">Active</option><option value="pending">Pending</option><option value="invited">Invited</option>
+              </select>
+            </label>
+          ) : <input type="hidden" name="status" value="active" />}
         </div>
 
         {!isEditing ? (
           <div className="mt-5 flex items-start gap-2 rounded-xl bg-primary-subtle p-3 text-xs text-primary">
             <Info className="mt-0.5 size-4 shrink-0" />
-            <p>Email invitations will be added later. The user must already have a Travora account.</p>
+            <p>Email invitations are not available yet. Ask the person to create an account first, then add them here.</p>
           </div>
         ) : null}
         {actionState.message ? <p role={actionState.status === "error" ? "alert" : "status"} className={actionState.status === "error" ? "mt-5 rounded-xl bg-error-subtle px-3.5 py-3 text-sm text-error" : "mt-5 rounded-xl bg-success-subtle px-3.5 py-3 text-sm text-success"}>{actionState.message}</p> : null}
 
         <div className="mt-6 flex flex-col-reverse gap-3 border-t border-border-subtle pt-5 sm:flex-row sm:justify-end">
           <Button type="button" variant="outline" size="md" onClick={onClose}>Cancel</Button>
-          <Button type="submit" size="md" disabled={isPending}>{isPending ? "Saving participant…" : isEditing ? "Update participant" : "Add participant"}</Button>
+          <Button type="submit" size="md" disabled={isPending}>{isPending ? "Saving access…" : isEditing ? "Update access" : "Add user"}</Button>
         </div>
       </form>
     </Card>

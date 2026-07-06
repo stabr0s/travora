@@ -71,9 +71,14 @@ export function PersistedParticipantsSection({
     <section className="space-y-6">
       <ParticipantsHeader
         onInvite={canManage ? openAddPanel : undefined}
-        actionLabel="Add participant"
-        description="Manage registered travelers and their access to this trip."
+        actionLabel="Share trip"
+        description="See who can access this trip and how they can collaborate."
       />
+      <Card padding="sm" className="text-sm leading-relaxed text-muted">
+        {canManage
+          ? "Share this trip with existing Travora users. Email invitations and public links will be added later."
+          : "Only the trip owner can manage access. You can still see everyone who has access to this trip."}
+      </Card>
       {isPanelOpen && canManage ? (
         <PersistedInviteParticipantPanel
           key={editingParticipant?.memberId || "new"}
@@ -85,16 +90,17 @@ export function PersistedParticipantsSection({
       {loadError ? <Card padding="sm" className="text-sm text-error">{loadError}</Card> : !participants.length ? (
         <EmptyState
           icon={Users}
-          title="No participants available"
-          description="The trip owner will normally appear here after the trip is created."
+          title="No access records yet"
+          description="People with access to this trip will appear here."
         />
       ) : (
         <>
           {message?.message ? <Card padding="sm" className={message.status === "error" ? "text-sm text-error" : "text-sm text-success"}>{message.message}</Card> : null}
-          {!canManage ? (
-            <Card padding="sm" className="text-sm text-muted">Participant management is available only to the trip owner. Your access is read-only.</Card>
-          ) : null}
           <ParticipantsStats participants={statsParticipants} />
+          <div>
+            <h2 className="text-lg font-semibold tracking-tight text-foreground">People with access</h2>
+            <p className="mt-1 text-sm text-muted">Owners manage access; editors and viewers appear here as trip members.</p>
+          </div>
           <div className="grid gap-5 lg:grid-cols-2">
             {participants.map((participant) => (
               <PersistedParticipantCard
