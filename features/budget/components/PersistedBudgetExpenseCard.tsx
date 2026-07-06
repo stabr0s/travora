@@ -6,8 +6,8 @@ import type { PersistedBudgetExpense } from "@/features/budget/types/persisted-b
 type PersistedBudgetExpenseCardProps = {
   expense: PersistedBudgetExpense;
   isPending?: boolean;
-  onDelete: (expense: PersistedBudgetExpense) => void;
-  onEdit: (expense: PersistedBudgetExpense) => void;
+  onDelete?: (expense: PersistedBudgetExpense) => void;
+  onEdit?: (expense: PersistedBudgetExpense) => void;
 };
 
 const statusDetails = {
@@ -53,10 +53,12 @@ export function PersistedBudgetExpenseCard({ expense, isPending, onDelete, onEdi
             {expense.expense_date ? <span className="inline-flex items-center gap-1.5"><CalendarDays className="size-3.5" />{formatDate(expense.expense_date)}</span> : null}
           </div>
           {expense.notes ? <p className="mt-3 text-xs leading-relaxed text-muted">{expense.notes}</p> : null}
-          <div className="mt-4 flex gap-2 border-t border-border-subtle pt-3">
-            <Button size="sm" variant="outline" onClick={() => onEdit(expense)} disabled={isPending}>Edit</Button>
-            <Button size="sm" variant="ghost" className="text-error" onClick={() => onDelete(expense)} disabled={isPending}>Delete</Button>
-          </div>
+          {onEdit && onDelete ? (
+            <div className="mt-4 flex gap-2 border-t border-border-subtle pt-3">
+              <Button size="sm" variant="outline" onClick={() => onEdit(expense)} disabled={isPending}>Edit</Button>
+              <Button size="sm" variant="ghost" className="text-error" onClick={() => onDelete(expense)} disabled={isPending}>Delete</Button>
+            </div>
+          ) : null}
         </div>
         <div className="shrink-0 sm:text-right">
           <p className="text-xl font-semibold tracking-tight text-foreground">{formatCurrency(expense.amount, currency)}</p>

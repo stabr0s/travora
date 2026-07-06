@@ -7,9 +7,10 @@ import { cn } from "@/lib/utils";
 type PersistedPackingItemRowProps = {
   item: PersistedPackingItem;
   isPending: boolean;
-  onDelete: (item: PersistedPackingItem) => void;
-  onEdit: (item: PersistedPackingItem) => void;
-  onToggle: (item: PersistedPackingItem) => void;
+  canEditTrip: boolean;
+  onDelete?: (item: PersistedPackingItem) => void;
+  onEdit?: (item: PersistedPackingItem) => void;
+  onToggle?: (item: PersistedPackingItem) => void;
 };
 
 const priorityDetails = {
@@ -21,6 +22,7 @@ const priorityDetails = {
 export function PersistedPackingItemRow({
   item,
   isPending,
+  canEditTrip,
   onDelete,
   onEdit,
   onToggle,
@@ -33,10 +35,10 @@ export function PersistedPackingItemRow({
       <input
         type="checkbox"
         checked={item.is_packed ?? false}
-        disabled={isPending}
-        onChange={() => onToggle(item)}
+        disabled={isPending || !canEditTrip}
+        onChange={() => onToggle?.(item)}
         aria-label={`Mark ${item.name} as ${item.is_packed ? "not packed" : "packed"}`}
-        className="mt-0.5 size-5 shrink-0 cursor-pointer accent-primary disabled:cursor-wait"
+        className="mt-0.5 size-5 shrink-0 cursor-pointer accent-primary disabled:cursor-not-allowed"
       />
       <div className="min-w-0 flex-1">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
@@ -53,10 +55,12 @@ export function PersistedPackingItemRow({
           <span className="capitalize">{item.category || "Other"}</span>
           {item.assigned_to_name ? <span className="inline-flex items-center gap-1.5"><UserRound className="size-3.5" />{item.assigned_to_name}</span> : null}
         </div>
-        <div className="mt-4 flex gap-2 border-t border-border-subtle pt-3">
-          <Button size="sm" variant="outline" onClick={() => onEdit(item)} disabled={isPending}>Edit</Button>
-          <Button size="sm" variant="ghost" className="text-error" onClick={() => onDelete(item)} disabled={isPending}>Delete</Button>
-        </div>
+        {onEdit && onDelete ? (
+          <div className="mt-4 flex gap-2 border-t border-border-subtle pt-3">
+            <Button size="sm" variant="outline" onClick={() => onEdit(item)} disabled={isPending}>Edit</Button>
+            <Button size="sm" variant="ghost" className="text-error" onClick={() => onDelete(item)} disabled={isPending}>Delete</Button>
+          </div>
+        ) : null}
       </div>
     </div>
   );

@@ -3,7 +3,7 @@ import { Plus } from "lucide-react";
 import { Button, SectionHeader } from "@/components/ui";
 
 type ReservationsHeaderProps = {
-  onAddReservation: () => void;
+  onAddReservation?: () => void;
 };
 
 export function ReservationsHeader({
@@ -14,12 +14,12 @@ export function ReservationsHeader({
       title="Reservations"
       description="Keep flights, stays, tickets, and transport details together for the whole trip."
       className="mb-0"
-      action={
+      action={onAddReservation ? (
         <Button size="md" onClick={onAddReservation}>
           <Plus className="size-4" />
           Add reservation
         </Button>
-      }
+      ) : undefined}
     />
   );
 }

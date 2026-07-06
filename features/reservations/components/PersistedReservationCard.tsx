@@ -18,8 +18,8 @@ import type { PersistedReservation } from "@/features/reservations/types/persist
 type PersistedReservationCardProps = {
   reservation: PersistedReservation;
   isPending?: boolean;
-  onDelete: (reservation: PersistedReservation) => void;
-  onEdit: (reservation: PersistedReservation) => void;
+  onDelete?: (reservation: PersistedReservation) => void;
+  onEdit?: (reservation: PersistedReservation) => void;
 };
 
 const typeIcons: Record<string, LucideIcon> = {
@@ -99,10 +99,12 @@ export function PersistedReservationCard({ reservation, isPending, onDelete, onE
               </p>
             </div>
           ) : null}
-          <div className="mt-4 flex gap-2 border-t border-border-subtle pt-3">
-            <Button size="sm" variant="outline" onClick={() => onEdit(reservation)} disabled={isPending}>Edit</Button>
-            <Button size="sm" variant="ghost" className="text-error" onClick={() => onDelete(reservation)} disabled={isPending}>Delete</Button>
-          </div>
+          {onEdit && onDelete ? (
+            <div className="mt-4 flex gap-2 border-t border-border-subtle pt-3">
+              <Button size="sm" variant="outline" onClick={() => onEdit(reservation)} disabled={isPending}>Edit</Button>
+              <Button size="sm" variant="ghost" className="text-error" onClick={() => onDelete(reservation)} disabled={isPending}>Delete</Button>
+            </div>
+          ) : null}
         </div>
       </div>
     </Card>

@@ -4,7 +4,6 @@ import {
   CircleDollarSign,
   LayoutDashboard,
   Luggage,
-  Map,
   MapPin,
   Users,
 } from "lucide-react";
@@ -15,7 +14,6 @@ import { cn } from "@/lib/utils";
 const tabs = [
   { id: "overview", label: "Overview", icon: LayoutDashboard },
   { id: "places", label: "Places", icon: MapPin },
-  { id: "map", label: "Map", icon: Map },
   { id: "plan", label: "Plan", icon: CalendarRange },
   { id: "reservations", label: "Reservations", icon: BedDouble },
   { id: "budget", label: "Budget", icon: CircleDollarSign },

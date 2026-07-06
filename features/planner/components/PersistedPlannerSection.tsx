@@ -16,6 +16,7 @@ type PersistedPlannerSectionProps = {
   tripId: string;
   items: PersistedPlannerItem[];
   loadError?: string;
+  canEditTrip: boolean;
 };
 
 function formatDate(value: string) {
@@ -31,6 +32,7 @@ export function PersistedPlannerSection({
   tripId,
   items,
   loadError,
+  canEditTrip,
 }: PersistedPlannerSectionProps) {
   const [isAddPanelOpen, setIsAddPanelOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<PersistedPlannerItem | null>(null);
@@ -63,15 +65,15 @@ export function PersistedPlannerSection({
         title="Plan"
         description="Organize dated activities and keep flexible ideas ready for later."
         className="mb-0"
-        action={
+        action={canEditTrip ? (
           <Button size="md" onClick={openAddPanel}>
             <Plus className="size-4" />
             Add item
           </Button>
-        }
+        ) : undefined}
       />
 
-      {isAddPanelOpen ? (
+      {isAddPanelOpen && canEditTrip ? (
         <PersistedAddPlanItemPanel
           key={editingItem?.id || "new"}
           tripId={tripId}
@@ -85,7 +87,7 @@ export function PersistedPlannerSection({
           icon={CalendarDays}
           title="No plan items yet"
           description="Start shaping this trip by adding a dated activity or an unscheduled idea."
-          action={<Button onClick={openAddPanel}>Add first item</Button>}
+          action={canEditTrip ? <Button onClick={openAddPanel}>Add first item</Button> : undefined}
         />
       ) : (
         <div className="space-y-8">
@@ -106,8 +108,8 @@ export function PersistedPlannerSection({
                     key={item.id}
                     item={item}
                     isPending={isPending}
-                    onEdit={(selected) => { setEditingItem(selected); setIsAddPanelOpen(true); }}
-                    onDelete={handleDelete}
+                    onEdit={canEditTrip ? (selected) => { setEditingItem(selected); setIsAddPanelOpen(true); } : undefined}
+                    onDelete={canEditTrip ? handleDelete : undefined}
                   />
                 ))}
               </div>

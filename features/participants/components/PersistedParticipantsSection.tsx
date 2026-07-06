@@ -14,15 +14,12 @@ import type {
   ParticipantActionState,
   PersistedParticipant,
 } from "@/features/participants/types/persisted-participant";
-import type {
-  Participant,
-  ParticipantRole,
-} from "@/features/participants/types/participant";
+import type { Participant } from "@/features/participants/types/participant";
 
 type PersistedParticipantsSectionProps = {
   tripId: string;
   participants: PersistedParticipant[];
-  currentUserRole: ParticipantRole | null;
+  canManageParticipants: boolean;
   loadError?: string;
 };
 
@@ -47,14 +44,14 @@ function toParticipant(participant: PersistedParticipant): Participant {
 export function PersistedParticipantsSection({
   tripId,
   participants,
-  currentUserRole,
+  canManageParticipants,
   loadError,
 }: PersistedParticipantsSectionProps) {
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [editingParticipant, setEditingParticipant] = useState<PersistedParticipant | null>(null);
   const [message, setMessage] = useState<ParticipantActionState | null>(null);
   const [isPending, startTransition] = useTransition();
-  const canManage = currentUserRole === "owner";
+  const canManage = canManageParticipants;
   const statsParticipants = participants.map(toParticipant);
 
   function openAddPanel() {

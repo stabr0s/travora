@@ -21,6 +21,7 @@ type PersistedBudgetSectionProps = {
   tripId: string;
   expenses: PersistedBudgetExpense[];
   loadError?: string;
+  canEditTrip: boolean;
 };
 
 function calculateSummaries(expenses: PersistedBudgetExpense[]) {
@@ -55,7 +56,7 @@ function calculateSummaries(expenses: PersistedBudgetExpense[]) {
   return { totals: Array.from(totals.values()), categories };
 }
 
-export function PersistedBudgetSection({ tripId, expenses, loadError }: PersistedBudgetSectionProps) {
+export function PersistedBudgetSection({ tripId, expenses, loadError, canEditTrip }: PersistedBudgetSectionProps) {
   const [isAddPanelOpen, setIsAddPanelOpen] = useState(false);
   const [editingExpense, setEditingExpense] = useState<PersistedBudgetExpense | null>(null);
   const [message, setMessage] = useState<CreateBudgetExpenseActionState | null>(null);
@@ -74,8 +75,8 @@ export function PersistedBudgetSection({ tripId, expenses, loadError }: Persiste
 
   return (
     <section className="space-y-6">
-      <BudgetHeader onAddExpense={openAddPanel} />
-      {isAddPanelOpen ? (
+      <BudgetHeader onAddExpense={canEditTrip ? openAddPanel : undefined} />
+      {isAddPanelOpen && canEditTrip ? (
         <PersistedAddExpensePanel
           key={editingExpense?.id || "new"}
           tripId={tripId}
@@ -88,7 +89,7 @@ export function PersistedBudgetSection({ tripId, expenses, loadError }: Persiste
           icon={WalletCards}
           title="No expenses yet"
           description="Add the first expense to start tracking trip costs."
-          action={<Button onClick={openAddPanel}>Add first expense</Button>}
+          action={canEditTrip ? <Button onClick={openAddPanel}>Add first expense</Button> : undefined}
         />
       ) : (
         <>
@@ -101,8 +102,8 @@ export function PersistedBudgetSection({ tripId, expenses, loadError }: Persiste
                 key={expense.id}
                 expense={expense}
                 isPending={isPending}
-                onEdit={(selected) => { setEditingExpense(selected); setIsAddPanelOpen(true); }}
-                onDelete={handleDelete}
+                onEdit={canEditTrip ? (selected) => { setEditingExpense(selected); setIsAddPanelOpen(true); } : undefined}
+                onDelete={canEditTrip ? handleDelete : undefined}
               />
             ))}
           </section>

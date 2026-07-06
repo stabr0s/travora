@@ -46,10 +46,11 @@ The initial `places` schema already includes nullable `latitude` and
 `map_order`, range constraints for both existing coordinate columns, a
 non-negative constraint for map order, and an index on `(trip_id, map_order)`.
 
-Persisted places can store coordinates without geocoding. The current Map tab
-uses those rows to separate map-ready places from places missing coordinates
-and to apply a stable display order. Leaflet/OpenStreetMap rendering,
-geocoding, routing, and distance calculations remain future work.
+Persisted places can store coordinates without geocoding. The prepared Map
+components can separate map-ready places from places missing coordinates and
+apply a stable display order. The Map tab is currently hidden from Trip Detail;
+its data foundation remains intact while Leaflet/OpenStreetMap rendering,
+geocoding, routing, and distance calculations are postponed.
 
 ## Automatic timestamps
 
@@ -129,8 +130,8 @@ constraints. Migration `003` is idempotent and does not alter RLS policies.
 
 - The migration has not been applied automatically by this repository.
 - Demo trip IDs intentionally continue using mock data.
-- Persisted UUID trips use Supabase for detail modules, and Map reads persisted
-  Places data without rendering real map tiles yet.
+- Persisted UUID trips use Supabase for detail modules. Map-ready Places fields
+  remain available, while the Map tab and real tile rendering are postponed.
 - Dashboard does not yet provide complete persisted analytics.
 - Application routes are not protected.
 - Storage, realtime collaboration, and file uploads are not configured.

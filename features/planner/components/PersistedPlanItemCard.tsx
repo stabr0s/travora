@@ -12,8 +12,8 @@ import type { PersistedPlannerItem } from "@/features/planner/types/persisted-pl
 type PersistedPlanItemCardProps = {
   item: PersistedPlannerItem;
   isPending?: boolean;
-  onDelete: (item: PersistedPlannerItem) => void;
-  onEdit: (item: PersistedPlannerItem) => void;
+  onDelete?: (item: PersistedPlannerItem) => void;
+  onEdit?: (item: PersistedPlannerItem) => void;
 };
 
 const statusDetails = {
@@ -60,10 +60,12 @@ export function PersistedPlanItemCard({ item, isPending, onDelete, onEdit }: Per
               {item.end_time ? ` – ${formatTime(item.end_time)}` : ""}
             </div>
           ) : null}
-          <div className="mt-4 flex gap-2 border-t border-border-subtle pt-3">
-            <Button size="sm" variant="outline" onClick={() => onEdit(item)} disabled={isPending}>Edit</Button>
-            <Button size="sm" variant="ghost" className="text-error" onClick={() => onDelete(item)} disabled={isPending}>Delete</Button>
-          </div>
+          {onEdit && onDelete ? (
+            <div className="mt-4 flex gap-2 border-t border-border-subtle pt-3">
+              <Button size="sm" variant="outline" onClick={() => onEdit(item)} disabled={isPending}>Edit</Button>
+              <Button size="sm" variant="ghost" className="text-error" onClick={() => onDelete(item)} disabled={isPending}>Delete</Button>
+            </div>
+          ) : null}
         </div>
       </div>
     </Card>

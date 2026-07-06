@@ -7,7 +7,7 @@ import type { Place } from "@/features/places/types/place";
 
 type PlacesGridProps = {
   places: Place[];
-  onAddPlace: () => void;
+  onAddPlace?: () => void;
   isPending?: boolean;
   onDeletePlace?: (place: Place) => void;
   onEditPlace?: (place: Place) => void;
@@ -32,16 +32,16 @@ export function PlacesGrid({ places, onAddPlace, isPending, onDeletePlace, onEdi
           title="No places in this view"
           description="Try another filter or add the first place you want to remember."
           className="min-h-[24rem] md:col-span-2"
-          action={
+          action={onAddPlace ? (
             <Button size="md" onClick={onAddPlace}>
               <Plus className="size-4" />
               Add place
             </Button>
-          }
+          ) : undefined}
         />
       ) : null}
 
-      <AddPlaceCard onClick={onAddPlace} />
+      {onAddPlace ? <AddPlaceCard onClick={onAddPlace} /> : null}
     </section>
   );
 }

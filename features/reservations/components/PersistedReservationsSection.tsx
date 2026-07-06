@@ -16,6 +16,7 @@ type PersistedReservationsSectionProps = {
   tripId: string;
   reservations: PersistedReservation[];
   loadError?: string;
+  canEditTrip: boolean;
 };
 
 function filterReservations(reservations: PersistedReservation[], filter: ReservationFilter) {
@@ -31,6 +32,7 @@ export function PersistedReservationsSection({
   tripId,
   reservations,
   loadError,
+  canEditTrip,
 }: PersistedReservationsSectionProps) {
   const [activeFilter, setActiveFilter] = useState<ReservationFilter>("all");
   const [isAddPanelOpen, setIsAddPanelOpen] = useState(false);
@@ -54,8 +56,8 @@ export function PersistedReservationsSection({
 
   return (
     <section className="space-y-6">
-      <ReservationsHeader onAddReservation={openAddPanel} />
-      {isAddPanelOpen ? (
+      <ReservationsHeader onAddReservation={canEditTrip ? openAddPanel : undefined} />
+      {isAddPanelOpen && canEditTrip ? (
         <PersistedAddReservationPanel
           key={editingReservation?.id || "new"}
           tripId={tripId}
@@ -68,7 +70,7 @@ export function PersistedReservationsSection({
           icon={ReceiptText}
           title="No reservations yet"
           description="Save the first flight, stay, ticket, or transport booking for this trip."
-          action={<Button onClick={openAddPanel}>Add first reservation</Button>}
+          action={canEditTrip ? <Button onClick={openAddPanel}>Add first reservation</Button> : undefined}
         />
       ) : (
         <>
@@ -81,8 +83,8 @@ export function PersistedReservationsSection({
                   key={reservation.id}
                   reservation={reservation}
                   isPending={isPending}
-                  onEdit={(selected) => { setEditingReservation(selected); setIsAddPanelOpen(true); }}
-                  onDelete={handleDelete}
+                  onEdit={canEditTrip ? (selected) => { setEditingReservation(selected); setIsAddPanelOpen(true); } : undefined}
+                  onDelete={canEditTrip ? handleDelete : undefined}
                 />
               ))}
             </div>

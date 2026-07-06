@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 26 — Map Data Foundation
+Sprint 27 — Hide Map + Permissions Hardening
 
 Status: IN PROGRESS
 
@@ -230,6 +230,13 @@ Status: IN PROGRESS
 - Mock trip behavior preserved
 - Backend manual test checklist documented
 
+### Sprint 26 — Map Data Foundation
+- Places extended with optional coordinates and map order
+- Persisted Places Add/Edit supports map-ready data
+- Persisted Map data view prepared from Supabase Places
+- Coordinate and map-order constraints documented in migration 003
+- No map tiles, geocoding, or routing added
+
 ## MVP Mock Modules Completed
 
 - Dashboard
@@ -378,12 +385,23 @@ Status: IN PROGRESS
 
 - Places support optional `latitude`, `longitude`, and `map_order`
 - Persisted Places Add/Edit can save optional coordinates and map order
-- Persisted Map uses the already-loaded Supabase Places data
-- Map-ready and missing-coordinate places are shown separately
+- Persisted Map data components use the already-loaded Supabase Places data
+- Map-ready and missing-coordinate places can be shown separately when the module returns
 - No Leaflet or OpenStreetMap tiles are rendered yet
 - No geocoding or routing API is implemented
-- Mock Map behavior remains unchanged
-- The next likely task is Leaflet/OpenStreetMap rendering
+- Map code and schema remain available, but its Trip Detail tab is currently hidden
+
+## Hide Map + Permissions Hardening
+
+- Map Data Foundation remains available in code and database schema
+- The Map tab is hidden from mock and persisted Trip Detail for now
+- Leaflet and OpenStreetMap rendering is postponed
+- Owner, editor, and viewer roles drive persisted UI permissions
+- Viewers and users without a confirmed role receive read-only UI
+- Editors can manage trip modules but cannot manage participants
+- Owners can manage trip modules and participants
+- RLS remains the final backend enforcement layer
+- No public links, invite tokens, or email invitations were added
 
 ## Manual Backend Test Checklist
 
@@ -464,19 +482,20 @@ Principles:
 
 ## Next Task
 
-Task #026 — Map Data Foundation
+Task #027 — Hide Map + Permissions Hardening
 
 Goal:
 
-Prepare persisted Places data for future interactive map rendering.
+Hide the postponed Map workspace and align persisted controls with trip roles.
 
 The task includes:
 
-- Add map ordering and coordinate constraints
-- Save optional coordinates from persisted Places
-- Present map-ready and missing-coordinate places in persisted Map
+- Hide Map from Trip Detail without removing its code or schema
+- Keep owner/editor module editing controls available
+- Make persisted modules read-only for viewers and unknown roles
+- Keep participant management restricted to owners
 
 Important:
 
-Mock Map behavior remains unchanged. No map library, tiles, geocoding, or
-routing are included in this foundation task.
+RLS remains the final backend permission layer. No migrations, public links,
+invitations, or new dependencies are included.

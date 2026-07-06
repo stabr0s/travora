@@ -28,6 +28,7 @@ type PersistedPackingSectionProps = {
   tripId: string;
   items: PersistedPackingItem[];
   loadError?: string;
+  canEditTrip: boolean;
 };
 
 const categories: PackingCategory[] = [
@@ -57,7 +58,7 @@ function toPackingItem(item: PersistedPackingItem): PackingItem {
   };
 }
 
-export function PersistedPackingSection({ tripId, items, loadError }: PersistedPackingSectionProps) {
+export function PersistedPackingSection({ tripId, items, loadError, canEditTrip }: PersistedPackingSectionProps) {
   const [activeCategory, setActiveCategory] = useState<PackingCategoryFilter>("all");
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<PersistedPackingItem | null>(null);
@@ -90,8 +91,8 @@ export function PersistedPackingSection({ tripId, items, loadError }: PersistedP
 
   return (
     <section className="space-y-6">
-      <PackingHeader onAddItem={openAddPanel} />
-      {isPanelOpen ? (
+      <PackingHeader onAddItem={canEditTrip ? openAddPanel : undefined} />
+      {isPanelOpen && canEditTrip ? (
         <PersistedAddPackingItemPanel
           key={editingItem?.id || "new"}
           tripId={tripId}
@@ -104,7 +105,7 @@ export function PersistedPackingSection({ tripId, items, loadError }: PersistedP
           icon={Luggage}
           title="No packing items yet"
           description="Add the first item to start preparing this trip."
-          action={<Button onClick={openAddPanel}>Add first item</Button>}
+          action={canEditTrip ? <Button onClick={openAddPanel}>Add first item</Button> : undefined}
         />
       ) : (
         <>
@@ -126,9 +127,10 @@ export function PersistedPackingSection({ tripId, items, loadError }: PersistedP
                         key={item.id}
                         item={item}
                         isPending={isPending}
-                        onToggle={handleToggle}
-                        onEdit={(selected) => { setEditingItem(selected); setIsPanelOpen(true); }}
-                        onDelete={handleDelete}
+                        canEditTrip={canEditTrip}
+                        onToggle={canEditTrip ? handleToggle : undefined}
+                        onEdit={canEditTrip ? (selected) => { setEditingItem(selected); setIsPanelOpen(true); } : undefined}
+                        onDelete={canEditTrip ? handleDelete : undefined}
                       />
                     ))}
                   </div>

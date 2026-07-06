@@ -22,6 +22,7 @@ type PlacesSectionProps = {
   places?: PersistedPlace[];
   mode?: "mock" | "persisted";
   loadError?: string;
+  canEditTrip?: boolean;
 };
 
 function filterPlaces(places: Place[], filter: PlaceFilter): Place[] {
@@ -44,12 +45,14 @@ export function PlacesSection({
   places = [],
   mode = "mock",
   loadError,
+  canEditTrip = true,
 }: PlacesSectionProps) {
   const [activeFilter, setActiveFilter] = useState<PlaceFilter>("all");
   const [isAddPanelOpen, setIsAddPanelOpen] = useState(false);
   const [editingPlace, setEditingPlace] = useState<PersistedPlace | null>(null);
   const [message, setMessage] = useState<CreatePlaceActionState | null>(null);
   const [isPending, startTransition] = useTransition();
+  const canMutate = mode === "mock" || canEditTrip;
   const tripPlaces = useMemo(
     () => mode === "persisted" ? places.map(mapPersistedPlaceToPlace) : getMockPlacesByTripId(tripId),
     [mode, places, tripId],
@@ -76,9 +79,9 @@ export function PlacesSection({
 
   return (
     <section className="space-y-6">
-      <PlacesHeader onAddPlace={openAddPanel} />
+      <PlacesHeader onAddPlace={canMutate ? openAddPanel : undefined} />
 
-      {isAddPanelOpen ? (
+      {isAddPanelOpen && canMutate ? (
         <AddPlacePanel
           key={editingPlace?.id || "new"}
           tripId={tripId}
@@ -97,10 +100,10 @@ export function PlacesSection({
           <PlacesFilters activeFilter={activeFilter} onFilterChange={setActiveFilter} />
           <PlacesGrid
             places={filteredPlaces}
-            onAddPlace={openAddPanel}
+            onAddPlace={canMutate ? openAddPanel : undefined}
             isPending={isPending}
-            onEditPlace={mode === "persisted" ? handleEdit : undefined}
-            onDeletePlace={mode === "persisted" ? handleDelete : undefined}
+            onEditPlace={mode === "persisted" && canEditTrip ? handleEdit : undefined}
+            onDeletePlace={mode === "persisted" && canEditTrip ? handleDelete : undefined}
           />
         </>
       )}

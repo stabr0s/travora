@@ -3,7 +3,7 @@ import { Plus } from "lucide-react";
 import { Button, SectionHeader } from "@/components/ui";
 
 type BudgetHeaderProps = {
-  onAddExpense: () => void;
+  onAddExpense?: () => void;
 };
 
 export function BudgetHeader({ onAddExpense }: BudgetHeaderProps) {
@@ -12,12 +12,12 @@ export function BudgetHeader({ onAddExpense }: BudgetHeaderProps) {
       title="Budget"
       description="See the shape of trip spending, shared costs, and what remains per traveler."
       className="mb-0"
-      action={
+      action={onAddExpense ? (
         <Button size="md" onClick={onAddExpense}>
           <Plus className="size-4" />
           Add expense
         </Button>
-      }
+      ) : undefined}
     />
   );
 }
