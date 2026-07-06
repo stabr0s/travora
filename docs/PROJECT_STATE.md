@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 23 — Persist Packing
+Sprint 24 — Persist Participants
 
 Status: IN PROGRESS
 
@@ -211,6 +211,12 @@ Status: IN PROGRESS
 - Mock trip modules remain preview-only
 - No schema changes, bulk actions, undo, history, or realtime added
 
+### Sprint 23 — Persist Packing
+- Persisted trips load packing items from Supabase
+- Packing items support create, edit, delete, and persisted checkbox state
+- Mock packing retains local preview-only behavior
+- No realtime collaboration or private permission logic added
+
 ## MVP Mock Modules Completed
 
 - Dashboard
@@ -226,10 +232,10 @@ Status: IN PROGRESS
 
 ## Known Limitations
 
-- Trips, Places, Planner, Reservations, Budget, and Packing persist for signed-in users; other modules still use mock data
+- Trips and all detail modules except Map persist for signed-in users
 - Authentication foundation only; application routes remain public
 - Database migration has been applied manually
-- Persistence is currently limited to Trips, Places, Planner, Reservations, Budget, and Packing
+- Persistence includes Trips, Places, Planner, Reservations, Budget, Packing, and Participants
 - Forms in modules not yet connected to persistence remain preview-only
 - Map is placeholder only
 - Sharing/invitations are mock-only
@@ -241,8 +247,8 @@ Status: IN PROGRESS
 - Typed browser and server clients prepared
 - Authentication implemented in the Auth Foundation sprint
 - Database schema applied in the Database Schema Foundation sprint
-- Trip, Place, Planner, Reservations, Budget, and Packing persistence added in their persistence sprints
-- Mock data is still used outside Trips, Places, Planner, Reservations, Budget, and Packing
+- Trip and detail-module persistence added through the Participants sprint
+- Mock data remains available for demo trip IDs
 
 ## Auth Foundation
 
@@ -332,6 +338,17 @@ Status: IN PROGRESS
 - No realtime collaboration or per-user private permissions implemented
 - Participants remains a placeholder for persisted trips
 
+## Persist Participants
+
+- Persisted trips load participants from `trip_members` and limited profile data
+- Trip owners can add existing registered users by email
+- Trip owners can edit or remove non-owner members
+- Mock trips continue using mock participant data and preview-only invitations
+- Migration `002_participant_profile_access.sql` adds limited participant/profile RPC functions
+- The `profiles` table remains unavailable for global reads
+- No real email invitations, invite tokens, service-role usage, or realtime collaboration added
+- Map remains a placeholder
+
 ## Tech Stack
 
 - Next.js 16
@@ -396,21 +413,21 @@ Principles:
 
 ## Next Task
 
-Task #023 — Persist Packing
+Task #024 — Persist Participants
 
 Goal:
 
-Persist packing items and checklist progress for saved trips.
+Persist trip participants and owner-managed membership roles.
 
 The task includes:
 
-- Server-side Packing CRUD operations
-- Persisted checkbox state
-- Packing statistics, progress, and category filters
-- Add/Edit form and confirmed delete action
+- Limited participant/profile RPC access
+- Participant listing from `trip_members` and `profiles`
+- Owner-only add, edit, and remove actions
+- Read-only participant view for non-owners
 
 Important:
 
-Mock Packing remains local and preview-only.
+Mock Participants remains preview-only.
 
-Do not add participant persistence, realtime collaboration, or private permission logic yet.
+Do not add email delivery, invite tokens, public sharing, or realtime collaboration yet.

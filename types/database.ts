@@ -325,7 +325,31 @@ export type Database = {
       };
     };
     Views: Record<string, never>;
-    Functions: Record<string, never>;
+    Functions: {
+      get_trip_participants: {
+        Args: { target_trip_id: string };
+        Returns: Array<{
+          member_id: string;
+          trip_id: string;
+          user_id: string;
+          role: string;
+          status: string;
+          created_at: string | null;
+          email: string | null;
+          full_name: string | null;
+          avatar_url: string | null;
+        }>;
+      };
+      add_trip_member_by_email: {
+        Args: {
+          target_trip_id: string;
+          target_email: string;
+          target_role: string;
+          target_status: string;
+        };
+        Returns: string;
+      };
+    };
     Enums: Record<string, never>;
     CompositeTypes: Record<string, never>;
   };

@@ -3,21 +3,27 @@ import { UserPlus } from "lucide-react";
 import { Button, SectionHeader } from "@/components/ui";
 
 type ParticipantsHeaderProps = {
-  onInvite: () => void;
+  onInvite?: () => void;
+  actionLabel?: string;
+  description?: string;
 };
 
-export function ParticipantsHeader({ onInvite }: ParticipantsHeaderProps) {
+export function ParticipantsHeader({
+  onInvite,
+  actionLabel = "Invite participant",
+  description = "Preview the travelers, roles, and future sharing setup for this trip.",
+}: ParticipantsHeaderProps) {
   return (
     <SectionHeader
       title="Participants"
-      description="Preview the travelers, roles, and future sharing setup for this trip."
+      description={description}
       className="mb-0"
-      action={
+      action={onInvite ? (
         <Button size="md" onClick={onInvite}>
           <UserPlus className="size-4" />
-          Invite participant
+          {actionLabel}
         </Button>
-      }
+      ) : undefined}
     />
   );
 }

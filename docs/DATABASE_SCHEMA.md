@@ -3,6 +3,9 @@
 This document describes the initial Supabase schema prepared in
 `supabase/migrations/001_initial_schema.sql`.
 
+Participant profile access is extended by
+`supabase/migrations/002_participant_profile_access.sql`.
+
 The migration is a foundation only. Travora still reads all trip-planning data
 from local mock files.
 
@@ -73,6 +76,21 @@ Three small `stable security definer` functions prevent recursive RLS checks:
 
 Each helper uses a fixed `search_path = public` and returns only a boolean.
 
+## Participant profile access
+
+Migration `002_participant_profile_access.sql` adds two narrowly scoped
+`security definer` functions:
+
+- `get_trip_participants(target_trip_id)` returns member rows with limited
+  profile fields only when the caller owns the trip or is an active member;
+- `add_trip_member_by_email(...)` lets only the trip owner add an existing
+  registered profile as an editor or viewer.
+
+Execute permission is revoked from `public` and granted only to
+`authenticated`. The `profiles` table is still not globally readable. These
+functions do not use a service-role key, create profiles, send emails, or
+create invitation tokens.
+
 ## Applying the migration manually
 
 1. Open the target Supabase project.
@@ -83,8 +101,9 @@ Each helper uses a fixed `search_path = public` and returns only a boolean.
 5. Verify the tables in **Table Editor** and their policies in the RLS policy view.
 6. Register a test user and confirm that a matching `profiles` row is created.
 
-Apply the migration to a new or otherwise prepared project. It is an initial
-migration and is not designed to be rerun over an existing copy of the schema.
+Apply migration `001` to a new or otherwise prepared project. After reviewing
+it, apply migration `002` to enable limited participant/profile access. The
+initial migration is not designed to be rerun over an existing schema.
 
 ## Current limitations
 

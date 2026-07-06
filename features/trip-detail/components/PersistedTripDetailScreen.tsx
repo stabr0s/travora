@@ -8,6 +8,9 @@ import { PersistedBudgetSection } from "@/features/budget";
 import type { PersistedBudgetExpense } from "@/features/budget/types/persisted-budget";
 import { PersistedPackingSection } from "@/features/packing";
 import type { PersistedPackingItem } from "@/features/packing/types/persisted-packing";
+import { PersistedParticipantsSection } from "@/features/participants";
+import type { PersistedParticipant } from "@/features/participants/types/persisted-participant";
+import type { ParticipantRole } from "@/features/participants/types/participant";
 import { PlacesSection } from "@/features/places";
 import type { PersistedPlace } from "@/features/places/types/persisted-place";
 import { PersistedPlannerSection } from "@/features/planner";
@@ -32,11 +35,13 @@ type PersistedTripDetailScreenProps = {
   budgetError?: string;
   packingItems: PersistedPackingItem[];
   packingError?: string;
+  participants: PersistedParticipant[];
+  currentUserRole: ParticipantRole | null;
+  participantsError?: string;
 };
 
-const moduleNames: Record<Exclude<TripDetailTabId, "overview" | "places" | "plan" | "reservations" | "budget" | "packing">, string> = {
+const moduleNames: Record<Exclude<TripDetailTabId, "overview" | "places" | "plan" | "reservations" | "budget" | "packing" | "participants">, string> = {
   map: "Map",
-  participants: "Participants",
 };
 
 export function PersistedTripDetailScreen({
@@ -51,6 +56,9 @@ export function PersistedTripDetailScreen({
   budgetError,
   packingItems,
   packingError,
+  participants,
+  currentUserRole,
+  participantsError,
 }: PersistedTripDetailScreenProps) {
   const [activeTab, setActiveTab] = useState<TripDetailTabId>("overview");
 
@@ -91,11 +99,18 @@ export function PersistedTripDetailScreen({
           items={packingItems}
           loadError={packingError}
         />
+      ) : activeTab === "participants" ? (
+        <PersistedParticipantsSection
+          tripId={trip.id}
+          participants={participants}
+          currentUserRole={currentUserRole}
+          loadError={participantsError}
+        />
       ) : (
         <EmptyState
           icon={Construction}
           title={`${moduleNames[activeTab]} will be connected next`}
-          description="This saved trip currently supports Overview, Places, Plan, Reservations, Budget, and Packing. The remaining modules will be connected in later tasks."
+          description="This saved trip currently supports every planning module except the interactive Map."
           className="min-h-80"
         />
       )}
