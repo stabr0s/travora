@@ -109,6 +109,7 @@ export type Database = {
           country: string | null;
           latitude: number | null;
           longitude: number | null;
+          map_order: number | null;
           status: "idea" | "planned" | "visited" | "rejected" | null;
           priority: "must-see" | "recommended" | "optional" | null;
           notes: string | null;
@@ -127,6 +128,7 @@ export type Database = {
           country?: string | null;
           latitude?: number | null;
           longitude?: number | null;
+          map_order?: number | null;
           status?: "idea" | "planned" | "visited" | "rejected" | null;
           priority?: "must-see" | "recommended" | "optional" | null;
           notes?: string | null;

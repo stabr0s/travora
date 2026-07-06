@@ -11,6 +11,32 @@ function readField(formData: FormData, name: string) {
   return String(formData.get(name) ?? "").trim();
 }
 
+type ParsedMapFields =
+  | { data: { latitude: number | null; longitude: number | null; mapOrder: number | null }; error: null }
+  | { data: null; error: string };
+
+function parseOptionalNumber(value: string): number | null {
+  return value === "" ? null : Number(value);
+}
+
+function readMapFields(formData: FormData): ParsedMapFields {
+  const latitude = parseOptionalNumber(readField(formData, "latitude"));
+  const longitude = parseOptionalNumber(readField(formData, "longitude"));
+  const mapOrder = parseOptionalNumber(readField(formData, "mapOrder"));
+
+  if (latitude !== null && (!Number.isFinite(latitude) || latitude < -90 || latitude > 90)) {
+    return { data: null, error: "Latitude must be a number between -90 and 90." };
+  }
+  if (longitude !== null && (!Number.isFinite(longitude) || longitude < -180 || longitude > 180)) {
+    return { data: null, error: "Longitude must be a number between -180 and 180." };
+  }
+  if (mapOrder !== null && (!Number.isInteger(mapOrder) || mapOrder < 0)) {
+    return { data: null, error: "Map order must be a whole number of 0 or more." };
+  }
+
+  return { data: { latitude, longitude, mapOrder }, error: null };
+}
+
 export async function createPlaceAction(
   _previousState: CreatePlaceActionState,
   formData: FormData,
@@ -26,6 +52,9 @@ export async function createPlaceAction(
     return { status: "error", message: "Enter a name for this place." };
   }
 
+  const mapFields = readMapFields(formData);
+  if (mapFields.error) return { status: "error", message: mapFields.error };
+
   const result = await createPlace({
     tripId,
     title,
@@ -37,6 +66,7 @@ export async function createPlaceAction(
     priority: readField(formData, "priority") as PlacePriority,
     notes: readField(formData, "notes"),
     websiteUrl: readField(formData, "websiteUrl"),
+    ...mapFields.data,
   });
 
   if (result.error) {
@@ -59,6 +89,9 @@ export async function updatePlaceAction(
   if (!isUuid(id)) return { status: "error", message: "This place is not available." };
   if (!title) return { status: "error", message: "Enter a name for this place." };
 
+  const mapFields = readMapFields(formData);
+  if (mapFields.error) return { status: "error", message: mapFields.error };
+
   const result = await updatePlace({
     id,
     tripId,
@@ -71,6 +104,7 @@ export async function updatePlaceAction(
     priority: readField(formData, "priority") as PlacePriority,
     notes: readField(formData, "notes"),
     websiteUrl: readField(formData, "websiteUrl"),
+    ...mapFields.data,
   });
 
   if (result.error) return { status: "error", message: result.error.message };

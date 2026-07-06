@@ -1,10 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Construction } from "lucide-react";
-
-import { EmptyState } from "@/components/ui";
 import { PersistedBudgetSection } from "@/features/budget";
+import { PersistedMapSection } from "@/features/map";
 import type { PersistedBudgetExpense } from "@/features/budget/types/persisted-budget";
 import { PersistedPackingSection } from "@/features/packing";
 import type { PersistedPackingItem } from "@/features/packing/types/persisted-packing";
@@ -38,10 +36,6 @@ type PersistedTripDetailScreenProps = {
   participants: PersistedParticipant[];
   currentUserRole: ParticipantRole | null;
   participantsError?: string;
-};
-
-const moduleNames: Record<Exclude<TripDetailTabId, "overview" | "places" | "plan" | "reservations" | "budget" | "packing" | "participants">, string> = {
-  map: "Map",
 };
 
 export function PersistedTripDetailScreen({
@@ -81,6 +75,8 @@ export function PersistedTripDetailScreen({
           items={plannerItems}
           loadError={plannerError}
         />
+      ) : activeTab === "map" ? (
+        <PersistedMapSection places={places} loadError={placesError} />
       ) : activeTab === "reservations" ? (
         <PersistedReservationsSection
           tripId={trip.id}
@@ -106,14 +102,7 @@ export function PersistedTripDetailScreen({
           currentUserRole={currentUserRole}
           loadError={participantsError}
         />
-      ) : (
-        <EmptyState
-          icon={Construction}
-          title={`${moduleNames[activeTab]} will be connected next`}
-          description="This saved trip currently supports every planning module except the interactive Map."
-          className="min-h-80"
-        />
-      )}
+      ) : null}
     </div>
   );
 }

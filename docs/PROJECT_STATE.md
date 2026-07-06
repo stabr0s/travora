@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 25 — MVP Backend Stabilization
+Sprint 26 — Map Data Foundation
 
 Status: IN PROGRESS
 
@@ -223,6 +223,13 @@ Status: IN PROGRESS
 - Non-owner participant views remain read-only
 - No real email invitations, invite tokens, or public sharing added
 
+### Sprint 25 — MVP Backend Stabilization
+- Persisted MVP services and actions reviewed for consistency
+- Safe loading and mutation error states verified
+- Participant error wording corrected
+- Mock trip behavior preserved
+- Backend manual test checklist documented
+
 ## MVP Mock Modules Completed
 
 - Dashboard
@@ -238,12 +245,12 @@ Status: IN PROGRESS
 
 ## Known Limitations
 
-- Trips and all detail modules except Map persist for signed-in users
+- Trips and detail-module records persist for signed-in users
 - Authentication foundation only; application routes remain public
 - Database migration has been applied manually
 - Persistence includes Trips, Places, Planner, Reservations, Budget, Packing, and Participants
 - Forms in modules not yet connected to persistence remain preview-only
-- Map is placeholder only
+- Persisted Map uses Places data but does not render real map tiles yet
 - Real email invitations and public sharing are not implemented
 
 ## Supabase Foundation
@@ -367,6 +374,17 @@ Status: IN PROGRESS
 - Map remains a placeholder
 - The next likely task is Map persistence or sharing/public links
 
+## Map Data Foundation
+
+- Places support optional `latitude`, `longitude`, and `map_order`
+- Persisted Places Add/Edit can save optional coordinates and map order
+- Persisted Map uses the already-loaded Supabase Places data
+- Map-ready and missing-coordinate places are shown separately
+- No Leaflet or OpenStreetMap tiles are rendered yet
+- No geocoding or routing API is implemented
+- Mock Map behavior remains unchanged
+- The next likely task is Leaflet/OpenStreetMap rendering
+
 ## Manual Backend Test Checklist
 
 - Login and logout
@@ -446,21 +464,19 @@ Principles:
 
 ## Next Task
 
-Task #025 — MVP Backend Stabilization
+Task #026 — Map Data Foundation
 
 Goal:
 
-Stabilize the persisted MVP backend and UI integration.
+Prepare persisted Places data for future interactive map rendering.
 
 The task includes:
 
-- Audit persisted services and server actions
-- Review safe errors, RLS, RPCs, and manual database types
-- Correct persisted error and empty states
-- Document the backend MVP manual test checklist
+- Add map ordering and coordinate constraints
+- Save optional coordinates from persisted Places
+- Present map-ready and missing-coordinate places in persisted Map
 
 Important:
 
-Mock trip behavior remains unchanged.
-
-Do not add new product features; Map remains a placeholder.
+Mock Map behavior remains unchanged. No map library, tiles, geocoding, or
+routing are included in this foundation task.

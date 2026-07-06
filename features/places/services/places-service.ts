@@ -36,6 +36,17 @@ async function getAuthContext() {
   return { supabase, user: data.user };
 }
 
+function hasValidMapFields(input: CreatePlaceInput) {
+  const validLatitude = input.latitude == null
+    || (Number.isFinite(input.latitude) && input.latitude >= -90 && input.latitude <= 90);
+  const validLongitude = input.longitude == null
+    || (Number.isFinite(input.longitude) && input.longitude >= -180 && input.longitude <= 180);
+  const validMapOrder = input.mapOrder == null
+    || (Number.isInteger(input.mapOrder) && input.mapOrder >= 0);
+
+  return validLatitude && validLongitude && validMapOrder;
+}
+
 export async function getPlacesForTrip(
   tripId: string,
 ): Promise<PlacesServiceResult<PersistedPlace[]>> {
@@ -75,10 +86,10 @@ export async function getPlacesForTrip(
 export async function createPlace(
   input: CreatePlaceInput,
 ): Promise<PlacesServiceResult<PersistedPlace>> {
-  if (!isUuid(input.tripId) || !input.title.trim()) {
+  if (!isUuid(input.tripId) || !input.title.trim() || !hasValidMapFields(input)) {
     return {
       data: null,
-      error: { code: "INVALID_TRIP", message: "Choose a saved trip and enter a place name." },
+      error: { code: "INVALID_TRIP", message: "Check the saved trip, place name, and optional map values." },
     };
   }
 
@@ -106,6 +117,7 @@ export async function createPlace(
     website_url: input.websiteUrl || null,
     latitude: input.latitude ?? null,
     longitude: input.longitude ?? null,
+    map_order: input.mapOrder ?? null,
   };
 
   const { error: insertError } = await supabase.from("places").insert(payload);
@@ -136,6 +148,7 @@ export async function createPlace(
     country: input.country || null,
     latitude: input.latitude ?? null,
     longitude: input.longitude ?? null,
+    map_order: input.mapOrder ?? null,
     status: input.status || null,
     priority: input.priority || null,
     notes: input.notes || null,
@@ -154,7 +167,7 @@ export async function updatePlace(
   if (!isUuid(input.tripId)) {
     return { data: null, error: { code: "INVALID_TRIP", message: "This saved trip is not available." } };
   }
-  if (!isUuid(input.id) || !input.title.trim()) {
+  if (!isUuid(input.id) || !input.title.trim() || !hasValidMapFields(input)) {
     return { data: null, error: { code: "INVALID_RECORD", message: "Choose a valid place and enter its name." } };
   }
 
@@ -167,6 +180,9 @@ export async function updatePlace(
     address: input.address || null,
     city: input.city || null,
     country: input.country || null,
+    latitude: input.latitude ?? null,
+    longitude: input.longitude ?? null,
+    map_order: input.mapOrder ?? null,
     status: input.status || null,
     priority: input.priority || null,
     notes: input.notes || null,

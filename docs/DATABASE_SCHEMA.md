@@ -6,6 +6,9 @@ This document describes the initial Supabase schema prepared in
 Participant profile access is extended by
 `supabase/migrations/002_participant_profile_access.sql`.
 
+Map-ready place data is extended by
+`supabase/migrations/003_map_data_foundation.sql`.
+
 Travora supports two data modes. The four demo trip IDs continue reading local
 mock data, while persisted UUID trips use Supabase for Trips, Places, Planner,
 Reservations, Budget, Packing, and Participants. Map remains a visual
@@ -35,6 +38,18 @@ placeholder, and Dashboard is not yet backed by complete persisted analytics.
 The owner is represented by `trips.owner_id`. The database does not create an
 automatic owner membership row; the current trip creation service inserts the
 active owner membership explicitly.
+
+## Map data foundation
+
+The initial `places` schema already includes nullable `latitude` and
+`longitude` columns. Migration `003_map_data_foundation.sql` adds nullable
+`map_order`, range constraints for both existing coordinate columns, a
+non-negative constraint for map order, and an index on `(trip_id, map_order)`.
+
+Persisted places can store coordinates without geocoding. The current Map tab
+uses those rows to separate map-ready places from places missing coordinates
+and to apply a stable display order. Leaflet/OpenStreetMap rendering,
+geocoding, routing, and distance calculations remain future work.
 
 ## Automatic timestamps
 
@@ -107,11 +122,15 @@ Apply migration `001` to a new or otherwise prepared project. After reviewing
 it, apply migration `002` to enable limited participant/profile access. The
 initial migration is not designed to be rerun over an existing schema.
 
+After reviewing it, apply migration `003` to add map ordering and coordinate
+constraints. Migration `003` is idempotent and does not alter RLS policies.
+
 ## Current limitations
 
 - The migration has not been applied automatically by this repository.
 - Demo trip IDs intentionally continue using mock data.
-- Persisted UUID trips use Supabase for all current detail modules except Map.
+- Persisted UUID trips use Supabase for detail modules, and Map reads persisted
+  Places data without rendering real map tiles yet.
 - Dashboard does not yet provide complete persisted analytics.
 - Application routes are not protected.
 - Storage, realtime collaboration, and file uploads are not configured.
