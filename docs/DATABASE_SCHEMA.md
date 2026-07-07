@@ -33,7 +33,8 @@ placeholder, and Dashboard is not yet backed by complete persisted analytics.
 - Places, planner items, reservations, expenses, and packing items belong to a trip.
 - A planner item can optionally reference a place. Deleting that place keeps the
   planner item and clears its `place_id`.
-- Deleting a trip cascades to its module data and memberships.
+- Deleting a trip cascades to `trip_members`, `places`, `planner_items`,
+  `reservations`, `budget_expenses`, and `packing_items`.
 
 The owner is represented by `trips.owner_id`. The database does not create an
 automatic owner membership row; the current trip creation service inserts the
@@ -138,6 +139,8 @@ constraints. Migration `003` is idempotent and does not alter RLS policies.
 - Persisted UUID trips use Supabase for detail modules. Map-ready Places fields
   remain available, while the Map tab and real tile rendering are postponed.
 - Dashboard does not yet provide complete persisted analytics.
+- Trip deletion is permanent in the current MVP; there is no soft delete,
+  archive, or restore flow yet.
 - Application routes are not protected.
 - Storage, realtime collaboration, and file uploads are not configured.
 - The TypeScript `Database` type is still maintained manually.

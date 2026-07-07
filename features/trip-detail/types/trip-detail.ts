@@ -8,7 +8,8 @@ export type TripDetailTabId =
   | "reservations"
   | "budget"
   | "packing"
-  | "participants";
+  | "participants"
+  | "settings";
 
 export type PlanningChecklistItem = {
   id: string;

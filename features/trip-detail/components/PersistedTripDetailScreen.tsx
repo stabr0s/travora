@@ -15,6 +15,7 @@ import { PersistedPlannerSection } from "@/features/planner";
 import type { PersistedPlannerItem } from "@/features/planner/types/persisted-planner";
 import { PersistedReservationsSection } from "@/features/reservations";
 import type { PersistedReservation } from "@/features/reservations/types/persisted-reservation";
+import { PersistedTripSettingsSection } from "@/features/trips/components/PersistedTripSettingsSection";
 import { PersistedTripHero } from "@/features/trip-detail/components/PersistedTripHero";
 import { PersistedTripOverview } from "@/features/trip-detail/components/PersistedTripOverview";
 import { TripTabs } from "@/features/trip-detail/components/TripTabs";
@@ -57,6 +58,7 @@ export function PersistedTripDetailScreen({
   const [activeTab, setActiveTab] = useState<TripDetailTabId>("overview");
   const canEditTrip = currentUserRole === "owner" || currentUserRole === "editor";
   const canManageParticipants = currentUserRole === "owner";
+  const canManageSettings = currentUserRole === "owner";
 
   return (
     <div className="space-y-6">
@@ -66,7 +68,7 @@ export function PersistedTripDetailScreen({
           You have view-only access to this trip. Ask the trip owner for edit access.
         </Card>
       ) : null}
-      <TripTabs activeTab={activeTab} onTabChange={setActiveTab} />
+      <TripTabs activeTab={activeTab} onTabChange={setActiveTab} showSettings />
       {activeTab === "overview" ? (
         <PersistedTripOverview />
       ) : activeTab === "places" ? (
@@ -111,6 +113,11 @@ export function PersistedTripDetailScreen({
           participants={participants}
           canManageParticipants={canManageParticipants}
           loadError={participantsError}
+        />
+      ) : activeTab === "settings" ? (
+        <PersistedTripSettingsSection
+          trip={trip}
+          canManageSettings={canManageSettings}
         />
       ) : null}
     </div>

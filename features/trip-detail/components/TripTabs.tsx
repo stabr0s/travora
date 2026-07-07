@@ -5,6 +5,7 @@ import {
   LayoutDashboard,
   Luggage,
   MapPin,
+  Settings,
   Users,
 } from "lucide-react";
 
@@ -21,16 +22,21 @@ const tabs = [
   { id: "participants", label: "Participants", icon: Users },
 ] as const;
 
+const settingsTab = { id: "settings", label: "Settings", icon: Settings } as const;
+
 type TripTabsProps = {
   activeTab: TripDetailTabId;
   onTabChange: (tab: TripDetailTabId) => void;
+  showSettings?: boolean;
 };
 
-export function TripTabs({ activeTab, onTabChange }: TripTabsProps) {
+export function TripTabs({ activeTab, onTabChange, showSettings = false }: TripTabsProps) {
+  const visibleTabs = showSettings ? [...tabs, settingsTab] : tabs;
+
   return (
     <nav aria-label="Trip sections" className="overflow-x-auto rounded-2xl border border-border bg-surface-elevated p-1.5 shadow-sm">
       <div className="flex min-w-max gap-1">
-        {tabs.map((tab) => {
+        {visibleTabs.map((tab) => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;
 

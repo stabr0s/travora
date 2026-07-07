@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 28 — Trip Sharing UX
+Sprint 29 — Trip Settings & Management
 
 Status: IN PROGRESS
 
@@ -244,6 +244,13 @@ Status: IN PROGRESS
 - Participant management kept owner-only
 - Existing RLS retained as final backend enforcement
 
+### Sprint 28 — Trip Sharing UX
+- Participants presents clearer trip sharing and access information
+- Owners can add existing registered Travora users by email
+- Owners can manage access for non-owner members
+- Editors and viewers see read-only people and access information
+- No email invitations, public links, invite tokens, schema changes, or RLS changes added
+
 ## MVP Mock Modules Completed
 
 - Dashboard
@@ -421,6 +428,17 @@ Status: IN PROGRESS
 - Public share links and invite tokens are not implemented
 - No schema or RLS changes were required
 
+## Trip Settings & Management
+
+- Persisted trip owners can edit basic trip details
+- Persisted trip owners can delete trips
+- Editors and viewers see read-only settings
+- Mock trips are immutable and never call persisted settings actions
+- Delete is permanent in this MVP
+- Related module rows are removed by existing database cascade
+- Archive and restore flows are not implemented yet
+- No schema or RLS changes were required
+
 ## Manual Backend Test Checklist
 
 - Login and logout
@@ -432,6 +450,7 @@ Status: IN PROGRESS
 - Budget: create, edit, and delete
 - Packing: create, edit, delete, and toggle packed state
 - Participants: owner adds an existing user, edits them, and removes a non-owner
+- Trip Settings: owner edits details and deletes only a disposable test trip
 - Open a mock trip and confirm the full mock experience still works
 - Refresh after mutations and confirm data persists
 - Verify representative rows directly in Supabase
@@ -500,20 +519,20 @@ Principles:
 
 ## Next Task
 
-Task #028 — Trip Sharing UX
+Task #029 — Trip Settings & Management
 
 Goal:
 
-Clarify sharing and access management around existing trip participants.
+Add owner-only settings management for persisted trips.
 
 The task includes:
 
-- Present Participants as the trip access center
-- Clarify owner, editor, and viewer capabilities
-- Improve adding an existing Travora user by email
-- Keep access management owner-only
+- Edit existing `trips` fields
+- Delete persisted trips after strong confirmation
+- Keep editor/viewer settings read-only
+- Keep mock trips immutable
 
 Important:
 
-Existing `trip_members`, profiles, RPCs, and RLS remain unchanged. No email
-invitations, public links, invite tokens, or new dependencies are included.
+Existing schema, RLS, mock trips, and connected module behavior remain unchanged.
+No archive, restore, soft delete, new migrations, or new dependencies are included.
