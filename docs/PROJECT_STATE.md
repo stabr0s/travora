@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 30 — Trips List & Dashboard Polish
+Sprint 31 — Final MVP QA & Deploy Preparation
 
 Status: IN PROGRESS
 
@@ -259,6 +259,14 @@ Status: IN PROGRESS
 - Delete relies on existing database cascade
 - No archive, restore, schema changes, or RLS changes added
 
+### Sprint 30 — Trips List & Dashboard Polish
+- Trips list presents persisted trips more clearly
+- Trip cards show role, status, and date metadata
+- Dashboard uses persisted trip summary data
+- Empty states are improved for signed-in users with no trips
+- Mock and demo trips remain safe and clearly separated
+- No analytics engine, charts, schema changes, or RLS changes added
+
 ## MVP Mock Modules Completed
 
 - Dashboard
@@ -457,6 +465,18 @@ Status: IN PROGRESS
 - No analytics engine or charts were added
 - No schema or RLS changes were required
 
+## Final MVP QA & Deploy Preparation
+
+- Production readiness was reviewed
+- Environment variable example was prepared
+- Deployment documentation was added
+- MVP QA checklist was added
+- README was cleaned up for the Travora MVP
+- Persisted modules were reviewed for obvious deploy risks
+- No major product features were added
+- Map rendering remains postponed
+- The next likely step is first Vercel deploy or post-QA bugfixes
+
 ## Manual Backend Test Checklist
 
 - Login and logout
@@ -537,20 +557,21 @@ Principles:
 
 ## Next Task
 
-Task #030 — Trips List & Dashboard Polish
+Task #031 — Final MVP QA & Deploy Preparation
 
 Goal:
 
-Improve the Trips list and Dashboard using existing persisted trip data.
+Prepare the Travora MVP for first deployment and manual QA.
 
 The task includes:
 
-- Show clearer trip metadata on `/trips`
-- Include owner/editor/viewer role context
-- Use persisted trips for Dashboard summary cards
-- Improve empty states
+- Review production readiness
+- Document deployment setup
+- Add MVP QA checklist
+- Clarify env requirements
+- Keep current feature scope stable
 
 Important:
 
 Existing schema, RLS, mock trips, and connected module behavior remain unchanged.
-No analytics engine, charts, new migrations, RLS changes, or new dependencies are included.
+No new product features, migrations, RLS changes, or dependencies are included.

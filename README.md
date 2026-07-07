@@ -1,36 +1,50 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Travora
 
-## Getting Started
+Travora is a private travel planning MVP built with Next.js and Supabase.
 
-First, run the development server:
+The current MVP supports persisted trips, places, planner items, reservations,
+budget expenses, packing items, and participants. Demo trips remain available
+for safe exploration.
+
+## Stack
+
+- Next.js 16 App Router
+- React 19
+- TypeScript
+- Tailwind CSS
+- Supabase Auth and database
+- pnpm
+
+## Local development
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
+cp .env.example .env.local
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Required environment variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=
+```
 
-## Learn More
+Use values from the Supabase project settings or Connect dialog.
 
-To learn more about Next.js, take a look at the following resources:
+Do not commit `.env.local`. Never expose a Supabase `service_role` key, JWT
+secret, database password, or any other secret in the browser.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Deployment and QA
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Deployment guide: [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md)
+- MVP QA checklist: [`docs/MVP_QA_CHECKLIST.md`](docs/MVP_QA_CHECKLIST.md)
 
-## Deploy on Vercel
+## Current limitations
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Map rendering is postponed.
+- Public share links are not implemented.
+- Email invitations are not implemented.
+- Application routes are public; Supabase RLS is the backend enforcement layer.
