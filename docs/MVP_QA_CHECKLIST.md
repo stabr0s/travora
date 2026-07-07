@@ -2,6 +2,26 @@
 
 Use a disposable test trip for destructive checks.
 
+## Production QA status
+
+Production URL: https://travora-theta.vercel.app
+
+Manually checked after first Vercel MVP deploy:
+
+- [x] App loads on production URL
+- [x] Register works
+- [x] Login works
+- [x] Dashboard works
+- [x] Trips list works
+- [x] Create trip works
+- [x] Persisted trip detail works
+- [x] Persisted modules were checked
+- [x] Map tab remains hidden
+- [x] Basic auth redirect works
+
+This notes the first manual production smoke test, not exhaustive regression
+coverage.
+
 ## Auth
 
 - [ ] Register account

@@ -2,6 +2,38 @@
 
 Travora is prepared for first MVP testing on Vercel.
 
+## Production deployment
+
+- Production URL: https://travora-theta.vercel.app
+- Deploy target: Vercel
+- Branch: `main`
+- Current deployment status: First MVP deploy completed successfully
+- Vercel environment variables configured:
+  - `NEXT_PUBLIC_SUPABASE_URL`
+  - `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
+
+Reminder:
+
+- Never add a Supabase `service_role` key to Vercel.
+- Never commit `.env.local`.
+
+## Supabase Auth production configuration
+
+- Site URL: https://travora-theta.vercel.app
+- Additional Redirect URLs should include:
+  - `https://travora-theta.vercel.app/auth/callback`
+  - `http://localhost:3000/auth/callback`
+
+Deployment-specific preview URLs may also need to be allowlisted when testing
+Vercel preview deployments.
+
+## Troubleshooting
+
+- If register/login returns a generic error and Supabase Auth Logs show `401`
+  on `/auth/v1/signup`, verify that the Vercel Supabase publishable key belongs
+  to the same Supabase project as `NEXT_PUBLIC_SUPABASE_URL`.
+- If auth redirects to the wrong domain, check Supabase Auth URL Configuration.
+
 ## Recommended target
 
 - Vercel

@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 31 — Final MVP QA & Deploy Preparation
+Sprint 33 — Post-Deploy QA Notes
 
 Status: IN PROGRESS
 
@@ -267,6 +267,14 @@ Status: IN PROGRESS
 - Mock and demo trips remain safe and clearly separated
 - No analytics engine, charts, schema changes, or RLS changes added
 
+### Sprint 31 — Final MVP QA & Deploy Preparation
+- Production readiness was reviewed
+- Environment variable example was prepared
+- Deployment documentation was added
+- MVP QA checklist was added
+- README was cleaned up for the Travora MVP
+- No major product features, migrations, RLS changes, or dependencies added
+
 ## MVP Mock Modules Completed
 
 - Dashboard
@@ -477,6 +485,17 @@ Status: IN PROGRESS
 - Map rendering remains postponed
 - The next likely step is first Vercel deploy or post-QA bugfixes
 
+## Post-Deploy QA Notes
+
+- First Vercel deploy completed successfully
+- Production URL is https://travora-theta.vercel.app
+- Vercel environment variables are configured
+- Supabase Auth redirect URLs were corrected
+- Production register/login works
+- Main production app functions were manually checked
+- No product features were added
+- The next likely step is user testing, feedback sprint, or post-deploy bugfixes
+
 ## Manual Backend Test Checklist
 
 - Login and logout
@@ -557,19 +576,18 @@ Principles:
 
 ## Next Task
 
-Task #031 — Final MVP QA & Deploy Preparation
+Task #033 — Post-Deploy QA Notes
 
 Goal:
 
-Prepare the Travora MVP for first deployment and manual QA.
+Document the first successful production deployment and post-deploy QA status.
 
 The task includes:
 
-- Review production readiness
-- Document deployment setup
-- Add MVP QA checklist
-- Clarify env requirements
-- Keep current feature scope stable
+- Record the production Vercel URL
+- Document Supabase Auth production URL settings
+- Note first manual production QA status
+- Keep current feature scope unchanged
 
 Important:
 

@@ -6,6 +6,8 @@ The current MVP supports persisted trips, places, planner items, reservations,
 budget expenses, packing items, and participants. Demo trips remain available
 for safe exploration.
 
+Production: https://travora-theta.vercel.app
+
 ## Stack
 
 - Next.js 16 App Router
