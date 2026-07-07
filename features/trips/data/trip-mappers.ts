@@ -1,5 +1,5 @@
 import type { PersistedTrip } from "@/features/trips/types/persisted-trip";
-import type { Trip, TripStatus } from "@/features/trips/types/trip";
+import type { Trip, TripRole, TripStatus } from "@/features/trips/types/trip";
 
 const coverGradients = [
   "from-sky-600 via-cyan-500 to-emerald-300",
@@ -12,7 +12,10 @@ function normalizeStatus(status: PersistedTrip["status"]): TripStatus {
   return status === "upcoming" || status === "archived" ? status : "planning";
 }
 
-export function mapPersistedTripToTrip(trip: PersistedTrip): Trip {
+export function mapPersistedTripToTrip(
+  trip: PersistedTrip,
+  role?: TripRole | null,
+): Trip {
   const gradientIndex = Array.from(trip.id).reduce(
     (total, character) => total + character.charCodeAt(0),
     0,
@@ -31,5 +34,8 @@ export function mapPersistedTripToTrip(trip: PersistedTrip): Trip {
     progress: null,
     status: normalizeStatus(trip.status),
     coverGradient: coverGradients[gradientIndex],
+    role: role || undefined,
+    createdAt: trip.created_at,
+    updatedAt: trip.updated_at,
   };
 }

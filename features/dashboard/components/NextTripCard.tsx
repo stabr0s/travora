@@ -1,6 +1,7 @@
+import Link from "next/link";
 import { ArrowRight, Calendar, MapPin, Users } from "lucide-react";
 
-import { Badge, Button, Card } from "@/components/ui";
+import { Badge, Card } from "@/components/ui";
 import type { NextTrip } from "@/features/dashboard/types/dashboard";
 import { cn } from "@/lib/utils";
 
@@ -8,19 +9,23 @@ type NextTripCardProps = {
   trip: NextTrip;
 };
 
-function formatDateRange(startDate: string, endDate: string): string {
+function formatDateRange(startDate: string, endDate: string | null): string {
   const start = new Date(startDate);
-  const end = new Date(endDate);
   const formatter = new Intl.DateTimeFormat("en-US", {
     month: "short",
     day: "numeric",
   });
-  const yearFormatter = new Intl.DateTimeFormat("en-US", { year: "numeric" });
+  const yearFormatter = new Intl.DateTimeFormat("en-US", { year: "numeric", timeZone: "UTC" });
 
+  if (!endDate) return `From ${formatter.format(start)}, ${yearFormatter.format(start)}`;
+
+  const end = new Date(endDate);
   return `${formatter.format(start)} – ${formatter.format(end)}, ${yearFormatter.format(end)}`;
 }
 
-function formatCurrency(amount: number, currency: string): string {
+function formatCurrency(amount: number | null, currency: string): string {
+  if (amount === null) return "Budget not set";
+
   return new Intl.NumberFormat("en-US", {
     style: "currency",
     currency,
@@ -59,15 +64,20 @@ export function NextTripCard({ trip }: NextTripCardProps) {
               </span>
               <span className="inline-flex items-center gap-1.5">
                 <Users className="size-4 shrink-0 text-muted-foreground" />
-                {trip.participants} travelers
+                {trip.participants === null ? "Travelers not connected" : `${trip.participants} travelers`}
               </span>
               <span className="inline-flex items-center gap-1.5">
                 <MapPin className="size-4 shrink-0 text-muted-foreground" />
-                {trip.placesCount} places
+                {trip.placesCount === null ? "Places not connected" : `${trip.placesCount} places`}
               </span>
             </div>
 
-            <div className="space-y-2">
+            {trip.progress === null ? (
+              <div className="rounded-xl bg-surface px-3 py-2 text-sm text-muted">
+                Trip preparation is connected inside the trip workspace.
+              </div>
+            ) : (
+              <div className="space-y-2">
               <div className="flex items-center justify-between text-sm">
                 <span className="font-medium text-foreground">Trip preparation</span>
                 <span className="text-muted">{trip.progress}%</span>
@@ -79,6 +89,7 @@ export function NextTripCard({ trip }: NextTripCardProps) {
                 />
               </div>
             </div>
+            )}
           </div>
 
           <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
@@ -90,14 +101,17 @@ export function NextTripCard({ trip }: NextTripCardProps) {
                 {formatCurrency(trip.costPerPerson, trip.currency)}
               </p>
               <p className="mt-1 text-sm text-muted">
-                {trip.daysUntil} days until departure
+                {trip.daysUntil === null ? "Dates are still flexible" : `${trip.daysUntil} days until departure`}
               </p>
             </div>
 
-            <Button size="md" className="w-full sm:w-auto">
+            <Link
+              href={`/trips/${trip.id}`}
+              className="inline-flex h-10 w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 text-sm font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary-hover sm:w-auto"
+            >
               View trip
               <ArrowRight className="size-4" />
-            </Button>
+            </Link>
           </div>
         </div>
       </div>

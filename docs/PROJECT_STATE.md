@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 29 — Trip Settings & Management
+Sprint 30 — Trips List & Dashboard Polish
 
 Status: IN PROGRESS
 
@@ -251,6 +251,14 @@ Status: IN PROGRESS
 - Editors and viewers see read-only people and access information
 - No email invitations, public links, invite tokens, schema changes, or RLS changes added
 
+### Sprint 29 — Trip Settings & Management
+- Persisted trip owners can edit basic trip details
+- Persisted trip owners can delete trips after strong confirmation
+- Editors and viewers see read-only trip settings
+- Mock trips remain immutable
+- Delete relies on existing database cascade
+- No archive, restore, schema changes, or RLS changes added
+
 ## MVP Mock Modules Completed
 
 - Dashboard
@@ -439,6 +447,16 @@ Status: IN PROGRESS
 - Archive and restore flows are not implemented yet
 - No schema or RLS changes were required
 
+## Trips List & Dashboard Polish
+
+- Trips list presents persisted trips more clearly
+- Trip cards show role, status, and date metadata
+- Dashboard uses persisted trip summary data
+- Empty states are improved for signed-in users with no trips
+- Mock and demo trips remain safe and clearly separated
+- No analytics engine or charts were added
+- No schema or RLS changes were required
+
 ## Manual Backend Test Checklist
 
 - Login and logout
@@ -519,20 +537,20 @@ Principles:
 
 ## Next Task
 
-Task #029 — Trip Settings & Management
+Task #030 — Trips List & Dashboard Polish
 
 Goal:
 
-Add owner-only settings management for persisted trips.
+Improve the Trips list and Dashboard using existing persisted trip data.
 
 The task includes:
 
-- Edit existing `trips` fields
-- Delete persisted trips after strong confirmation
-- Keep editor/viewer settings read-only
-- Keep mock trips immutable
+- Show clearer trip metadata on `/trips`
+- Include owner/editor/viewer role context
+- Use persisted trips for Dashboard summary cards
+- Improve empty states
 
 Important:
 
 Existing schema, RLS, mock trips, and connected module behavior remain unchanged.
-No archive, restore, soft delete, new migrations, or new dependencies are included.
+No analytics engine, charts, new migrations, RLS changes, or new dependencies are included.

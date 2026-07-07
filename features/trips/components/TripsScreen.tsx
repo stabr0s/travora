@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 
 import { TripsAccessNotice } from "@/features/trips/components/TripsAccessNotice";
 import { TripsFilters } from "@/features/trips/components/TripsFilters";
-import { TripsGrid } from "@/features/trips/components/TripsGrid";
+import { createFirstTripAction, TripsGrid } from "@/features/trips/components/TripsGrid";
 import { TripsHeader } from "@/features/trips/components/TripsHeader";
 import { TripsStats } from "@/features/trips/components/TripsStats";
 import type { Trip, TripFilter } from "@/features/trips/types/trip";
@@ -24,6 +24,7 @@ export function TripsScreen({ trips, mode = "saved" }: TripsScreenProps) {
         : trips.filter((trip) => trip.status === activeFilter),
     [activeFilter, trips],
   );
+  const isSavedEmptyState = mode === "saved" && trips.length === 0;
 
   return (
     <div className="space-y-8">
@@ -31,7 +32,14 @@ export function TripsScreen({ trips, mode = "saved" }: TripsScreenProps) {
       {mode !== "saved" ? <TripsAccessNotice mode={mode} /> : null}
       <TripsStats trips={trips} />
       <TripsFilters activeFilter={activeFilter} onFilterChange={setActiveFilter} />
-      <TripsGrid trips={filteredTrips} />
+      <TripsGrid
+        trips={filteredTrips}
+        emptyTitle={isSavedEmptyState ? "Create your first trip" : undefined}
+        emptyDescription={isSavedEmptyState
+          ? "Start with the essentials now. Places, plans, reservations, budget, packing, and access can follow."
+          : undefined}
+        emptyAction={isSavedEmptyState ? createFirstTripAction() : undefined}
+      />
     </div>
   );
 }

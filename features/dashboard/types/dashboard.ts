@@ -7,13 +7,13 @@ export type NextTrip = {
   title: string;
   country: string;
   startDate: string;
-  endDate: string;
-  participants: number;
-  costPerPerson: number;
+  endDate: string | null;
+  participants: number | null;
+  costPerPerson: number | null;
   currency: string;
-  progress: number;
-  daysUntil: number;
-  placesCount: number;
+  progress: number | null;
+  daysUntil: number | null;
+  placesCount: number | null;
   coverGradient: string;
 };
 
@@ -50,11 +50,22 @@ export type UpcomingReservation = {
   status: "paid" | "deposit" | "unpaid";
 };
 
+export type DashboardTripSummary = {
+  id: string;
+  title: string;
+  country: string;
+  status: "planning" | "upcoming" | "archived";
+  role?: "owner" | "editor" | "viewer";
+  dateLabel: string;
+};
+
 export type DashboardData = {
   user: DashboardUser;
-  nextTrip: NextTrip;
+  nextTrip: NextTrip | null;
   stats: DashboardStat[];
   quickActions: QuickAction[];
+  recentTrips: DashboardTripSummary[];
   recentPlaces: RecentPlace[];
   upcomingReservations: UpcomingReservation[];
+  isPersisted?: boolean;
 };

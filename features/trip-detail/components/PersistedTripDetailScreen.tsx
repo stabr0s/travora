@@ -24,6 +24,7 @@ import type { PersistedTrip } from "@/features/trips/types/persisted-trip";
 
 type PersistedTripDetailScreenProps = {
   trip: PersistedTrip;
+  initialTab?: TripDetailTabId;
   places: PersistedPlace[];
   placesError?: string;
   plannerItems: PersistedPlannerItem[];
@@ -41,6 +42,7 @@ type PersistedTripDetailScreenProps = {
 
 export function PersistedTripDetailScreen({
   trip,
+  initialTab = "overview",
   places,
   placesError,
   plannerItems,
@@ -55,7 +57,7 @@ export function PersistedTripDetailScreen({
   currentUserRole,
   participantsError,
 }: PersistedTripDetailScreenProps) {
-  const [activeTab, setActiveTab] = useState<TripDetailTabId>("overview");
+  const [activeTab, setActiveTab] = useState<TripDetailTabId>(initialTab);
   const canEditTrip = currentUserRole === "owner" || currentUserRole === "editor";
   const canManageParticipants = currentUserRole === "owner";
   const canManageSettings = currentUserRole === "owner";

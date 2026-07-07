@@ -7,6 +7,8 @@ import type { DashboardUser } from "@/features/dashboard/types/dashboard";
 
 type DashboardHeroProps = {
   user: DashboardUser;
+  tripCount?: number;
+  persisted?: boolean;
 };
 
 function getGreeting(): string {
@@ -17,7 +19,7 @@ function getGreeting(): string {
   return "Good evening";
 }
 
-export function DashboardHero({ user }: DashboardHeroProps) {
+export function DashboardHero({ user, tripCount = 3, persisted = false }: DashboardHeroProps) {
   return (
     <section className="relative overflow-hidden rounded-2xl border border-border bg-surface-elevated p-6 shadow-sm md:p-8">
       <div className="absolute -right-8 -top-8 size-40 rounded-full bg-primary-subtle/60 blur-2xl" />
@@ -35,8 +37,9 @@ export function DashboardHero({ user }: DashboardHeroProps) {
           </h2>
 
           <p className="max-w-xl text-sm leading-relaxed text-muted md:text-base">
-            Your next adventure is coming up. Review your itinerary, places, and
-            reservations — everything in one place.
+            {persisted
+              ? "Review your saved trips, open recent workspaces, and keep planning momentum."
+              : "Your next adventure is coming up. Review your itinerary, places, and reservations — everything in one place."}
           </p>
         </div>
 
@@ -46,7 +49,9 @@ export function DashboardHero({ user }: DashboardHeroProps) {
           </div>
           <div>
             <p className="text-xs font-medium text-muted">This week</p>
-            <p className="text-sm font-semibold text-foreground">3 trips in progress</p>
+            <p className="text-sm font-semibold text-foreground">
+              {persisted ? `${tripCount} saved trips` : "3 trips in progress"}
+            </p>
           </div>
         </div>
       </div>

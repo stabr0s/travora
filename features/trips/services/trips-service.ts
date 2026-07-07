@@ -1,12 +1,12 @@
-import { randomUUID } from "node:crypto";
-
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import type {
-  CreateTripInput,
   PersistedTrip,
+  PersistedTripCard,
+  PersistedTripRole,
   TripsServiceResult,
 } from "@/features/trips/types/persisted-trip";
-import type { Database } from "@/types/database";
+
+export { createTrip } from "@/features/trips/services/trip-create-service";
 
 const authRequired = {
   code: "AUTH_REQUIRED" as const,
@@ -33,19 +33,6 @@ function logSupabaseDiagnostic(
     message: error.message,
     details: error.details,
     hint: error.hint,
-  });
-}
-
-function logAuthDiagnostic(userId: string | null, ownerId: string | null) {
-  if (process.env.NODE_ENV !== "development") {
-    return;
-  }
-
-  console.info("[Trips] auth diagnostic", {
-    hasUser: Boolean(userId),
-    userId,
-    ownerIdInPayload: ownerId,
-    ownerMatchesUser: Boolean(userId && ownerId && userId === ownerId),
   });
 }
 
@@ -91,6 +78,57 @@ export async function getCurrentUserTrips(): Promise<
   return { data, error: null };
 }
 
+export async function getTripCardsForCurrentUser(): Promise<
+  TripsServiceResult<PersistedTripCard[]>
+> {
+  const { supabase, user } = await getAuthContext();
+
+  if (!user) {
+    return { data: null, error: authRequired };
+  }
+
+  const { data: trips, error: tripsError } = await supabase
+    .from("trips")
+    .select("*")
+    .order("start_date", { ascending: true, nullsFirst: false })
+    .order("updated_at", { ascending: false, nullsFirst: false })
+    .order("created_at", { ascending: false });
+
+  if (tripsError) {
+    logSupabaseDiagnostic("trip cards query failed", tripsError);
+    return {
+      data: null,
+      error: { code: "LOAD_FAILED", message: "We couldn't load your saved trips." },
+    };
+  }
+
+  const { data: memberships, error: membershipsError } = await supabase
+    .from("trip_members")
+    .select("trip_id, role, status")
+    .eq("user_id", user.id)
+    .eq("status", "active");
+
+  if (membershipsError) {
+    logSupabaseDiagnostic("trip membership query failed", membershipsError);
+    return {
+      data: null,
+      error: { code: "LOAD_FAILED", message: "We couldn't load your trip access." },
+    };
+  }
+
+  const roleByTripId = new Map<string, PersistedTripRole>();
+  memberships?.forEach((membership) => {
+    roleByTripId.set(membership.trip_id, membership.role);
+  });
+
+  const cards = trips.map((trip) => ({
+    trip,
+    role: trip.owner_id === user.id ? "owner" : roleByTripId.get(trip.id) || null,
+  }));
+
+  return { data: cards, error: null };
+}
+
 export async function getTripById(
   tripId: string,
 ): Promise<TripsServiceResult<PersistedTrip>> {
@@ -121,95 +159,4 @@ export async function getTripById(
   }
 
   return { data, error: null };
-}
-
-export async function createTrip(
-  input: CreateTripInput,
-): Promise<TripsServiceResult<PersistedTrip>> {
-  const { supabase, user } = await getAuthContext();
-
-  if (!user) {
-    return { data: null, error: authRequired };
-  }
-
-  const tripId = randomUUID();
-  const tripPayload: Database["public"]["Tables"]["trips"]["Insert"] = {
-    id: tripId,
-    owner_id: user.id,
-    title: input.title,
-    destination: input.destination || null,
-    start_date: input.startDate || null,
-    end_date: input.endDate || null,
-    currency: input.currency || "EUR",
-    description: input.description || null,
-    status: "planning",
-  };
-
-  logAuthDiagnostic(user.id, tripPayload.owner_id);
-
-  const { error: tripError } = await supabase.from("trips").insert(tripPayload);
-
-  if (tripError) {
-    logSupabaseDiagnostic("trip insert failed", tripError);
-
-    return {
-      data: null,
-      error: { code: "CREATE_FAILED", message: "We couldn't create your trip." },
-    };
-  }
-
-  const { error: memberError } = await supabase.from("trip_members").insert({
-    trip_id: tripId,
-    user_id: user.id,
-    role: "owner",
-    status: "active",
-  });
-
-  if (memberError) {
-    logSupabaseDiagnostic("owner membership insert failed", memberError);
-
-    const { error: rollbackError } = await supabase
-      .from("trips")
-      .delete()
-      .eq("id", tripId);
-
-    if (rollbackError) {
-      logSupabaseDiagnostic("trip rollback failed", rollbackError);
-    }
-
-    return {
-      data: null,
-      error: {
-        code: "CREATE_FAILED",
-        message: "We couldn't finish setting up your trip. Please try again.",
-      },
-    };
-  }
-
-  const { data: trip, error: readError } = await supabase
-    .from("trips")
-    .select("*")
-    .eq("id", tripId)
-    .single();
-
-  if (readError) {
-    logSupabaseDiagnostic("created trip readback failed", readError);
-  }
-
-  const fallbackTrip: PersistedTrip = {
-    id: tripId,
-    owner_id: user.id,
-    title: input.title,
-    destination: input.destination || null,
-    start_date: input.startDate || null,
-    end_date: input.endDate || null,
-    cover_image_url: null,
-    status: "planning",
-    description: input.description || null,
-    currency: input.currency || "EUR",
-    created_at: null,
-    updated_at: null,
-  };
-
-  return { data: trip || fallbackTrip, error: null };
 }

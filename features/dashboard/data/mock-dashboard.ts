@@ -74,6 +74,24 @@ export const mockDashboardData: DashboardData = {
       icon: "wallet",
     },
   ],
+  recentTrips: [
+    {
+      id: "japan-2027",
+      title: "Japan 2027",
+      country: "Japan",
+      status: "planning",
+      role: "owner",
+      dateLabel: "Apr 2027",
+    },
+    {
+      id: "sicily-2026",
+      title: "Sicily 2026",
+      country: "Italy",
+      status: "upcoming",
+      role: "owner",
+      dateLabel: "Sep 2026",
+    },
+  ],
   recentPlaces: [
     {
       id: "place-1",

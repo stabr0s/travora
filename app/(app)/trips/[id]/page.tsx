@@ -12,15 +12,36 @@ import {
 import { getPlacesForTrip } from "@/features/places/services/places-service";
 import { getPlannerItemsForTrip } from "@/features/planner/services/planner-service";
 import { getReservationsForTrip } from "@/features/reservations/services/reservations-service";
+import type { TripDetailTabId } from "@/features/trip-detail/types/trip-detail";
 import { getTripById } from "@/features/trips/services/trips-service";
 import { isUuid } from "@/lib/validation/is-uuid";
 
 type TripDetailPageProps = {
   params: Promise<{ id: string }>;
+  searchParams?: Promise<{ tab?: string | string[] }>;
 };
 
-export default async function TripDetailPage({ params }: TripDetailPageProps) {
+const persistedTabs: TripDetailTabId[] = [
+  "overview",
+  "places",
+  "plan",
+  "reservations",
+  "budget",
+  "packing",
+  "participants",
+  "settings",
+];
+
+function readInitialTab(value: string | string[] | undefined): TripDetailTabId {
+  const tab = Array.isArray(value) ? value[0] : value;
+  return persistedTabs.includes(tab as TripDetailTabId)
+    ? tab as TripDetailTabId
+    : "overview";
+}
+
+export default async function TripDetailPage({ params, searchParams }: TripDetailPageProps) {
   const { id } = await params;
+  const query = searchParams ? await searchParams : undefined;
 
   if (getMockTripDetail(id)) {
     return <TripDetailScreen tripId={id} />;
@@ -54,6 +75,7 @@ export default async function TripDetailPage({ params }: TripDetailPageProps) {
     return (
       <PersistedTripDetailScreen
         trip={persistedTrip.data}
+        initialTab={readInitialTab(query?.tab)}
         places={persistedPlaces.data || []}
         placesError={persistedPlaces.error?.message}
         plannerItems={persistedPlanner.data || []}

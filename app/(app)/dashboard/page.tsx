@@ -1,5 +1,13 @@
 import { DashboardScreen } from "@/features/dashboard";
+import { mapPersistedTripCardsToDashboard } from "@/features/dashboard/data/dashboard-mappers";
+import { getTripCardsForCurrentUser } from "@/features/trips/services/trips-service";
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
+  const result = await getTripCardsForCurrentUser();
+
+  if (result.data) {
+    return <DashboardScreen data={mapPersistedTripCardsToDashboard(result.data)} />;
+  }
+
   return <DashboardScreen />;
 }

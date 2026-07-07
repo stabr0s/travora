@@ -1,6 +1,12 @@
 import type { Database } from "@/types/database";
 
 export type PersistedTrip = Database["public"]["Tables"]["trips"]["Row"];
+export type PersistedTripRole = "owner" | "editor" | "viewer";
+
+export type PersistedTripCard = {
+  trip: PersistedTrip;
+  role: PersistedTripRole | null;
+};
 
 export type CreateTripInput = {
   title: string;
