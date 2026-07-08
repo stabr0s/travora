@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowLeft, CalendarDays, MapPin, Users } from "lucide-react";
+import { ArrowLeft, CalendarDays, MapPin, Printer, Users } from "lucide-react";
 
 import { Badge } from "@/components/ui";
 import type {
@@ -45,13 +45,22 @@ export function TripHero({ trip }: TripHeroProps) {
       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-black/15" />
       <div className="relative flex min-h-80 flex-col justify-between p-5 sm:p-8">
         <div className="flex items-center justify-between gap-4">
-          <Link
-            href="/trips"
-            className="inline-flex h-10 items-center gap-2 rounded-xl border border-white/20 bg-black/15 px-4 text-sm font-medium text-white backdrop-blur-sm transition-colors hover:bg-black/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
-          >
-            <ArrowLeft className="size-4" />
-            All trips
-          </Link>
+          <div className="flex flex-wrap gap-2">
+            <Link
+              href="/trips"
+              className="inline-flex h-10 items-center gap-2 rounded-xl border border-white/20 bg-black/15 px-4 text-sm font-medium text-white backdrop-blur-sm transition-colors hover:bg-black/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
+            >
+              <ArrowLeft className="size-4" />
+              All trips
+            </Link>
+            <Link
+              href={`/trips/${trip.id}/summary`}
+              className="inline-flex h-10 items-center gap-2 rounded-xl border border-white/20 bg-white/15 px-4 text-sm font-medium text-white backdrop-blur-sm transition-colors hover:bg-white/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
+            >
+              <Printer className="size-4" />
+              Print summary
+            </Link>
+          </div>
           <Badge variant={status.variant} className="border-white/20 bg-white/90">
             {status.label}
           </Badge>

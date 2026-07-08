@@ -11,7 +11,7 @@ export function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="hidden w-[var(--sidebar-width)] shrink-0 flex-col border-r border-border bg-background md:flex">
+    <aside className="hidden w-[var(--sidebar-width)] shrink-0 flex-col border-r border-border bg-background print:hidden md:flex">
       <div className="flex h-[var(--topbar-height)] items-center px-5">
         <Logo />
       </div>

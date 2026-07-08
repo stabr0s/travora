@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 36 — Mobile UX Polish
+Sprint 37 — Export / Print Trip Summary
 
 Status: IN PROGRESS
 
@@ -296,6 +296,12 @@ Status: IN PROGRESS
 - Packing has simple static presets for common trip types
 - No migrations, RLS changes, external APIs, AI features, or dependencies added
 
+### Sprint 36 — Mobile UX Polish
+- Dashboard, Trips, and Trip Detail screens reviewed for mobile usability
+- Trip Detail tabs, persisted forms, and dense cards improved on small screens
+- Action buttons and destructive actions made more comfortable on mobile
+- No backend logic, schema changes, new product features, or dependencies added
+
 ## MVP Mock Modules Completed
 
 - Dashboard
@@ -549,6 +555,16 @@ Status: IN PROGRESS
 - No backend logic, schema changes, or new product features added
 - Map remains hidden from Trip Detail
 
+## Export / Print Trip Summary
+
+- Trip users can open a print-friendly summary from Trip Detail
+- Browser print can be used to print or save the summary as PDF
+- Summary includes overview, planner, places, reservations, budget, and packing sections when data exists
+- Participant details are reduced to role and status counts for privacy
+- No server-side PDF generation added
+- No public share links added
+- No schema or RLS changes added
+
 ## Manual Backend Test Checklist
 
 - Login and logout
@@ -629,20 +645,20 @@ Principles:
 
 ## Next Task
 
-Task #036 — Mobile UX Polish
+Task #037 — Export / Print Trip Summary
 
 Goal:
 
-Improve small-screen usability across the existing MVP.
+Add a read-only print-friendly Trip Summary view.
 
 The task includes:
 
-- Review dashboard, trips, and trip detail on mobile
-- Improve Trip Detail tabs, forms, cards, and action buttons
-- Add mobile QA checklist coverage
-- Preserve existing app behavior
+- Add `/trips/[id]/summary`
+- Add a Print summary action from Trip Detail
+- Support browser print/save as PDF
+- Keep participant private data minimal
 
 Important:
 
 Existing schema, RLS, mock trips, and connected module behavior remain unchanged.
-No backend logic, migrations, RLS changes, map rendering, or dependencies are included.
+No server-side PDF generation, public sharing, migrations, RLS changes, map rendering, or dependencies are included.

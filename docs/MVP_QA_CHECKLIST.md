@@ -115,6 +115,16 @@ coverage.
 - [ ] Key actions are tappable on mobile
 - [ ] Destructive actions remain clearly separated on mobile
 
+## Export / Print Summary
+
+- [ ] Summary route opens for persisted trip
+- [ ] Print summary button opens browser print
+- [ ] Print layout hides app actions and navigation
+- [ ] Viewer can open read-only summary
+- [ ] Summary does not expose internal IDs
+- [ ] Participant emails are not printed
+- [ ] Mock trip summary route remains safe
+
 ## Demo and postponed areas
 
 - [ ] Mock/demo trip `/trips/japan-2027` renders safely

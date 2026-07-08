@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowLeft, CalendarDays, MapPin } from "lucide-react";
+import { ArrowLeft, CalendarDays, MapPin, Printer } from "lucide-react";
 
 import { Badge } from "@/components/ui";
 import type { PersistedTrip } from "@/features/trips/types/persisted-trip";
@@ -27,13 +27,22 @@ export function PersistedTripHero({ trip }: PersistedTripHeroProps) {
       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/15 to-black/10" />
       <div className="relative flex min-h-72 flex-col justify-between p-5 sm:p-8">
         <div className="flex items-center justify-between gap-4">
-          <Link
-            href="/trips"
-            className="inline-flex h-10 items-center gap-2 rounded-xl border border-white/20 bg-black/15 px-4 text-sm font-medium text-white backdrop-blur-sm transition-colors hover:bg-black/25"
-          >
-            <ArrowLeft className="size-4" />
-            All trips
-          </Link>
+          <div className="flex flex-wrap gap-2">
+            <Link
+              href="/trips"
+              className="inline-flex h-10 items-center gap-2 rounded-xl border border-white/20 bg-black/15 px-4 text-sm font-medium text-white backdrop-blur-sm transition-colors hover:bg-black/25"
+            >
+              <ArrowLeft className="size-4" />
+              All trips
+            </Link>
+            <Link
+              href={`/trips/${trip.id}/summary`}
+              className="inline-flex h-10 items-center gap-2 rounded-xl border border-white/20 bg-white/15 px-4 text-sm font-medium text-white backdrop-blur-sm transition-colors hover:bg-white/25"
+            >
+              <Printer className="size-4" />
+              Print summary
+            </Link>
+          </div>
           <Badge className="border-white/20 bg-white/90 capitalize">
             {trip.status || "planning"}
           </Badge>
