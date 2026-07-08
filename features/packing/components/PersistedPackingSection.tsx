@@ -122,6 +122,7 @@ export function PersistedPackingSection({ tripId, items, loadError, canEditTrip 
                   type="button"
                   variant="outline"
                   size="sm"
+                  className="flex-1 sm:flex-none"
                   disabled={isPending}
                   onClick={() => handlePreset(preset.id)}
                 >

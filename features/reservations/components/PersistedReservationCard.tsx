@@ -62,16 +62,16 @@ export function PersistedReservationCard({ reservation, isPending, onDelete, onE
 
   return (
     <Card padding="md" className="h-full">
-      <div className="flex gap-4">
+      <div className="flex flex-col gap-4 sm:flex-row">
         <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-primary-subtle">
           <Icon className="size-5 text-primary" strokeWidth={1.75} />
         </span>
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-start justify-between gap-2">
-            <div>
+            <div className="min-w-0">
               {reservation.type ? <p className="text-xs font-medium capitalize text-muted">{reservation.type}</p> : null}
-              <h3 className="mt-1 text-lg font-semibold tracking-tight text-foreground">{reservation.title}</h3>
-              {reservation.provider ? <p className="mt-1 text-sm text-muted">{reservation.provider}</p> : null}
+              <h3 className="mt-1 break-words text-lg font-semibold tracking-tight text-foreground">{reservation.title}</h3>
+              {reservation.provider ? <p className="mt-1 break-words text-sm text-muted">{reservation.provider}</p> : null}
             </div>
             <Badge variant={status.variant}>{status.label}</Badge>
           </div>
@@ -80,15 +80,15 @@ export function PersistedReservationCard({ reservation, isPending, onDelete, onE
             {reservation.start_date ? (
               <p className="flex items-start gap-2">
                 <CalendarDays className="mt-0.5 size-3.5 shrink-0" />
-                <span>{formatDate(reservation.start_date)}{reservation.end_date ? ` – ${formatDate(reservation.end_date)}` : ""}</span>
+                <span className="min-w-0 break-words">{formatDate(reservation.start_date)}{reservation.end_date ? ` – ${formatDate(reservation.end_date)}` : ""}</span>
               </p>
             ) : null}
-            {reservation.location ? <p className="flex items-center gap-2"><MapPin className="size-3.5" />{reservation.location}</p> : null}
-            {reservation.reservation_number ? <p className="flex items-center gap-2"><ReceiptText className="size-3.5" />Ref. {reservation.reservation_number}</p> : null}
-            {reservation.payer_name ? <p className="flex items-center gap-2"><UserRound className="size-3.5" />Paid by {reservation.payer_name}</p> : null}
+            {reservation.location ? <p className="flex items-start gap-2"><MapPin className="mt-0.5 size-3.5 shrink-0" /><span className="min-w-0 break-words">{reservation.location}</span></p> : null}
+            {reservation.reservation_number ? <p className="flex items-start gap-2"><ReceiptText className="mt-0.5 size-3.5 shrink-0" /><span className="min-w-0 break-words">Ref. {reservation.reservation_number}</span></p> : null}
+            {reservation.payer_name ? <p className="flex items-start gap-2"><UserRound className="mt-0.5 size-3.5 shrink-0" /><span className="min-w-0 break-words">Paid by {reservation.payer_name}</span></p> : null}
           </div>
 
-          {reservation.notes ? <p className="mt-4 text-xs leading-relaxed text-muted">{reservation.notes}</p> : null}
+          {reservation.notes ? <p className="mt-4 break-words text-xs leading-relaxed text-muted">{reservation.notes}</p> : null}
           {reservation.total_price !== null ? (
             <div className="mt-5 border-t border-border-subtle pt-4">
               <p className="text-xs text-muted">Total price</p>
@@ -100,9 +100,9 @@ export function PersistedReservationCard({ reservation, isPending, onDelete, onE
             </div>
           ) : null}
           {onEdit && onDelete ? (
-            <div className="mt-4 flex gap-2 border-t border-border-subtle pt-3">
-              <Button size="sm" variant="outline" onClick={() => onEdit(reservation)} disabled={isPending}>Edit</Button>
-              <Button size="sm" variant="ghost" className="text-error" onClick={() => onDelete(reservation)} disabled={isPending}>Delete</Button>
+            <div className="mt-4 flex flex-col gap-2 border-t border-border-subtle pt-3 sm:flex-row">
+              <Button size="sm" variant="outline" className="w-full sm:w-auto" onClick={() => onEdit(reservation)} disabled={isPending}>Edit</Button>
+              <Button size="sm" variant="ghost" className="w-full text-error sm:w-auto" onClick={() => onDelete(reservation)} disabled={isPending}>Delete</Button>
             </div>
           ) : null}
         </div>

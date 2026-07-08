@@ -53,7 +53,7 @@ export function DeleteTripDangerZone({ trip }: DeleteTripDangerZoneProps) {
         </p>
 
         <label className="block text-sm font-medium text-foreground">
-          Type <span className="font-semibold">{trip.title}</span> to confirm
+          Type <span className="break-words font-semibold">{trip.title}</span> to confirm
           <input
             className={fieldClassName}
             name="confirmation"
@@ -71,7 +71,7 @@ export function DeleteTripDangerZone({ trip }: DeleteTripDangerZoneProps) {
         ) : null}
 
         <div className="flex justify-end">
-          <Button type="submit" disabled={!canDelete} className="bg-error text-white hover:bg-error/90">
+          <Button type="submit" disabled={!canDelete} className="w-full bg-error text-white hover:bg-error/90 sm:w-auto">
             {isPending ? "Deleting trip…" : "Delete trip permanently"}
           </Button>
         </div>

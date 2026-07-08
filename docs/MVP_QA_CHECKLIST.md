@@ -105,6 +105,16 @@ coverage.
 - [ ] Trips cards show role/status/date metadata
 - [ ] Empty states are clear
 
+## Mobile UX
+
+- [ ] Dashboard is usable on mobile
+- [ ] Trips list cards stack and wrap correctly on mobile
+- [ ] Trip Detail tabs scroll horizontally and keep active tab clear
+- [ ] Add/Edit forms are usable on mobile
+- [ ] No horizontal overflow on key routes
+- [ ] Key actions are tappable on mobile
+- [ ] Destructive actions remain clearly separated on mobile
+
 ## Demo and postponed areas
 
 - [ ] Mock/demo trip `/trips/japan-2027` renders safely

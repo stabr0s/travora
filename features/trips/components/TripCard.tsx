@@ -87,9 +87,9 @@ export function TripCard({ trip }: TripCardProps) {
             </Badge>
           </div>
         </div>
-        <div className="relative">
-          <p className="text-sm font-medium text-white/80">{trip.country}</p>
-          <h2 className="mt-1 text-xl font-semibold tracking-tight text-white">{trip.title}</h2>
+        <div className="relative min-w-0">
+          <p className="break-words text-sm font-medium text-white/80">{trip.country}</p>
+          <h2 className="mt-1 break-words text-xl font-semibold tracking-tight text-white">{trip.title}</h2>
         </div>
       </div>
 
@@ -131,10 +131,10 @@ export function TripCard({ trip }: TripCardProps) {
         )}
 
         <div className="mt-auto border-t border-border-subtle pt-4">
-          <div className="flex items-end justify-between gap-4">
-            <div>
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+            <div className="min-w-0">
             <p className="text-xs text-muted">Cost per person</p>
-            <p className="mt-0.5 text-lg font-semibold tracking-tight text-foreground">
+            <p className="mt-0.5 break-words text-lg font-semibold tracking-tight text-foreground">
               {trip.costPerPerson === null
                 ? "Budget not set"
                 : formatCurrency(trip.costPerPerson, trip.currency)}
@@ -149,7 +149,7 @@ export function TripCard({ trip }: TripCardProps) {
               {trip.role === "owner" ? (
                 <Link
                   href={`/trips/${trip.id}?tab=settings`}
-                  className="inline-flex h-9 items-center justify-center gap-1.5 rounded-lg border border-border bg-background px-3 text-xs font-medium text-foreground shadow-xs transition-colors hover:bg-surface"
+                  className="inline-flex h-10 w-full items-center justify-center gap-1.5 rounded-lg border border-border bg-background px-3 text-xs font-medium text-foreground shadow-xs transition-colors hover:bg-surface sm:w-auto"
                 >
                   <Settings className="size-3.5" />
                   Settings
@@ -157,7 +157,7 @@ export function TripCard({ trip }: TripCardProps) {
               ) : null}
               <Link
                 href={`/trips/${trip.id}`}
-                className="inline-flex h-9 items-center justify-center rounded-lg bg-primary px-3 text-xs font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary-hover"
+                className="inline-flex h-10 w-full items-center justify-center rounded-lg bg-primary px-3 text-xs font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary-hover sm:w-auto"
               >
                 Open trip
               </Link>

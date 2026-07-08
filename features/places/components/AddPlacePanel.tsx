@@ -178,8 +178,8 @@ export function AddPlacePanel({
         ) : null}
 
         <div className="mt-6 flex flex-col-reverse gap-3 border-t border-border-subtle pt-5 sm:flex-row sm:justify-end">
-          <Button type="button" variant="outline" size="md" onClick={onClose}>Cancel</Button>
-          <Button type={isPersisted ? "submit" : "button"} size="md" disabled={!isPersisted || isPending}>
+          <Button type="button" variant="outline" size="md" className="w-full sm:w-auto" onClick={onClose}>Cancel</Button>
+          <Button type={isPersisted ? "submit" : "button"} size="md" className="w-full sm:w-auto" disabled={!isPersisted || isPending}>
             {isPersisted ? (isPending ? "Saving place…" : isEditing ? "Update place" : "Save place") : "Preview only"}
           </Button>
         </div>

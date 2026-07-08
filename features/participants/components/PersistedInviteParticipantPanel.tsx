@@ -85,8 +85,8 @@ export function PersistedInviteParticipantPanel({
         {actionState.message ? <p role={actionState.status === "error" ? "alert" : "status"} className={actionState.status === "error" ? "mt-5 rounded-xl bg-error-subtle px-3.5 py-3 text-sm text-error" : "mt-5 rounded-xl bg-success-subtle px-3.5 py-3 text-sm text-success"}>{actionState.message}</p> : null}
 
         <div className="mt-6 flex flex-col-reverse gap-3 border-t border-border-subtle pt-5 sm:flex-row sm:justify-end">
-          <Button type="button" variant="outline" size="md" onClick={onClose}>Cancel</Button>
-          <Button type="submit" size="md" disabled={isPending}>{isPending ? "Saving access…" : isEditing ? "Update access" : "Add user"}</Button>
+          <Button type="button" variant="outline" size="md" className="w-full sm:w-auto" onClick={onClose}>Cancel</Button>
+          <Button type="submit" size="md" className="w-full sm:w-auto" disabled={isPending}>{isPending ? "Saving access…" : isEditing ? "Update access" : "Add user"}</Button>
         </div>
       </form>
     </Card>

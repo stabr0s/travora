@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 35 — Smart Defaults & Quick Actions
+Sprint 36 — Mobile UX Polish
 
 Status: IN PROGRESS
 
@@ -289,6 +289,13 @@ Status: IN PROGRESS
 - Future speed-up backlog documented
 - No migrations, RLS changes, external APIs, map rendering, or dependencies added
 
+### Sprint 35 — Smart Defaults & Quick Actions
+- Budget and Reservations default currency from trip settings
+- Planner can prefill a new plan item from saved Places
+- Planner quick-add stores the existing `place_id` relation when a place is selected
+- Packing has simple static presets for common trip types
+- No migrations, RLS changes, external APIs, AI features, or dependencies added
+
 ## MVP Mock Modules Completed
 
 - Dashboard
@@ -533,6 +540,15 @@ Status: IN PROGRESS
 - Packing presets skip existing item names case-insensitively
 - No AI, external APIs, geocoding, schema changes, or RLS changes added
 
+## Mobile UX Polish
+
+- Dashboard, Trips, and Trip Detail screens reviewed for mobile usability
+- Trip Detail tabs improved for small-screen horizontal scrolling and tap targets
+- Persisted add/edit forms stack action buttons more comfortably on mobile
+- Trip, reservation, budget, packing, and participant cards handle long text and wrapped actions better
+- No backend logic, schema changes, or new product features added
+- Map remains hidden from Trip Detail
+
 ## Manual Backend Test Checklist
 
 - Login and logout
@@ -613,20 +629,20 @@ Principles:
 
 ## Next Task
 
-Task #035 — Smart Defaults & Quick Actions
+Task #036 — Mobile UX Polish
 
 Goal:
 
-Reduce repetitive typing during common persisted trip planning flows.
+Improve small-screen usability across the existing MVP.
 
 The task includes:
 
-- Default Budget and Reservation currencies from trip settings
-- Prefill Planner items from saved Places
-- Add simple static Packing presets
-- Document Smart Defaults QA checks
+- Review dashboard, trips, and trip detail on mobile
+- Improve Trip Detail tabs, forms, cards, and action buttons
+- Add mobile QA checklist coverage
+- Preserve existing app behavior
 
 Important:
 
 Existing schema, RLS, mock trips, and connected module behavior remain unchanged.
-No new migrations, RLS changes, external APIs, AI features, map rendering, or dependencies are included.
+No backend logic, migrations, RLS changes, map rendering, or dependencies are included.

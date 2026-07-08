@@ -34,7 +34,10 @@ export function TripTabs({ activeTab, onTabChange, showSettings = false }: TripT
   const visibleTabs = showSettings ? [...tabs, settingsTab] : tabs;
 
   return (
-    <nav aria-label="Trip sections" className="overflow-x-auto rounded-2xl border border-border bg-surface-elevated p-1.5 shadow-sm">
+    <nav
+      aria-label="Trip sections"
+      className="max-w-full overflow-x-auto rounded-2xl border border-border bg-surface-elevated p-1.5 shadow-sm"
+    >
       <div className="flex min-w-max gap-1">
         {visibleTabs.map((tab) => {
           const Icon = tab.icon;
@@ -47,7 +50,7 @@ export function TripTabs({ activeTab, onTabChange, showSettings = false }: TripT
               aria-current={isActive ? "page" : undefined}
               onClick={() => onTabChange(tab.id)}
               className={cn(
-                "inline-flex h-10 items-center gap-2 rounded-xl px-3 text-sm font-medium transition-colors",
+                "inline-flex h-11 scroll-mx-3 items-center gap-2 whitespace-nowrap rounded-xl px-3.5 text-sm font-medium transition-colors",
                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30",
                 isActive
                   ? "bg-primary text-primary-foreground shadow-sm"

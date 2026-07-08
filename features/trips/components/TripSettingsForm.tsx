@@ -146,7 +146,7 @@ export function TripSettingsForm({ trip, canManageSettings }: TripSettingsFormPr
 
         {canManageSettings ? (
           <div className="flex justify-end">
-            <Button type="submit" disabled={isPending}>
+            <Button type="submit" className="w-full sm:w-auto" disabled={isPending}>
               {isPending ? "Saving settings…" : "Save settings"}
             </Button>
           </div>
