@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 33 — Post-Deploy QA Notes
+Sprint 34 — Post-Deploy Bugfixes & Smart Entry Improvements
 
 Status: IN PROGRESS
 
@@ -275,6 +275,13 @@ Status: IN PROGRESS
 - README was cleaned up for the Travora MVP
 - No major product features, migrations, RLS changes, or dependencies added
 
+### Sprint 33 — Post-Deploy QA Notes
+- First Vercel deploy completed successfully
+- Production URL documented
+- Supabase Auth production configuration documented
+- Production QA status documented
+- No product features, migrations, RLS changes, or dependencies added
+
 ## MVP Mock Modules Completed
 
 - Dashboard
@@ -496,6 +503,20 @@ Status: IN PROGRESS
 - No product features were added
 - The next likely step is user testing, feedback sprint, or post-deploy bugfixes
 
+## Post-Deploy Bugfixes & Smart Entry Improvements
+
+- Auth confirmation callback hardened for `code` and `token_hash` flows
+- Reservation payment can optionally create a Budget expense on reservation create
+- Places can prefill country from the trip destination when adding a persisted place
+- Future speed-up backlog:
+  - Default budget currency from trip
+  - Planner quick-add from Places
+  - Packing presets
+  - Duplicate/copy day plan
+  - Recent categories
+  - Import from Google Maps link/manual paste
+- No public links, email invitations, invite tokens, realtime, map rendering, schema changes, or RLS changes added
+
 ## Manual Backend Test Checklist
 
 - Login and logout
@@ -576,20 +597,20 @@ Principles:
 
 ## Next Task
 
-Task #033 — Post-Deploy QA Notes
+Task #034 — Post-Deploy Bugfixes & Smart Entry Improvements
 
 Goal:
 
-Document the first successful production deployment and post-deploy QA status.
+Fix critical post-deploy auth confirmation and add small smart-entry improvements.
 
 The task includes:
 
-- Record the production Vercel URL
-- Document Supabase Auth production URL settings
-- Note first manual production QA status
-- Keep current feature scope unchanged
+- Harden Supabase Auth callback handling
+- Add optional reservation payment to Budget creation
+- Add persisted Places country smart default
+- Document future speed-up ideas
 
 Important:
 
 Existing schema, RLS, mock trips, and connected module behavior remain unchanged.
-No new product features, migrations, RLS changes, or dependencies are included.
+No new migrations, RLS changes, external APIs, map rendering, or dependencies are included.

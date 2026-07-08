@@ -23,6 +23,7 @@ type PlacesSectionProps = {
   mode?: "mock" | "persisted";
   loadError?: string;
   canEditTrip?: boolean;
+  defaultCountry?: string;
 };
 
 function filterPlaces(places: Place[], filter: PlaceFilter): Place[] {
@@ -46,6 +47,7 @@ export function PlacesSection({
   mode = "mock",
   loadError,
   canEditTrip = true,
+  defaultCountry,
 }: PlacesSectionProps) {
   const [activeFilter, setActiveFilter] = useState<PlaceFilter>("all");
   const [isAddPanelOpen, setIsAddPanelOpen] = useState(false);
@@ -87,6 +89,7 @@ export function PlacesSection({
           tripId={tripId}
           mode={mode}
           place={editingPlace}
+          defaultCountry={defaultCountry}
           onClose={() => setIsAddPanelOpen(false)}
         />
       ) : null}

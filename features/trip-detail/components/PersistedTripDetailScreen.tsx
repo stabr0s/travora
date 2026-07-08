@@ -80,6 +80,7 @@ export function PersistedTripDetailScreen({
           mode="persisted"
           loadError={placesError}
           canEditTrip={canEditTrip}
+          defaultCountry={trip.destination || undefined}
         />
       ) : activeTab === "plan" ? (
         <PersistedPlannerSection

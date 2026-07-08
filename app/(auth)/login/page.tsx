@@ -1,14 +1,17 @@
 import { LoginForm } from "@/features/auth";
 
 type LoginPageProps = {
-  searchParams: Promise<{ error?: string | string[] }>;
+  searchParams: Promise<{ confirmed?: string | string[]; error?: string | string[] }>;
 };
 
 export default async function LoginPage({ searchParams }: LoginPageProps) {
-  const { error } = await searchParams;
+  const { confirmed, error } = await searchParams;
   const initialError = error === "auth_callback_failed"
-    ? "We couldn't complete authentication. Please try signing in again."
+    ? "We could not confirm your email. Please try signing in or request a new confirmation link."
+    : undefined;
+  const initialSuccess = confirmed === "1"
+    ? "Email confirmed. You can sign in."
     : undefined;
 
-  return <LoginForm initialError={initialError} />;
+  return <LoginForm initialError={initialError} initialSuccess={initialSuccess} />;
 }

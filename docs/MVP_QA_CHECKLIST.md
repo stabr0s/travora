@@ -25,6 +25,8 @@ coverage.
 ## Auth
 
 - [ ] Register account
+- [ ] Confirm email link completes through `/auth/callback`
+- [ ] Expired or invalid confirmation link shows friendly login error
 - [ ] Login
 - [ ] Logout
 - [ ] Confirm `/settings` shows auth state
@@ -40,6 +42,9 @@ coverage.
 ## Places
 
 - [ ] Create place
+- [ ] Add Place pre-fills country from trip destination when safe
+- [ ] Confirm pre-filled country can be changed or cleared
+- [ ] Confirm Edit Place does not overwrite country from trip destination
 - [ ] Edit place
 - [ ] Delete place
 
@@ -52,6 +57,9 @@ coverage.
 ## Reservations
 
 - [ ] Create reservation
+- [ ] Create reservation with "Add this payment to Budget" checked
+- [ ] Confirm matching budget expense appears after reservation save
+- [ ] Confirm editing/deleting reservation does not auto-sync budget expense
 - [ ] Edit reservation
 - [ ] Delete reservation
 

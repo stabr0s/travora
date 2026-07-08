@@ -2,19 +2,45 @@
 
 import { revalidatePath } from "next/cache";
 
+import { createBudgetExpense } from "@/features/budget/services/budget-service";
+import type { BudgetCategory } from "@/features/budget/types/budget";
 import {
   createReservation,
   deleteReservation,
   updateReservation,
 } from "@/features/reservations/services/reservations-service";
+import type {
+  ReservationStatus,
+  ReservationType,
+} from "@/features/reservations/types/reservation";
 import type { CreateReservationActionState } from "@/features/reservations/types/persisted-reservation";
-import type { ReservationStatus } from "@/features/reservations/types/reservation";
 import { isUuid } from "@/lib/validation/is-uuid";
 
 const validStatuses: ReservationStatus[] = ["paid", "deposit", "unpaid"];
 
 function readField(formData: FormData, name: string) {
   return String(formData.get(name) ?? "").trim();
+}
+
+function shouldAddToBudget(formData: FormData) {
+  return formData.get("addToBudget") === "on";
+}
+
+function mapReservationTypeToBudgetCategory(type: string): BudgetCategory {
+  const reservationType = type as ReservationType;
+
+  if (reservationType === "hotel") return "hotels";
+  if (reservationType === "flight") return "flights";
+  if (reservationType === "transport" || reservationType === "car") return "transport";
+  if (reservationType === "ticket") return "attractions";
+  if (reservationType === "insurance") return "insurance";
+  return "other";
+}
+
+function toExpenseDate(timestamp: number | undefined) {
+  return timestamp === undefined
+    ? undefined
+    : new Date(timestamp).toISOString().slice(0, 10);
 }
 
 export async function createReservationAction(
@@ -71,6 +97,35 @@ export async function createReservationAction(
 
   if (result.error) {
     return { status: "error", message: result.error.message };
+  }
+
+  if (shouldAddToBudget(formData) && totalPrice !== undefined && totalPrice > 0) {
+    const budgetResult = await createBudgetExpense({
+      tripId,
+      title: `Reservation: ${title}`,
+      amount: totalPrice,
+      category: mapReservationTypeToBudgetCategory(readField(formData, "type")),
+      currency: (readField(formData, "currency") || "EUR").toUpperCase(),
+      paidByName: readField(formData, "payerName"),
+      participantsCount: 1,
+      status: validStatuses.includes(requestedStatus) ? requestedStatus : "unpaid",
+      expenseDate: toExpenseDate(startTimestamp),
+      notes: "Created from a reservation. Reservation edits and deletes do not update this budget expense automatically.",
+    });
+
+    revalidatePath(`/trips/${tripId}`);
+
+    if (budgetResult.error) {
+      return {
+        status: "success",
+        message: "Reservation saved, but the budget expense could not be created.",
+      };
+    }
+
+    return {
+      status: "success",
+      message: "Reservation saved and budget expense created.",
+    };
   }
 
   revalidatePath(`/trips/${tripId}`);

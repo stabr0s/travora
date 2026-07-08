@@ -12,11 +12,14 @@ const initialState: AuthActionState = { status: "idle" };
 
 type LoginFormProps = {
   initialError?: string;
+  initialSuccess?: string;
 };
 
-export function LoginForm({ initialError }: LoginFormProps) {
+export function LoginForm({ initialError, initialSuccess }: LoginFormProps) {
   const [state, formAction] = useActionState(loginAction, initialState);
-  const message = state.message ?? initialError;
+  const message = state.message ?? initialError ?? initialSuccess;
+  const isSuccessMessage = state.status === "success"
+    || (!state.message && !initialError && Boolean(initialSuccess));
 
   return (
     <div>
@@ -48,7 +51,12 @@ export function LoginForm({ initialError }: LoginFormProps) {
         />
 
         {message ? (
-          <p role="alert" className="rounded-xl bg-error-subtle px-3.5 py-3 text-sm text-error">
+          <p
+            role={isSuccessMessage ? "status" : "alert"}
+            className={isSuccessMessage
+              ? "rounded-xl bg-success-subtle px-3.5 py-3 text-sm text-success"
+              : "rounded-xl bg-error-subtle px-3.5 py-3 text-sm text-error"}
+          >
             {message}
           </p>
         ) : null}

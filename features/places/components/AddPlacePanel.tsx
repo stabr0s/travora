@@ -17,19 +17,39 @@ type AddPlacePanelProps = {
   tripId: string;
   mode: "mock" | "persisted";
   place?: PersistedPlace | null;
+  defaultCountry?: string;
   onClose: () => void;
 };
 
 const initialState: CreatePlaceActionState = { status: "idle" };
 
+function parseCountryDefault(destination?: string) {
+  const value = destination?.trim();
+  if (!value) return "";
+
+  if (value.includes(",")) {
+    return value.split(",").at(-1)?.trim() || "";
+  }
+
+  const looksLikeCountry = value.length <= 32
+    && !/\d/.test(value)
+    && value.split(/\s+/).length <= 3;
+
+  return looksLikeCountry ? value : "";
+}
+
 export function AddPlacePanel({
   tripId,
   mode,
   place,
+  defaultCountry,
   onClose,
 }: AddPlacePanelProps) {
   const isPersisted = mode === "persisted";
   const isEditing = Boolean(place);
+  const countryDefault = isPersisted && !isEditing
+    ? parseCountryDefault(defaultCountry)
+    : "";
   const [actionState, formAction, isPending] = useActionState(
     isEditing ? updatePlaceAction : createPlaceAction,
     initialState,
@@ -71,7 +91,12 @@ export function AddPlacePanel({
           </label>
           <label className="text-sm font-medium text-foreground">
             Country
-            <input className={fieldClassName} defaultValue={place?.country || ""} name="country" type="text" placeholder="Japan" />
+            <input className={fieldClassName} defaultValue={place?.country || countryDefault} name="country" type="text" placeholder="Japan" />
+            {isPersisted && !isEditing && countryDefault ? (
+              <span className="mt-1 block text-xs text-muted">
+                Prefilled from trip destination. You can change or clear it.
+              </span>
+            ) : null}
           </label>
           <label className="text-sm font-medium text-foreground sm:col-span-2">
             Address

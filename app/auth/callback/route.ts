@@ -2,6 +2,17 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 
+const allowedOtpTypes = [
+  "signup",
+  "invite",
+  "magiclink",
+  "recovery",
+  "email_change",
+  "email",
+] as const;
+
+type AllowedOtpType = (typeof allowedOtpTypes)[number];
+
 function getSafeNextPath(value: string | null) {
   if (!value?.startsWith("/") || value.startsWith("//") || value.includes("\\")) {
     return "/dashboard";
@@ -16,21 +27,46 @@ function loginErrorResponse(request: NextRequest) {
   );
 }
 
-export async function GET(request: NextRequest) {
-  const code = request.nextUrl.searchParams.get("code");
+function isAllowedOtpType(value: string | null): value is AllowedOtpType {
+  return allowedOtpTypes.includes(value as AllowedOtpType);
+}
 
-  if (!code) {
+export async function GET(request: NextRequest) {
+  const authError = request.nextUrl.searchParams.get("error")
+    || request.nextUrl.searchParams.get("error_code")
+    || request.nextUrl.searchParams.get("error_description");
+
+  if (authError) {
+    return loginErrorResponse(request);
+  }
+
+  const code = request.nextUrl.searchParams.get("code");
+  const tokenHash = request.nextUrl.searchParams.get("token_hash");
+  const type = request.nextUrl.searchParams.get("type");
+  const nextPath = getSafeNextPath(request.nextUrl.searchParams.get("next"));
+
+  if (!code && (!tokenHash || !isAllowedOtpType(type))) {
     return loginErrorResponse(request);
   }
 
   const supabase = await createServerSupabaseClient();
-  const { error } = await supabase.auth.exchangeCodeForSession(code);
 
-  if (error) {
-    return loginErrorResponse(request);
+  if (code) {
+    const { error } = await supabase.auth.exchangeCodeForSession(code);
+    if (error) return loginErrorResponse(request);
+
+    return NextResponse.redirect(new URL(nextPath, request.url));
   }
 
-  const nextPath = getSafeNextPath(request.nextUrl.searchParams.get("next"));
+  if (tokenHash && isAllowedOtpType(type)) {
+    const { error } = await supabase.auth.verifyOtp({
+      token_hash: tokenHash,
+      type,
+    });
+    if (error) return loginErrorResponse(request);
 
-  return NextResponse.redirect(new URL(nextPath, request.url));
+    return NextResponse.redirect(new URL(nextPath, request.url));
+  }
+
+  return loginErrorResponse(request);
 }

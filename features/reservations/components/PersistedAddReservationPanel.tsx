@@ -114,6 +114,21 @@ export function PersistedAddReservationPanel({
             Payer
             <input className={fieldClassName} defaultValue={reservation?.payer_name || ""} name="payerName" type="text" placeholder="Traveler name" />
           </label>
+          {!isEditing ? (
+            <label className="flex items-start gap-3 rounded-xl border border-border-subtle bg-surface p-4 text-sm sm:col-span-2">
+              <input
+                className="mt-1 size-4 rounded border-border text-primary focus:ring-primary/30"
+                name="addToBudget"
+                type="checkbox"
+              />
+              <span>
+                <span className="block font-medium text-foreground">Add this payment to Budget</span>
+                <span className="mt-1 block text-xs leading-relaxed text-muted">
+                  If the price is greater than zero, Travora will create a matching budget expense when this reservation is saved.
+                </span>
+              </span>
+            </label>
+          ) : null}
           <label className="text-sm font-medium text-foreground sm:col-span-2">
             Notes
             <textarea className="mt-2 min-h-28 w-full resize-none rounded-xl border border-border bg-background px-3.5 py-3 text-sm text-foreground shadow-xs outline-none transition-colors placeholder:text-muted-foreground focus:border-primary/40 focus:ring-2 focus:ring-primary/15" defaultValue={reservation?.notes || ""} name="notes" placeholder="Booking details or reminders" />
