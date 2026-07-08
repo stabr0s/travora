@@ -19,13 +19,25 @@ Reminder:
 
 ## Supabase Auth production configuration
 
-- Site URL: https://travora-theta.vercel.app
+- Site URL must include the protocol:
+  `https://travora-theta.vercel.app`
 - Additional Redirect URLs should include:
   - `https://travora-theta.vercel.app/auth/callback`
   - `http://localhost:3000/auth/callback`
+- Signup confirmation emails should use Supabase's built-in confirmation URL
+  variable: `{{ .ConfirmationURL }}`.
 
 Deployment-specific preview URLs may also need to be allowlisted when testing
 Vercel preview deployments.
+
+Important malformed-link check:
+
+- A broken confirmation URL like
+  `https://atbaylwoqrrrljlnogfu.supabase.co/travora-theta.vercel.app?code=...`
+  means Supabase is missing the full production callback target. Recheck that
+  the Site URL includes `https://` and that the Additional Redirect URL includes
+  the full `/auth/callback` path:
+  `https://travora-theta.vercel.app/auth/callback`.
 
 ## Troubleshooting
 
@@ -33,6 +45,9 @@ Vercel preview deployments.
   on `/auth/v1/signup`, verify that the Vercel Supabase publishable key belongs
   to the same Supabase project as `NEXT_PUBLIC_SUPABASE_URL`.
 - If auth redirects to the wrong domain, check Supabase Auth URL Configuration.
+- If a confirmation email points to the Supabase project domain followed by the
+  app domain without protocol, verify the production Site URL, Redirect URLs, and
+  that the confirmation email template uses `{{ .ConfirmationURL }}`.
 
 ## Recommended target
 
@@ -64,9 +79,11 @@ Before deployment, confirm:
 - Migration `002_participant_profile_access.sql` is applied.
 - Migration `003_map_data_foundation.sql` is applied.
 - Supabase Auth is enabled.
-- Site URL is set to the production domain.
+- Site URL is set to the production domain with protocol, for example:
+  `https://travora-theta.vercel.app`.
 - Auth callback URL matches the deployment domain, for example:
   `https://your-domain.com/auth/callback`.
+- Signup confirmation template uses `{{ .ConfirmationURL }}`.
 
 ## Build commands
 

@@ -26,6 +26,8 @@ coverage.
 
 - [ ] Register account
 - [ ] Confirm email link completes through `/auth/callback`
+- [ ] Confirm production email link starts with `https://travora-theta.vercel.app/auth/callback`
+- [ ] Confirm Supabase signup email template uses `{{ .ConfirmationURL }}`
 - [ ] Expired or invalid confirmation link shows friendly login error
 - [ ] Login
 - [ ] Logout
