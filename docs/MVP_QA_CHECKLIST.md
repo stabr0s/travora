@@ -52,6 +52,9 @@ coverage.
 
 ## Planner
 
+- [ ] Create planner item from saved Place quick-add
+- [ ] Confirm planner quick-add stores `place_id`
+- [ ] Confirm planner item can still be created manually without Place
 - [ ] Create planner item
 - [ ] Edit planner item
 - [ ] Delete planner item
@@ -59,6 +62,8 @@ coverage.
 ## Reservations
 
 - [ ] Create reservation
+- [ ] Confirm Add Reservation defaults currency from trip settings
+- [ ] Confirm Edit Reservation keeps existing currency unless user changes it
 - [ ] Create reservation with "Add this payment to Budget" checked
 - [ ] Confirm matching budget expense appears after reservation save
 - [ ] Confirm editing/deleting reservation does not auto-sync budget expense
@@ -68,11 +73,17 @@ coverage.
 ## Budget
 
 - [ ] Create budget expense
+- [ ] Confirm Add Budget Expense defaults currency from trip settings
+- [ ] Confirm Edit Budget Expense keeps existing currency unless user changes it
 - [ ] Edit budget expense
 - [ ] Delete budget expense
 
 ## Packing
 
+- [ ] Add Weekend packing preset
+- [ ] Add City break packing preset
+- [ ] Add Road trip packing preset
+- [ ] Confirm packing presets skip duplicate item names clearly
 - [ ] Create packing item
 - [ ] Edit packing item
 - [ ] Toggle packed state

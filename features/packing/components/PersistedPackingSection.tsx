@@ -5,6 +5,7 @@ import { Luggage } from "lucide-react";
 
 import { Button, Card, EmptyState } from "@/components/ui";
 import {
+  addPackingPresetAction,
   deletePackingItemAction,
   togglePackingItemPackedAction,
 } from "@/features/packing/actions/packing-actions";
@@ -14,6 +15,7 @@ import { PackingProgressCard } from "@/features/packing/components/PackingProgre
 import { PackingStats } from "@/features/packing/components/PackingStats";
 import { PersistedAddPackingItemPanel } from "@/features/packing/components/PersistedAddPackingItemPanel";
 import { PersistedPackingItemRow } from "@/features/packing/components/PersistedPackingItemRow";
+import { packingPresets } from "@/features/packing/data/packing-presets";
 import type {
   PackingActionState,
   PersistedPackingItem,
@@ -89,6 +91,12 @@ export function PersistedPackingSection({ tripId, items, loadError, canEditTrip 
     });
   }
 
+  function handlePreset(presetId: string) {
+    startTransition(async () => {
+      setMessage(await addPackingPresetAction(tripId, presetId));
+    });
+  }
+
   return (
     <section className="space-y-6">
       <PackingHeader onAddItem={canEditTrip ? openAddPanel : undefined} />
@@ -100,6 +108,31 @@ export function PersistedPackingSection({ tripId, items, loadError, canEditTrip 
           onClose={() => setIsPanelOpen(false)}
         />
       ) : null}
+      {canEditTrip ? (
+        <Card padding="sm">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <h2 className="text-sm font-semibold text-foreground">Packing presets</h2>
+              <p className="mt-1 text-sm text-muted">Start from a preset and adjust the list.</p>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {packingPresets.map((preset) => (
+                <Button
+                  key={preset.id}
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  disabled={isPending}
+                  onClick={() => handlePreset(preset.id)}
+                >
+                  {preset.label}
+                </Button>
+              ))}
+            </div>
+          </div>
+        </Card>
+      ) : null}
+      {message?.message ? <Card padding="sm" className={message.status === "error" ? "text-sm text-error" : "text-sm text-success"}>{message.message}</Card> : null}
       {loadError ? <Card padding="sm" className="text-sm text-error">{loadError}</Card> : !items.length ? (
         <EmptyState
           icon={Luggage}
@@ -109,7 +142,6 @@ export function PersistedPackingSection({ tripId, items, loadError, canEditTrip 
         />
       ) : (
         <>
-          {message?.message ? <Card padding="sm" className={message.status === "error" ? "text-sm text-error" : "text-sm text-success"}>{message.message}</Card> : null}
           <PackingStats items={uiItems} />
           <PackingProgressCard totalItems={items.length} packedItems={packedCount} />
           <PackingCategoryTabs categories={categories} items={uiItems} activeCategory={activeCategory} onCategoryChange={setActiveCategory} />

@@ -30,6 +30,7 @@ export async function createPlannerItemAction(
   const date = readField(formData, "date");
   const startTime = readField(formData, "startTime");
   const endTime = readField(formData, "endTime");
+  const placeId = readField(formData, "placeId");
   const requestedStatus = readField(formData, "status") as PlannerItemStatus;
   const orderIndexValue = readField(formData, "orderIndex");
 
@@ -53,12 +54,17 @@ export async function createPlannerItemAction(
     return { status: "error", message: "End time cannot be earlier than start time." };
   }
 
+  if (placeId && !isUuid(placeId)) {
+    return { status: "error", message: "Choose a valid saved place or leave it empty." };
+  }
+
   const parsedOrderIndex = orderIndexValue ? Number.parseInt(orderIndexValue, 10) : 0;
   const orderIndex = Number.isFinite(parsedOrderIndex) ? parsedOrderIndex : 0;
   const status = validStatuses.includes(requestedStatus) ? requestedStatus : "planned";
   const result = await createPlannerItem({
     tripId,
     title,
+    placeId: placeId || undefined,
     description: readField(formData, "description"),
     date,
     startTime,

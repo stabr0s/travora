@@ -11,10 +11,12 @@ import type {
   CreatePlannerItemActionState,
   PersistedPlannerItem,
 } from "@/features/planner/types/persisted-planner";
+import type { PersistedPlace } from "@/features/places/types/persisted-place";
 
 type PersistedPlannerSectionProps = {
   tripId: string;
   items: PersistedPlannerItem[];
+  places?: PersistedPlace[];
   loadError?: string;
   canEditTrip: boolean;
 };
@@ -31,6 +33,7 @@ function formatDate(value: string) {
 export function PersistedPlannerSection({
   tripId,
   items,
+  places = [],
   loadError,
   canEditTrip,
 }: PersistedPlannerSectionProps) {
@@ -78,6 +81,7 @@ export function PersistedPlannerSection({
           key={editingItem?.id || "new"}
           tripId={tripId}
           item={editingItem}
+          places={places}
           onClose={() => setIsAddPanelOpen(false)}
         />
       ) : null}

@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 34 — Post-Deploy Bugfixes & Smart Entry Improvements
+Sprint 35 — Smart Defaults & Quick Actions
 
 Status: IN PROGRESS
 
@@ -282,6 +282,13 @@ Status: IN PROGRESS
 - Production QA status documented
 - No product features, migrations, RLS changes, or dependencies added
 
+### Sprint 34 — Post-Deploy Bugfixes & Smart Entry Improvements
+- Auth confirmation callback hardened for `code` and `token_hash` flows
+- Reservation payment can optionally create a Budget expense on reservation create
+- Places can prefill country from the trip destination when adding a persisted place
+- Future speed-up backlog documented
+- No migrations, RLS changes, external APIs, map rendering, or dependencies added
+
 ## MVP Mock Modules Completed
 
 - Dashboard
@@ -517,6 +524,15 @@ Status: IN PROGRESS
   - Import from Google Maps link/manual paste
 - No public links, email invitations, invite tokens, realtime, map rendering, schema changes, or RLS changes added
 
+## Smart Defaults & Quick Actions
+
+- Budget and Reservations can default currency from trip settings
+- Planner can prefill a new plan item from saved Places
+- Planner quick-add stores the existing `place_id` relation when a place is selected
+- Packing has simple static presets for Weekend, City break, and Road trip
+- Packing presets skip existing item names case-insensitively
+- No AI, external APIs, geocoding, schema changes, or RLS changes added
+
 ## Manual Backend Test Checklist
 
 - Login and logout
@@ -597,20 +613,20 @@ Principles:
 
 ## Next Task
 
-Task #034 — Post-Deploy Bugfixes & Smart Entry Improvements
+Task #035 — Smart Defaults & Quick Actions
 
 Goal:
 
-Fix critical post-deploy auth confirmation and add small smart-entry improvements.
+Reduce repetitive typing during common persisted trip planning flows.
 
 The task includes:
 
-- Harden Supabase Auth callback handling
-- Add optional reservation payment to Budget creation
-- Add persisted Places country smart default
-- Document future speed-up ideas
+- Default Budget and Reservation currencies from trip settings
+- Prefill Planner items from saved Places
+- Add simple static Packing presets
+- Document Smart Defaults QA checks
 
 Important:
 
 Existing schema, RLS, mock trips, and connected module behavior remain unchanged.
-No new migrations, RLS changes, external APIs, map rendering, or dependencies are included.
+No new migrations, RLS changes, external APIs, AI features, map rendering, or dependencies are included.

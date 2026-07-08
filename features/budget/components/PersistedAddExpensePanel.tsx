@@ -19,13 +19,20 @@ const fieldClassName =
 type PersistedAddExpensePanelProps = {
   tripId: string;
   expense?: PersistedBudgetExpense | null;
+  tripCurrency?: string;
   onClose: () => void;
 };
 
 const initialState: CreateBudgetExpenseActionState = { status: "idle" };
 
-export function PersistedAddExpensePanel({ tripId, expense, onClose }: PersistedAddExpensePanelProps) {
+export function PersistedAddExpensePanel({
+  tripId,
+  expense,
+  tripCurrency,
+  onClose,
+}: PersistedAddExpensePanelProps) {
   const isEditing = Boolean(expense);
+  const defaultCurrency = expense?.currency || tripCurrency || "EUR";
   const [actionState, formAction, isPending] = useActionState(
     isEditing ? updateBudgetExpenseAction : createBudgetExpenseAction,
     initialState,
@@ -52,7 +59,7 @@ export function PersistedAddExpensePanel({ tripId, expense, onClose }: Persisted
           <label className="text-sm font-medium text-foreground">Category<select className={fieldClassName} defaultValue={expense?.category || "hotels"} name="category"><option value="flights">Flights</option><option value="hotels">Hotels</option><option value="transport">Transport</option><option value="attractions">Attractions</option><option value="insurance">Insurance</option><option value="food">Food</option><option value="other">Other</option></select></label>
           <label className="text-sm font-medium text-foreground">Paid by<input className={fieldClassName} defaultValue={expense?.paid_by_name || ""} name="paidByName" type="text" placeholder="Traveler name" /></label>
           <label className="text-sm font-medium text-foreground">Amount<input className={fieldClassName} defaultValue={expense?.amount} name="amount" type="number" min="0.01" step="0.01" placeholder="0" required /></label>
-          <label className="text-sm font-medium text-foreground">Currency<select className={fieldClassName} defaultValue={expense?.currency || "EUR"} name="currency"><option value="EUR">EUR</option><option value="USD">USD</option><option value="PLN">PLN</option><option value="JPY">JPY</option></select></label>
+          <label className="text-sm font-medium text-foreground">Currency<select className={fieldClassName} defaultValue={defaultCurrency} name="currency"><option value="EUR">EUR</option><option value="USD">USD</option><option value="PLN">PLN</option><option value="JPY">JPY</option></select><span className="mt-1 block text-xs text-muted">Currency defaults from trip settings.</span></label>
           <label className="text-sm font-medium text-foreground">Participants<input className={fieldClassName} defaultValue={expense?.participants_count || 1} name="participantsCount" type="number" min="1" step="1" required /></label>
           <label className="text-sm font-medium text-foreground">Status<select className={fieldClassName} defaultValue={expense?.status || "paid"} name="status"><option value="paid">Paid</option><option value="deposit">Deposit</option><option value="unpaid">Unpaid</option></select></label>
           <label className="text-sm font-medium text-foreground sm:col-span-2">Expense date<input className={fieldClassName} defaultValue={expense?.expense_date || ""} name="expenseDate" type="date" /></label>

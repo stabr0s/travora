@@ -86,6 +86,7 @@ export function PersistedTripDetailScreen({
         <PersistedPlannerSection
           tripId={trip.id}
           items={plannerItems}
+          places={places}
           loadError={plannerError}
           canEditTrip={canEditTrip}
         />
@@ -93,6 +94,7 @@ export function PersistedTripDetailScreen({
         <PersistedReservationsSection
           tripId={trip.id}
           reservations={reservations}
+          tripCurrency={trip.currency || undefined}
           loadError={reservationsError}
           canEditTrip={canEditTrip}
         />
@@ -100,6 +102,7 @@ export function PersistedTripDetailScreen({
         <PersistedBudgetSection
           tripId={trip.id}
           expenses={budgetExpenses}
+          tripCurrency={trip.currency || undefined}
           loadError={budgetError}
           canEditTrip={canEditTrip}
         />

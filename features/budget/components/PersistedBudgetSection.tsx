@@ -20,6 +20,7 @@ import type {
 type PersistedBudgetSectionProps = {
   tripId: string;
   expenses: PersistedBudgetExpense[];
+  tripCurrency?: string;
   loadError?: string;
   canEditTrip: boolean;
 };
@@ -56,7 +57,13 @@ function calculateSummaries(expenses: PersistedBudgetExpense[]) {
   return { totals: Array.from(totals.values()), categories };
 }
 
-export function PersistedBudgetSection({ tripId, expenses, loadError, canEditTrip }: PersistedBudgetSectionProps) {
+export function PersistedBudgetSection({
+  tripId,
+  expenses,
+  tripCurrency,
+  loadError,
+  canEditTrip,
+}: PersistedBudgetSectionProps) {
   const [isAddPanelOpen, setIsAddPanelOpen] = useState(false);
   const [editingExpense, setEditingExpense] = useState<PersistedBudgetExpense | null>(null);
   const [message, setMessage] = useState<CreateBudgetExpenseActionState | null>(null);
@@ -81,6 +88,7 @@ export function PersistedBudgetSection({ tripId, expenses, loadError, canEditTri
           key={editingExpense?.id || "new"}
           tripId={tripId}
           expense={editingExpense}
+          tripCurrency={tripCurrency}
           onClose={() => setIsAddPanelOpen(false)}
         />
       ) : null}

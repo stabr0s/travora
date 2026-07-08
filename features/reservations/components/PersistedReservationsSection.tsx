@@ -15,6 +15,7 @@ import type { ReservationFilter } from "@/features/reservations/types/reservatio
 type PersistedReservationsSectionProps = {
   tripId: string;
   reservations: PersistedReservation[];
+  tripCurrency?: string;
   loadError?: string;
   canEditTrip: boolean;
 };
@@ -31,6 +32,7 @@ function filterReservations(reservations: PersistedReservation[], filter: Reserv
 export function PersistedReservationsSection({
   tripId,
   reservations,
+  tripCurrency,
   loadError,
   canEditTrip,
 }: PersistedReservationsSectionProps) {
@@ -62,6 +64,7 @@ export function PersistedReservationsSection({
           key={editingReservation?.id || "new"}
           tripId={tripId}
           reservation={editingReservation}
+          tripCurrency={tripCurrency}
           onClose={() => setIsAddPanelOpen(false)}
         />
       ) : null}

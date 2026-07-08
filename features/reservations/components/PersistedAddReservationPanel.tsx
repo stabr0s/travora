@@ -19,6 +19,7 @@ const fieldClassName =
 type PersistedAddReservationPanelProps = {
   tripId: string;
   reservation?: PersistedReservation | null;
+  tripCurrency?: string;
   onClose: () => void;
 };
 
@@ -31,9 +32,11 @@ function toLocalDateTime(value?: string | null) {
 export function PersistedAddReservationPanel({
   tripId,
   reservation,
+  tripCurrency,
   onClose,
 }: PersistedAddReservationPanelProps) {
   const isEditing = Boolean(reservation);
+  const defaultCurrency = reservation?.currency || tripCurrency || "EUR";
   const [actionState, formAction, isPending] = useActionState(
     isEditing ? updateReservationAction : createReservationAction,
     initialState,
@@ -99,10 +102,11 @@ export function PersistedAddReservationPanel({
           </label>
           <label className="text-sm font-medium text-foreground">
             Currency
-            <select className={fieldClassName} defaultValue={reservation?.currency || "EUR"} name="currency">
+            <select className={fieldClassName} defaultValue={defaultCurrency} name="currency">
               <option value="EUR">EUR</option><option value="USD">USD</option>
               <option value="PLN">PLN</option><option value="JPY">JPY</option>
             </select>
+            <span className="mt-1 block text-xs text-muted">Currency defaults from trip settings.</span>
           </label>
           <label className="text-sm font-medium text-foreground">
             Status
@@ -124,7 +128,7 @@ export function PersistedAddReservationPanel({
               <span>
                 <span className="block font-medium text-foreground">Add this payment to Budget</span>
                 <span className="mt-1 block text-xs leading-relaxed text-muted">
-                  If the price is greater than zero, Travora will create a matching budget expense when this reservation is saved.
+                  You can also add this payment to Budget. If the price is greater than zero, Travora will create a matching budget expense when this reservation is saved.
                 </span>
               </span>
             </label>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useMemo, useState } from "react";
 import { CalendarPlus, X } from "lucide-react";
 
 import { Button, Card } from "@/components/ui";
@@ -12,6 +12,7 @@ import type {
   CreatePlannerItemActionState,
   PersistedPlannerItem,
 } from "@/features/planner/types/persisted-planner";
+import type { PersistedPlace } from "@/features/places/types/persisted-place";
 
 const fieldClassName =
   "mt-2 h-11 w-full rounded-xl border border-border bg-background px-3.5 text-sm text-foreground shadow-xs outline-none transition-colors placeholder:text-muted-foreground focus:border-primary/40 focus:ring-2 focus:ring-primary/15";
@@ -19,21 +20,58 @@ const fieldClassName =
 type PersistedAddPlanItemPanelProps = {
   tripId: string;
   item?: PersistedPlannerItem | null;
+  places?: PersistedPlace[];
   onClose: () => void;
 };
 
 const initialState: CreatePlannerItemActionState = { status: "idle" };
 
+function typeFromPlace(place: PersistedPlace) {
+  if (["attraction", "restaurant", "hotel", "transport", "other"].includes(place.category || "")) {
+    return place.category || "other";
+  }
+  return "other";
+}
+
+function descriptionFromPlace(place: PersistedPlace) {
+  const details = [
+    place.category ? `Category: ${place.category}` : "",
+    place.address ? `Address: ${place.address}` : "",
+    place.website_url ? `Website: ${place.website_url}` : "",
+  ].filter(Boolean);
+
+  return details.length ? `From saved place. ${details.join(". ")}.` : "From saved place.";
+}
+
 export function PersistedAddPlanItemPanel({
   tripId,
   item,
+  places = [],
   onClose,
 }: PersistedAddPlanItemPanelProps) {
   const isEditing = Boolean(item);
+  const [selectedPlaceId, setSelectedPlaceId] = useState(item?.place_id || "");
+  const [title, setTitle] = useState(item?.title || "");
+  const [type, setType] = useState(item?.type || "attraction");
+  const [description, setDescription] = useState(item?.description || "");
+  const sortedPlaces = useMemo(
+    () => [...places].sort((a, b) => a.title.localeCompare(b.title)),
+    [places],
+  );
   const [actionState, formAction, isPending] = useActionState(
     isEditing ? updatePlannerItemAction : createPlannerItemAction,
     initialState,
   );
+
+  function handlePlaceChange(value: string) {
+    setSelectedPlaceId(value);
+    const place = sortedPlaces.find((savedPlace) => savedPlace.id === value);
+    if (!place) return;
+
+    setTitle(place.title);
+    setType(typeFromPlace(place));
+    setDescription(descriptionFromPlace(place));
+  }
 
   return (
     <Card padding="md" className="border-primary/15 shadow-md">
@@ -41,6 +79,7 @@ export function PersistedAddPlanItemPanel({
         <input type="hidden" name="tripId" value={tripId} />
         {item ? <input type="hidden" name="recordId" value={item.id} /> : null}
         <input type="hidden" name="orderIndex" value={item?.order_index ?? 0} />
+        {!isEditing ? <input type="hidden" name="placeId" value={selectedPlaceId} /> : null}
 
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-start gap-3">
@@ -58,13 +97,46 @@ export function PersistedAddPlanItemPanel({
         </div>
 
         <div className="mt-6 grid gap-5 sm:grid-cols-2">
+          {!isEditing && sortedPlaces.length ? (
+            <label className="text-sm font-medium text-foreground sm:col-span-2">
+              Use saved place
+              <select
+                className={fieldClassName}
+                value={selectedPlaceId}
+                onChange={(event) => handlePlaceChange(event.target.value)}
+              >
+                <option value="">No saved place</option>
+                {sortedPlaces.map((place) => (
+                  <option key={place.id} value={place.id}>
+                    {place.title}{place.city ? ` · ${place.city}` : ""}
+                  </option>
+                ))}
+              </select>
+              <span className="mt-1 block text-xs text-muted">
+                Use a saved place to fill this faster.
+              </span>
+            </label>
+          ) : null}
           <label className="text-sm font-medium text-foreground sm:col-span-2">
             Title
-            <input className={fieldClassName} defaultValue={item?.title} name="title" type="text" placeholder="e.g. Visit the old town" required />
+            <input
+              className={fieldClassName}
+              name="title"
+              type="text"
+              placeholder="e.g. Visit the old town"
+              required
+              value={title}
+              onChange={(event) => setTitle(event.target.value)}
+            />
           </label>
           <label className="text-sm font-medium text-foreground">
             Type
-            <select className={fieldClassName} defaultValue={item?.type || "attraction"} name="type">
+            <select
+              className={fieldClassName}
+              name="type"
+              value={type}
+              onChange={(event) => setType(event.target.value)}
+            >
               <option value="flight">Flight</option>
               <option value="hotel">Hotel</option>
               <option value="attraction">Attraction</option>
@@ -100,8 +172,9 @@ export function PersistedAddPlanItemPanel({
             <textarea
               className="mt-2 min-h-28 w-full resize-none rounded-xl border border-border bg-background px-3.5 py-3 text-sm text-foreground shadow-xs outline-none transition-colors placeholder:text-muted-foreground focus:border-primary/40 focus:ring-2 focus:ring-primary/15"
               name="description"
-              defaultValue={item?.description || ""}
               placeholder="Optional details for this item"
+              value={description}
+              onChange={(event) => setDescription(event.target.value)}
             />
           </label>
         </div>

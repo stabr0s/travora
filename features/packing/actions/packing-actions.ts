@@ -5,9 +5,11 @@ import { revalidatePath } from "next/cache";
 import {
   createPackingItem,
   deletePackingItem,
+  getPackingItemsForTrip,
   togglePackingItemPacked,
   updatePackingItem,
 } from "@/features/packing/services/packing-service";
+import { getPackingPreset } from "@/features/packing/data/packing-presets";
 import type { PackingActionState } from "@/features/packing/types/persisted-packing";
 import type { PackingCategory, PackingPriority } from "@/features/packing/types/packing";
 import { isUuid } from "@/lib/validation/is-uuid";
@@ -55,6 +57,76 @@ export async function createPackingItemAction(
   if (result.error) return { status: "error", message: result.error.message };
   revalidatePath(`/trips/${tripId}`);
   return { status: "success", message: "Packing item saved." };
+}
+
+export async function addPackingPresetAction(
+  tripId: string,
+  presetId: string,
+): Promise<PackingActionState> {
+  if (!isUuid(tripId)) return { status: "error", message: "This saved trip is not available." };
+
+  const preset = getPackingPreset(presetId);
+  if (!preset) return { status: "error", message: "Choose a valid packing preset." };
+
+  const existingResult = await getPackingItemsForTrip(tripId);
+  if (existingResult.error) {
+    return { status: "error", message: existingResult.error.message };
+  }
+
+  const existingNames = new Set(
+    existingResult.data.map((item) => item.name.trim().toLowerCase()),
+  );
+  const itemsToCreate = preset.items.filter(
+    (item) => !existingNames.has(item.name.trim().toLowerCase()),
+  );
+  const skippedCount = preset.items.length - itemsToCreate.length;
+
+  if (!itemsToCreate.length) {
+    return { status: "success", message: "All preset items are already on your packing list." };
+  }
+
+  let addedCount = 0;
+  let failedCount = 0;
+
+  for (const item of itemsToCreate) {
+    const result = await createPackingItem({
+      tripId,
+      name: item.name,
+      category: item.category,
+      isShared: item.isShared,
+      isPacked: false,
+      priority: item.priority,
+      notes: item.notes,
+    });
+
+    if (result.error) failedCount += 1;
+    else addedCount += 1;
+  }
+
+  revalidatePath(`/trips/${tripId}`);
+
+  if (addedCount === 0) {
+    return { status: "error", message: "We couldn't add preset items." };
+  }
+
+  const duplicateCopy = skippedCount === 1 ? "1 duplicate" : `${skippedCount} duplicates`;
+  const addedCopy = addedCount === 1 ? "1 preset item" : `${addedCount} preset items`;
+
+  if (failedCount > 0) {
+    const failedCopy = failedCount === 1 ? "1 item" : `${failedCount} items`;
+    const skippedCopy = skippedCount > 0 ? ` Skipped ${duplicateCopy}, and` : "";
+    return {
+      status: "success",
+      message: `Added ${addedCopy}.${skippedCopy} ${failedCopy} could not be added.`,
+    };
+  }
+
+  return {
+    status: "success",
+    message: skippedCount > 0
+      ? `Added ${addedCopy}. Skipped ${duplicateCopy}.`
+      : `Added ${addedCopy}.`,
+  };
 }
 
 export async function updatePackingItemAction(
