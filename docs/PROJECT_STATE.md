@@ -579,6 +579,7 @@ Status: IN PROGRESS
 - Main MVP modules are presented: Places, Plan, Reservations, Budget, Packing, People, and Print Summary
 - Auth page onboarding copy was reviewed and made friendlier
 - MVP limitations are communicated clearly without presenting them as errors
+- Landing feedback fixes: removed unwanted tagline and corrected public logo link behavior
 - No backend or schema changes were added
 - No new product systems were added
 

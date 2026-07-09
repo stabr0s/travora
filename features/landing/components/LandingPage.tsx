@@ -60,7 +60,7 @@ export function LandingPage() {
       <section className="relative px-4 py-6 sm:px-6 lg:px-8">
         <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-96 bg-gradient-to-b from-primary-subtle via-surface to-transparent" />
         <nav className="mx-auto flex max-w-6xl items-center justify-between gap-4">
-          <Logo />
+          <Logo href="/" />
           <div className="flex items-center gap-2">
             <Link href="/login" className="rounded-xl px-3 py-2 text-sm font-medium text-muted hover:bg-surface hover:text-foreground">
               Sign in
@@ -73,9 +73,6 @@ export function LandingPage() {
 
         <div className="mx-auto grid max-w-6xl gap-10 pb-16 pt-16 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:pb-24 lg:pt-24">
           <div className="max-w-3xl">
-            <p className="mb-5 inline-flex rounded-full border border-border bg-surface-elevated px-3 py-1 text-sm font-medium text-muted shadow-xs">
-              Travel planning for calm groups
-            </p>
             <h1 className="text-balance text-5xl font-semibold tracking-tight text-foreground sm:text-6xl lg:text-7xl">
               Plan every trip in one calm place.
             </h1>

@@ -5,12 +5,13 @@ import { cn } from "@/lib/utils";
 type LogoProps = {
   className?: string;
   compact?: boolean;
+  href?: string;
 };
 
-export function Logo({ className, compact = false }: LogoProps) {
+export function Logo({ className, compact = false, href = "/dashboard" }: LogoProps) {
   return (
     <Link
-      href="/dashboard"
+      href={href}
       className={cn("group flex items-center gap-2.5", className)}
     >
       <span className="flex size-9 items-center justify-center rounded-xl bg-primary text-sm font-bold text-primary-foreground shadow-sm transition-shadow group-hover:shadow-md">
