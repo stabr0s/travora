@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation";
 
 import { Logo } from "@/components/layout/Logo";
+import { getLogoHrefForPathname } from "@/components/layout/logo-routing";
 import { navigationItems } from "@/lib/config/navigation";
 import { cn } from "@/lib/utils";
 
@@ -18,7 +19,7 @@ export function TopBar() {
       )}
     >
       <div className="flex min-w-0 items-center gap-4 md:hidden">
-        <Logo compact />
+        <Logo compact href={getLogoHrefForPathname(pathname)} />
       </div>
 
       <div className="hidden min-w-0 md:block">

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import { Logo } from "@/components/layout/Logo";
+import { getLogoHrefForPathname } from "@/components/layout/logo-routing";
 import { sidebarNavigation } from "@/lib/config/navigation";
 import { cn } from "@/lib/utils";
 
@@ -13,7 +14,7 @@ export function Sidebar() {
   return (
     <aside className="hidden w-[var(--sidebar-width)] shrink-0 flex-col border-r border-border bg-background print:hidden md:flex">
       <div className="flex h-[var(--topbar-height)] items-center px-5">
-        <Logo />
+        <Logo href={getLogoHrefForPathname(pathname)} />
       </div>
 
       <nav className="flex flex-1 flex-col gap-1 px-3 py-4">
