@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 38 — Public Landing & Onboarding Polish
+Sprint 40 — Focused Public Demo Trip
 
 Status: IN PROGRESS
 
@@ -583,6 +583,15 @@ Status: IN PROGRESS
 - No backend or schema changes were added
 - No new product systems were added
 
+## Focused Public Demo Trip
+
+- Public demo trip is now self-contained
+- App sidebar and app navigation are hidden for demo trip routes
+- Demo users can return to landing, register, or sign in
+- "All trips" is removed from demo mode
+- Persisted app navigation is unchanged
+- No backend, schema, or auth changes were added
+
 ## Manual Backend Test Checklist
 
 - Login and logout
@@ -663,20 +672,20 @@ Principles:
 
 ## Next Task
 
-Task #038 — Public Landing & Onboarding Polish
+Task #040 — Focused Public Demo Trip
 
 Goal:
 
-Improve the public landing page and onboarding copy for new users.
+Make the public demo trip experience focused and self-contained.
 
 The task includes:
 
-- Replace the root redirect with a public landing page
-- Explain the core Travora MVP modules
-- Add clear Get started, Sign in, and demo trip CTAs
-- Improve login and register onboarding copy
+- Hide app navigation for public demo trip routes
+- Remove the confusing All trips action from demo trip hero
+- Add Back to landing, Get started, and Sign in actions
+- Keep persisted trip navigation unchanged
 
 Important:
 
-Existing schema, RLS, auth behavior, mock trips, and connected module behavior remain unchanged.
+Existing schema, RLS, auth behavior, persisted trips, and connected module behavior remain unchanged.
 No public sharing, migrations, RLS changes, map rendering, onboarding wizard, or dependencies are included.

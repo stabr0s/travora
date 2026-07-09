@@ -44,6 +44,17 @@ coverage.
 - [ ] Landing has no horizontal overflow on mobile
 - [ ] Landing does not introduce new backend behavior
 
+## Focused public demo trip
+
+- [ ] Landing View demo trip opens `/trips/japan-2027`
+- [ ] Demo trip does not show Dashboard, Trips, or Settings sidebar links
+- [ ] Demo trip has Back to landing, Get started, and Sign in actions
+- [ ] All trips button is not visible on demo trip
+- [ ] Demo trip has no app mobile navigation
+- [ ] Persisted trip navigation still works
+- [ ] No backend behavior changed
+- [ ] No migrations or dependencies added
+
 ## Trips
 
 - [ ] Create trip

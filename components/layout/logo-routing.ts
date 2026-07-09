@@ -5,10 +5,14 @@ const publicDemoTripIds = new Set([
   "new-york-2026",
 ]);
 
-export function getLogoHrefForPathname(pathname: string) {
-  const tripId = pathname.match(/^\/trips\/([^/]+)/)?.[1];
+export function isPublicDemoTripPathname(pathname: string) {
+  const match = pathname.match(/^\/trips\/([^/]+)(?:\/summary)?$/);
 
-  if (tripId && publicDemoTripIds.has(tripId)) {
+  return Boolean(match?.[1] && publicDemoTripIds.has(match[1]));
+}
+
+export function getLogoHrefForPathname(pathname: string) {
+  if (isPublicDemoTripPathname(pathname)) {
     return "/";
   }
 
