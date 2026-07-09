@@ -28,7 +28,7 @@ export function LoginForm({ initialError, initialSuccess }: LoginFormProps) {
           Welcome back
         </h1>
         <p className="mt-2 text-sm text-muted">
-          Sign in to continue planning with Travora.
+          Sign in to continue planning trips, sharing access, and keeping everything in one place.
         </p>
       </div>
 
@@ -65,9 +65,9 @@ export function LoginForm({ initialError, initialSuccess }: LoginFormProps) {
       </form>
 
       <p className="mt-6 text-center text-sm text-muted">
-        New to Travora?{" "}
+        New to Travora? Create a free account and start with your first trip.{" "}
         <Link href="/register" className="font-medium text-primary hover:text-primary-hover">
-          Create an account
+          Get started
         </Link>
       </p>
     </div>

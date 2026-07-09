@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 37 — Export / Print Trip Summary
+Sprint 38 — Public Landing & Onboarding Polish
 
 Status: IN PROGRESS
 
@@ -302,6 +302,13 @@ Status: IN PROGRESS
 - Action buttons and destructive actions made more comfortable on mobile
 - No backend logic, schema changes, new product features, or dependencies added
 
+### Sprint 37 — Export / Print Trip Summary
+- Trip users can open a print-friendly summary from Trip Detail
+- Browser print can be used to print or save the summary as PDF
+- Summary includes overview, planner, places, reservations, budget, and packing sections
+- Participant details are reduced to role and status counts for privacy
+- No server-side PDF generation, public share links, schema changes, or RLS changes added
+
 ## MVP Mock Modules Completed
 
 - Dashboard
@@ -565,6 +572,16 @@ Status: IN PROGRESS
 - No public share links added
 - No schema or RLS changes added
 
+## Public Landing & Onboarding Polish
+
+- Public landing page was improved and now explains Travora before entering the app
+- Travora value proposition is clearer for new users
+- Main MVP modules are presented: Places, Plan, Reservations, Budget, Packing, People, and Print Summary
+- Auth page onboarding copy was reviewed and made friendlier
+- MVP limitations are communicated clearly without presenting them as errors
+- No backend or schema changes were added
+- No new product systems were added
+
 ## Manual Backend Test Checklist
 
 - Login and logout
@@ -645,20 +662,20 @@ Principles:
 
 ## Next Task
 
-Task #037 — Export / Print Trip Summary
+Task #038 — Public Landing & Onboarding Polish
 
 Goal:
 
-Add a read-only print-friendly Trip Summary view.
+Improve the public landing page and onboarding copy for new users.
 
 The task includes:
 
-- Add `/trips/[id]/summary`
-- Add a Print summary action from Trip Detail
-- Support browser print/save as PDF
-- Keep participant private data minimal
+- Replace the root redirect with a public landing page
+- Explain the core Travora MVP modules
+- Add clear Get started, Sign in, and demo trip CTAs
+- Improve login and register onboarding copy
 
 Important:
 
-Existing schema, RLS, mock trips, and connected module behavior remain unchanged.
-No server-side PDF generation, public sharing, migrations, RLS changes, map rendering, or dependencies are included.
+Existing schema, RLS, auth behavior, mock trips, and connected module behavior remain unchanged.
+No public sharing, migrations, RLS changes, map rendering, onboarding wizard, or dependencies are included.

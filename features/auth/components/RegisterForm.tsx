@@ -20,7 +20,7 @@ export function RegisterForm() {
           Create your account
         </h1>
         <p className="mt-2 text-sm text-muted">
-          Start with auth today. Your demo trips stay ready to explore.
+          Create a free account, confirm your email, and start planning your first trip.
         </p>
       </div>
 

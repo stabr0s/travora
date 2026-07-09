@@ -33,6 +33,17 @@ coverage.
 - [ ] Logout
 - [ ] Confirm `/settings` shows auth state
 
+## Public landing and onboarding
+
+- [ ] Landing page loads on desktop
+- [ ] Landing page loads on mobile
+- [ ] Get started links to `/register`
+- [ ] Sign in links to `/login`
+- [ ] Demo trip link opens `/trips/japan-2027`
+- [ ] Auth page copy is clear for new users
+- [ ] Landing has no horizontal overflow on mobile
+- [ ] Landing does not introduce new backend behavior
+
 ## Trips
 
 - [ ] Create trip
