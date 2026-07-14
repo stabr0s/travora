@@ -58,8 +58,8 @@ export async function createPlannerItemAction(
     return { status: "error", message: "Choose a valid saved place or leave it empty." };
   }
 
-  const parsedOrderIndex = orderIndexValue ? Number.parseInt(orderIndexValue, 10) : 0;
-  const orderIndex = Number.isFinite(parsedOrderIndex) ? parsedOrderIndex : 0;
+  const parsedOrderIndex = orderIndexValue ? Number.parseInt(orderIndexValue, 10) : undefined;
+  const orderIndex = Number.isFinite(parsedOrderIndex) ? parsedOrderIndex : undefined;
   const status = validStatuses.includes(requestedStatus) ? requestedStatus : "planned";
   const result = await createPlannerItem({
     tripId,

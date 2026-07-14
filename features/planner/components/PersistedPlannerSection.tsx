@@ -5,8 +5,11 @@ import { CalendarDays, Plus } from "lucide-react";
 
 import { Button, Card, EmptyState, SectionHeader } from "@/components/ui";
 import { deletePlannerItemAction } from "@/features/planner/actions/planner-actions";
+import { reorderPlannerItemAction } from "@/features/planner/actions/planner-usability-actions";
 import { PersistedAddPlanItemPanel } from "@/features/planner/components/PersistedAddPlanItemPanel";
+import { PersistedCopyDayPanel } from "@/features/planner/components/PersistedCopyDayPanel";
 import { PersistedPlanItemCard } from "@/features/planner/components/PersistedPlanItemCard";
+import { PersistedQuickAddPlanItem } from "@/features/planner/components/PersistedQuickAddPlanItem";
 import type {
   CreatePlannerItemActionState,
   PersistedPlannerItem,
@@ -30,6 +33,27 @@ function formatDate(value: string) {
   }).format(new Date(`${value}T00:00:00Z`));
 }
 
+function compareNullable(valueA: string | null, valueB: string | null) {
+  if (valueA && valueB) return valueA.localeCompare(valueB);
+  if (valueA) return -1;
+  if (valueB) return 1;
+  return 0;
+}
+
+function sortDayItems(items: PersistedPlannerItem[]) {
+  return items
+    .map((item, fallbackIndex) => ({ item, fallbackIndex }))
+    .sort((left, right) => {
+      const orderDiff = (left.item.order_index ?? left.fallbackIndex)
+        - (right.item.order_index ?? right.fallbackIndex);
+      if (orderDiff) return orderDiff;
+
+      return compareNullable(left.item.start_time, right.item.start_time)
+        || compareNullable(left.item.created_at, right.item.created_at);
+    })
+    .map(({ item }) => item);
+}
+
 export function PersistedPlannerSection({
   tripId,
   items,
@@ -49,8 +73,21 @@ export function PersistedPlannerSection({
       grouped.set(key, [...(grouped.get(key) || []), item]);
     });
 
-    return Array.from(grouped.entries());
+    return Array.from(grouped.entries())
+      .map(([date, groupItems]) => [date, sortDayItems(groupItems)] as const)
+      .sort(([dateA], [dateB]) => {
+        if (dateA === "unscheduled") return 1;
+        if (dateB === "unscheduled") return -1;
+        return dateA.localeCompare(dateB);
+      });
   }, [items]);
+  const copyableDays = groups
+    .filter(([date]) => date !== "unscheduled")
+    .map(([date, groupItems]) => ({
+      date,
+      label: formatDate(date),
+      count: groupItems.length,
+    }));
 
   function openAddPanel() {
     setEditingItem(null);
@@ -60,6 +97,23 @@ export function PersistedPlannerSection({
   function handleDelete(item: PersistedPlannerItem) {
     if (!window.confirm(`Delete “${item.title}”? This cannot be undone.`)) return;
     startTransition(async () => setMessage(await deletePlannerItemAction(tripId, item.id)));
+  }
+
+  function handleMove(groupItems: PersistedPlannerItem[], item: PersistedPlannerItem, direction: "up" | "down") {
+    const currentIndex = groupItems.findIndex((groupItem) => groupItem.id === item.id);
+    const siblingIndex = direction === "up" ? currentIndex - 1 : currentIndex + 1;
+    const sibling = groupItems[siblingIndex];
+    if (currentIndex < 0 || !sibling) return;
+
+    startTransition(async () => {
+      setMessage(await reorderPlannerItemAction(
+        tripId,
+        item.id,
+        sibling.id,
+        item.order_index ?? currentIndex,
+        sibling.order_index ?? siblingIndex,
+      ));
+    });
   }
 
   return (
@@ -86,11 +140,15 @@ export function PersistedPlannerSection({
         />
       ) : null}
 
+      {canEditTrip ? <PersistedCopyDayPanel tripId={tripId} days={copyableDays} /> : null}
+
       {loadError ? <Card padding="sm" className="text-sm text-error">{loadError}</Card> : !items.length ? (
         <EmptyState
           icon={CalendarDays}
           title="No plan items yet"
-          description="Start shaping this trip by adding a dated activity or an unscheduled idea."
+          description={places.length
+            ? "Start with a quick activity, or use a saved Place in the full Add item form."
+            : "Start with a quick activity, then add saved Places when your itinerary grows."}
           action={canEditTrip ? <Button onClick={openAddPanel}>Add first item</Button> : undefined}
         />
       ) : (
@@ -107,13 +165,18 @@ export function PersistedPlannerSection({
                 </span>
               </div>
               <div className="space-y-3">
-                {groupItems.map((item) => (
+                {canEditTrip && date !== "unscheduled" ? (
+                  <PersistedQuickAddPlanItem tripId={tripId} date={date} places={places} />
+                ) : null}
+                {groupItems.map((item, index) => (
                   <PersistedPlanItemCard
                     key={item.id}
                     item={item}
                     isPending={isPending}
                     onEdit={canEditTrip ? (selected) => { setEditingItem(selected); setIsAddPanelOpen(true); } : undefined}
                     onDelete={canEditTrip ? handleDelete : undefined}
+                    onMoveUp={canEditTrip && index > 0 ? (selected) => handleMove(groupItems, selected, "up") : undefined}
+                    onMoveDown={canEditTrip && index < groupItems.length - 1 ? (selected) => handleMove(groupItems, selected, "down") : undefined}
                   />
                 ))}
               </div>

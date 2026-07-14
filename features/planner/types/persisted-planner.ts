@@ -22,6 +22,20 @@ export type UpdatePlannerItemInput = CreatePlannerItemInput & { id: string };
 
 export type DeletePlannerItemInput = { tripId: string; id: string };
 
+export type CopyPlannerDayInput = {
+  tripId: string;
+  sourceDate: string;
+  targetDate: string;
+};
+
+export type ReorderPlannerItemInput = {
+  tripId: string;
+  itemId: string;
+  siblingId: string;
+  itemOrderIndex: number;
+  siblingOrderIndex: number;
+};
+
 export type PlannerServiceResult<T> =
   | { data: T; error: null }
   | {

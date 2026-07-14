@@ -76,9 +76,22 @@ coverage.
 
 ## Planner
 
+- [ ] Owner/editor can quick-add planner item
+- [ ] Viewer cannot quick-add planner item
 - [ ] Create planner item from saved Place quick-add
 - [ ] Confirm planner quick-add stores `place_id`
 - [ ] Confirm planner item can still be created manually without Place
+- [ ] Owner/editor can copy day
+- [ ] Viewer cannot copy day
+- [ ] Copied day preserves title, description, type, times, place link, and status
+- [ ] Copy day does not overwrite existing target-day items
+- [ ] Copying an empty day shows a friendly error
+- [ ] Copying a day to itself shows a friendly error
+- [ ] Owner/editor can move planner items up/down within one day
+- [ ] Viewer cannot reorder planner items
+- [ ] No drag and drop dependency was added
+- [ ] No planner redesign was added
+- [ ] No planner migration was added
 - [ ] Create planner item
 - [ ] Edit planner item
 - [ ] Delete planner item

@@ -78,7 +78,7 @@ export function PersistedAddPlanItemPanel({
       <form action={formAction}>
         <input type="hidden" name="tripId" value={tripId} />
         {item ? <input type="hidden" name="recordId" value={item.id} /> : null}
-        <input type="hidden" name="orderIndex" value={item?.order_index ?? 0} />
+        {item ? <input type="hidden" name="orderIndex" value={item.order_index ?? 0} /> : null}
         {!isEditing ? <input type="hidden" name="placeId" value={selectedPlaceId} /> : null}
 
         <div className="flex items-start justify-between gap-4">

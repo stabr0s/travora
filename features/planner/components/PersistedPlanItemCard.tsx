@@ -1,6 +1,8 @@
 import {
   CalendarClock,
   CheckCircle2,
+  ChevronDown,
+  ChevronUp,
   CircleDashed,
   Clock3,
   XCircle,
@@ -14,6 +16,8 @@ type PersistedPlanItemCardProps = {
   isPending?: boolean;
   onDelete?: (item: PersistedPlannerItem) => void;
   onEdit?: (item: PersistedPlannerItem) => void;
+  onMoveDown?: (item: PersistedPlannerItem) => void;
+  onMoveUp?: (item: PersistedPlannerItem) => void;
 };
 
 const statusDetails = {
@@ -26,7 +30,14 @@ function formatTime(value: string) {
   return value.slice(0, 5);
 }
 
-export function PersistedPlanItemCard({ item, isPending, onDelete, onEdit }: PersistedPlanItemCardProps) {
+export function PersistedPlanItemCard({
+  item,
+  isPending,
+  onDelete,
+  onEdit,
+  onMoveDown,
+  onMoveUp,
+}: PersistedPlanItemCardProps) {
   const status = statusDetails[item.status || "planned"];
   const StatusIcon = status.icon;
 
@@ -61,7 +72,19 @@ export function PersistedPlanItemCard({ item, isPending, onDelete, onEdit }: Per
             </div>
           ) : null}
           {onEdit && onDelete ? (
-            <div className="mt-4 flex gap-2 border-t border-border-subtle pt-3">
+            <div className="mt-4 flex flex-wrap gap-2 border-t border-border-subtle pt-3">
+              {onMoveUp ? (
+                <Button size="sm" variant="outline" onClick={() => onMoveUp(item)} disabled={isPending}>
+                  <ChevronUp className="size-4" />
+                  Move up
+                </Button>
+              ) : null}
+              {onMoveDown ? (
+                <Button size="sm" variant="outline" onClick={() => onMoveDown(item)} disabled={isPending}>
+                  <ChevronDown className="size-4" />
+                  Move down
+                </Button>
+              ) : null}
               <Button size="sm" variant="outline" onClick={() => onEdit(item)} disabled={isPending}>Edit</Button>
               <Button size="sm" variant="ghost" className="text-error" onClick={() => onDelete(item)} disabled={isPending}>Delete</Button>
             </div>

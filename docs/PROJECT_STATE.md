@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 42 — Configurable Packing Presets
+Sprint 43 — Planner Usability Polish
 
 Status: IN PROGRESS
 
@@ -336,6 +336,14 @@ Status: IN PROGRESS
 - Invalid `/Dasboard` route no longer renders confusing content
 - Packing preset configuration and planner improvements postponed
 
+### Sprint 42 — Configurable Packing Presets
+- Custom packing presets can be created, edited, deleted, and applied on persisted trips
+- Built-in packing presets remain code-only starters
+- Applying presets skips duplicate trip items using name and category
+- Logged-out `/dashboard` redirects to the public Japan demo trip
+- Migration `004_packing_presets.sql` adds preset tables and owner-only RLS
+- No service-role/admin client, public preset marketplace, import/export, or new dependencies added
+
 ## MVP Mock Modules Completed
 
 - Dashboard
@@ -640,6 +648,17 @@ Status: IN PROGRESS
 - Migration `004_packing_presets.sql` adds preset tables and owner-only RLS
 - No service-role/admin client, public preset marketplace, import/export, or new dependencies added
 
+## Planner Usability Polish
+
+- Planner item creation is faster through inline quick-add on dated plan groups
+- Days can be copied to another target date without overwriting target-day items
+- Plan items can move up or down within the same day using existing `order_index`
+- Planner empty states now explain the first useful step more clearly
+- No drag and drop was added
+- No full planner redesign was added
+- No new dependencies were added
+- No migration was needed; existing `planner_items` fields are used
+
 ## Manual Backend Test Checklist
 
 - Login and logout
@@ -720,19 +739,19 @@ Principles:
 
 ## Next Task
 
-Task #042 — Configurable Packing Presets + Logged-out Dashboard Fix
+Task #043 — Planner Usability Polish
 
 Goal:
 
-Add user-owned packing presets for persisted trips and keep logged-out dashboard access safe.
+Improve everyday usability of the persisted Planner tab without a full redesign.
 
 The task includes:
 
-- Add custom packing preset tables and owner-only RLS
-- Add create/edit/delete UI for persisted packing presets
-- Apply built-in and custom presets with duplicate skipping
-- Redirect logged-out `/dashboard` users to the public demo trip
+- Faster inline planner item creation
+- Copying a planned day to another date
+- Moving items up or down within one day
+- Clearer Planner empty states
 
 Important:
 
-Existing auth behavior, persisted trip modules, mock trips, public sharing, map rendering, and dependencies remain unchanged.
+Existing schema, RLS, auth behavior, mock trips, public sharing, map rendering, and dependencies remain unchanged.

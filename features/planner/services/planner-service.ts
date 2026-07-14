@@ -36,6 +36,31 @@ async function getAuthContext() {
   return { supabase, user: data.user };
 }
 
+async function getNextOrderIndex(
+  supabase: Awaited<ReturnType<typeof createServerSupabaseClient>>,
+  tripId: string,
+  date?: string,
+) {
+  const query = supabase
+    .from("planner_items")
+    .select("order_index")
+    .eq("trip_id", tripId);
+
+  const { data, error } = date ? await query.eq("date", date) : await query.is("date", null);
+
+  if (error) {
+    logPlannerError("planner order query failed", error);
+    return 0;
+  }
+
+  const maxOrder = (data || []).reduce((max, item, index) => {
+    const order = item.order_index ?? index;
+    return Math.max(max, order);
+  }, -1);
+
+  return maxOrder + 1;
+}
+
 export async function getPlannerItemsForTrip(
   tripId: string,
 ): Promise<PlannerServiceResult<PersistedPlannerItem[]>> {
@@ -60,8 +85,8 @@ export async function getPlannerItemsForTrip(
     .select("*")
     .eq("trip_id", tripId)
     .order("date", { ascending: true, nullsFirst: false })
+    .order("order_index", { ascending: true, nullsFirst: false })
     .order("start_time", { ascending: true, nullsFirst: false })
-    .order("order_index", { ascending: true })
     .order("created_at", { ascending: true });
 
   if (error) {
@@ -94,6 +119,11 @@ export async function createPlannerItem(
     };
   }
 
+  const orderIndex = input.orderIndex ?? await getNextOrderIndex(
+    supabase,
+    input.tripId,
+    input.date || undefined,
+  );
   const itemId = randomUUID();
   const payload: Database["public"]["Tables"]["planner_items"]["Insert"] = {
     id: itemId,
@@ -106,7 +136,7 @@ export async function createPlannerItem(
     end_time: input.endTime || null,
     type: input.type || null,
     status: input.status || "planned",
-    order_index: input.orderIndex ?? 0,
+    order_index: orderIndex,
   };
 
   const { error: insertError } = await supabase.from("planner_items").insert(payload);
@@ -138,7 +168,7 @@ export async function createPlannerItem(
     end_time: input.endTime || null,
     type: input.type || null,
     status: input.status || "planned",
-    order_index: input.orderIndex ?? 0,
+    order_index: orderIndex,
     created_at: null,
     updated_at: null,
   };
