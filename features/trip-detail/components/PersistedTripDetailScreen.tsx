@@ -5,6 +5,7 @@ import { Card } from "@/components/ui";
 import { PersistedBudgetSection } from "@/features/budget";
 import type { PersistedBudgetExpense } from "@/features/budget/types/persisted-budget";
 import { PersistedPackingSection } from "@/features/packing";
+import type { PackingPresetWithItems } from "@/features/packing/types/packing-preset";
 import type { PersistedPackingItem } from "@/features/packing/types/persisted-packing";
 import { PersistedParticipantsSection } from "@/features/participants";
 import type { PersistedParticipant } from "@/features/participants/types/persisted-participant";
@@ -34,6 +35,7 @@ type PersistedTripDetailScreenProps = {
   budgetExpenses: PersistedBudgetExpense[];
   budgetError?: string;
   packingItems: PersistedPackingItem[];
+  packingPresets: PackingPresetWithItems[];
   packingError?: string;
   participants: PersistedParticipant[];
   currentUserRole: ParticipantRole | null;
@@ -52,6 +54,7 @@ export function PersistedTripDetailScreen({
   budgetExpenses,
   budgetError,
   packingItems,
+  packingPresets,
   packingError,
   participants,
   currentUserRole,
@@ -110,6 +113,7 @@ export function PersistedTripDetailScreen({
         <PersistedPackingSection
           tripId={trip.id}
           items={packingItems}
+          customPresets={packingPresets}
           loadError={packingError}
           canEditTrip={canEditTrip}
         />

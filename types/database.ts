@@ -325,6 +325,68 @@ export type Database = {
           },
         ];
       };
+      packing_presets: {
+        Row: {
+          id: string;
+          owner_id: string;
+          name: string;
+          description: string | null;
+          created_at: string | null;
+          updated_at: string | null;
+        };
+        Insert: {
+          id?: string;
+          owner_id: string;
+          name: string;
+          description?: string | null;
+          created_at?: string | null;
+          updated_at?: string | null;
+        };
+        Update: Partial<Database["public"]["Tables"]["packing_presets"]["Insert"]>;
+        Relationships: [
+          {
+            foreignKeyName: "packing_presets_owner_id_fkey";
+            columns: ["owner_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      packing_preset_items: {
+        Row: {
+          id: string;
+          preset_id: string;
+          name: string;
+          category: string | null;
+          priority: "essential" | "recommended" | "optional" | null;
+          notes: string | null;
+          sort_order: number | null;
+          created_at: string | null;
+          updated_at: string | null;
+        };
+        Insert: {
+          id?: string;
+          preset_id: string;
+          name: string;
+          category?: string | null;
+          priority?: "essential" | "recommended" | "optional" | null;
+          notes?: string | null;
+          sort_order?: number | null;
+          created_at?: string | null;
+          updated_at?: string | null;
+        };
+        Update: Partial<Database["public"]["Tables"]["packing_preset_items"]["Insert"]>;
+        Relationships: [
+          {
+            foreignKeyName: "packing_preset_items_preset_id_fkey";
+            columns: ["preset_id"];
+            isOneToOne: false;
+            referencedRelation: "packing_presets";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
     };
     Views: Record<string, never>;
     Functions: {

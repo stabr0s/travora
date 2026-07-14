@@ -4,6 +4,7 @@ import {
   TripDetailScreen,
 } from "@/features/trip-detail";
 import { getBudgetExpensesForTrip } from "@/features/budget/services/budget-service";
+import { getPackingPresetsForCurrentUser } from "@/features/packing/services/packing-preset-service";
 import { getPackingItemsForTrip } from "@/features/packing/services/packing-service";
 import {
   getCurrentUserTripRole,
@@ -60,6 +61,7 @@ export default async function TripDetailPage({ params, searchParams }: TripDetai
       persistedReservations,
       persistedBudget,
       persistedPacking,
+      persistedPackingPresets,
       persistedParticipants,
       persistedRole,
     ] = await Promise.all([
@@ -68,6 +70,7 @@ export default async function TripDetailPage({ params, searchParams }: TripDetai
       getReservationsForTrip(id),
       getBudgetExpensesForTrip(id),
       getPackingItemsForTrip(id),
+      getPackingPresetsForCurrentUser(),
       getParticipantsForTrip(id),
       getCurrentUserTripRole(id),
     ]);
@@ -85,6 +88,7 @@ export default async function TripDetailPage({ params, searchParams }: TripDetai
         budgetExpenses={persistedBudget.data || []}
         budgetError={persistedBudget.error?.message}
         packingItems={persistedPacking.data || []}
+        packingPresets={persistedPackingPresets.data || []}
         packingError={persistedPacking.error?.message}
         participants={persistedParticipants.data || []}
         currentUserRole={persistedRole.data}

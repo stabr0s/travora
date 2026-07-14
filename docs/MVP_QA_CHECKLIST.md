@@ -109,7 +109,17 @@ coverage.
 - [ ] Add Weekend packing preset
 - [ ] Add City break packing preset
 - [ ] Add Road trip packing preset
-- [ ] Confirm packing presets skip duplicate item names clearly
+- [ ] Confirm packing presets skip duplicate item name/category pairs clearly
+- [ ] Create custom packing preset
+- [ ] Add preset items
+- [ ] Edit preset items
+- [ ] Edit custom packing preset
+- [ ] Delete custom packing preset
+- [ ] Apply custom packing preset to a trip
+- [ ] Re-apply same preset and confirm duplicates are skipped
+- [ ] Confirm built-in presets still work
+- [ ] Confirm viewer cannot apply or manage presets
+- [ ] Confirm user cannot access another user’s presets
 - [ ] Create packing item
 - [ ] Edit packing item
 - [ ] Toggle packed state
@@ -127,6 +137,8 @@ coverage.
 ## Dashboard and trips list
 
 - [ ] Dashboard shows persisted trip summary
+- [ ] Logged-out `/dashboard` redirects to `/trips/japan-2027`
+- [ ] Signed-in `/dashboard` still works
 - [ ] Trips list shows persisted trips
 - [ ] Trips cards show role/status/date metadata
 - [ ] Clicking a trip card opens the trip
@@ -139,7 +151,7 @@ coverage.
 - [ ] `/Dasboard` does not render a trip or confusing page
 - [ ] Valid `/dashboard` still works
 - [ ] Demo trip still works
-- [ ] No packing preset configuration was added
+- [ ] Focused demo trip still works after logged-out dashboard redirect
 - [ ] Planner was not redesigned
 
 ## Mobile UX

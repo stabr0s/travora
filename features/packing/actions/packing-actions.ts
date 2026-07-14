@@ -44,6 +44,10 @@ function readPackingValues(formData: FormData) {
   };
 }
 
+function duplicateKey(name: string, category?: string | null) {
+  return `${name.trim().toLowerCase()}::${category?.trim().toLowerCase() ?? ""}`;
+}
+
 export async function createPackingItemAction(
   _previousState: PackingActionState,
   formData: FormData,
@@ -73,13 +77,22 @@ export async function addPackingPresetAction(
     return { status: "error", message: existingResult.error.message };
   }
 
-  const existingNames = new Set(
-    existingResult.data.map((item) => item.name.trim().toLowerCase()),
+  const existingKeys = new Set(
+    existingResult.data.map((item) => duplicateKey(item.name, item.category)),
   );
-  const itemsToCreate = preset.items.filter(
-    (item) => !existingNames.has(item.name.trim().toLowerCase()),
-  );
-  const skippedCount = preset.items.length - itemsToCreate.length;
+  const presetKeys = new Set<string>();
+  const itemsToCreate = [];
+  let skippedCount = 0;
+
+  for (const item of preset.items) {
+    const key = duplicateKey(item.name, item.category);
+    if (existingKeys.has(key) || presetKeys.has(key)) {
+      skippedCount += 1;
+      continue;
+    }
+    presetKeys.add(key);
+    itemsToCreate.push(item);
+  }
 
   if (!itemsToCreate.length) {
     return { status: "success", message: "All preset items are already on your packing list." };

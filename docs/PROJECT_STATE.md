@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 41 — Quick UX Fixes After Real Testing
+Sprint 42 — Configurable Packing Presets
 
 Status: IN PROGRESS
 
@@ -309,6 +309,33 @@ Status: IN PROGRESS
 - Participant details are reduced to role and status counts for privacy
 - No server-side PDF generation, public share links, schema changes, or RLS changes added
 
+### Sprint 38 — Public Landing & Onboarding Polish
+- Public landing page added
+- Landing CTAs connect to register, login, and demo trip
+- Auth onboarding copy reviewed
+- MVP limitations communicated clearly
+- No backend or schema changes added
+
+### Sprint 39 — Landing Feedback Fixes
+- Unwanted landing tagline removed
+- Public logo links corrected to return to landing
+- Auth and public demo routes keep public logo behavior
+- No backend or auth behavior changed
+
+### Sprint 40 — Focused Public Demo Trip
+- Public demo trip routes made self-contained
+- App shell navigation hidden for demo trip routes
+- Demo hero links to landing, register, and login
+- Persisted app navigation remains unchanged
+- No backend, schema, or auth changes added
+
+### Sprint 41 — Quick UX Fixes After Real Testing
+- Places quick status changes added for editable persisted trips
+- Trip cards made clickable without nested links
+- Custom currency input supported where relevant
+- Invalid `/Dasboard` route no longer renders confusing content
+- Packing preset configuration and planner improvements postponed
+
 ## MVP Mock Modules Completed
 
 - Dashboard
@@ -602,6 +629,17 @@ Status: IN PROGRESS
 - Planner improvements are postponed
 - No backend or schema changes were added
 
+## Configurable Packing Presets
+
+- Custom packing presets can be created, edited, deleted, and applied on persisted trips
+- Built-in packing presets remain code-only starters
+- Custom presets are owned by the current user and are not shared globally
+- Applying presets skips duplicate trip items using name and category
+- Owner/editor users can manage and apply presets; viewers remain read-only
+- Logged-out `/dashboard` now redirects to the public Japan demo trip
+- Migration `004_packing_presets.sql` adds preset tables and owner-only RLS
+- No service-role/admin client, public preset marketplace, import/export, or new dependencies added
+
 ## Manual Backend Test Checklist
 
 - Login and logout
@@ -682,20 +720,19 @@ Principles:
 
 ## Next Task
 
-Task #041 — Quick UX Fixes After Real Testing
+Task #042 — Configurable Packing Presets + Logged-out Dashboard Fix
 
 Goal:
 
-Apply small UX fixes after real production testing.
+Add user-owned packing presets for persisted trips and keep logged-out dashboard access safe.
 
 The task includes:
 
-- Add quick Places status changes
-- Make trip cards clickable
-- Support custom currency text input where relevant
-- Add safe not-found handling for invalid routes like `/Dasboard`
+- Add custom packing preset tables and owner-only RLS
+- Add create/edit/delete UI for persisted packing presets
+- Apply built-in and custom presets with duplicate skipping
+- Redirect logged-out `/dashboard` users to the public demo trip
 
 Important:
 
-Existing schema, RLS, auth behavior, persisted trips, and connected module behavior remain unchanged.
-No planner redesign, packing preset configuration, public sharing, migrations, RLS changes, map rendering, or dependencies are included.
+Existing auth behavior, persisted trip modules, mock trips, public sharing, map rendering, and dependencies remain unchanged.

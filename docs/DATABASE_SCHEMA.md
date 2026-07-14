@@ -9,6 +9,9 @@ Participant profile access is extended by
 Map-ready place data is extended by
 `supabase/migrations/003_map_data_foundation.sql`.
 
+User-owned packing presets are extended by
+`supabase/migrations/004_packing_presets.sql`.
+
 Travora supports two data modes. The four demo trip IDs continue reading local
 mock data, while persisted UUID trips use Supabase for Trips, Places, Planner,
 Reservations, Budget, Packing, and Participants. Map remains a visual
@@ -24,6 +27,8 @@ placeholder, and Dashboard is not yet backed by complete persisted analytics.
 - `reservations` — flights, stays, tickets, and other bookings.
 - `budget_expenses` — individual trip expenses.
 - `packing_items` — shared or assigned checklist entries.
+- `packing_presets` — reusable packing templates owned by one profile.
+- `packing_preset_items` — reusable items belonging to a packing preset.
 
 ## Relationships
 
@@ -35,6 +40,8 @@ placeholder, and Dashboard is not yet backed by complete persisted analytics.
   planner item and clears its `place_id`.
 - Deleting a trip cascades to `trip_members`, `places`, `planner_items`,
   `reservations`, `budget_expenses`, and `packing_items`.
+- Deleting a profile cascades to that profile’s custom packing presets, and
+  deleting a preset cascades to its preset items.
 
 The owner is represented by `trips.owner_id`. The database does not create an
 automatic owner membership row; the current trip creation service inserts the
@@ -115,6 +122,20 @@ and RPC foundations. Task 028 adds no schema or RLS changes: owners can add an
 existing registered user, while email invitations, invite tokens, and public
 share links remain unimplemented.
 
+## Packing presets
+
+Migration `004_packing_presets.sql` adds private, user-owned packing preset
+tables. Built-in presets remain code-only starters and are not stored in the
+database.
+
+Custom presets are scoped by `owner_id = auth.uid()`. RLS lets users select,
+insert, update, and delete only their own presets. Preset items inherit access
+through their parent preset using `exists` checks against `packing_presets`.
+
+Preset items do not include quantity in this MVP. Applying a preset creates
+normal `packing_items` rows for a trip and still relies on existing
+`packing_items` RLS for trip edit permissions.
+
 ## Applying the migration manually
 
 1. Open the target Supabase project.
@@ -131,6 +152,10 @@ initial migration is not designed to be rerun over an existing schema.
 
 After reviewing it, apply migration `003` to add map ordering and coordinate
 constraints. Migration `003` is idempotent and does not alter RLS policies.
+
+After reviewing it, apply migration `004` to add user-owned packing presets.
+Migration `004` adds new tables and RLS policies but does not change existing
+packing item schema.
 
 ## Current limitations
 
