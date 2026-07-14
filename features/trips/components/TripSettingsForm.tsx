@@ -69,9 +69,20 @@ export function TripSettingsForm({ trip, canManageSettings }: TripSettingsFormPr
               name="currency"
               defaultValue={trip.currency || "EUR"}
               disabled={!canManageSettings}
-              maxLength={3}
+              list="trip-settings-currency-options"
+              maxLength={12}
               placeholder="EUR"
+              required
             />
+            <datalist id="trip-settings-currency-options">
+              <option value="EUR" />
+              <option value="USD" />
+              <option value="PLN" />
+              <option value="JOD" />
+              <option value="CNY" />
+              <option value="MAD" />
+            </datalist>
+            <span className="mt-1 block text-xs text-muted">Custom currency codes are supported.</span>
           </label>
 
           <label className="text-sm font-medium text-foreground">

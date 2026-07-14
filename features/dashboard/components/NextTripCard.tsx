@@ -26,16 +26,25 @@ function formatDateRange(startDate: string, endDate: string | null): string {
 function formatCurrency(amount: number | null, currency: string): string {
   if (amount === null) return "Budget not set";
 
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency,
-    maximumFractionDigits: 0,
-  }).format(amount);
+  try {
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency,
+      maximumFractionDigits: 0,
+    }).format(amount);
+  } catch {
+    return `${amount.toLocaleString("en-US")} ${currency}`;
+  }
 }
 
 export function NextTripCard({ trip }: NextTripCardProps) {
   return (
-    <Card padding="none" className="overflow-hidden">
+    <Card padding="none" className="relative overflow-hidden">
+      <Link
+        href={`/trips/${trip.id}`}
+        className="absolute inset-0 z-10 rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:ring-offset-2"
+        aria-label={`Open ${trip.title}`}
+      />
       <div className="grid lg:grid-cols-5">
         <div
           className={cn(
@@ -107,7 +116,7 @@ export function NextTripCard({ trip }: NextTripCardProps) {
 
             <Link
               href={`/trips/${trip.id}`}
-              className="inline-flex h-10 w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 text-sm font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary-hover sm:w-auto"
+              className="relative z-20 inline-flex h-10 w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 text-sm font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary-hover sm:w-auto"
             >
               View trip
               <ArrowRight className="size-4" />

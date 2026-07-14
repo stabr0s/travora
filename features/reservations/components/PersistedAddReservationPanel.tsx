@@ -102,11 +102,25 @@ export function PersistedAddReservationPanel({
           </label>
           <label className="text-sm font-medium text-foreground">
             Currency
-            <select className={fieldClassName} defaultValue={defaultCurrency} name="currency">
-              <option value="EUR">EUR</option><option value="USD">USD</option>
-              <option value="PLN">PLN</option><option value="JPY">JPY</option>
-            </select>
-            <span className="mt-1 block text-xs text-muted">Currency defaults from trip settings.</span>
+            <input
+              className={fieldClassName}
+              defaultValue={defaultCurrency}
+              list="reservation-currency-options"
+              maxLength={12}
+              name="currency"
+              placeholder="EUR"
+              required
+              type="text"
+            />
+            <datalist id="reservation-currency-options">
+              <option value="EUR" />
+              <option value="USD" />
+              <option value="PLN" />
+              <option value="JOD" />
+              <option value="CNY" />
+              <option value="MAD" />
+            </datalist>
+            <span className="mt-1 block text-xs text-muted">Currency defaults from trip settings. Custom codes are supported.</span>
           </label>
           <label className="text-sm font-medium text-foreground">
             Status

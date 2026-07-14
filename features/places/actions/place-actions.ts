@@ -2,7 +2,12 @@
 
 import { revalidatePath } from "next/cache";
 
-import { createPlace, deletePlace, updatePlace } from "@/features/places/services/places-service";
+import {
+  createPlace,
+  deletePlace,
+  updatePlace,
+  updatePlaceStatus,
+} from "@/features/places/services/places-service";
 import type { CreatePlaceActionState } from "@/features/places/types/persisted-place";
 import type { PlaceCategory, PlacePriority, PlaceStatus } from "@/features/places/types/place";
 import { isUuid } from "@/lib/validation/is-uuid";
@@ -123,4 +128,18 @@ export async function deletePlaceAction(
   if (result.error) return { status: "error", message: result.error.message };
   revalidatePath(`/trips/${tripId}`);
   return { status: "success", message: "Place deleted." };
+}
+
+export async function updatePlaceStatusAction(
+  tripId: string,
+  id: string,
+  status: PlaceStatus,
+): Promise<CreatePlaceActionState> {
+  if (!isUuid(tripId)) return { status: "error", message: "This saved trip is not available." };
+  if (!isUuid(id)) return { status: "error", message: "This place is not available." };
+
+  const result = await updatePlaceStatus({ tripId, id, status });
+  if (result.error) return { status: "error", message: result.error.message };
+  revalidatePath(`/trips/${tripId}`);
+  return { status: "success", message: "Place status updated." };
 }

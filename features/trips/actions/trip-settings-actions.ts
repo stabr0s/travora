@@ -36,7 +36,7 @@ function isValidCoverUrl(value: string) {
 }
 
 function normalizeCurrency(value: string) {
-  return (value || "EUR").toUpperCase();
+  return (value.trim() || "EUR").toUpperCase();
 }
 
 export async function updateTripSettingsAction(
@@ -65,8 +65,8 @@ export async function updateTripSettingsAction(
   if (!statuses.includes(status)) {
     return { status: "error", message: "Choose a valid trip status." };
   }
-  if (!/^[A-Z]{3}$/.test(currency)) {
-    return { status: "error", message: "Currency must be a 3-letter code, for example EUR." };
+  if (currency.length > 12) {
+    return { status: "error", message: "Currency should be 12 characters or fewer." };
   }
 
   const result = await updateTrip({

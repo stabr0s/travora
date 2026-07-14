@@ -7,9 +7,12 @@ import type {
   PersistedPlace,
   PlacesServiceResult,
   UpdatePlaceInput,
+  UpdatePlaceStatusInput,
 } from "@/features/places/types/persisted-place";
 import { isUuid } from "@/lib/validation/is-uuid";
 import type { Database } from "@/types/database";
+
+const validPlaceStatuses = ["idea", "planned", "visited", "rejected"] as const;
 
 type SupabaseDiagnostic = {
   code?: string;
@@ -203,6 +206,30 @@ export async function updatePlace(
     return { data: null, error: { code: "UPDATE_FAILED", message: "We couldn't confirm the place update." } };
   }
   return { data, error: null };
+}
+
+export async function updatePlaceStatus(
+  input: UpdatePlaceStatusInput,
+): Promise<PlacesServiceResult<null>> {
+  if (!isUuid(input.tripId)) {
+    return { data: null, error: { code: "INVALID_TRIP", message: "This saved trip is not available." } };
+  }
+  if (!isUuid(input.id) || !validPlaceStatuses.includes(input.status)) {
+    return { data: null, error: { code: "INVALID_RECORD", message: "Choose a valid place status." } };
+  }
+
+  const { supabase, user } = await getAuthContext();
+  if (!user) return { data: null, error: { code: "AUTH_REQUIRED", message: "Sign in to edit places." } };
+
+  const { error } = await supabase.from("places").update({ status: input.status })
+    .eq("id", input.id).eq("trip_id", input.tripId);
+
+  if (error) {
+    logPlacesError("place status update failed", error);
+    return { data: null, error: { code: "UPDATE_FAILED", message: "We couldn't update this place status." } };
+  }
+
+  return { data: null, error: null };
 }
 
 export async function deletePlace(

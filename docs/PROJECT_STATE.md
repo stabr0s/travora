@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 40 — Focused Public Demo Trip
+Sprint 41 — Quick UX Fixes After Real Testing
 
 Status: IN PROGRESS
 
@@ -592,6 +592,16 @@ Status: IN PROGRESS
 - Persisted app navigation is unchanged
 - No backend, schema, or auth changes were added
 
+## Quick UX Fixes After Real Testing
+
+- Places status can be changed quickly from place cards
+- Trip cards are clickable
+- Custom currency input is supported where relevant
+- Invalid `/Dasboard` route no longer renders confusing content
+- Packing preset configuration is postponed
+- Planner improvements are postponed
+- No backend or schema changes were added
+
 ## Manual Backend Test Checklist
 
 - Login and logout
@@ -672,20 +682,20 @@ Principles:
 
 ## Next Task
 
-Task #040 — Focused Public Demo Trip
+Task #041 — Quick UX Fixes After Real Testing
 
 Goal:
 
-Make the public demo trip experience focused and self-contained.
+Apply small UX fixes after real production testing.
 
 The task includes:
 
-- Hide app navigation for public demo trip routes
-- Remove the confusing All trips action from demo trip hero
-- Add Back to landing, Get started, and Sign in actions
-- Keep persisted trip navigation unchanged
+- Add quick Places status changes
+- Make trip cards clickable
+- Support custom currency text input where relevant
+- Add safe not-found handling for invalid routes like `/Dasboard`
 
 Important:
 
 Existing schema, RLS, auth behavior, persisted trips, and connected module behavior remain unchanged.
-No public sharing, migrations, RLS changes, map rendering, onboarding wizard, or dependencies are included.
+No planner redesign, packing preset configuration, public sharing, migrations, RLS changes, map rendering, or dependencies are included.

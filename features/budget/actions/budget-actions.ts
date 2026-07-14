@@ -18,6 +18,10 @@ function readField(formData: FormData, name: string) {
   return String(formData.get(name) ?? "").trim();
 }
 
+function normalizeCurrency(value: string) {
+  return (value.trim() || "EUR").toUpperCase();
+}
+
 export async function createBudgetExpenseAction(
   _previousState: CreateBudgetExpenseActionState,
   formData: FormData,
@@ -29,6 +33,7 @@ export async function createBudgetExpenseAction(
   const category = readField(formData, "category") as BudgetCategory;
   const status = readField(formData, "status") as ExpenseStatus;
   const expenseDate = readField(formData, "expenseDate");
+  const currency = normalizeCurrency(readField(formData, "currency"));
 
   if (!isUuid(tripId)) return { status: "error", message: "This saved trip is not available." };
   if (!title) return { status: "error", message: "Enter a title for this expense." };
@@ -37,6 +42,9 @@ export async function createBudgetExpenseAction(
   }
   if (!Number.isInteger(participantsCount) || participantsCount < 1) {
     return { status: "error", message: "Participants count must be at least one." };
+  }
+  if (currency.length > 12) {
+    return { status: "error", message: "Currency should be 12 characters or fewer." };
   }
   const parsedExpenseDate = expenseDate ? new Date(`${expenseDate}T00:00:00Z`) : null;
   if (expenseDate && (!/^\d{4}-\d{2}-\d{2}$/.test(expenseDate)
@@ -50,7 +58,7 @@ export async function createBudgetExpenseAction(
     title,
     amount,
     category: categories.includes(category) ? category : "other",
-    currency: (readField(formData, "currency") || "EUR").toUpperCase(),
+    currency,
     paidByName: readField(formData, "paidByName"),
     participantsCount,
     status: statuses.includes(status) ? status : "paid",
@@ -76,6 +84,7 @@ export async function updateBudgetExpenseAction(
   const category = readField(formData, "category") as BudgetCategory;
   const status = readField(formData, "status") as ExpenseStatus;
   const expenseDate = readField(formData, "expenseDate");
+  const currency = normalizeCurrency(readField(formData, "currency"));
 
   if (!isUuid(tripId)) return { status: "error", message: "This saved trip is not available." };
   if (!isUuid(id)) return { status: "error", message: "This expense is not available." };
@@ -83,6 +92,9 @@ export async function updateBudgetExpenseAction(
   if (!Number.isFinite(amount) || amount <= 0) return { status: "error", message: "Amount must be greater than zero." };
   if (!Number.isInteger(participantsCount) || participantsCount < 1) {
     return { status: "error", message: "Participants count must be at least one." };
+  }
+  if (currency.length > 12) {
+    return { status: "error", message: "Currency should be 12 characters or fewer." };
   }
   const parsedExpenseDate = expenseDate ? new Date(`${expenseDate}T00:00:00Z`) : null;
   if (expenseDate && (!/^\d{4}-\d{2}-\d{2}$/.test(expenseDate)
@@ -97,7 +109,7 @@ export async function updateBudgetExpenseAction(
     title,
     amount,
     category: categories.includes(category) ? category : "other",
-    currency: (readField(formData, "currency") || "EUR").toUpperCase(),
+    currency,
     paidByName: readField(formData, "paidByName"),
     participantsCount,
     status: statuses.includes(status) ? status : "paid",

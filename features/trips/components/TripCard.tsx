@@ -56,11 +56,15 @@ function formatTimestamp(value: string | null | undefined): string | null {
 }
 
 function formatCurrency(amount: number, currency: string): string {
-  return new Intl.NumberFormat("en-US", {
-    currency,
-    maximumFractionDigits: 0,
-    style: "currency",
-  }).format(amount);
+  try {
+    return new Intl.NumberFormat("en-US", {
+      currency,
+      maximumFractionDigits: 0,
+      style: "currency",
+    }).format(amount);
+  } catch {
+    return `${amount.toLocaleString("en-US")} ${currency}`;
+  }
 }
 
 export function TripCard({ trip }: TripCardProps) {
@@ -69,7 +73,12 @@ export function TripCard({ trip }: TripCardProps) {
   const activityDate = formatTimestamp(trip.updatedAt || trip.createdAt);
 
   return (
-    <Card padding="none" className="group flex h-full flex-col overflow-hidden">
+    <Card padding="none" className="group relative flex h-full flex-col overflow-hidden">
+      <Link
+        href={`/trips/${trip.id}`}
+        className="absolute inset-0 z-10 rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:ring-offset-2"
+        aria-label={`Open ${trip.title}`}
+      />
       <div className={cn("relative flex min-h-44 flex-col justify-between bg-gradient-to-br p-5", trip.coverGradient)}>
         <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-black/5 to-black/10" />
         <div className="relative flex justify-between gap-2">
@@ -149,7 +158,7 @@ export function TripCard({ trip }: TripCardProps) {
               {trip.role === "owner" ? (
                 <Link
                   href={`/trips/${trip.id}?tab=settings`}
-                  className="inline-flex h-10 w-full items-center justify-center gap-1.5 rounded-lg border border-border bg-background px-3 text-xs font-medium text-foreground shadow-xs transition-colors hover:bg-surface sm:w-auto"
+                  className="relative z-20 inline-flex h-10 w-full items-center justify-center gap-1.5 rounded-lg border border-border bg-background px-3 text-xs font-medium text-foreground shadow-xs transition-colors hover:bg-surface sm:w-auto"
                 >
                   <Settings className="size-3.5" />
                   Settings
@@ -157,7 +166,7 @@ export function TripCard({ trip }: TripCardProps) {
               ) : null}
               <Link
                 href={`/trips/${trip.id}`}
-                className="inline-flex h-10 w-full items-center justify-center rounded-lg bg-primary px-3 text-xs font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary-hover sm:w-auto"
+                className="relative z-20 inline-flex h-10 w-full items-center justify-center rounded-lg bg-primary px-3 text-xs font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary-hover sm:w-auto"
               >
                 Open trip
               </Link>

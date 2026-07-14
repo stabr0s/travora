@@ -21,6 +21,12 @@ export type CreatePlaceInput = {
 
 export type UpdatePlaceInput = CreatePlaceInput & { id: string };
 
+export type UpdatePlaceStatusInput = {
+  tripId: string;
+  id: string;
+  status: PlaceStatus;
+};
+
 export type DeletePlaceInput = { tripId: string; id: string };
 
 export type PlacesServiceResult<T> =

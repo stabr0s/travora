@@ -35,28 +35,33 @@ export function RecentTrips({ trips }: RecentTripsProps) {
       ) : (
         <ul className="divide-y divide-border-subtle pt-2">
           {trips.map((trip) => (
-            <li key={trip.id} className="flex items-start gap-3 py-3 first:pt-0 last:pb-0">
-              <span className="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-lg bg-surface">
-                <CalendarDays className="size-4 text-primary" strokeWidth={1.75} />
-              </span>
-              <div className="min-w-0 flex-1">
-                <div className="flex flex-wrap items-center gap-2">
-                  <Link href={`/trips/${trip.id}`} className="truncate text-sm font-medium text-foreground hover:text-primary">
-                    {trip.title}
-                  </Link>
-                  <Badge variant={statusVariants[trip.status]} className="shrink-0 capitalize">
-                    {trip.status}
-                  </Badge>
-                  {trip.role ? (
-                    <Badge variant="outline" className="shrink-0">
-                      {roleLabels[trip.role]}
+            <li key={trip.id} className="py-3 first:pt-0 last:pb-0">
+              <Link
+                href={`/trips/${trip.id}`}
+                className="flex items-start gap-3 rounded-xl transition-colors hover:bg-surface"
+              >
+                <span className="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-lg bg-surface">
+                  <CalendarDays className="size-4 text-primary" strokeWidth={1.75} />
+                </span>
+                <div className="min-w-0 flex-1">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="truncate text-sm font-medium text-foreground">
+                      {trip.title}
+                    </span>
+                    <Badge variant={statusVariants[trip.status]} className="shrink-0 capitalize">
+                      {trip.status}
                     </Badge>
-                  ) : null}
+                    {trip.role ? (
+                      <Badge variant="outline" className="shrink-0">
+                        {roleLabels[trip.role]}
+                      </Badge>
+                    ) : null}
+                  </div>
+                  <p className="mt-0.5 truncate text-xs text-muted">
+                    {trip.country} · {trip.dateLabel}
+                  </p>
                 </div>
-                <p className="mt-0.5 truncate text-xs text-muted">
-                  {trip.country} · {trip.dateLabel}
-                </p>
-              </div>
+              </Link>
             </li>
           ))}
         </ul>

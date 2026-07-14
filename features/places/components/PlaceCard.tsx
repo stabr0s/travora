@@ -1,3 +1,4 @@
+import type { ChangeEvent } from "react";
 import { CalendarDays, Clock3, MapPin, Wallet } from "lucide-react";
 
 import { Badge, Button, Card } from "@/components/ui";
@@ -32,6 +33,7 @@ type PlaceCardProps = {
   isPending?: boolean;
   onDelete?: (place: Place) => void;
   onEdit?: (place: Place) => void;
+  onStatusChange?: (place: Place, status: PlaceStatus) => void;
 };
 
 function formatDuration(minutes: number): string {
@@ -54,7 +56,13 @@ function formatCost(cost: number, currency: string | null): string {
       }).format(cost);
 }
 
-export function PlaceCard({ place, isPending, onDelete, onEdit }: PlaceCardProps) {
+export function PlaceCard({
+  place,
+  isPending,
+  onDelete,
+  onEdit,
+  onStatusChange,
+}: PlaceCardProps) {
   const priority = place.priority ? priorityDetails[place.priority] : null;
   const status = place.status ? statusDetails[place.status] : null;
   const location = [place.city, place.country].filter(Boolean).join(", ");
@@ -62,6 +70,11 @@ export function PlaceCard({ place, isPending, onDelete, onEdit }: PlaceCardProps
     place.estimatedDuration !== null ||
     place.estimatedCost !== null ||
     Boolean(place.plannedDay);
+  const canChangeStatus = Boolean(onStatusChange);
+
+  function handleStatusChange(event: ChangeEvent<HTMLSelectElement>) {
+    onStatusChange?.(place, event.target.value as PlaceStatus);
+  }
 
   return (
     <Card padding="none" className="overflow-hidden">
@@ -88,11 +101,26 @@ export function PlaceCard({ place, isPending, onDelete, onEdit }: PlaceCardProps
 
       <div className="space-y-4 p-5">
         <div className="flex flex-wrap items-center gap-2">
-          {status ? (
-            <Badge variant={status.variant}>{status.label}</Badge>
-          ) : (
-            <Badge variant="outline">Status not set</Badge>
-          )}
+          {canChangeStatus ? (
+            <label className="flex items-center gap-2 text-xs font-medium text-muted">
+              Status
+              <select
+                className="h-8 rounded-lg border border-border bg-background px-2.5 text-xs text-foreground shadow-xs outline-none transition-colors focus:border-primary/40 focus:ring-2 focus:ring-primary/15 disabled:bg-surface disabled:text-muted"
+                value={place.status || "idea"}
+                onChange={handleStatusChange}
+                disabled={isPending}
+              >
+                <option value="idea">Idea</option>
+                <option value="planned">Planned</option>
+                <option value="visited">Visited</option>
+                <option value="rejected">Rejected</option>
+              </select>
+            </label>
+          ) : status ? (
+              <Badge variant={status.variant}>{status.label}</Badge>
+            ) : (
+              <Badge variant="outline">Status not set</Badge>
+            )}
           {place.plannedDay ? <Badge variant="outline">Day {place.plannedDay}</Badge> : null}
         </div>
 

@@ -22,6 +22,10 @@ function readField(formData: FormData, name: string) {
   return String(formData.get(name) ?? "").trim();
 }
 
+function normalizeCurrency(value: string) {
+  return (value.trim() || "EUR").toUpperCase();
+}
+
 function shouldAddToBudget(formData: FormData) {
   return formData.get("addToBudget") === "on";
 }
@@ -53,6 +57,7 @@ export async function createReservationAction(
   const endDate = readField(formData, "endDate");
   const totalPriceValue = readField(formData, "totalPrice");
   const requestedStatus = readField(formData, "status") as ReservationStatus;
+  const currency = normalizeCurrency(readField(formData, "currency"));
 
   if (!isUuid(tripId)) {
     return { status: "error", message: "This saved trip is not available." };
@@ -65,6 +70,9 @@ export async function createReservationAction(
   const totalPrice = totalPriceValue ? Number(totalPriceValue) : undefined;
   if (totalPrice !== undefined && (!Number.isFinite(totalPrice) || totalPrice < 0)) {
     return { status: "error", message: "Enter a valid reservation price." };
+  }
+  if (currency.length > 12) {
+    return { status: "error", message: "Currency should be 12 characters or fewer." };
   }
 
   const startTimestamp = startDate ? Date.parse(startDate) : undefined;
@@ -89,7 +97,7 @@ export async function createReservationAction(
     endDate: endTimestamp !== undefined ? new Date(endTimestamp).toISOString() : undefined,
     location: readField(formData, "location"),
     totalPrice,
-    currency: readField(formData, "currency") || "EUR",
+    currency,
     status: validStatuses.includes(requestedStatus) ? requestedStatus : "unpaid",
     payerName: readField(formData, "payerName"),
     notes: readField(formData, "notes"),
@@ -105,7 +113,7 @@ export async function createReservationAction(
       title: `Reservation: ${title}`,
       amount: totalPrice,
       category: mapReservationTypeToBudgetCategory(readField(formData, "type")),
-      currency: (readField(formData, "currency") || "EUR").toUpperCase(),
+      currency,
       paidByName: readField(formData, "payerName"),
       participantsCount: 1,
       status: validStatuses.includes(requestedStatus) ? requestedStatus : "unpaid",
@@ -143,6 +151,7 @@ export async function updateReservationAction(
   const endDate = readField(formData, "endDate");
   const totalPriceValue = readField(formData, "totalPrice");
   const requestedStatus = readField(formData, "status") as ReservationStatus;
+  const currency = normalizeCurrency(readField(formData, "currency"));
 
   if (!isUuid(tripId)) return { status: "error", message: "This saved trip is not available." };
   if (!isUuid(id)) return { status: "error", message: "This reservation is not available." };
@@ -151,6 +160,9 @@ export async function updateReservationAction(
   const totalPrice = totalPriceValue ? Number(totalPriceValue) : undefined;
   if (totalPrice !== undefined && (!Number.isFinite(totalPrice) || totalPrice < 0)) {
     return { status: "error", message: "Enter a valid reservation price." };
+  }
+  if (currency.length > 12) {
+    return { status: "error", message: "Currency should be 12 characters or fewer." };
   }
   const startTimestamp = startDate ? Date.parse(startDate) : undefined;
   const endTimestamp = endDate ? Date.parse(endDate) : undefined;
@@ -173,7 +185,7 @@ export async function updateReservationAction(
     endDate: endTimestamp !== undefined ? new Date(endTimestamp).toISOString() : undefined,
     location: readField(formData, "location"),
     totalPrice,
-    currency: readField(formData, "currency") || "EUR",
+    currency,
     status: validStatuses.includes(requestedStatus) ? requestedStatus : "unpaid",
     payerName: readField(formData, "payerName"),
     notes: readField(formData, "notes"),

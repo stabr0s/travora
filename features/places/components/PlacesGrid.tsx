@@ -3,7 +3,7 @@ import { MapPinOff, Plus } from "lucide-react";
 import { Button, EmptyState } from "@/components/ui";
 import { AddPlaceCard } from "@/features/places/components/AddPlaceCard";
 import { PlaceCard } from "@/features/places/components/PlaceCard";
-import type { Place } from "@/features/places/types/place";
+import type { Place, PlaceStatus } from "@/features/places/types/place";
 
 type PlacesGridProps = {
   places: Place[];
@@ -11,9 +11,17 @@ type PlacesGridProps = {
   isPending?: boolean;
   onDeletePlace?: (place: Place) => void;
   onEditPlace?: (place: Place) => void;
+  onStatusChange?: (place: Place, status: PlaceStatus) => void;
 };
 
-export function PlacesGrid({ places, onAddPlace, isPending, onDeletePlace, onEditPlace }: PlacesGridProps) {
+export function PlacesGrid({
+  places,
+  onAddPlace,
+  isPending,
+  onDeletePlace,
+  onEditPlace,
+  onStatusChange,
+}: PlacesGridProps) {
   return (
     <section className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
       {places.map((place) => (
@@ -23,6 +31,7 @@ export function PlacesGrid({ places, onAddPlace, isPending, onDeletePlace, onEdi
           isPending={isPending}
           onDelete={onDeletePlace}
           onEdit={onEditPlace}
+          onStatusChange={onStatusChange}
         />
       ))}
 

@@ -69,6 +69,8 @@ coverage.
 - [ ] Add Place pre-fills country from trip destination when safe
 - [ ] Confirm pre-filled country can be changed or cleared
 - [ ] Confirm Edit Place does not overwrite country from trip destination
+- [ ] Owner/editor can quickly change place status from the place card
+- [ ] Viewer cannot quickly change place status
 - [ ] Edit place
 - [ ] Delete place
 
@@ -84,6 +86,7 @@ coverage.
 ## Reservations
 
 - [ ] Create reservation
+- [ ] Custom currency can be used in reservation forms
 - [ ] Confirm Add Reservation defaults currency from trip settings
 - [ ] Confirm Edit Reservation keeps existing currency unless user changes it
 - [ ] Create reservation with "Add this payment to Budget" checked
@@ -95,6 +98,7 @@ coverage.
 ## Budget
 
 - [ ] Create budget expense
+- [ ] Custom currency can be used in budget forms
 - [ ] Confirm Add Budget Expense defaults currency from trip settings
 - [ ] Confirm Edit Budget Expense keeps existing currency unless user changes it
 - [ ] Edit budget expense
@@ -125,7 +129,18 @@ coverage.
 - [ ] Dashboard shows persisted trip summary
 - [ ] Trips list shows persisted trips
 - [ ] Trips cards show role/status/date metadata
+- [ ] Clicking a trip card opens the trip
+- [ ] Trip card buttons still work
 - [ ] Empty states are clear
+
+## Route safety and quick UX fixes
+
+- [ ] Custom currency can be used in trip settings and new trip form
+- [ ] `/Dasboard` does not render a trip or confusing page
+- [ ] Valid `/dashboard` still works
+- [ ] Demo trip still works
+- [ ] No packing preset configuration was added
+- [ ] Planner was not redesigned
 
 ## Mobile UX
 

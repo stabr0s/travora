@@ -10,6 +10,10 @@ function readField(formData: FormData, name: string) {
   return String(formData.get(name) ?? "").trim();
 }
 
+function normalizeCurrency(value: string) {
+  return (value.trim() || "EUR").toUpperCase();
+}
+
 export async function createTripAction(
   _previousState: CreateTripActionState,
   formData: FormData,
@@ -17,6 +21,7 @@ export async function createTripAction(
   const title = readField(formData, "title");
   const startDate = readField(formData, "startDate");
   const endDate = readField(formData, "endDate");
+  const currency = normalizeCurrency(readField(formData, "currency"));
 
   if (!title) {
     return { status: "error", message: "Enter a name for your trip." };
@@ -29,12 +34,16 @@ export async function createTripAction(
     };
   }
 
+  if (currency.length > 12) {
+    return { status: "error", message: "Currency should be 12 characters or fewer." };
+  }
+
   const result = await createTrip({
     title,
     destination: readField(formData, "destination"),
     startDate,
     endDate,
-    currency: readField(formData, "currency") || "EUR",
+    currency,
     description: readField(formData, "description"),
   });
 

@@ -64,13 +64,24 @@ export function NewTripScreen({ isSignedIn }: NewTripScreenProps) {
 
             <label className="text-sm font-medium text-foreground">
               Currency
-              <select className={fieldClassName} defaultValue="EUR" name="currency">
-                <option value="EUR">EUR — Euro</option>
-                <option value="USD">USD — US Dollar</option>
-                <option value="PLN">PLN — Polish Zloty</option>
-                <option value="GBP">GBP — British Pound</option>
-                <option value="JPY">JPY — Japanese Yen</option>
-              </select>
+              <input
+                className={fieldClassName}
+                defaultValue="EUR"
+                list="trip-currency-options"
+                maxLength={12}
+                name="currency"
+                placeholder="EUR"
+                type="text"
+              />
+              <datalist id="trip-currency-options">
+                <option value="EUR" />
+                <option value="USD" />
+                <option value="PLN" />
+                <option value="JOD" />
+                <option value="CNY" />
+                <option value="MAD" />
+              </datalist>
+              <span className="mt-1 block text-xs text-muted">Use a currency code like EUR, PLN, JOD, CNY, or MAD.</span>
             </label>
 
             <label className="text-sm font-medium text-foreground">

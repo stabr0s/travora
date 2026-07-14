@@ -3,7 +3,10 @@
 import { useMemo, useState, useTransition } from "react";
 
 import { Card } from "@/components/ui";
-import { deletePlaceAction } from "@/features/places/actions/place-actions";
+import {
+  deletePlaceAction,
+  updatePlaceStatusAction,
+} from "@/features/places/actions/place-actions";
 import { AddPlacePanel } from "@/features/places/components/AddPlacePanel";
 import { PlacesFilters } from "@/features/places/components/PlacesFilters";
 import { PlacesGrid } from "@/features/places/components/PlacesGrid";
@@ -15,7 +18,7 @@ import type {
   CreatePlaceActionState,
   PersistedPlace,
 } from "@/features/places/types/persisted-place";
-import type { Place, PlaceFilter } from "@/features/places/types/place";
+import type { Place, PlaceFilter, PlaceStatus } from "@/features/places/types/place";
 
 type PlacesSectionProps = {
   tripId: string;
@@ -74,6 +77,11 @@ export function PlacesSection({
     if (!window.confirm(`Delete “${place.name}”? This cannot be undone.`)) return;
     startTransition(async () => setMessage(await deletePlaceAction(tripId, place.id)));
   }
+
+  function handleStatusChange(place: Place, status: PlaceStatus) {
+    startTransition(async () => setMessage(await updatePlaceStatusAction(tripId, place.id, status)));
+  }
+
   const filteredPlaces = useMemo(
     () => filterPlaces(tripPlaces, activeFilter),
     [activeFilter, tripPlaces],
@@ -107,6 +115,7 @@ export function PlacesSection({
             isPending={isPending}
             onEditPlace={mode === "persisted" && canEditTrip ? handleEdit : undefined}
             onDeletePlace={mode === "persisted" && canEditTrip ? handleDelete : undefined}
+            onStatusChange={mode === "persisted" && canEditTrip ? handleStatusChange : undefined}
           />
         </>
       )}
