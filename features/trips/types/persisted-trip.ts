@@ -35,6 +35,13 @@ export type DeleteTripInput = {
   tripId: string;
 };
 
+export type DuplicateTripInput = {
+  tripId: string;
+  title: string;
+  startDate?: string;
+  endDate?: string;
+};
+
 export type TripsServiceErrorCode =
   | "AUTH_REQUIRED"
   | "LOAD_FAILED"

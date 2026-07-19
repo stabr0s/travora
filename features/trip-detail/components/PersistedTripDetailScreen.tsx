@@ -139,6 +139,7 @@ export function PersistedTripDetailScreen({
         <PersistedTripSettingsSection
           trip={trip}
           canManageSettings={canManageSettings}
+          canDuplicateTrip={canEditTrip}
         />
       ) : null}
     </div>

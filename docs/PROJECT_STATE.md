@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 48 — Product Cleanup & Beta Readiness
+Sprint 49 — Trip Duplicate / Templates MVP
 
 Status: IN PROGRESS
 
@@ -735,6 +735,16 @@ Status: IN PROGRESS
 - File attachments and calendar export are postponed
 - Realtime collaboration, AI planning, analytics, comments, payments, and advanced per-section privacy controls are postponed
 
+## Trip Duplicate / Templates MVP
+
+- Owner and editor users can duplicate persisted trips into their own account
+- Duplicated trips copy supported modules: Places, Planner, Reservations, Budget, and Packing
+- Planner items remap copied `place_id` values to copied Places
+- Members, invite links, public share settings/tokens, and personal packing states are not copied
+- Mock/demo trips and public share pages cannot be duplicated
+- Full template gallery/system remains future work
+- No migrations, dependencies, RLS changes, RPC changes, or auth architecture changes
+
 ## Manual Backend Test Checklist
 
 - Login and logout
@@ -815,21 +825,21 @@ Principles:
 
 ## Next Task
 
-Task #048 — Product Cleanup & Beta Readiness
+Task #049 — Trip Duplicate / Templates MVP
 
 Goal:
 
-Prepare Travora for beta usage by polishing product flow, copy, empty states, documentation, and QA notes.
+Let users reuse an existing persisted trip as a practical template by duplicating it.
 
 The task includes:
 
-- Production flow review
-- Empty state and helper copy polish
-- Mobile wrapping and spacing review
-- Dashboard getting started card
-- Beta known limitations documentation
-- QA checklist refresh
+- Duplicate trip action in Trip Settings
+- New copied trip owned by the current user
+- Copying Places, Planner, Reservations, Budget, and Packing
+- Planner Place reference remapping
+- Excluding members, invites, public share data, and personal packing states
+- Staged copy with cleanup if a later step fails
 
 Important:
 
-No migrations, dependencies, RLS/RPC changes, auth architecture changes, or large product features are added.
+No full templates system, migrations, dependencies, RLS/RPC changes, auth architecture changes, or public template features are added.

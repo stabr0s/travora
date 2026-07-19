@@ -74,6 +74,24 @@ coverage.
 ## Trips
 
 - [ ] Create trip
+- [ ] Owner can duplicate persisted trip
+- [ ] Editor can duplicate persisted trip into their own account
+- [ ] Viewer cannot duplicate persisted trip
+- [ ] Copied trip opens successfully
+- [ ] Copied trip is owned by the current user
+- [ ] Copied places belong to copied trip
+- [ ] Copied planner items reference copied places, not original places
+- [ ] Copied reservations belong to copied trip
+- [ ] Copied budget items belong to copied trip
+- [ ] Copied packing items belong to copied trip
+- [ ] Personal packing states are not copied
+- [ ] Public share is disabled on copied trip
+- [ ] Invite links are not copied
+- [ ] Members are not copied except current user owner membership
+- [ ] Original trip is unchanged after duplication
+- [ ] Mock/demo trips cannot be duplicated
+- [ ] Public share visitors cannot duplicate trips
+- [ ] No service-role/admin client is used for duplication
 - [ ] Edit trip settings
 - [ ] Delete test trip
 - [ ] Confirm deleted trip disappears from `/trips`

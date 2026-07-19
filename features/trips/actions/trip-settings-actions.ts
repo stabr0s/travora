@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
+import { duplicateTrip } from "@/features/trips/services/trip-duplicate-service";
 import { deleteTrip, updateTrip } from "@/features/trips/services/trip-settings-service";
 import type {
   TripSettingsActionState,
@@ -106,4 +107,30 @@ export async function deleteTripAction(
 
   revalidatePath("/trips");
   redirect("/trips");
+}
+
+export async function duplicateTripAction(
+  _previousState: TripSettingsActionState,
+  formData: FormData,
+): Promise<TripSettingsActionState> {
+  const tripId = readField(formData, "tripId");
+  const title = readField(formData, "title");
+  const startDate = readField(formData, "startDate");
+  const endDate = readField(formData, "endDate");
+
+  if (!isUuid(tripId)) return { status: "error", message: "This saved trip is not available." };
+  if (title.length < 2) return { status: "error", message: "Trip name must be at least 2 characters." };
+  if (!isValidDate(startDate) || !isValidDate(endDate)) {
+    return { status: "error", message: "Enter valid trip dates." };
+  }
+  if (startDate && endDate && endDate < startDate) {
+    return { status: "error", message: "End date must be the same as or later than start date." };
+  }
+
+  const result = await duplicateTrip({ tripId, title, startDate, endDate });
+  if (result.error) return { status: "error", message: result.error.message };
+
+  revalidatePath("/dashboard");
+  revalidatePath("/trips");
+  redirect(`/trips/${result.data.id}`);
 }

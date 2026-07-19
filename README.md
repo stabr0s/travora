@@ -5,7 +5,8 @@ Travora is a private travel planning MVP built with Next.js and Supabase.
 The current MVP supports persisted trips, places, planner items, reservations,
 budget expenses, packing items, personal packing progress, participants,
 manual invite links, public read-only share links, and print-friendly trip
-summaries. Demo trips remain available for safe exploration.
+summaries. Trips can also be duplicated to reuse a previous itinerary as a
+simple template. Demo trips remain available for safe exploration.
 
 Production: https://travora-theta.vercel.app
 
@@ -54,12 +55,14 @@ secret, database password, or any other secret in the browser.
 - Add existing Travora users directly or create manual email-bound invite links.
 - Share a public read-only trip page.
 - Print a clean trip summary from Trip Detail.
+- Duplicate a persisted trip as a starting point for a new one.
 
 ## Current beta limitations
 
 - Map rendering is postponed.
 - Public share pages are read-only.
 - Manual invite links exist, but Travora does not send emails automatically yet.
+- Full template galleries, public templates, and template categories are postponed.
 - File attachments and calendar export are postponed.
 - Realtime collaboration and AI planning are postponed.
 - Application routes are public; Supabase RLS is the backend enforcement layer.

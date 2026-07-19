@@ -1,5 +1,6 @@
 import { Card, SectionHeader } from "@/components/ui";
 import { DeleteTripDangerZone } from "@/features/trips/components/DeleteTripDangerZone";
+import { DuplicateTripCard } from "@/features/trips/components/DuplicateTripCard";
 import { PublicShareSettingsCard } from "@/features/trips/components/PublicShareSettingsCard";
 import { TripSettingsForm } from "@/features/trips/components/TripSettingsForm";
 import type { PersistedTrip } from "@/features/trips/types/persisted-trip";
@@ -7,11 +8,13 @@ import type { PersistedTrip } from "@/features/trips/types/persisted-trip";
 type PersistedTripSettingsSectionProps = {
   trip: PersistedTrip;
   canManageSettings: boolean;
+  canDuplicateTrip: boolean;
 };
 
 export function PersistedTripSettingsSection({
   trip,
   canManageSettings,
+  canDuplicateTrip,
 }: PersistedTripSettingsSectionProps) {
   return (
     <section className="space-y-6">
@@ -32,6 +35,7 @@ export function PersistedTripSettingsSection({
       ) : null}
 
       <TripSettingsForm trip={trip} canManageSettings={canManageSettings} />
+      {canDuplicateTrip ? <DuplicateTripCard trip={trip} /> : null}
       <PublicShareSettingsCard trip={trip} canManageSettings={canManageSettings} />
       {canManageSettings ? <DeleteTripDangerZone trip={trip} /> : null}
     </section>
