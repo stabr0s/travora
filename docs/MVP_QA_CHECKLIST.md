@@ -141,6 +141,7 @@ coverage.
 - [ ] Toggle packed state
 - [ ] Owner/editor can toggle packed state
 - [ ] Viewer cannot toggle packed state
+- [ ] Viewer cannot toggle packed state even by clicking around the row/checkbox area
 - [ ] Delete packing item
 
 ## Participants and permissions
@@ -196,12 +197,30 @@ coverage.
 - [ ] Participant emails are not printed
 - [ ] Mock trip summary route remains safe
 
+## Public read-only share links
+
+- [ ] Owner can enable public share link
+- [ ] Owner can copy public link
+- [ ] Public link opens without login
+- [ ] Public link is read-only
+- [ ] Public page has no app sidebar navigation
+- [ ] Public page has no edit/delete/toggle/settings controls
+- [ ] Public page does not expose participant emails
+- [ ] Public page does not expose user IDs, member IDs, owner IDs, or share token fields
+- [ ] Public page does not expose reservation reference/confirmation number
+- [ ] Owner can disable public link
+- [ ] Disabled link shows safe not-found behavior
+- [ ] Owner can regenerate public link
+- [ ] Old regenerated link no longer works
+- [ ] Editor/viewer cannot manage public link
+- [ ] Invalid token shows safe not-found behavior
+- [ ] No service-role/admin client is used
+
 ## Demo and postponed areas
 
 - [ ] Mock/demo trip `/trips/japan-2027` renders safely
 - [ ] Other mock/demo trips render safely
 - [ ] Map tab is hidden from Trip Detail
-- [ ] No public link UI is active
 - [ ] No email invitation claim appears
 
 ## Build and deployment readiness

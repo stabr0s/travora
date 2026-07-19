@@ -19,6 +19,8 @@ type SupabaseDiagnostic = {
   hint?: string;
 };
 
+type AuthContext = Awaited<ReturnType<typeof getAuthContext>>;
+
 function logPackingError(operation: string, error: SupabaseDiagnostic) {
   if (process.env.NODE_ENV !== "development") return;
   console.error(`[Packing] ${operation}`, {
@@ -33,6 +35,48 @@ async function getAuthContext() {
   const supabase = await createServerSupabaseClient();
   const { data } = await supabase.auth.getUser();
   return { supabase, user: data.user };
+}
+
+async function confirmCanEditTrip(
+  { supabase, user }: AuthContext,
+  tripId: string,
+): Promise<PackingServiceResult<true>> {
+  if (!user) return { data: null, error: { code: "AUTH_REQUIRED", message: "Sign in to update packing items." } };
+
+  const { data: trip, error: tripError } = await supabase
+    .from("trips")
+    .select("owner_id")
+    .eq("id", tripId)
+    .maybeSingle();
+
+  if (tripError) {
+    logPackingError("packing permission trip lookup failed", tripError);
+    return { data: null, error: { code: "LOAD_FAILED", message: "We couldn't confirm packing permissions." } };
+  }
+  if (!trip) return { data: null, error: { code: "INVALID_TRIP", message: "This saved trip is not available." } };
+  if (trip.owner_id === user.id) return { data: true, error: null };
+
+  const { data: member, error: memberError } = await supabase
+    .from("trip_members")
+    .select("role, status")
+    .eq("trip_id", tripId)
+    .eq("user_id", user.id)
+    .maybeSingle();
+
+  if (memberError) {
+    logPackingError("packing permission member lookup failed", memberError);
+    return { data: null, error: { code: "LOAD_FAILED", message: "We couldn't confirm packing permissions." } };
+  }
+
+  const canEdit = member?.status === "active" && (member.role === "owner" || member.role === "editor");
+  if (!canEdit) {
+    return {
+      data: null,
+      error: { code: "UPDATE_FAILED", message: "You have view-only access to this trip." },
+    };
+  }
+
+  return { data: true, error: null };
 }
 
 function itemValues(input: CreatePackingItemInput) {
@@ -152,6 +196,9 @@ export async function togglePackingItemPacked(
   if (!isUuid(input.id)) return { data: null, error: { code: "INVALID_RECORD", message: "This packing item is not available." } };
   const { supabase, user } = await getAuthContext();
   if (!user) return { data: null, error: { code: "AUTH_REQUIRED", message: "Sign in to update packing items." } };
+
+  const permission = await confirmCanEditTrip({ supabase, user }, input.tripId);
+  if (permission.error) return { data: null, error: permission.error };
 
   const { error } = await supabase.from("packing_items").update({ is_packed: input.isPacked })
     .eq("id", input.id).eq("trip_id", input.tripId);

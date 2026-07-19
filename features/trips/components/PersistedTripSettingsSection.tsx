@@ -1,5 +1,6 @@
 import { Card, SectionHeader } from "@/components/ui";
 import { DeleteTripDangerZone } from "@/features/trips/components/DeleteTripDangerZone";
+import { PublicShareSettingsCard } from "@/features/trips/components/PublicShareSettingsCard";
 import { TripSettingsForm } from "@/features/trips/components/TripSettingsForm";
 import type { PersistedTrip } from "@/features/trips/types/persisted-trip";
 
@@ -31,6 +32,7 @@ export function PersistedTripSettingsSection({
       ) : null}
 
       <TripSettingsForm trip={trip} canManageSettings={canManageSettings} />
+      <PublicShareSettingsCard trip={trip} canManageSettings={canManageSettings} />
       {canManageSettings ? <DeleteTripDangerZone trip={trip} /> : null}
     </section>
   );

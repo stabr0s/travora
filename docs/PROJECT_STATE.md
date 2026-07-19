@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 44 — Production QA Fixes
+Sprint 45 — Public Read-Only Share Link
 
 Status: IN PROGRESS
 
@@ -678,6 +678,20 @@ Status: IN PROGRESS
 - No dependencies were added
 - No migration was added
 
+## Public Read-Only Share Link
+
+- Owner can enable, disable, and regenerate a public read-only share link
+- Public share links use `/share/{token}` and do not require login
+- Public share page has no app sidebar, topbar, or mobile app navigation
+- Public share payload hides participant emails, internal user/member IDs, owner IDs, share tokens, and reservation references
+- Public access is scoped through `get_public_trip_share(target_token)` RPC only
+- No public select policies were added to core tables
+- Public share tokens are generated server-side and do not include trip or user IDs
+- Regenerating a link invalidates the old token immediately
+- Disabling a link makes the existing token stop resolving
+- Packing viewer toggle bug fixed with UI and server-side permission guards
+- Migration `005_public_trip_share.sql` added
+
 ## Manual Backend Test Checklist
 
 - Login and logout
@@ -758,20 +772,21 @@ Principles:
 
 ## Next Task
 
-Task #044 — Production QA Fixes
+Task #045 — Public Read-Only Share Link + Packing Viewer Fix
 
 Goal:
 
-Fix production QA issues without changing schema, auth architecture, or app design.
+Add a public read-only trip share link and harden packing viewer permissions.
 
 The task includes:
 
-- Logged-out `/trips` redirect to Japan demo
-- Scroll opened panels into view after user actions
-- Block viewer packing checkbox toggles
-- Mobile zoom and scroll polish
-- Sync linked Places to planned from Planner when safe
+- Owner-managed public share controls in Trip Settings
+- Public `/share/{token}` page without app navigation
+- Token-scoped public RPC payload
+- Sensitive participant/internal data hidden
+- Reservation references hidden
+- Viewer packing toggle blocked in UI and server service
 
 Important:
 
-Existing schema, RLS, auth behavior, mock trips, public sharing, map rendering, and dependencies remain unchanged.
+Auth behavior, mock trips, app navigation for persisted trips, map rendering, and dependencies remain unchanged.

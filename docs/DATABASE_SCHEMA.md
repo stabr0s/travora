@@ -12,6 +12,9 @@ Map-ready place data is extended by
 User-owned packing presets are extended by
 `supabase/migrations/004_packing_presets.sql`.
 
+Public read-only share links are extended by
+`supabase/migrations/005_public_trip_share.sql`.
+
 Travora supports two data modes. The four demo trip IDs continue reading local
 mock data, while persisted UUID trips use Supabase for Trips, Places, Planner,
 Reservations, Budget, Packing, and Participants. Map remains a visual
@@ -119,8 +122,8 @@ create invitation tokens.
 
 The Participants sharing UX uses these existing `trip_members`, `profiles`,
 and RPC foundations. Task 028 adds no schema or RLS changes: owners can add an
-existing registered user, while email invitations, invite tokens, and public
-share links remain unimplemented.
+existing registered user, while email invitations and invite tokens remain
+unimplemented.
 
 ## Packing presets
 
@@ -135,6 +138,34 @@ through their parent preset using `exists` checks against `packing_presets`.
 Preset items do not include quantity in this MVP. Applying a preset creates
 normal `packing_items` rows for a trip and still relies on existing
 `packing_items` RLS for trip edit permissions.
+
+## Public read-only share links
+
+Migration `005_public_trip_share.sql` adds public share metadata directly to
+`trips`:
+
+- `public_share_enabled`
+- `public_share_token`
+- `public_share_created_at`
+- `public_share_updated_at`
+
+The migration also adds a partial unique index on non-null share tokens, a
+lookup index for enabled tokens, and a minimum token-length constraint.
+
+Public data access is intentionally narrow. The migration does not add public
+`select` policies to `trips`, `places`, `planner_items`, `reservations`,
+`budget_expenses`, `packing_items`, `profiles`, or `trip_members`.
+
+Instead, `public.get_public_trip_share(target_token)` is a small
+`stable security definer` RPC with `search_path = public`. It returns a JSON
+payload only when the token matches an enabled trip share. Invalid, disabled,
+or null tokens return no public trip data. Execute permission is granted to
+`anon` and `authenticated`, while direct table access remains governed by
+existing RLS.
+
+The public payload omits owner IDs, user IDs, member IDs, participant emails,
+share tokens, auth/session data, and reservation reference numbers. It is meant
+only for read-only public trip previews.
 
 ## Applying the migration manually
 
@@ -157,6 +188,10 @@ After reviewing it, apply migration `004` to add user-owned packing presets.
 Migration `004` adds new tables and RLS policies but does not change existing
 packing item schema.
 
+After reviewing it, apply migration `005` to add public read-only share link
+metadata and the token-scoped public share RPC. Migration `005` does not add
+public select policies to core tables.
+
 ## Current limitations
 
 - The migration has not been applied automatically by this repository.
@@ -167,6 +202,8 @@ packing item schema.
 - Trip deletion is permanent in the current MVP; there is no soft delete,
   archive, or restore flow yet.
 - Application routes are not protected.
+- Public share links are bearer links and read-only; there is no expiry,
+  password protection, section-level visibility, or analytics yet.
 - Storage, realtime collaboration, and file uploads are not configured.
 - The TypeScript `Database` type is still maintained manually.
 

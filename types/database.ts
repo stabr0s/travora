@@ -1,3 +1,11 @@
+export type Json =
+  | string
+  | number
+  | boolean
+  | null
+  | { [key: string]: Json | undefined }
+  | Json[];
+
 // TODO: Replace these manually maintained table types with generated Supabase
 // types once the schema stabilizes and the generation workflow is configured.
 export type Database = {
@@ -35,6 +43,10 @@ export type Database = {
           status: "planning" | "upcoming" | "archived" | null;
           description: string | null;
           currency: string | null;
+          public_share_enabled: boolean;
+          public_share_token: string | null;
+          public_share_created_at: string | null;
+          public_share_updated_at: string | null;
           created_at: string | null;
           updated_at: string | null;
         };
@@ -49,6 +61,10 @@ export type Database = {
           status?: "planning" | "upcoming" | "archived" | null;
           description?: string | null;
           currency?: string | null;
+          public_share_enabled?: boolean;
+          public_share_token?: string | null;
+          public_share_created_at?: string | null;
+          public_share_updated_at?: string | null;
           created_at?: string | null;
           updated_at?: string | null;
         };
@@ -412,6 +428,10 @@ export type Database = {
           target_status: string;
         };
         Returns: string;
+      };
+      get_public_trip_share: {
+        Args: { target_token: string };
+        Returns: Json | null;
       };
     };
     Enums: Record<string, never>;

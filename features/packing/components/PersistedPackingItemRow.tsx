@@ -36,7 +36,7 @@ export function PersistedPackingItemRow({
       <input
         type="checkbox"
         checked={item.is_packed ?? false}
-        disabled={isPending || !canEditTrip}
+        disabled={isPending || !canToggle}
         onChange={() => {
           if (!canToggle) return;
           onToggle?.(item);

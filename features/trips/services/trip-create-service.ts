@@ -117,6 +117,10 @@ export async function createTrip(
     status: "planning",
     description: input.description || null,
     currency: input.currency || "EUR",
+    public_share_enabled: false,
+    public_share_token: null,
+    public_share_created_at: null,
+    public_share_updated_at: null,
     created_at: null,
     updated_at: null,
   };
