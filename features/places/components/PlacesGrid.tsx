@@ -39,7 +39,7 @@ export function PlacesGrid({
         <EmptyState
           icon={MapPinOff}
           title="No places in this view"
-          description="Try another filter or add the first place you want to remember."
+          description="Places keep restaurants, sights, hotels, and ideas in one list. Add the first place or try another filter."
           className="min-h-[24rem] md:col-span-2"
           action={onAddPlace ? (
             <Button size="md" onClick={onAddPlace}>

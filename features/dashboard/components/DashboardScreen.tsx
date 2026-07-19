@@ -3,6 +3,7 @@ import { Plane, Plus } from "lucide-react";
 
 import { EmptyState, SectionHeader } from "@/components/ui";
 import { DashboardHero } from "@/features/dashboard/components/DashboardHero";
+import { GettingStartedCard } from "@/features/dashboard/components/GettingStartedCard";
 import { NextTripCard } from "@/features/dashboard/components/NextTripCard";
 import { QuickActions } from "@/features/dashboard/components/QuickActions";
 import { RecentPlaces } from "@/features/dashboard/components/RecentPlaces";
@@ -61,7 +62,10 @@ export function DashboardScreen({ data = mockDashboardData }: DashboardScreenPro
           )}
         </div>
         <div className="xl:col-span-2">
-          <QuickActions actions={data.quickActions} />
+          <div className="grid gap-6">
+            <QuickActions actions={data.quickActions} />
+            <GettingStartedCard />
+          </div>
         </div>
       </div>
 

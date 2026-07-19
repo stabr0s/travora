@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 47 — Email Invite Links
+Sprint 48 — Product Cleanup & Beta Readiness
 
 Status: IN PROGRESS
 
@@ -717,6 +717,24 @@ Status: IN PROGRESS
 - Migration `007_trip_invites.sql` added
 - RPC security model added with `get_trip_invite_by_token` and `accept_trip_invite`
 
+## Product Cleanup & Beta Readiness
+
+- Production flows reviewed across landing, demo, auth, dashboard, trips, modules, sharing, invites, packing progress, and print summary
+- Empty states and helper copy polished where the next step was unclear
+- Mobile polish reviewed for wrapping, button stacking, and dense helper copy
+- Beta known limitations documented clearly as planned future work
+- Getting started dashboard card added
+- No migrations, dependencies, RLS changes, RPC changes, or auth architecture changes
+- No large product feature added
+
+### Beta known limitations and backlog
+
+- Map rendering is postponed; map-ready place fields remain available
+- Public share pages are read-only, including packing
+- Manual email-bound invite links exist, but automatic email sending is postponed
+- File attachments and calendar export are postponed
+- Realtime collaboration, AI planning, analytics, comments, payments, and advanced per-section privacy controls are postponed
+
 ## Manual Backend Test Checklist
 
 - Login and logout
@@ -797,21 +815,21 @@ Principles:
 
 ## Next Task
 
-Task #047 — Email Invite Links for Trip Members
+Task #048 — Product Cleanup & Beta Readiness
 
 Goal:
 
-Allow trip owners to invite people by email using copyable invite links.
+Prepare Travora for beta usage by polishing product flow, copy, empty states, documentation, and QA notes.
 
 The task includes:
 
-- New `trip_invites` table
-- Owner-created invite links for viewer/editor access
-- Public `/invite/{token}` route without app navigation
-- Email-bound invite acceptance after login/register
-- Owner revoke flow for pending invites
-- Safe invite RPCs
+- Production flow review
+- Empty state and helper copy polish
+- Mobile wrapping and spacing review
+- Dashboard getting started card
+- Beta known limitations documentation
+- QA checklist refresh
 
 Important:
 
-No automatic email sending, external email provider, realtime, public editing, service-role/admin client, or new dependencies are added.
+No migrations, dependencies, RLS/RPC changes, auth architecture changes, or large product features are added.

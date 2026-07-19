@@ -100,7 +100,7 @@ export function PersistedBudgetSection({
         <EmptyState
           icon={WalletCards}
           title="No expenses yet"
-          description="Add the first expense to start tracking trip costs."
+          description="Track flights, stays, food, and shared costs here. Add the first expense when money starts moving."
           action={canEditTrip ? <Button onClick={openAddPanel}>Add first expense</Button> : undefined}
         />
       ) : (

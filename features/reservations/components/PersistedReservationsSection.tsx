@@ -76,7 +76,7 @@ export function PersistedReservationsSection({
         <EmptyState
           icon={ReceiptText}
           title="No reservations yet"
-          description="Save the first flight, stay, ticket, or transport booking for this trip."
+          description="Keep flights, stays, tickets, and transport bookings together. Add the first reservation when you book something."
           action={canEditTrip ? <Button onClick={openAddPanel}>Add first reservation</Button> : undefined}
         />
       ) : (

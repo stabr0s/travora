@@ -132,7 +132,7 @@ export function PersistedPackingSection({
         <EmptyState
           icon={Luggage}
           title="No packing items yet"
-          description="Add the first item to start preparing this trip."
+          description="Build a shared checklist, then each traveler can track their own packed progress."
           action={canEditTrip ? <Button onClick={openAddPanel}>Add first item</Button> : undefined}
         />
       ) : (
@@ -165,7 +165,7 @@ export function PersistedPackingSection({
               ))}
             </div>
           ) : (
-            <EmptyState icon={Luggage} title="No items in this category" description="Choose another category to see your packing items." className="min-h-80" />
+            <EmptyState icon={Luggage} title="No items in this category" description="Choose another category, or add an item if this section needs something." className="min-h-80" />
           )}
         </>
       )}

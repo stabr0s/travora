@@ -22,6 +22,22 @@ Manually checked after first Vercel MVP deploy:
 This notes the first manual production smoke test, not exhaustive regression
 coverage.
 
+## Beta readiness sweep
+
+- [ ] Landing → demo → register/login flow is clear
+- [ ] Register/login → dashboard flow is clear
+- [ ] Create trip flow has clear copy and safe empty states
+- [ ] Dashboard getting started card is visible and helpful
+- [ ] Places empty state explains what to add next
+- [ ] Planner empty state explains quick-add and saved Places
+- [ ] Reservations empty state explains what belongs there
+- [ ] Budget empty state explains how to start tracking costs
+- [ ] Packing empty state explains shared checklist and personal progress
+- [ ] Participants and invite empty states explain access next steps
+- [ ] Public share invalid/disabled state is safe
+- [ ] Invite invalid/revoked/wrong-email states are clear
+- [ ] Known beta limitations are documented without sounding like app errors
+
 ## Auth
 
 - [ ] Register account
@@ -241,6 +257,10 @@ coverage.
 - [ ] Other mock/demo trips render safely
 - [ ] Map tab is hidden from Trip Detail
 - [ ] No automatic email-sending claim appears
+- [ ] Public share is clearly read-only
+- [ ] Public share packing is clearly read-only
+- [ ] Attachments, calendar export, realtime, and AI are documented as postponed
+- [ ] Known limitations are listed in README/project docs
 
 ## Build and deployment readiness
 

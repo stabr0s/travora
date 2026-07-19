@@ -59,7 +59,7 @@ function PublicSection({
 function EmptyCopy({ label }: { label: string }) {
   return (
     <Card padding="sm" className="text-sm text-muted">
-      No {label} shared yet.
+      No {label} are included in this read-only share yet.
     </Card>
   );
 }

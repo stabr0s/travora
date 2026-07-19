@@ -135,7 +135,9 @@ export function TripInviteManager({ tripId, invites }: TripInviteManagerProps) {
             ))}
           </div>
         ) : (
-          <p className="rounded-xl bg-surface px-4 py-3 text-sm text-muted">No pending invite links yet.</p>
+          <p className="rounded-xl bg-surface px-4 py-3 text-sm text-muted">
+            No pending invite links yet. Create one when someone needs access but is not ready to be added directly.
+          </p>
         )}
       </div>
     </Card>
