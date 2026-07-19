@@ -1,3 +1,5 @@
+import { redirect } from "next/navigation";
+
 import { TripsScreen } from "@/features/trips";
 import { mockTrips } from "@/features/trips/data/mock-trips";
 import { mapPersistedTripToTrip } from "@/features/trips/data/trip-mappers";
@@ -15,10 +17,14 @@ export default async function TripsPage() {
     );
   }
 
+  if (result.error.code === "AUTH_REQUIRED") {
+    redirect("/trips/japan-2027");
+  }
+
   return (
     <TripsScreen
       trips={mockTrips.map((trip) => ({ ...trip, isDemo: true }))}
-      mode={result.error.code === "AUTH_REQUIRED" ? "demo" : "fallback"}
+      mode="fallback"
     />
   );
 }

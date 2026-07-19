@@ -10,6 +10,7 @@ import { ParticipantsStats } from "@/features/participants/components/Participan
 import { PersistedInviteParticipantPanel } from "@/features/participants/components/PersistedInviteParticipantPanel";
 import { PersistedParticipantCard } from "@/features/participants/components/PersistedParticipantCard";
 import { RolesOverviewCard } from "@/features/participants/components/RolesOverviewCard";
+import { useScrollIntoViewOnOpen } from "@/hooks/useScrollIntoViewOnOpen";
 import type {
   ParticipantActionState,
   PersistedParticipant,
@@ -51,6 +52,7 @@ export function PersistedParticipantsSection({
   const [editingParticipant, setEditingParticipant] = useState<PersistedParticipant | null>(null);
   const [message, setMessage] = useState<ParticipantActionState | null>(null);
   const [isPending, startTransition] = useTransition();
+  const panelRef = useScrollIntoViewOnOpen<HTMLDivElement>(isPanelOpen);
   const canManage = canManageParticipants;
   const statsParticipants = participants.map(toParticipant);
 
@@ -80,12 +82,14 @@ export function PersistedParticipantsSection({
           : "Only the trip owner can manage access. You can still see everyone who has access to this trip."}
       </Card>
       {isPanelOpen && canManage ? (
-        <PersistedInviteParticipantPanel
-          key={editingParticipant?.memberId || "new"}
-          tripId={tripId}
-          participant={editingParticipant}
-          onClose={() => setIsPanelOpen(false)}
-        />
+        <div ref={panelRef}>
+          <PersistedInviteParticipantPanel
+            key={editingParticipant?.memberId || "new"}
+            tripId={tripId}
+            participant={editingParticipant}
+            onClose={() => setIsPanelOpen(false)}
+          />
+        </div>
       ) : null}
       {loadError ? <Card padding="sm" className="text-sm text-error">{loadError}</Card> : !participants.length ? (
         <EmptyState

@@ -11,6 +11,7 @@ import {
 import { addPackingPresetAction } from "@/features/packing/actions/packing-actions";
 import { PackingPresetForm } from "@/features/packing/components/PackingPresetForm";
 import { packingPresets } from "@/features/packing/data/packing-presets";
+import { useScrollIntoViewOnOpen } from "@/hooks/useScrollIntoViewOnOpen";
 import type {
   PackingPresetActionState,
   PackingPresetWithItems,
@@ -29,6 +30,7 @@ export function PackingPresetManager({
   const [editingPreset, setEditingPreset] = useState<PackingPresetWithItems | null>(null);
   const [message, setMessage] = useState<PackingPresetActionState | null>(null);
   const [isPending, startTransition] = useTransition();
+  const formRef = useScrollIntoViewOnOpen<HTMLDivElement>(isFormOpen);
 
   function openCreateForm() {
     setEditingPreset(null);
@@ -143,12 +145,14 @@ export function PackingPresetManager({
       ) : null}
 
       {isFormOpen ? (
-        <PackingPresetForm
-          key={editingPreset?.id || "new-preset"}
-          tripId={tripId}
-          preset={editingPreset}
-          onClose={() => setIsFormOpen(false)}
-        />
+        <div ref={formRef}>
+          <PackingPresetForm
+            key={editingPreset?.id || "new-preset"}
+            tripId={tripId}
+            preset={editingPreset}
+            onClose={() => setIsFormOpen(false)}
+          />
+        </div>
       ) : null}
     </div>
   );

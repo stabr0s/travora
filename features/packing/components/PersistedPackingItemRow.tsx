@@ -29,6 +29,7 @@ export function PersistedPackingItemRow({
 }: PersistedPackingItemRowProps) {
   const priority = priorityDetails[item.priority || "recommended"];
   const isShared = item.is_shared ?? true;
+  const canToggle = canEditTrip && Boolean(onToggle);
 
   return (
     <div className="flex items-start gap-3 px-4 py-4 sm:px-5">
@@ -36,9 +37,16 @@ export function PersistedPackingItemRow({
         type="checkbox"
         checked={item.is_packed ?? false}
         disabled={isPending || !canEditTrip}
-        onChange={() => onToggle?.(item)}
+        onChange={() => {
+          if (!canToggle) return;
+          onToggle?.(item);
+        }}
         aria-label={`Mark ${item.name} as ${item.is_packed ? "not packed" : "packed"}`}
-        className="mt-0.5 size-5 shrink-0 cursor-pointer accent-primary disabled:cursor-not-allowed"
+        aria-disabled={!canToggle}
+        className={cn(
+          "mt-0.5 size-5 shrink-0 accent-primary disabled:cursor-not-allowed",
+          canToggle ? "cursor-pointer" : "cursor-not-allowed",
+        )}
       />
       <div className="min-w-0 flex-1">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">

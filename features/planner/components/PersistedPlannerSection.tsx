@@ -10,6 +10,7 @@ import { PersistedAddPlanItemPanel } from "@/features/planner/components/Persist
 import { PersistedCopyDayPanel } from "@/features/planner/components/PersistedCopyDayPanel";
 import { PersistedPlanItemCard } from "@/features/planner/components/PersistedPlanItemCard";
 import { PersistedQuickAddPlanItem } from "@/features/planner/components/PersistedQuickAddPlanItem";
+import { useScrollIntoViewOnOpen } from "@/hooks/useScrollIntoViewOnOpen";
 import type {
   CreatePlannerItemActionState,
   PersistedPlannerItem,
@@ -65,6 +66,7 @@ export function PersistedPlannerSection({
   const [editingItem, setEditingItem] = useState<PersistedPlannerItem | null>(null);
   const [message, setMessage] = useState<CreatePlannerItemActionState | null>(null);
   const [isPending, startTransition] = useTransition();
+  const panelRef = useScrollIntoViewOnOpen<HTMLDivElement>(isAddPanelOpen);
   const groups = useMemo(() => {
     const grouped = new Map<string, PersistedPlannerItem[]>();
 
@@ -131,13 +133,15 @@ export function PersistedPlannerSection({
       />
 
       {isAddPanelOpen && canEditTrip ? (
-        <PersistedAddPlanItemPanel
-          key={editingItem?.id || "new"}
-          tripId={tripId}
-          item={editingItem}
-          places={places}
-          onClose={() => setIsAddPanelOpen(false)}
-        />
+        <div ref={panelRef}>
+          <PersistedAddPlanItemPanel
+            key={editingItem?.id || "new"}
+            tripId={tripId}
+            item={editingItem}
+            places={places}
+            onClose={() => setIsAddPanelOpen(false)}
+          />
+        </div>
       ) : null}
 
       {canEditTrip ? <PersistedCopyDayPanel tripId={tripId} days={copyableDays} /> : null}

@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 43 — Planner Usability Polish
+Sprint 44 — Production QA Fixes
 
 Status: IN PROGRESS
 
@@ -344,6 +344,13 @@ Status: IN PROGRESS
 - Migration `004_packing_presets.sql` adds preset tables and owner-only RLS
 - No service-role/admin client, public preset marketplace, import/export, or new dependencies added
 
+### Sprint 43 — Planner Usability Polish
+- Planner item creation is faster through inline quick-add on dated plan groups
+- Days can be copied to another target date without overwriting target-day items
+- Plan items can move up or down within the same day using existing `order_index`
+- Planner empty states explain the first useful step more clearly
+- No drag and drop, full planner redesign, new dependencies, or migration added
+
 ## MVP Mock Modules Completed
 
 - Dashboard
@@ -659,6 +666,18 @@ Status: IN PROGRESS
 - No new dependencies were added
 - No migration was needed; existing `planner_items` fields are used
 
+## Production QA Fixes
+
+- Logged-out `/trips` redirects to the public Japan demo trip
+- Opened add/edit/manage panels scroll into view after user action
+- Viewers cannot toggle persisted packing packed state
+- Mobile form controls avoid iOS auto-zoom with 16px input/select/textarea text
+- Planner-linked places can auto-change to `planned`
+- Visited and rejected places are not overwritten by planner sync
+- No large redesign was added
+- No dependencies were added
+- No migration was added
+
 ## Manual Backend Test Checklist
 
 - Login and logout
@@ -739,18 +758,19 @@ Principles:
 
 ## Next Task
 
-Task #043 — Planner Usability Polish
+Task #044 — Production QA Fixes
 
 Goal:
 
-Improve everyday usability of the persisted Planner tab without a full redesign.
+Fix production QA issues without changing schema, auth architecture, or app design.
 
 The task includes:
 
-- Faster inline planner item creation
-- Copying a planned day to another date
-- Moving items up or down within one day
-- Clearer Planner empty states
+- Logged-out `/trips` redirect to Japan demo
+- Scroll opened panels into view after user actions
+- Block viewer packing checkbox toggles
+- Mobile zoom and scroll polish
+- Sync linked Places to planned from Planner when safe
 
 Important:
 

@@ -189,6 +189,7 @@ export async function updatePlannerItem(
 
   const payload: Database["public"]["Tables"]["planner_items"]["Update"] = {
     title: input.title.trim(),
+    place_id: input.placeId || null,
     description: input.description || null,
     date: input.date || null,
     start_time: input.startTime || null,

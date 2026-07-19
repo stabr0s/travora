@@ -15,6 +15,7 @@ import { PackingStats } from "@/features/packing/components/PackingStats";
 import { PersistedAddPackingItemPanel } from "@/features/packing/components/PersistedAddPackingItemPanel";
 import { PersistedPackingItemRow } from "@/features/packing/components/PersistedPackingItemRow";
 import { PackingPresetManager } from "@/features/packing/components/PackingPresetManager";
+import { useScrollIntoViewOnOpen } from "@/hooks/useScrollIntoViewOnOpen";
 import type {
   PackingActionState,
   PersistedPackingItem,
@@ -73,6 +74,7 @@ export function PersistedPackingSection({
   const [editingItem, setEditingItem] = useState<PersistedPackingItem | null>(null);
   const [message, setMessage] = useState<PackingActionState | null>(null);
   const [isPending, startTransition] = useTransition();
+  const panelRef = useScrollIntoViewOnOpen<HTMLDivElement>(isPanelOpen);
   const uiItems = useMemo(() => items.map(toPackingItem), [items]);
   const filteredItems = activeCategory === "all"
     ? items
@@ -102,12 +104,14 @@ export function PersistedPackingSection({
     <section className="space-y-6">
       <PackingHeader onAddItem={canEditTrip ? openAddPanel : undefined} />
       {isPanelOpen && canEditTrip ? (
-        <PersistedAddPackingItemPanel
-          key={editingItem?.id || "new"}
-          tripId={tripId}
-          item={editingItem}
-          onClose={() => setIsPanelOpen(false)}
-        />
+        <div ref={panelRef}>
+          <PersistedAddPackingItemPanel
+            key={editingItem?.id || "new"}
+            tripId={tripId}
+            item={editingItem}
+            onClose={() => setIsPanelOpen(false)}
+          />
+        </div>
       ) : null}
       {canEditTrip ? <PackingPresetManager tripId={tripId} presets={customPresets} /> : null}
       {message?.message ? <Card padding="sm" className={message.status === "error" ? "text-sm text-error" : "text-sm text-success"}>{message.message}</Card> : null}

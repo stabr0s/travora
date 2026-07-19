@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 
+import { markPlacePlannedIfSafe } from "@/features/places/services/place-status-sync-service";
 import {
   createPlannerItem,
   deletePlannerItem,
@@ -78,6 +79,17 @@ export async function createPlannerItemAction(
     return { status: "error", message: result.error.message };
   }
 
+  if (placeId) {
+    const placeResult = await markPlacePlannedIfSafe({ tripId, id: placeId });
+    if (placeResult.error) {
+      revalidatePath(`/trips/${tripId}`);
+      return {
+        status: "success",
+        message: "Plan item saved. Linked place status could not be updated.",
+      };
+    }
+  }
+
   revalidatePath(`/trips/${tripId}`);
   return { status: "success", message: "Plan item saved to this trip." };
 }
@@ -92,6 +104,7 @@ export async function updatePlannerItemAction(
   const date = readField(formData, "date");
   const startTime = readField(formData, "startTime");
   const endTime = readField(formData, "endTime");
+  const placeId = readField(formData, "placeId");
   const requestedStatus = readField(formData, "status") as PlannerItemStatus;
   const parsedOrderIndex = Number.parseInt(readField(formData, "orderIndex") || "0", 10);
 
@@ -105,10 +118,14 @@ export async function updatePlannerItemAction(
   if (startTime && endTime && endTime < startTime) {
     return { status: "error", message: "End time cannot be earlier than start time." };
   }
+  if (placeId && !isUuid(placeId)) {
+    return { status: "error", message: "Choose a valid saved place or leave it empty." };
+  }
 
   const result = await updatePlannerItem({
     id,
     tripId,
+    placeId: placeId || undefined,
     title,
     description: readField(formData, "description"),
     date,
@@ -120,6 +137,16 @@ export async function updatePlannerItemAction(
   });
 
   if (result.error) return { status: "error", message: result.error.message };
+  if (placeId) {
+    const placeResult = await markPlacePlannedIfSafe({ tripId, id: placeId });
+    if (placeResult.error) {
+      revalidatePath(`/trips/${tripId}`);
+      return {
+        status: "success",
+        message: "Plan item updated. Linked place status could not be updated.",
+      };
+    }
+  }
   revalidatePath(`/trips/${tripId}`);
   return { status: "success", message: "Plan item updated." };
 }

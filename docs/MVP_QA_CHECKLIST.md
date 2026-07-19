@@ -80,6 +80,9 @@ coverage.
 - [ ] Viewer cannot quick-add planner item
 - [ ] Create planner item from saved Place quick-add
 - [ ] Confirm planner quick-add stores `place_id`
+- [ ] Adding planner item with `place_id` marks linked Place as planned
+- [ ] Editing planner item to add/change Place marks the new Place as planned
+- [ ] Visited/rejected Place status is not overwritten by Planner linking
 - [ ] Confirm planner item can still be created manually without Place
 - [ ] Owner/editor can copy day
 - [ ] Viewer cannot copy day
@@ -136,6 +139,8 @@ coverage.
 - [ ] Create packing item
 - [ ] Edit packing item
 - [ ] Toggle packed state
+- [ ] Owner/editor can toggle packed state
+- [ ] Viewer cannot toggle packed state
 - [ ] Delete packing item
 
 ## Participants and permissions
@@ -151,7 +156,9 @@ coverage.
 
 - [ ] Dashboard shows persisted trip summary
 - [ ] Logged-out `/dashboard` redirects to `/trips/japan-2027`
+- [ ] Logged-out `/trips` redirects to `/trips/japan-2027`
 - [ ] Signed-in `/dashboard` still works
+- [ ] Signed-in `/trips` still works
 - [ ] Trips list shows persisted trips
 - [ ] Trips cards show role/status/date metadata
 - [ ] Clicking a trip card opens the trip
@@ -173,6 +180,8 @@ coverage.
 - [ ] Trips list cards stack and wrap correctly on mobile
 - [ ] Trip Detail tabs scroll horizontally and keep active tab clear
 - [ ] Add/Edit forms are usable on mobile
+- [ ] Add/Edit panels scroll into view after user action
+- [ ] Mobile inputs do not auto-zoom on focus
 - [ ] No horizontal overflow on key routes
 - [ ] Key actions are tappable on mobile
 - [ ] Destructive actions remain clearly separated on mobile

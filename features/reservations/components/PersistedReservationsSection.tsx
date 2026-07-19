@@ -9,6 +9,7 @@ import { PersistedAddReservationPanel } from "@/features/reservations/components
 import { PersistedReservationCard } from "@/features/reservations/components/PersistedReservationCard";
 import { ReservationsFilters } from "@/features/reservations/components/ReservationsFilters";
 import { ReservationsHeader } from "@/features/reservations/components/ReservationsHeader";
+import { useScrollIntoViewOnOpen } from "@/hooks/useScrollIntoViewOnOpen";
 import type { CreateReservationActionState, PersistedReservation } from "@/features/reservations/types/persisted-reservation";
 import type { ReservationFilter } from "@/features/reservations/types/reservation";
 
@@ -41,6 +42,7 @@ export function PersistedReservationsSection({
   const [editingReservation, setEditingReservation] = useState<PersistedReservation | null>(null);
   const [message, setMessage] = useState<CreateReservationActionState | null>(null);
   const [isPending, startTransition] = useTransition();
+  const panelRef = useScrollIntoViewOnOpen<HTMLDivElement>(isAddPanelOpen);
   const filteredReservations = useMemo(
     () => filterReservations(reservations, activeFilter),
     [activeFilter, reservations],
@@ -60,13 +62,15 @@ export function PersistedReservationsSection({
     <section className="space-y-6">
       <ReservationsHeader onAddReservation={canEditTrip ? openAddPanel : undefined} />
       {isAddPanelOpen && canEditTrip ? (
-        <PersistedAddReservationPanel
-          key={editingReservation?.id || "new"}
-          tripId={tripId}
-          reservation={editingReservation}
-          tripCurrency={tripCurrency}
-          onClose={() => setIsAddPanelOpen(false)}
-        />
+        <div ref={panelRef}>
+          <PersistedAddReservationPanel
+            key={editingReservation?.id || "new"}
+            tripId={tripId}
+            reservation={editingReservation}
+            tripCurrency={tripCurrency}
+            onClose={() => setIsAddPanelOpen(false)}
+          />
+        </div>
       ) : null}
       {loadError ? <Card padding="sm" className="text-sm text-error">{loadError}</Card> : !reservations.length ? (
         <EmptyState

@@ -79,7 +79,7 @@ export function PersistedAddPlanItemPanel({
         <input type="hidden" name="tripId" value={tripId} />
         {item ? <input type="hidden" name="recordId" value={item.id} /> : null}
         {item ? <input type="hidden" name="orderIndex" value={item.order_index ?? 0} /> : null}
-        {!isEditing ? <input type="hidden" name="placeId" value={selectedPlaceId} /> : null}
+        <input type="hidden" name="placeId" value={selectedPlaceId} />
 
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-start gap-3">
@@ -97,7 +97,7 @@ export function PersistedAddPlanItemPanel({
         </div>
 
         <div className="mt-6 grid gap-5 sm:grid-cols-2">
-          {!isEditing && sortedPlaces.length ? (
+          {sortedPlaces.length ? (
             <label className="text-sm font-medium text-foreground sm:col-span-2">
               Use saved place
               <select
@@ -113,7 +113,7 @@ export function PersistedAddPlanItemPanel({
                 ))}
               </select>
               <span className="mt-1 block text-xs text-muted">
-                Use a saved place to fill this faster.
+                Use a saved place to fill this faster or link this item to Places.
               </span>
             </label>
           ) : null}

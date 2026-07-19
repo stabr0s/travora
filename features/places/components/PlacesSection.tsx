@@ -14,6 +14,7 @@ import { PlacesHeader } from "@/features/places/components/PlacesHeader";
 import { PlacesStats } from "@/features/places/components/PlacesStats";
 import { getMockPlacesByTripId } from "@/features/places/data/mock-places";
 import { mapPersistedPlaceToPlace } from "@/features/places/data/place-mappers";
+import { useScrollIntoViewOnOpen } from "@/hooks/useScrollIntoViewOnOpen";
 import type {
   CreatePlaceActionState,
   PersistedPlace,
@@ -57,6 +58,7 @@ export function PlacesSection({
   const [editingPlace, setEditingPlace] = useState<PersistedPlace | null>(null);
   const [message, setMessage] = useState<CreatePlaceActionState | null>(null);
   const [isPending, startTransition] = useTransition();
+  const panelRef = useScrollIntoViewOnOpen<HTMLDivElement>(isAddPanelOpen);
   const canMutate = mode === "mock" || canEditTrip;
   const tripPlaces = useMemo(
     () => mode === "persisted" ? places.map(mapPersistedPlaceToPlace) : getMockPlacesByTripId(tripId),
@@ -92,14 +94,16 @@ export function PlacesSection({
       <PlacesHeader onAddPlace={canMutate ? openAddPanel : undefined} />
 
       {isAddPanelOpen && canMutate ? (
-        <AddPlacePanel
-          key={editingPlace?.id || "new"}
-          tripId={tripId}
-          mode={mode}
-          place={editingPlace}
-          defaultCountry={defaultCountry}
-          onClose={() => setIsAddPanelOpen(false)}
-        />
+        <div ref={panelRef}>
+          <AddPlacePanel
+            key={editingPlace?.id || "new"}
+            tripId={tripId}
+            mode={mode}
+            place={editingPlace}
+            defaultCountry={defaultCountry}
+            onClose={() => setIsAddPanelOpen(false)}
+          />
+        </div>
       ) : null}
 
       {loadError ? (

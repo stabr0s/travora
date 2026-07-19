@@ -10,6 +10,7 @@ import { PersistedAddExpensePanel } from "@/features/budget/components/Persisted
 import { PersistedBudgetCategoryBreakdown } from "@/features/budget/components/PersistedBudgetCategoryBreakdown";
 import { PersistedBudgetExpenseCard } from "@/features/budget/components/PersistedBudgetExpenseCard";
 import { PersistedBudgetStats } from "@/features/budget/components/PersistedBudgetStats";
+import { useScrollIntoViewOnOpen } from "@/hooks/useScrollIntoViewOnOpen";
 import type {
   CategoryTotal,
   CreateBudgetExpenseActionState,
@@ -68,6 +69,7 @@ export function PersistedBudgetSection({
   const [editingExpense, setEditingExpense] = useState<PersistedBudgetExpense | null>(null);
   const [message, setMessage] = useState<CreateBudgetExpenseActionState | null>(null);
   const [isPending, startTransition] = useTransition();
+  const panelRef = useScrollIntoViewOnOpen<HTMLDivElement>(isAddPanelOpen);
   const summaries = useMemo(() => calculateSummaries(expenses), [expenses]);
 
   function openAddPanel() {
@@ -84,13 +86,15 @@ export function PersistedBudgetSection({
     <section className="space-y-6">
       <BudgetHeader onAddExpense={canEditTrip ? openAddPanel : undefined} />
       {isAddPanelOpen && canEditTrip ? (
-        <PersistedAddExpensePanel
-          key={editingExpense?.id || "new"}
-          tripId={tripId}
-          expense={editingExpense}
-          tripCurrency={tripCurrency}
-          onClose={() => setIsAddPanelOpen(false)}
-        />
+        <div ref={panelRef}>
+          <PersistedAddExpensePanel
+            key={editingExpense?.id || "new"}
+            tripId={tripId}
+            expense={editingExpense}
+            tripCurrency={tripCurrency}
+            onClose={() => setIsAddPanelOpen(false)}
+          />
+        </div>
       ) : null}
       {loadError ? <Card padding="sm" className="text-sm text-error">{loadError}</Card> : !expenses.length ? (
         <EmptyState
