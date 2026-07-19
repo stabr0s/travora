@@ -31,6 +31,11 @@ export type UpdateParticipantInput = {
 
 export type RemoveParticipantInput = { tripId: string; memberId: string };
 
+export type CurrentUserTripAccess = {
+  userId: string | null;
+  role: ParticipantRole | null;
+};
+
 export type ParticipantsServiceResult<T> =
   | { data: T; error: null }
   | {

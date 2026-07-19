@@ -148,11 +148,21 @@ coverage.
 ## Budget
 
 - [ ] Create budget expense
+- [ ] Owner/editor can create an expense with paid by and split participants
+- [ ] Owner/editor can edit paid by and split participants
+- [ ] Viewer cannot edit budget expenses or settlement fields
+- [ ] Existing legacy expenses still render
+- [ ] Unassigned expenses are excluded from settlement suggestions
+- [ ] Settlement summary calculates paid/owed/balance per currency
+- [ ] Multi-currency expenses are not converted
+- [ ] Suggested settlements are reasonable
 - [ ] Custom currency can be used in budget forms
 - [ ] Confirm Add Budget Expense defaults currency from trip settings
 - [ ] Confirm Edit Budget Expense keeps existing currency unless user changes it
 - [ ] Edit budget expense
 - [ ] Delete budget expense
+- [ ] Public share remains safe/read-only without settlement details
+- [ ] Trip duplication resets budget settlement participant fields
 
 ## Packing
 

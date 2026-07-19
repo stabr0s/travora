@@ -10,13 +10,17 @@ import { PersistedAddExpensePanel } from "@/features/budget/components/Persisted
 import { PersistedBudgetCategoryBreakdown } from "@/features/budget/components/PersistedBudgetCategoryBreakdown";
 import { PersistedBudgetExpenseCard } from "@/features/budget/components/PersistedBudgetExpenseCard";
 import { PersistedBudgetStats } from "@/features/budget/components/PersistedBudgetStats";
+import { PersistedSettlementSummary } from "@/features/budget/components/PersistedSettlementSummary";
+import type { PersistedParticipant } from "@/features/participants/types/persisted-participant";
 import { useScrollIntoViewOnOpen } from "@/hooks/useScrollIntoViewOnOpen";
 import type {
+  BudgetParticipantOption,
   CategoryTotal,
   CreateBudgetExpenseActionState,
   CurrencyTotal,
   PersistedBudgetExpense,
 } from "@/features/budget/types/persisted-budget";
+import { calculateBudgetSettlements } from "@/features/budget/utils/settlement-calculator";
 
 type PersistedBudgetSectionProps = {
   tripId: string;
@@ -24,6 +28,8 @@ type PersistedBudgetSectionProps = {
   tripCurrency?: string;
   loadError?: string;
   canEditTrip: boolean;
+  participants: PersistedParticipant[];
+  currentUserId: string | null;
 };
 
 function calculateSummaries(expenses: PersistedBudgetExpense[]) {
@@ -58,12 +64,18 @@ function calculateSummaries(expenses: PersistedBudgetExpense[]) {
   return { totals: Array.from(totals.values()), categories };
 }
 
+function getParticipantName(participant: PersistedParticipant) {
+  return participant.fullName || participant.email || "Trip member";
+}
+
 export function PersistedBudgetSection({
   tripId,
   expenses,
   tripCurrency,
   loadError,
   canEditTrip,
+  participants,
+  currentUserId,
 }: PersistedBudgetSectionProps) {
   const [isAddPanelOpen, setIsAddPanelOpen] = useState(false);
   const [editingExpense, setEditingExpense] = useState<PersistedBudgetExpense | null>(null);
@@ -71,6 +83,15 @@ export function PersistedBudgetSection({
   const [isPending, startTransition] = useTransition();
   const panelRef = useScrollIntoViewOnOpen<HTMLDivElement>(isAddPanelOpen);
   const summaries = useMemo(() => calculateSummaries(expenses), [expenses]);
+  const activeParticipants = useMemo<BudgetParticipantOption[]>(() => (
+    participants
+      .filter((participant) => participant.status === "active")
+      .map((participant) => ({ userId: participant.userId, name: getParticipantName(participant) }))
+  ), [participants]);
+  const settlementSummaries = useMemo(
+    () => calculateBudgetSettlements(expenses, activeParticipants),
+    [activeParticipants, expenses],
+  );
 
   function openAddPanel() {
     setEditingExpense(null);
@@ -92,6 +113,8 @@ export function PersistedBudgetSection({
             tripId={tripId}
             expense={editingExpense}
             tripCurrency={tripCurrency}
+            participants={activeParticipants}
+            currentUserId={currentUserId}
             onClose={() => setIsAddPanelOpen(false)}
           />
         </div>
@@ -108,11 +131,13 @@ export function PersistedBudgetSection({
           {message?.message ? <Card padding="sm" className={message.status === "error" ? "text-sm text-error" : "text-sm text-success"}>{message.message}</Card> : null}
           <PersistedBudgetStats totals={summaries.totals} />
           <PersistedBudgetCategoryBreakdown categories={summaries.categories} />
+          <PersistedSettlementSummary summaries={settlementSummaries} />
           <section className="space-y-3" aria-label="Saved expenses">
             {expenses.map((expense) => (
               <PersistedBudgetExpenseCard
                 key={expense.id}
                 expense={expense}
+                participants={activeParticipants}
                 isPending={isPending}
                 onEdit={canEditTrip ? (selected) => { setEditingExpense(selected); setIsAddPanelOpen(true); } : undefined}
                 onDelete={canEditTrip ? handleDelete : undefined}

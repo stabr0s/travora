@@ -11,7 +11,7 @@ import {
   getPackingItemStatesForCurrentUser,
 } from "@/features/packing/services/packing-service";
 import {
-  getCurrentUserTripRole,
+  getCurrentUserTripAccess,
   getParticipantsForTrip,
 } from "@/features/participants/services/participants-service";
 import { getPlacesForTrip } from "@/features/places/services/places-service";
@@ -68,7 +68,7 @@ export default async function TripDetailPage({ params, searchParams }: TripDetai
       persistedPackingStates,
       persistedPackingPresets,
       persistedParticipants,
-      persistedRole,
+      persistedAccess,
     ] = await Promise.all([
       getPlacesForTrip(id),
       getPlannerItemsForTrip(id),
@@ -78,9 +78,9 @@ export default async function TripDetailPage({ params, searchParams }: TripDetai
       getPackingItemStatesForCurrentUser(id),
       getPackingPresetsForCurrentUser(),
       getParticipantsForTrip(id),
-      getCurrentUserTripRole(id),
+      getCurrentUserTripAccess(id),
     ]);
-    const persistedInvites = persistedRole.data === "owner"
+    const persistedInvites = persistedAccess.data?.role === "owner"
       ? await getTripInvitesForTrip(id)
       : { data: [], error: null };
 
@@ -96,14 +96,15 @@ export default async function TripDetailPage({ params, searchParams }: TripDetai
         reservationsError={persistedReservations.error?.message}
         budgetExpenses={persistedBudget.data || []}
         budgetError={persistedBudget.error?.message}
+        currentUserId={persistedAccess.data?.userId || null}
         packingItems={persistedPacking.data || []}
         packingItemStates={persistedPackingStates.data || []}
         packingPresets={persistedPackingPresets.data || []}
         packingError={persistedPacking.error?.message || persistedPackingStates.error?.message}
         participants={persistedParticipants.data || []}
         invites={persistedInvites.data || []}
-        currentUserRole={persistedRole.data}
-        participantsError={persistedParticipants.error?.message || persistedRole.error?.message || persistedInvites.error?.message}
+        currentUserRole={persistedAccess.data?.role || null}
+        participantsError={persistedParticipants.error?.message || persistedAccess.error?.message || persistedInvites.error?.message}
       />
     );
   }

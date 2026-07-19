@@ -35,6 +35,7 @@ type PersistedTripDetailScreenProps = {
   reservationsError?: string;
   budgetExpenses: PersistedBudgetExpense[];
   budgetError?: string;
+  currentUserId: string | null;
   packingItems: PersistedPackingItem[];
   packingItemStates: PersistedPackingItemState[];
   packingPresets: PackingPresetWithItems[];
@@ -56,6 +57,7 @@ export function PersistedTripDetailScreen({
   reservationsError,
   budgetExpenses,
   budgetError,
+  currentUserId,
   packingItems,
   packingItemStates,
   packingPresets,
@@ -116,6 +118,8 @@ export function PersistedTripDetailScreen({
           tripCurrency={trip.currency || undefined}
           loadError={budgetError}
           canEditTrip={canEditTrip}
+          participants={participants}
+          currentUserId={currentUserId}
         />
       ) : activeTab === "packing" ? (
         <PersistedPackingSection

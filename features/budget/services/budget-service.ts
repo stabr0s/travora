@@ -1,5 +1,6 @@
 import { randomUUID } from "node:crypto";
 
+import { resolveBudgetSettlementFields } from "@/features/budget/services/budget-settlement-validation";
 import type {
   BudgetServiceResult,
   CreateBudgetExpenseInput,
@@ -100,6 +101,11 @@ export async function createBudgetExpense(
     };
   }
 
+  const settlements = await resolveBudgetSettlementFields(supabase, input, user.id, logBudgetError);
+  if (settlements.error !== null) {
+    return { data: null, error: { code: "CREATE_FAILED", message: settlements.error } };
+  }
+
   const expenseId = randomUUID();
   const payload: Database["public"]["Tables"]["budget_expenses"]["Insert"] = {
     id: expenseId,
@@ -109,7 +115,10 @@ export async function createBudgetExpense(
     amount: input.amount,
     currency: input.currency || "EUR",
     paid_by_name: input.paidByName || null,
-    participants_count: input.participantsCount ?? 1,
+    paid_by_user_id: settlements.paidByUserId ?? null,
+    participants_count: settlements.participantsCount ?? 1,
+    split_between_user_ids: settlements.splitBetweenUserIds ?? null,
+    split_type: "equal",
     status: input.status || "paid",
     expense_date: input.expenseDate || null,
     notes: input.notes || null,
@@ -141,7 +150,10 @@ export async function createBudgetExpense(
     amount: input.amount,
     currency: input.currency || "EUR",
     paid_by_name: input.paidByName || null,
-    participants_count: input.participantsCount ?? 1,
+    paid_by_user_id: settlements.paidByUserId ?? null,
+    participants_count: settlements.participantsCount ?? 1,
+    split_between_user_ids: settlements.splitBetweenUserIds ?? null,
+    split_type: "equal",
     status: input.status || "paid",
     expense_date: input.expenseDate || null,
     notes: input.notes || null,
@@ -167,13 +179,21 @@ export async function updateBudgetExpense(
   const { supabase, user } = await getAuthContext();
   if (!user) return { data: null, error: { code: "AUTH_REQUIRED", message: "Sign in to edit expenses." } };
 
+  const settlements = await resolveBudgetSettlementFields(supabase, input, user.id, logBudgetError);
+  if (settlements.error !== null) {
+    return { data: null, error: { code: "UPDATE_FAILED", message: settlements.error } };
+  }
+
   const payload: Database["public"]["Tables"]["budget_expenses"]["Update"] = {
     category: input.category || null,
     title: input.title.trim(),
     amount: input.amount,
     currency: input.currency || "EUR",
     paid_by_name: input.paidByName || null,
-    participants_count: input.participantsCount ?? 1,
+    paid_by_user_id: settlements.paidByUserId,
+    participants_count: settlements.participantsCount,
+    split_between_user_ids: settlements.splitBetweenUserIds,
+    split_type: "equal",
     status: input.status || "paid",
     expense_date: input.expenseDate || null,
     notes: input.notes || null,

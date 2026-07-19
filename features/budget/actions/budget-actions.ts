@@ -22,6 +22,10 @@ function normalizeCurrency(value: string) {
   return (value.trim() || "EUR").toUpperCase();
 }
 
+function readUuidList(formData: FormData, name: string) {
+  return formData.getAll(name).map((value) => String(value).trim()).filter(Boolean);
+}
+
 export async function createBudgetExpenseAction(
   _previousState: CreateBudgetExpenseActionState,
   formData: FormData,
@@ -34,6 +38,9 @@ export async function createBudgetExpenseAction(
   const status = readField(formData, "status") as ExpenseStatus;
   const expenseDate = readField(formData, "expenseDate");
   const currency = normalizeCurrency(readField(formData, "currency"));
+  const paidByUserId = readField(formData, "paidByUserId");
+  const splitIds = readUuidList(formData, "splitBetweenUserIds");
+  const splitSelectionSubmitted = readField(formData, "splitSelectionSubmitted") === "1";
 
   if (!isUuid(tripId)) return { status: "error", message: "This saved trip is not available." };
   if (!title) return { status: "error", message: "Enter a title for this expense." };
@@ -60,7 +67,10 @@ export async function createBudgetExpenseAction(
     category: categories.includes(category) ? category : "other",
     currency,
     paidByName: readField(formData, "paidByName"),
+    paidByUserId: paidByUserId || undefined,
     participantsCount,
+    splitBetweenUserIds: splitSelectionSubmitted ? splitIds.length ? splitIds : null : undefined,
+    splitType: "equal",
     status: statuses.includes(status) ? status : "paid",
     expenseDate,
     notes: readField(formData, "notes"),
@@ -85,6 +95,8 @@ export async function updateBudgetExpenseAction(
   const status = readField(formData, "status") as ExpenseStatus;
   const expenseDate = readField(formData, "expenseDate");
   const currency = normalizeCurrency(readField(formData, "currency"));
+  const paidByUserId = readField(formData, "paidByUserId");
+  const splitIds = readUuidList(formData, "splitBetweenUserIds");
 
   if (!isUuid(tripId)) return { status: "error", message: "This saved trip is not available." };
   if (!isUuid(id)) return { status: "error", message: "This expense is not available." };
@@ -111,7 +123,10 @@ export async function updateBudgetExpenseAction(
     category: categories.includes(category) ? category : "other",
     currency,
     paidByName: readField(formData, "paidByName"),
+    paidByUserId: paidByUserId || null,
     participantsCount,
+    splitBetweenUserIds: splitIds.length ? splitIds : null,
+    splitType: "equal",
     status: statuses.includes(status) ? status : "paid",
     expenseDate,
     notes: readField(formData, "notes"),

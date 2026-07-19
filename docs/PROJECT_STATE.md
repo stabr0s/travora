@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 49 — Trip Duplicate / Templates MVP
+Sprint 50 — Budget Settlements MVP
 
 Status: IN PROGRESS
 
@@ -745,6 +745,19 @@ Status: IN PROGRESS
 - Full template gallery/system remains future work
 - No migrations, dependencies, RLS changes, RPC changes, or auth architecture changes
 
+## Budget Settlements MVP
+
+- Persisted budget expenses can track a real payer through `paid_by_user_id`
+- Persisted budget expenses can track equal split participants through `split_between_user_ids`
+- Budget shows settlement summaries per currency
+- Budget suggests who should pay whom using equal split calculations
+- Currencies are not converted; EUR, PLN, USD, and other currencies are summarized separately
+- Existing legacy expenses remain compatible and render normally
+- Expenses without assigned payer/split participants are excluded from settlement suggestions
+- Trip duplication resets settlement participant references on copied budget expenses
+- Public share budget remains read-only and does not expose participant IDs or emails
+- No live FX, payments, receipt scanning, invoices, external APIs, RLS changes, or RPC changes added
+
 ## Manual Backend Test Checklist
 
 - Login and logout
@@ -825,21 +838,20 @@ Principles:
 
 ## Next Task
 
-Task #049 — Trip Duplicate / Templates MVP
+Task #050 — Budget Settlements MVP
 
 Goal:
 
-Let users reuse an existing persisted trip as a practical template by duplicating it.
+Add basic equal-split group settlements to persisted Budget expenses.
 
 The task includes:
 
-- Duplicate trip action in Trip Settings
-- New copied trip owned by the current user
-- Copying Places, Planner, Reservations, Budget, and Packing
-- Planner Place reference remapping
-- Excluding members, invites, public share data, and personal packing states
-- Staged copy with cleanup if a later step fails
+- Assigning a payer to expenses
+- Splitting expenses between active trip participants
+- Per-currency paid/owed/balance summaries
+- Suggested debtor-to-creditor settlement rows
+- Legacy expense compatibility
 
 Important:
 
-No full templates system, migrations, dependencies, RLS/RPC changes, auth architecture changes, or public template features are added.
+No custom split amounts, payments, FX conversion, receipt scanning, RLS/RPC changes, or new dependencies are added.

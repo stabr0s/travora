@@ -21,6 +21,9 @@ Personal packing progress is extended by
 Email invite links are extended by
 `supabase/migrations/007_trip_invites.sql`.
 
+Budget settlements are extended by
+`supabase/migrations/008_budget_settlements.sql`.
+
 Travora supports two data modes. The four demo trip IDs continue reading local
 mock data, while persisted UUID trips use Supabase for Trips, Places, Planner,
 Reservations, Budget, Packing, and Participants. Map remains a visual
@@ -35,7 +38,7 @@ placeholder, and Dashboard is not yet backed by complete persisted analytics.
 - `places` — destinations and ideas assigned to a trip.
 - `planner_items` — dated or ordered itinerary entries, optionally linked to a place.
 - `reservations` — flights, stays, tickets, and other bookings.
-- `budget_expenses` — individual trip expenses.
+- `budget_expenses` — individual trip expenses and MVP equal-split settlement metadata.
 - `packing_items` — shared or assigned checklist entries.
 - `packing_item_states` — per-user packed/unpacked state for shared packing items.
 - `packing_presets` — reusable packing templates owned by one profile.
@@ -247,6 +250,32 @@ links cannot be reused to create duplicate membership.
 No external email provider is configured for this MVP. Invite links are copied
 and sent manually by the trip owner.
 
+## Budget settlements
+
+Migration `008_budget_settlements.sql` adds minimal settlement metadata to
+`budget_expenses`:
+
+- `paid_by_user_id` references `profiles(id)` and is nullable for legacy or
+  unassigned expenses;
+- `split_between_user_ids` stores the selected participant profile IDs for an
+  equal split and is nullable for legacy or unassigned expenses;
+- `split_type` defaults to `equal` and is constrained to `equal` for the MVP.
+
+The migration also adds an index on `paid_by_user_id`. It does not add new
+tables, RLS policies, RPC functions, payment state, or settlement persistence.
+
+Existing `budget_expenses` RLS remains the enforcement layer: active trip
+members can view expenses, and owners/editors can manage expenses through the
+existing `can_edit_trip(trip_id)` policy. The application validates that payer
+and split participant IDs belong to active trip members before writing them.
+
+Settlement calculations are derived in application code. For each currency,
+Travora totals how much each participant paid and how much they owe from
+assigned equal-split expenses, then suggests simple debtor-to-creditor
+settlements. Currencies are not converted. Expenses without assigned
+`paid_by_user_id` or `split_between_user_ids` still render normally but are not
+included in settlement suggestions.
+
 ## Applying the migration manually
 
 1. Open the target Supabase project.
@@ -279,6 +308,10 @@ own packing item states.
 After reviewing it, apply migration `007` to add manual email invite links.
 Migration `007` adds one new table, owner-only RLS, and token-scoped invite
 preview/acceptance RPCs. It does not add automatic email sending.
+
+After reviewing it, apply migration `008` to add Budget settlement metadata.
+Migration `008` adds nullable fields to `budget_expenses`, a split-type
+constraint, and a payer index. It does not change RLS or RPC functions.
 
 ## Current limitations
 

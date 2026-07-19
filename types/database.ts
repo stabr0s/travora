@@ -324,7 +324,10 @@ export type Database = {
           amount: number;
           currency: string | null;
           paid_by_name: string | null;
+          paid_by_user_id: string | null;
           participants_count: number | null;
+          split_between_user_ids: string[] | null;
+          split_type: "equal";
           status: "paid" | "deposit" | "unpaid" | null;
           expense_date: string | null;
           notes: string | null;
@@ -339,7 +342,10 @@ export type Database = {
           amount: number;
           currency?: string | null;
           paid_by_name?: string | null;
+          paid_by_user_id?: string | null;
           participants_count?: number | null;
+          split_between_user_ids?: string[] | null;
+          split_type?: "equal";
           status?: "paid" | "deposit" | "unpaid" | null;
           expense_date?: string | null;
           notes?: string | null;
@@ -353,6 +359,13 @@ export type Database = {
             columns: ["trip_id"];
             isOneToOne: false;
             referencedRelation: "trips";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "budget_expenses_paid_by_user_id_fkey";
+            columns: ["paid_by_user_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
             referencedColumns: ["id"];
           },
         ];

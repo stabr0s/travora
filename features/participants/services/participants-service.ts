@@ -1,5 +1,6 @@
 import type {
   AddParticipantInput,
+  CurrentUserTripAccess,
   ParticipantsServiceResult,
   PersistedParticipant,
   RemoveParticipantInput,
@@ -74,9 +75,9 @@ export async function getParticipantsForTrip(
   return { data: (data || []).map(mapParticipant), error: null };
 }
 
-export async function getCurrentUserTripRole(
+export async function getCurrentUserTripAccess(
   tripId: string,
-): Promise<ParticipantsServiceResult<ParticipantRole | null>> {
+): Promise<ParticipantsServiceResult<CurrentUserTripAccess>> {
   if (!isUuid(tripId)) return { data: null, error: { code: "INVALID_TRIP", message: "This saved trip is not available." } };
   const { supabase, user } = await getAuthContext();
   if (!user) return { data: null, error: { code: "AUTH_REQUIRED", message: "Sign in to view trip access." } };
@@ -87,7 +88,7 @@ export async function getCurrentUserTripRole(
     logParticipantsError("trip role lookup failed", tripError);
     return { data: null, error: { code: "LOAD_FAILED", message: "We couldn't confirm your trip role." } };
   }
-  if (trip?.owner_id === user.id) return { data: "owner", error: null };
+  if (trip?.owner_id === user.id) return { data: { userId: user.id, role: "owner" }, error: null };
 
   const { data: member, error } = await supabase.from("trip_members")
     .select("role, status").eq("trip_id", tripId).eq("user_id", user.id).maybeSingle();
@@ -95,7 +96,15 @@ export async function getCurrentUserTripRole(
     logParticipantsError("member role lookup failed", error);
     return { data: null, error: { code: "LOAD_FAILED", message: "We couldn't confirm your trip role." } };
   }
-  return { data: member?.status === "active" ? member.role : null, error: null };
+  return { data: { userId: user.id, role: member?.status === "active" ? member.role : null }, error: null };
+}
+
+export async function getCurrentUserTripRole(
+  tripId: string,
+): Promise<ParticipantsServiceResult<ParticipantRole | null>> {
+  const access = await getCurrentUserTripAccess(tripId);
+  if (access.error) return { data: null, error: access.error };
+  return { data: access.data.role, error: null };
 }
 
 export async function addParticipant(
