@@ -57,7 +57,6 @@ export type PublicSharePackingItem = {
   category: string | null;
   priority: string | null;
   notes: string | null;
-  isPacked: boolean | null;
 };
 
 export type PublicSharedTrip = {

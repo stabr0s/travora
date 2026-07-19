@@ -6,7 +6,7 @@ import {
   createPackingItem,
   deletePackingItem,
   getPackingItemsForTrip,
-  togglePackingItemPacked,
+  togglePersonalPackingItemState,
   updatePackingItem,
 } from "@/features/packing/services/packing-service";
 import { getPackingPreset } from "@/features/packing/data/packing-presets";
@@ -177,11 +177,19 @@ export async function togglePackingItemPackedAction(
   id: string,
   isPacked: boolean,
 ): Promise<PackingActionState> {
+  return togglePersonalPackingItemStateAction(tripId, id, isPacked);
+}
+
+export async function togglePersonalPackingItemStateAction(
+  tripId: string,
+  id: string,
+  isPacked: boolean,
+): Promise<PackingActionState> {
   if (!isUuid(tripId)) return { status: "error", message: "This saved trip is not available." };
   if (!isUuid(id)) return { status: "error", message: "This packing item is not available." };
 
-  const result = await togglePackingItemPacked({ tripId, id, isPacked });
+  const result = await togglePersonalPackingItemState({ tripId, id, isPacked });
   if (result.error) return { status: "error", message: result.error.message };
   revalidatePath(`/trips/${tripId}`);
-  return { status: "success", message: isPacked ? "Item marked as packed." : "Item marked as unpacked." };
+  return { status: "success", message: isPacked ? "Packed by you." : "Marked unpacked for you." };
 }

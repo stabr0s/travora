@@ -15,6 +15,9 @@ User-owned packing presets are extended by
 Public read-only share links are extended by
 `supabase/migrations/005_public_trip_share.sql`.
 
+Personal packing progress is extended by
+`supabase/migrations/006_personal_packing_state.sql`.
+
 Travora supports two data modes. The four demo trip IDs continue reading local
 mock data, while persisted UUID trips use Supabase for Trips, Places, Planner,
 Reservations, Budget, Packing, and Participants. Map remains a visual
@@ -30,6 +33,7 @@ placeholder, and Dashboard is not yet backed by complete persisted analytics.
 - `reservations` — flights, stays, tickets, and other bookings.
 - `budget_expenses` — individual trip expenses.
 - `packing_items` — shared or assigned checklist entries.
+- `packing_item_states` — per-user packed/unpacked state for shared packing items.
 - `packing_presets` — reusable packing templates owned by one profile.
 - `packing_preset_items` — reusable items belonging to a packing preset.
 
@@ -41,6 +45,7 @@ placeholder, and Dashboard is not yet backed by complete persisted analytics.
 - Places, planner items, reservations, expenses, and packing items belong to a trip.
 - A planner item can optionally reference a place. Deleting that place keeps the
   planner item and clears its `place_id`.
+- Deleting a packing item cascades to its personal `packing_item_states`.
 - Deleting a trip cascades to `trip_members`, `places`, `planner_items`,
   `reservations`, `budget_expenses`, and `packing_items`.
 - Deleting a profile cascades to that profile’s custom packing presets, and
@@ -91,6 +96,7 @@ users and follow these rules:
 - only trip owners can manage membership rows;
 - owners and active editors can manage places, planner items, reservations,
   expenses, and packing items.
+- active trip members can manage only their own personal packing item states.
 
 Invited and pending members do not receive trip data access until their status
 becomes `active`.
@@ -167,6 +173,35 @@ The public payload omits owner IDs, user IDs, member IDs, participant emails,
 share tokens, auth/session data, and reservation reference numbers. It is meant
 only for read-only public trip previews.
 
+## Personal packing progress
+
+Migration `006_personal_packing_state.sql` adds `packing_item_states` for
+per-user checklist progress. Packing items themselves remain shared records in
+`packing_items`, while each authenticated member can store their own
+`is_packed` value for a given item.
+
+The table stores:
+
+- `packing_item_id`
+- `user_id`
+- `is_packed`
+- timestamps
+
+The `(packing_item_id, user_id)` pair is unique, so each user has at most one
+state row per packing item. Deleting a packing item removes its personal state
+rows through cascade.
+
+RLS lets authenticated users select, insert, update, and delete only their own
+state rows. Each write also checks that the referenced packing item belongs to a
+trip where the user is the owner or an active member, using the existing
+`is_trip_owner(trip_id)` and `is_active_trip_member(trip_id)` helpers through
+`packing_items.trip_id`.
+
+The legacy `packing_items.is_packed` column remains for backwards
+compatibility and is not removed or migrated. Persisted authenticated UI uses
+`packing_item_states.is_packed` for personal progress. Public share pages remain
+read-only and do not create anonymous packing state.
+
 ## Applying the migration manually
 
 1. Open the target Supabase project.
@@ -192,6 +227,10 @@ After reviewing it, apply migration `005` to add public read-only share link
 metadata and the token-scoped public share RPC. Migration `005` does not add
 public select policies to core tables.
 
+After reviewing it, apply migration `006` to add personal packing progress.
+Migration `006` adds one new table and RLS policies for authenticated users'
+own packing item states.
+
 ## Current limitations
 
 - The migration has not been applied automatically by this repository.
@@ -204,6 +243,8 @@ public select policies to core tables.
 - Application routes are not protected.
 - Public share links are bearer links and read-only; there is no expiry,
   password protection, section-level visibility, or analytics yet.
+- Packing progress is personal for authenticated members only. There is no
+  anonymous public packing state, per-person dashboard, or realtime sync yet.
 - Storage, realtime collaboration, and file uploads are not configured.
 - The TypeScript `Database` type is still maintained manually.
 

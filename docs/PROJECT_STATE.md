@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 45 — Public Read-Only Share Link
+Sprint 46 — Personal Packing Progress
 
 Status: IN PROGRESS
 
@@ -692,6 +692,19 @@ Status: IN PROGRESS
 - Packing viewer toggle bug fixed with UI and server-side permission guards
 - Migration `005_public_trip_share.sql` added
 
+## Personal Packing Progress
+
+- Packing items remain shared trip checklist entries
+- Packed/unpacked state is personal per authenticated user
+- Owner, editor, and viewer can each toggle their own packing progress
+- One member's packed state does not affect another member's packed state
+- Viewer still cannot create, edit, delete, apply presets, or manage presets
+- Owner/editor still manage the shared packing list and presets as before
+- Public share packing remains read-only with no anonymous/localStorage state
+- Legacy `packing_items.is_packed` remains for backwards compatibility
+- Persisted authenticated UI uses `packing_item_states.is_packed`
+- Migration `006_personal_packing_state.sql` added
+
 ## Manual Backend Test Checklist
 
 - Login and logout
@@ -772,21 +785,21 @@ Principles:
 
 ## Next Task
 
-Task #045 — Public Read-Only Share Link + Packing Viewer Fix
+Task #046 — Personal Packing Progress
 
 Goal:
 
-Add a public read-only trip share link and harden packing viewer permissions.
+Make packing progress personal per authenticated trip member.
 
 The task includes:
 
-- Owner-managed public share controls in Trip Settings
-- Public `/share/{token}` page without app navigation
-- Token-scoped public RPC payload
-- Sensitive participant/internal data hidden
-- Reservation references hidden
-- Viewer packing toggle blocked in UI and server service
+- New `packing_item_states` table
+- Personal packed/unpacked state for owner/editor/viewer
+- Viewer can toggle only their own packing state
+- Viewer cannot manage shared packing items or presets
+- Public share remains read-only
+- Legacy shared `packing_items.is_packed` kept for compatibility
 
 Important:
 
-Auth behavior, mock trips, app navigation for persisted trips, map rendering, and dependencies remain unchanged.
+Auth architecture, mock trips, public share editing, map rendering, realtime, and dependencies remain unchanged.

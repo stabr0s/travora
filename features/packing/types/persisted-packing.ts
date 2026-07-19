@@ -4,6 +4,13 @@ import type { Database } from "@/types/database";
 export type PersistedPackingItem =
   Database["public"]["Tables"]["packing_items"]["Row"];
 
+export type PersistedPackingItemState =
+  Database["public"]["Tables"]["packing_item_states"]["Row"];
+
+export type PersistedPackingItemWithPersonalState = PersistedPackingItem & {
+  isPackedForCurrentUser: boolean;
+};
+
 export type CreatePackingItemInput = {
   tripId: string;
   name: string;
@@ -18,6 +25,7 @@ export type CreatePackingItemInput = {
 export type UpdatePackingItemInput = CreatePackingItemInput & { id: string };
 export type DeletePackingItemInput = { tripId: string; id: string };
 export type TogglePackingItemInput = DeletePackingItemInput & { isPacked: boolean };
+export type TogglePersonalPackingItemStateInput = DeletePackingItemInput & { isPacked: boolean };
 
 export type PackingServiceResult<T> =
   | { data: T; error: null }

@@ -138,10 +138,14 @@ coverage.
 - [ ] Confirm user cannot access another user’s presets
 - [ ] Create packing item
 - [ ] Edit packing item
-- [ ] Toggle packed state
-- [ ] Owner/editor can toggle packed state
-- [ ] Viewer cannot toggle packed state
-- [ ] Viewer cannot toggle packed state even by clicking around the row/checkbox area
+- [ ] Owner can toggle own packing state
+- [ ] Editor can toggle own packing state
+- [ ] Viewer can toggle own packing state
+- [ ] Owner toggle does not affect viewer state
+- [ ] Viewer toggle does not affect owner state
+- [ ] User cannot update packing state for a trip they are not a member of
+- [ ] Viewer cannot add/edit/delete packing items
+- [ ] Viewer cannot manage presets
 - [ ] Delete packing item
 
 ## Participants and permissions
@@ -205,6 +209,7 @@ coverage.
 - [ ] Public link is read-only
 - [ ] Public page has no app sidebar navigation
 - [ ] Public page has no edit/delete/toggle/settings controls
+- [ ] Public share packing remains read-only
 - [ ] Public page does not expose participant emails
 - [ ] Public page does not expose user IDs, member IDs, owner IDs, or share token fields
 - [ ] Public page does not expose reservation reference/confirmation number

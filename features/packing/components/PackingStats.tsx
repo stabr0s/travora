@@ -5,18 +5,19 @@ import type { PackingItem } from "@/features/packing/types/packing";
 
 type PackingStatsProps = {
   items: PackingItem[];
+  mode?: "shared" | "personal";
 };
 
-export function PackingStats({ items }: PackingStatsProps) {
+export function PackingStats({ items, mode = "shared" }: PackingStatsProps) {
   const packedCount = items.filter((item) => item.isPacked).length;
   const completion = items.length
     ? Math.round((packedCount / items.length) * 100)
     : 0;
   const stats = [
     { label: "Total items", value: items.length, icon: ListChecks },
-    { label: "Packed", value: packedCount, icon: PackageCheck },
+    { label: mode === "personal" ? "Packed by you" : "Packed", value: packedCount, icon: PackageCheck },
     { label: "Shared items", value: items.filter((item) => item.isShared).length, icon: Users },
-    { label: "Completion", value: `${completion}%`, icon: CheckCheck },
+    { label: mode === "personal" ? "Your completion" : "Completion", value: `${completion}%`, icon: CheckCheck },
   ];
 
   return (

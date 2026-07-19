@@ -5,7 +5,9 @@ import type {
   DeletePackingItemInput,
   PackingServiceResult,
   PersistedPackingItem,
+  PersistedPackingItemState,
   TogglePackingItemInput,
+  TogglePersonalPackingItemStateInput,
   UpdatePackingItemInput,
 } from "@/features/packing/types/persisted-packing";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
@@ -111,6 +113,43 @@ export async function getPackingItemsForTrip(
   return { data, error: null };
 }
 
+export async function getPackingItemStatesForCurrentUser(
+  tripId: string,
+): Promise<PackingServiceResult<PersistedPackingItemState[]>> {
+  if (!isUuid(tripId)) {
+    return { data: null, error: { code: "INVALID_TRIP", message: "This saved trip is not available." } };
+  }
+
+  const { supabase, user } = await getAuthContext();
+  if (!user) return { data: null, error: { code: "AUTH_REQUIRED", message: "Sign in to view your packing progress." } };
+
+  const { data: items, error: itemsError } = await supabase
+    .from("packing_items")
+    .select("id")
+    .eq("trip_id", tripId);
+
+  if (itemsError) {
+    logPackingError("packing items for state query failed", itemsError);
+    return { data: null, error: { code: "LOAD_FAILED", message: "We couldn't load your packing progress." } };
+  }
+
+  const itemIds = (items || []).map((item) => item.id);
+  if (!itemIds.length) return { data: [], error: null };
+
+  const { data, error } = await supabase
+    .from("packing_item_states")
+    .select("*")
+    .eq("user_id", user.id)
+    .in("packing_item_id", itemIds);
+
+  if (error) {
+    logPackingError("packing item states query failed", error);
+    return { data: null, error: { code: "LOAD_FAILED", message: "We couldn't load your packing progress." } };
+  }
+
+  return { data: data || [], error: null };
+}
+
 export async function createPackingItem(
   input: CreatePackingItemInput,
 ): Promise<PackingServiceResult<PersistedPackingItem>> {
@@ -214,4 +253,103 @@ export async function togglePackingItemPacked(
     return { data: null, error: { code: "UPDATE_FAILED", message: "We couldn't confirm the packing update." } };
   }
   return { data, error: null };
+}
+
+export async function togglePersonalPackingItemState(
+  input: TogglePersonalPackingItemStateInput,
+): Promise<PackingServiceResult<PersistedPackingItemState>> {
+  if (!isUuid(input.tripId)) return { data: null, error: { code: "INVALID_TRIP", message: "This saved trip is not available." } };
+  if (!isUuid(input.id)) return { data: null, error: { code: "INVALID_RECORD", message: "This packing item is not available." } };
+
+  const { supabase, user } = await getAuthContext();
+  if (!user) return { data: null, error: { code: "AUTH_REQUIRED", message: "Sign in to update your packing progress." } };
+
+  const { data: item, error: itemError } = await supabase
+    .from("packing_items")
+    .select("id, trip_id")
+    .eq("id", input.id)
+    .eq("trip_id", input.tripId)
+    .maybeSingle();
+
+  if (itemError) {
+    logPackingError("personal packing item lookup failed", itemError);
+    return { data: null, error: { code: "LOAD_FAILED", message: "We couldn't confirm this packing item." } };
+  }
+  if (!item) return { data: null, error: { code: "INVALID_RECORD", message: "This packing item is not available." } };
+
+  const { data: existingState, error: stateReadError } = await supabase
+    .from("packing_item_states")
+    .select("*")
+    .eq("packing_item_id", input.id)
+    .eq("user_id", user.id)
+    .maybeSingle();
+
+  if (stateReadError) {
+    logPackingError("personal packing state lookup failed", stateReadError);
+    return { data: null, error: { code: "LOAD_FAILED", message: "We couldn't load your packing progress." } };
+  }
+
+  if (existingState) {
+    const { error: updateError } = await supabase
+      .from("packing_item_states")
+      .update({ is_packed: input.isPacked })
+      .eq("id", existingState.id)
+      .eq("user_id", user.id);
+
+    if (updateError) {
+      logPackingError("personal packing state update failed", updateError);
+      return { data: null, error: { code: "UPDATE_FAILED", message: "We couldn't update your packing progress." } };
+    }
+
+    const { data, error: readError } = await supabase
+      .from("packing_item_states")
+      .select("*")
+      .eq("id", existingState.id)
+      .eq("user_id", user.id)
+      .maybeSingle();
+
+    if (readError || !data) {
+      if (readError) logPackingError("personal packing state update readback failed", readError);
+      return { data: null, error: { code: "UPDATE_FAILED", message: "We couldn't confirm your packing progress update." } };
+    }
+
+    return { data, error: null };
+  }
+
+  const stateId = randomUUID();
+  const payload: Database["public"]["Tables"]["packing_item_states"]["Insert"] = {
+    id: stateId,
+    packing_item_id: input.id,
+    user_id: user.id,
+    is_packed: input.isPacked,
+  };
+
+  const { error: insertError } = await supabase
+    .from("packing_item_states")
+    .insert(payload);
+
+  if (insertError) {
+    logPackingError("personal packing state insert failed", insertError);
+    return { data: null, error: { code: "UPDATE_FAILED", message: "We couldn't update your packing progress." } };
+  }
+
+  const { data, error: readError } = await supabase
+    .from("packing_item_states")
+    .select("*")
+    .eq("id", stateId)
+    .eq("user_id", user.id)
+    .maybeSingle();
+
+  if (readError) logPackingError("personal packing state insert readback failed", readError);
+
+  const fallback: PersistedPackingItemState = {
+    id: stateId,
+    packing_item_id: input.id,
+    user_id: user.id,
+    is_packed: input.isPacked,
+    created_at: null,
+    updated_at: null,
+  };
+
+  return { data: data || fallback, error: null };
 }

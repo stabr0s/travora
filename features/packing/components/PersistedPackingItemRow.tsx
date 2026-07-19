@@ -1,16 +1,16 @@
 import { UserRound } from "lucide-react";
 
 import { Badge, Button } from "@/components/ui";
-import type { PersistedPackingItem } from "@/features/packing/types/persisted-packing";
+import type { PersistedPackingItemWithPersonalState } from "@/features/packing/types/persisted-packing";
 import { cn } from "@/lib/utils";
 
 type PersistedPackingItemRowProps = {
-  item: PersistedPackingItem;
+  item: PersistedPackingItemWithPersonalState;
   isPending: boolean;
-  canEditTrip: boolean;
-  onDelete?: (item: PersistedPackingItem) => void;
-  onEdit?: (item: PersistedPackingItem) => void;
-  onToggle?: (item: PersistedPackingItem) => void;
+  canTogglePersonalState: boolean;
+  onDelete?: (item: PersistedPackingItemWithPersonalState) => void;
+  onEdit?: (item: PersistedPackingItemWithPersonalState) => void;
+  onToggle?: (item: PersistedPackingItemWithPersonalState) => void;
 };
 
 const priorityDetails = {
@@ -22,26 +22,26 @@ const priorityDetails = {
 export function PersistedPackingItemRow({
   item,
   isPending,
-  canEditTrip,
+  canTogglePersonalState,
   onDelete,
   onEdit,
   onToggle,
 }: PersistedPackingItemRowProps) {
   const priority = priorityDetails[item.priority || "recommended"];
   const isShared = item.is_shared ?? true;
-  const canToggle = canEditTrip && Boolean(onToggle);
+  const canToggle = canTogglePersonalState && Boolean(onToggle);
 
   return (
     <div className="flex items-start gap-3 px-4 py-4 sm:px-5">
       <input
         type="checkbox"
-        checked={item.is_packed ?? false}
+        checked={item.isPackedForCurrentUser}
         disabled={isPending || !canToggle}
         onChange={() => {
           if (!canToggle) return;
           onToggle?.(item);
         }}
-        aria-label={`Mark ${item.name} as ${item.is_packed ? "not packed" : "packed"}`}
+        aria-label={`Mark ${item.name} as ${item.isPackedForCurrentUser ? "not packed" : "packed"} for you`}
         aria-disabled={!canToggle}
         className={cn(
           "mt-0.5 size-5 shrink-0 accent-primary disabled:cursor-not-allowed",
@@ -51,7 +51,7 @@ export function PersistedPackingItemRow({
       <div className="min-w-0 flex-1">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
           <div className="min-w-0">
-            <p className={cn("break-words font-medium text-foreground", item.is_packed && "text-muted line-through")}>{item.name}</p>
+            <p className={cn("break-words font-medium text-foreground", item.isPackedForCurrentUser && "text-muted line-through")}>{item.name}</p>
             {item.notes ? <p className="mt-1 break-words text-xs leading-relaxed text-muted">{item.notes}</p> : null}
           </div>
           <div className="flex flex-wrap gap-1.5">

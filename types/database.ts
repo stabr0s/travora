@@ -341,6 +341,41 @@ export type Database = {
           },
         ];
       };
+      packing_item_states: {
+        Row: {
+          id: string;
+          packing_item_id: string;
+          user_id: string;
+          is_packed: boolean;
+          created_at: string | null;
+          updated_at: string | null;
+        };
+        Insert: {
+          id?: string;
+          packing_item_id: string;
+          user_id: string;
+          is_packed?: boolean;
+          created_at?: string | null;
+          updated_at?: string | null;
+        };
+        Update: Partial<Database["public"]["Tables"]["packing_item_states"]["Insert"]>;
+        Relationships: [
+          {
+            foreignKeyName: "packing_item_states_packing_item_id_fkey";
+            columns: ["packing_item_id"];
+            isOneToOne: false;
+            referencedRelation: "packing_items";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "packing_item_states_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       packing_presets: {
         Row: {
           id: string;

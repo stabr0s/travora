@@ -172,7 +172,7 @@ export function PublicShareScreen({ share }: PublicShareScreenProps) {
             <div className="grid gap-3 md:grid-cols-2">
               {share.packing.map((item, index) => (
                 <Card key={`${item.name}-${index}`} padding="sm">
-                  <p className="font-medium text-foreground">{item.isPacked ? "✓" : "○"} {item.name}</p>
+                  <p className="font-medium text-foreground">{item.name}</p>
                   <p className="mt-1 text-sm text-muted">{[item.category, item.priority].filter(Boolean).join(" · ") || "Packing item"}</p>
                   {item.notes ? <p className="mt-2 text-sm leading-relaxed text-muted">{item.notes}</p> : null}
                 </Card>

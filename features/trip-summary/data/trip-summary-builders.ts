@@ -1,7 +1,7 @@
 import { getMockBudgetByTripId } from "@/features/budget/data/mock-budget";
 import type { PersistedBudgetExpense } from "@/features/budget/types/persisted-budget";
 import { getMockPackingByTripId } from "@/features/packing/data/mock-packing";
-import type { PersistedPackingItem } from "@/features/packing/types/persisted-packing";
+import type { PersistedPackingItem, PersistedPackingItemState } from "@/features/packing/types/persisted-packing";
 import { getMockParticipantsByTripId } from "@/features/participants/data/mock-participants";
 import type { PersistedParticipant } from "@/features/participants/types/persisted-participant";
 import { getMockPlacesByTripId } from "@/features/places/data/mock-places";
@@ -104,8 +104,13 @@ export function buildPersistedSummary(input: {
   reservations: PersistedReservation[];
   budget: PersistedBudgetExpense[];
   packing: PersistedPackingItem[];
+  packingStates?: PersistedPackingItemState[];
   participants: PersistedParticipant[];
 }): TripSummaryData {
+  const stateByItemId = new Map(
+    (input.packingStates || []).map((state) => [state.packing_item_id, state.is_packed]),
+  );
+
   return {
     overview: {
       title: input.trip.title,
@@ -135,7 +140,10 @@ export function buildPersistedSummary(input: {
       notes: reservation.notes,
     })),
     budget: budgetSummary(input.budget),
-    packing: packingSummary(input.packing),
+    packing: packingSummary(input.packing.map((item) => ({
+      ...item,
+      isPacked: stateByItemId.get(item.id) ?? false,
+    }))),
     participants: participantCounts(input.participants),
   };
 }

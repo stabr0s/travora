@@ -6,7 +6,7 @@ import { Luggage } from "lucide-react";
 import { Button, Card, EmptyState } from "@/components/ui";
 import {
   deletePackingItemAction,
-  togglePackingItemPackedAction,
+  togglePersonalPackingItemStateAction,
 } from "@/features/packing/actions/packing-actions";
 import { PackingCategoryTabs } from "@/features/packing/components/PackingCategoryTabs";
 import { PackingHeader } from "@/features/packing/components/PackingHeader";
@@ -19,6 +19,8 @@ import { useScrollIntoViewOnOpen } from "@/hooks/useScrollIntoViewOnOpen";
 import type {
   PackingActionState,
   PersistedPackingItem,
+  PersistedPackingItemState,
+  PersistedPackingItemWithPersonalState,
 } from "@/features/packing/types/persisted-packing";
 import type { PackingPresetWithItems } from "@/features/packing/types/packing-preset";
 import type {
@@ -30,9 +32,11 @@ import type {
 type PersistedPackingSectionProps = {
   tripId: string;
   items: PersistedPackingItem[];
+  itemStates: PersistedPackingItemState[];
   customPresets?: PackingPresetWithItems[];
   loadError?: string;
   canEditTrip: boolean;
+  canTogglePersonalState: boolean;
 };
 
 const categories: PackingCategory[] = [
@@ -49,14 +53,14 @@ function categoryOf(item: PersistedPackingItem): PackingCategory {
     : "other";
 }
 
-function toPackingItem(item: PersistedPackingItem): PackingItem {
+function toPackingItem(item: PersistedPackingItemWithPersonalState): PackingItem {
   return {
     id: item.id,
     tripId: item.trip_id,
     name: item.name,
     category: categoryOf(item),
     isShared: item.is_shared ?? true,
-    isPacked: item.is_packed ?? false,
+    isPacked: item.isPackedForCurrentUser,
     priority: item.priority || "recommended",
     notes: item.notes || undefined,
   };
@@ -65,9 +69,11 @@ function toPackingItem(item: PersistedPackingItem): PackingItem {
 export function PersistedPackingSection({
   tripId,
   items,
+  itemStates,
   customPresets = [],
   loadError,
   canEditTrip,
+  canTogglePersonalState,
 }: PersistedPackingSectionProps) {
   const [activeCategory, setActiveCategory] = useState<PackingCategoryFilter>("all");
   const [isPanelOpen, setIsPanelOpen] = useState(false);
@@ -75,11 +81,18 @@ export function PersistedPackingSection({
   const [message, setMessage] = useState<PackingActionState | null>(null);
   const [isPending, startTransition] = useTransition();
   const panelRef = useScrollIntoViewOnOpen<HTMLDivElement>(isPanelOpen);
-  const uiItems = useMemo(() => items.map(toPackingItem), [items]);
+  const itemsWithPersonalState = useMemo<PersistedPackingItemWithPersonalState[]>(() => {
+    const stateByItemId = new Map(itemStates.map((state) => [state.packing_item_id, state.is_packed]));
+    return items.map((item) => ({
+      ...item,
+      isPackedForCurrentUser: stateByItemId.get(item.id) ?? false,
+    }));
+  }, [items, itemStates]);
+  const uiItems = useMemo(() => itemsWithPersonalState.map(toPackingItem), [itemsWithPersonalState]);
   const filteredItems = activeCategory === "all"
-    ? items
-    : items.filter((item) => categoryOf(item) === activeCategory);
-  const packedCount = items.filter((item) => item.is_packed).length;
+    ? itemsWithPersonalState
+    : itemsWithPersonalState.filter((item) => categoryOf(item) === activeCategory);
+  const packedCount = itemsWithPersonalState.filter((item) => item.isPackedForCurrentUser).length;
   const groupedItems = categories
     .map((category) => ({ category, items: filteredItems.filter((item) => categoryOf(item) === category) }))
     .filter((group) => group.items.length);
@@ -89,14 +102,14 @@ export function PersistedPackingSection({
     setIsPanelOpen(true);
   }
 
-  function handleDelete(item: PersistedPackingItem) {
+  function handleDelete(item: PersistedPackingItemWithPersonalState) {
     if (!window.confirm(`Delete “${item.name}”? This cannot be undone.`)) return;
     startTransition(async () => setMessage(await deletePackingItemAction(tripId, item.id)));
   }
 
-  function handleToggle(item: PersistedPackingItem) {
+  function handleToggle(item: PersistedPackingItemWithPersonalState) {
     startTransition(async () => {
-      setMessage(await togglePackingItemPackedAction(tripId, item.id, !(item.is_packed ?? false)));
+      setMessage(await togglePersonalPackingItemStateAction(tripId, item.id, !item.isPackedForCurrentUser));
     });
   }
 
@@ -124,8 +137,8 @@ export function PersistedPackingSection({
         />
       ) : (
         <>
-          <PackingStats items={uiItems} />
-          <PackingProgressCard totalItems={items.length} packedItems={packedCount} />
+          <PackingStats items={uiItems} mode="personal" />
+          <PackingProgressCard totalItems={items.length} packedItems={packedCount} mode="personal" />
           <PackingCategoryTabs categories={categories} items={uiItems} activeCategory={activeCategory} onCategoryChange={setActiveCategory} />
           {groupedItems.length ? (
             <div className="space-y-5">
@@ -141,8 +154,8 @@ export function PersistedPackingSection({
                         key={item.id}
                         item={item}
                         isPending={isPending}
-                        canEditTrip={canEditTrip}
-                        onToggle={canEditTrip ? handleToggle : undefined}
+                        canTogglePersonalState={canTogglePersonalState}
+                        onToggle={canTogglePersonalState ? handleToggle : undefined}
                         onEdit={canEditTrip ? (selected) => { setEditingItem(selected); setIsPanelOpen(true); } : undefined}
                         onDelete={canEditTrip ? handleDelete : undefined}
                       />

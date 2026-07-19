@@ -5,7 +5,10 @@ import {
 } from "@/features/trip-detail";
 import { getBudgetExpensesForTrip } from "@/features/budget/services/budget-service";
 import { getPackingPresetsForCurrentUser } from "@/features/packing/services/packing-preset-service";
-import { getPackingItemsForTrip } from "@/features/packing/services/packing-service";
+import {
+  getPackingItemsForTrip,
+  getPackingItemStatesForCurrentUser,
+} from "@/features/packing/services/packing-service";
 import {
   getCurrentUserTripRole,
   getParticipantsForTrip,
@@ -61,6 +64,7 @@ export default async function TripDetailPage({ params, searchParams }: TripDetai
       persistedReservations,
       persistedBudget,
       persistedPacking,
+      persistedPackingStates,
       persistedPackingPresets,
       persistedParticipants,
       persistedRole,
@@ -70,6 +74,7 @@ export default async function TripDetailPage({ params, searchParams }: TripDetai
       getReservationsForTrip(id),
       getBudgetExpensesForTrip(id),
       getPackingItemsForTrip(id),
+      getPackingItemStatesForCurrentUser(id),
       getPackingPresetsForCurrentUser(),
       getParticipantsForTrip(id),
       getCurrentUserTripRole(id),
@@ -88,8 +93,9 @@ export default async function TripDetailPage({ params, searchParams }: TripDetai
         budgetExpenses={persistedBudget.data || []}
         budgetError={persistedBudget.error?.message}
         packingItems={persistedPacking.data || []}
+        packingItemStates={persistedPackingStates.data || []}
         packingPresets={persistedPackingPresets.data || []}
-        packingError={persistedPacking.error?.message}
+        packingError={persistedPacking.error?.message || persistedPackingStates.error?.message}
         participants={persistedParticipants.data || []}
         currentUserRole={persistedRole.data}
         participantsError={persistedParticipants.error?.message || persistedRole.error?.message}

@@ -6,7 +6,7 @@ import { PersistedBudgetSection } from "@/features/budget";
 import type { PersistedBudgetExpense } from "@/features/budget/types/persisted-budget";
 import { PersistedPackingSection } from "@/features/packing";
 import type { PackingPresetWithItems } from "@/features/packing/types/packing-preset";
-import type { PersistedPackingItem } from "@/features/packing/types/persisted-packing";
+import type { PersistedPackingItem, PersistedPackingItemState } from "@/features/packing/types/persisted-packing";
 import { PersistedParticipantsSection } from "@/features/participants";
 import type { PersistedParticipant } from "@/features/participants/types/persisted-participant";
 import type { ParticipantRole } from "@/features/participants/types/participant";
@@ -35,6 +35,7 @@ type PersistedTripDetailScreenProps = {
   budgetExpenses: PersistedBudgetExpense[];
   budgetError?: string;
   packingItems: PersistedPackingItem[];
+  packingItemStates: PersistedPackingItemState[];
   packingPresets: PackingPresetWithItems[];
   packingError?: string;
   participants: PersistedParticipant[];
@@ -54,6 +55,7 @@ export function PersistedTripDetailScreen({
   budgetExpenses,
   budgetError,
   packingItems,
+  packingItemStates,
   packingPresets,
   packingError,
   participants,
@@ -62,6 +64,9 @@ export function PersistedTripDetailScreen({
 }: PersistedTripDetailScreenProps) {
   const [activeTab, setActiveTab] = useState<TripDetailTabId>(initialTab);
   const canEditTrip = currentUserRole === "owner" || currentUserRole === "editor";
+  const canTogglePackingState = currentUserRole === "owner"
+    || currentUserRole === "editor"
+    || currentUserRole === "viewer";
   const canManageParticipants = currentUserRole === "owner";
   const canManageSettings = currentUserRole === "owner";
 
@@ -70,7 +75,7 @@ export function PersistedTripDetailScreen({
       <PersistedTripHero trip={trip} />
       {!canEditTrip ? (
         <Card padding="sm" className="text-sm text-muted">
-          You have view-only access to this trip. Ask the trip owner for edit access.
+          You have view-only access to trip content. You can still update your own packing progress.
         </Card>
       ) : null}
       <TripTabs activeTab={activeTab} onTabChange={setActiveTab} showSettings />
@@ -113,9 +118,11 @@ export function PersistedTripDetailScreen({
         <PersistedPackingSection
           tripId={trip.id}
           items={packingItems}
+          itemStates={packingItemStates}
           customPresets={packingPresets}
           loadError={packingError}
           canEditTrip={canEditTrip}
+          canTogglePersonalState={canTogglePackingState}
         />
       ) : activeTab === "participants" ? (
         <PersistedParticipantsSection
