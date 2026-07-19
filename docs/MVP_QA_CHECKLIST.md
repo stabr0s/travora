@@ -165,6 +165,16 @@ coverage.
 ## Reservations
 
 - [ ] Create reservation
+- [ ] Reservation with date can export `.ics`
+- [ ] Reservation without date shows disabled/helper calendar export state
+- [ ] Exported `.ics` has sensible title/date/location/description
+- [ ] Owner can export reservation calendar file
+- [ ] Editor can export reservation calendar file
+- [ ] Viewer can export reservation calendar file
+- [ ] Viewer still cannot edit/delete reservation
+- [ ] Public share does not expose calendar export
+- [ ] No whole-trip calendar export was added
+- [ ] No planner/place calendar export was added
 - [ ] Add reservation-level Travel Link
 - [ ] Edit reservation-level Travel Link
 - [ ] Delete reservation-level Travel Link
@@ -323,7 +333,7 @@ coverage.
 - [ ] No automatic email-sending claim appears
 - [ ] Public share is clearly read-only
 - [ ] Public share packing is clearly read-only
-- [ ] Attachments, calendar export, realtime, and AI are documented as postponed
+- [ ] Attachments, whole-trip calendar export/API sync, realtime, and AI are documented as postponed
 - [ ] Known limitations are listed in README/project docs
 
 ## Build and deployment readiness

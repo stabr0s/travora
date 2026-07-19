@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 52 — Reservation Documents / Travel Links MVP
+Sprint 53 — Selected Reservation Calendar Export MVP
 
 Status: IN PROGRESS
 
@@ -732,7 +732,7 @@ Status: IN PROGRESS
 - Map rendering is postponed; map-ready place fields remain available
 - Public share pages are read-only, including packing
 - Manual email-bound invite links exist, but automatic email sending is postponed
-- File attachments and calendar export are postponed
+- File attachments and whole-trip calendar export/API sync are postponed
 - Realtime collaboration, AI planning, analytics, comments, payments, and advanced per-section privacy controls are postponed
 
 ## Trip Duplicate / Templates MVP
@@ -782,6 +782,18 @@ Status: IN PROGRESS
 - Public share and invite pages do not expose Travel Links
 - Migration `010_travel_links.sql` added
 - No file uploads, Supabase Storage, OCR, email scanning, external APIs, RLS changes outside the new table, or new dependencies added
+
+## Selected Reservation Calendar Export MVP
+
+- Persisted reservation cards can export a single reservation as an `.ics` file
+- Export is local client-side download from data already visible in the authenticated app
+- Owner, editor, and viewer users can export reservations
+- Reservations without a start date show a disabled helper instead of generating a file
+- No whole-trip calendar export added
+- No planner/place/bulk export added
+- No Google Calendar API, Apple Calendar API, OAuth, sync, reminders, or recurring events added
+- Public share pages do not expose calendar export
+- No migrations or new dependencies added
 
 ## Manual Backend Test Checklist
 
@@ -863,21 +875,20 @@ Principles:
 
 ## Next Task
 
-Task #052 — Reservation Documents / Travel Links MVP
+Task #053 — Selected Reservation Calendar Export MVP
 
 Goal:
 
-Add URL-only travel links for trip-level resources and reservation documents.
+Add `.ics` export for selected persisted reservations.
 
 The task includes:
 
-- Trip-level Travel Links in persisted Overview
-- Reservation-level Travel Links inside persisted reservation cards
-- Owner/editor manage access and viewer read-only access
-- Authenticated print summary support
-- Trip duplication support
-- Public share kept private/safe
+- Add to calendar action on individual persisted reservation cards
+- Client-side `.ics` generation and download
+- Owner/editor/viewer read-only export access
+- Disabled state when a reservation has no date
+- Public share kept unchanged
 
 Important:
 
-No file uploads, Supabase Storage, OCR, email scanning, external APIs, public share exposure, or new dependencies are added.
+No whole-trip export, planner export, Google/Apple Calendar API, OAuth, sync, reminders, migrations, or new dependencies are added.

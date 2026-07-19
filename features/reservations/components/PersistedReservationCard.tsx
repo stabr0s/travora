@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 
 import { Badge, Button, Card } from "@/components/ui";
+import { ReservationCalendarButton } from "@/features/reservations/components/ReservationCalendarButton";
 import type { PersistedReservation } from "@/features/reservations/types/persisted-reservation";
 import { TravelLinksCard } from "@/features/travel-links";
 import type { PersistedTravelLink } from "@/features/travel-links/types/travel-link";
@@ -116,12 +117,15 @@ export function PersistedReservationCard({
               </p>
             </div>
           ) : null}
-          {onEdit && onDelete ? (
-            <div className="mt-4 flex flex-col gap-2 border-t border-border-subtle pt-3 sm:flex-row">
-              <Button size="sm" variant="outline" className="w-full sm:w-auto" onClick={() => onEdit(reservation)} disabled={isPending}>Edit</Button>
-              <Button size="sm" variant="ghost" className="w-full text-error sm:w-auto" onClick={() => onDelete(reservation)} disabled={isPending}>Delete</Button>
-            </div>
-          ) : null}
+          <div className="mt-4 flex flex-col gap-2 border-t border-border-subtle pt-3 sm:flex-row sm:flex-wrap">
+            <ReservationCalendarButton reservation={reservation} />
+            {onEdit && onDelete ? (
+              <>
+                <Button size="sm" variant="outline" className="w-full sm:w-auto" onClick={() => onEdit(reservation)} disabled={isPending}>Edit</Button>
+                <Button size="sm" variant="ghost" className="w-full text-error sm:w-auto" onClick={() => onDelete(reservation)} disabled={isPending}>Delete</Button>
+              </>
+            ) : null}
+          </div>
           <div className="mt-5 border-t border-border-subtle pt-4">
             <TravelLinksCard
               tripId={reservation.trip_id}

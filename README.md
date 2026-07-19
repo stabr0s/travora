@@ -56,6 +56,7 @@ secret, database password, or any other secret in the browser.
 - Track basic equal-split group settlements per currency.
 - Keep private Important Info for addresses, check-in details, useful links, and group notes.
 - Save URL-only Travel Links at trip level or on specific reservations.
+- Download selected reservation `.ics` files for calendar import.
 - Track personal packed/unpacked progress per authenticated trip member.
 - Manage owner/editor/viewer access.
 - Add existing Travora users directly or create manual email-bound invite links.
@@ -71,8 +72,9 @@ secret, database password, or any other secret in the browser.
 - Travora does not convert currencies or process payments.
 - Important Info is plain text only; attachments, rich text, comments, and realtime notes are postponed.
 - Travel Links are URL-only; file upload, OCR, automatic booking import, and storage are postponed.
+- Calendar export is selected-reservation `.ics` download only; whole-trip export, API sync, OAuth, reminders, and recurring events are postponed.
 - Manual invite links exist, but Travora does not send emails automatically yet.
 - Full template galleries, public templates, and template categories are postponed.
-- File attachments and calendar export are postponed.
+- File attachments and whole-trip calendar export are postponed.
 - Realtime collaboration and AI planning are postponed.
 - Application routes are public; Supabase RLS is the backend enforcement layer.
