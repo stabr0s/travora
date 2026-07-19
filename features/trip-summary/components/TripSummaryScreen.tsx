@@ -64,6 +64,14 @@ export function TripSummaryScreen({ tripId, summary }: TripSummaryScreenProps) {
         ) : null}
       </header>
 
+      {overview.importantInfo ? (
+        <TripSummarySection title="Important Info">
+          <p className="whitespace-pre-line break-words text-sm leading-relaxed text-slate-700">
+            {overview.importantInfo}
+          </p>
+        </TripSummarySection>
+      ) : null}
+
       <TripSummarySection title="Planner">
         {summary.planner.length ? (
           <div className="space-y-5">

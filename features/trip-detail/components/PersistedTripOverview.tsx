@@ -1,14 +1,36 @@
 import { DatabaseZap } from "lucide-react";
 
 import { EmptyState } from "@/components/ui";
+import { PersistedImportantInfoCard } from "@/features/trip-detail/components/PersistedImportantInfoCard";
+import type { TripImportantInfo } from "@/features/trip-detail/types/important-info";
 
-export function PersistedTripOverview() {
+type PersistedTripOverviewProps = {
+  tripId: string;
+  importantInfo: TripImportantInfo | null;
+  importantInfoError?: string;
+  canEditTrip: boolean;
+};
+
+export function PersistedTripOverview({
+  tripId,
+  importantInfo,
+  importantInfoError,
+  canEditTrip,
+}: PersistedTripOverviewProps) {
   return (
-    <EmptyState
-      icon={DatabaseZap}
-      title="Your trip is saved"
-      description="Basic trip information is connected to Supabase. Places are available in the Places tab, while the remaining planning modules will be connected in later tasks."
-      className="min-h-80"
-    />
+    <div className="space-y-6">
+      <EmptyState
+        icon={DatabaseZap}
+        title="Your trip is saved"
+        description="Use this overview for the core trip context, then jump into Places, Plan, Reservations, Budget, Packing, and People when you need detail."
+        className="min-h-64"
+      />
+      <PersistedImportantInfoCard
+        tripId={tripId}
+        importantInfo={importantInfo}
+        loadError={importantInfoError}
+        canEditTrip={canEditTrip}
+      />
+    </div>
   );
 }

@@ -79,6 +79,32 @@ export type Database = {
           },
         ];
       };
+      trip_important_info: {
+        Row: {
+          id: string;
+          trip_id: string;
+          content: string | null;
+          created_at: string | null;
+          updated_at: string | null;
+        };
+        Insert: {
+          id?: string;
+          trip_id: string;
+          content?: string | null;
+          created_at?: string | null;
+          updated_at?: string | null;
+        };
+        Update: Partial<Database["public"]["Tables"]["trip_important_info"]["Insert"]>;
+        Relationships: [
+          {
+            foreignKeyName: "trip_important_info_trip_id_fkey";
+            columns: ["trip_id"];
+            isOneToOne: false;
+            referencedRelation: "trips";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       trip_members: {
         Row: {
           id: string;

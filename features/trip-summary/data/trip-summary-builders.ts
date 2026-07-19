@@ -11,6 +11,7 @@ import type { PersistedPlannerItem } from "@/features/planner/types/persisted-pl
 import { getMockReservationsByTripId } from "@/features/reservations/data/mock-reservations";
 import type { PersistedReservation } from "@/features/reservations/types/persisted-reservation";
 import { getMockTripDetail } from "@/features/trip-detail";
+import type { TripImportantInfo } from "@/features/trip-detail/types/important-info";
 import type { TripSummaryBudget, TripSummaryData, TripSummaryPacking, TripSummaryParticipants, TripSummaryPlannerGroup } from "@/features/trip-summary/types/trip-summary";
 import type { PersistedTrip } from "@/features/trips/types/persisted-trip";
 function formatCurrency(amount: number, currency: string | null) {
@@ -106,6 +107,7 @@ export function buildPersistedSummary(input: {
   packing: PersistedPackingItem[];
   packingStates?: PersistedPackingItemState[];
   participants: PersistedParticipant[];
+  importantInfo?: TripImportantInfo | null;
 }): TripSummaryData {
   const stateByItemId = new Map(
     (input.packingStates || []).map((state) => [state.packing_item_id, state.is_packed]),
@@ -120,6 +122,7 @@ export function buildPersistedSummary(input: {
       status: input.trip.status || "planning",
       currency: input.trip.currency,
       description: input.trip.description,
+      importantInfo: input.importantInfo?.content || null,
     },
     planner: persistedPlannerGroups(input.planner, input.places),
     places: input.places.map((place) => ({
@@ -162,6 +165,7 @@ export function buildMockSummary(tripId: string): TripSummaryData | null {
       status: trip.status,
       currency: trip.currency,
       description: trip.description,
+      importantInfo: null,
     },
     planner: getMockPlannerByTripId(tripId)?.days.map((day) => ({
       label: `${formatDate(day.date) || day.date}${day.city ? ` · ${day.city}` : ""}`,

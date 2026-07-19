@@ -24,6 +24,9 @@ Email invite links are extended by
 Budget settlements are extended by
 `supabase/migrations/008_budget_settlements.sql`.
 
+Trip Important Info is extended by
+`supabase/migrations/009_trip_important_info.sql`.
+
 Travora supports two data modes. The four demo trip IDs continue reading local
 mock data, while persisted UUID trips use Supabase for Trips, Places, Planner,
 Reservations, Budget, Packing, and Participants. Map remains a visual
@@ -34,6 +37,7 @@ placeholder, and Dashboard is not yet backed by complete persisted analytics.
 - `profiles` — application-facing data linked one-to-one with `auth.users`.
 - `trips` — core trip records owned by a profile.
 - `trip_members` — trip participants, their roles, and invitation status.
+- `trip_important_info` — private multiline trip notes for members.
 - `trip_invites` — copyable email-bound invite links for future or existing users.
 - `places` — destinations and ideas assigned to a trip.
 - `planner_items` — dated or ordered itinerary entries, optionally linked to a place.
@@ -48,14 +52,16 @@ placeholder, and Dashboard is not yet backed by complete persisted analytics.
 
 - A profile can own many trips.
 - A trip can have many members through `trip_members`.
+- A trip can have one private Important Info row through `trip_important_info`.
 - A trip can have many pending or historical invite links through `trip_invites`.
 - A profile can appear only once in a given trip membership list.
 - Places, planner items, reservations, expenses, and packing items belong to a trip.
 - A planner item can optionally reference a place. Deleting that place keeps the
   planner item and clears its `place_id`.
 - Deleting a packing item cascades to its personal `packing_item_states`.
-- Deleting a trip cascades to `trip_members`, `places`, `planner_items`,
-  `trip_invites`, `reservations`, `budget_expenses`, and `packing_items`.
+- Deleting a trip cascades to `trip_members`, `trip_important_info`, `places`,
+  `planner_items`, `trip_invites`, `reservations`, `budget_expenses`, and
+  `packing_items`.
 - Deleting a profile cascades to that profile’s custom packing presets, and
   deleting a preset cascades to its preset items.
 
@@ -276,6 +282,31 @@ settlements. Currencies are not converted. Expenses without assigned
 `paid_by_user_id` or `split_between_user_ids` still render normally but are not
 included in settlement suggestions.
 
+## Trip Important Info
+
+Migration `009_trip_important_info.sql` adds `trip_important_info`, a private
+one-row-per-trip notes table for practical information such as addresses,
+check-in details, emergency contacts, useful links, and group notes.
+
+The table stores:
+
+- `trip_id`
+- multiline `content`
+- timestamps
+
+The `trip_id` column is unique, so a trip has at most one Important Info row.
+The table uses the existing `set_updated_at()` trigger for update timestamps.
+
+RLS is enabled on the table. Authenticated trip owners and active members can
+select Important Info. Owners and active editors can insert and update it
+through the existing `can_edit_trip(trip_id)` helper. No public or anonymous
+policies are added, no RPC function is required, and the existing `trips` RLS
+policies are unchanged.
+
+Important Info is intentionally not included in public share payloads or invite
+preview pages. Authenticated trip summaries can include it for users who
+already have trip access.
+
 ## Applying the migration manually
 
 1. Open the target Supabase project.
@@ -312,6 +343,10 @@ preview/acceptance RPCs. It does not add automatic email sending.
 After reviewing it, apply migration `008` to add Budget settlement metadata.
 Migration `008` adds nullable fields to `budget_expenses`, a split-type
 constraint, and a payer index. It does not change RLS or RPC functions.
+
+After reviewing it, apply migration `009` to add private Trip Important Info.
+Migration `009` adds one table, one trigger, and RLS policies scoped to
+authenticated trip members/editors. It does not change public share RPCs.
 
 ## Current limitations
 

@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 50 — Budget Settlements MVP
+Sprint 51 — Trip Important Info / Notes MVP
 
 Status: IN PROGRESS
 
@@ -758,6 +758,19 @@ Status: IN PROGRESS
 - Public share budget remains read-only and does not expose participant IDs or emails
 - No live FX, payments, receipt scanning, invoices, external APIs, RLS changes, or RPC changes added
 
+## Trip Important Info / Notes MVP
+
+- Persisted trip Overview includes an Important Info card
+- Owner and editor users can add, edit, save, and clear Important Info
+- Viewer users can read Important Info but cannot edit it
+- Important Info is stored separately from public trip descriptions
+- Public share pages and invite pages do not expose Important Info
+- Authenticated print summary includes Important Info
+- Trip duplication copies Important Info content to the copied trip
+- Line breaks are preserved in read-only and print views
+- Migration `009_trip_important_info.sql` added
+- No attachments, rich text editor, markdown engine, comments, notifications, realtime, public share exposure, RLS changes to `trips`, or new dependencies added
+
 ## Manual Backend Test Checklist
 
 - Login and logout
@@ -838,20 +851,21 @@ Principles:
 
 ## Next Task
 
-Task #050 — Budget Settlements MVP
+Task #051 — Trip Important Info / Notes MVP
 
 Goal:
 
-Add basic equal-split group settlements to persisted Budget expenses.
+Add a private Important Info area for practical trip notes.
 
 The task includes:
 
-- Assigning a payer to expenses
-- Splitting expenses between active trip participants
-- Per-currency paid/owed/balance summaries
-- Suggested debtor-to-creditor settlement rows
-- Legacy expense compatibility
+- Important Info card in persisted Trip Overview
+- Owner/editor edit access
+- Viewer read-only access
+- Authenticated print summary support
+- Trip duplication support
+- Public share kept private/safe
 
 Important:
 
-No custom split amounts, payments, FX conversion, receipt scanning, RLS/RPC changes, or new dependencies are added.
+No attachments, rich text, markdown engine, comments, realtime, public exposure, or new dependencies are added.

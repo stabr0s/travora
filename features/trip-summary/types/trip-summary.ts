@@ -6,6 +6,7 @@ export type TripSummaryOverview = {
   status: string;
   currency: string | null;
   description: string | null;
+  importantInfo: string | null;
 };
 
 export type TripSummaryPlannerGroup = {

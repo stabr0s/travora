@@ -14,6 +14,7 @@ import {
   buildMockSummary,
   buildPersistedSummary,
 } from "@/features/trip-summary/data/trip-summary-builders";
+import { getImportantInfoForTrip } from "@/features/trip-detail/services/important-info-service";
 import { TripSummaryScreen } from "@/features/trip-summary";
 import { getTripById } from "@/features/trips/services/trips-service";
 import { isUuid } from "@/lib/validation/is-uuid";
@@ -51,7 +52,7 @@ export default async function TripSummaryPage({ params }: TripSummaryPageProps) 
     );
   }
 
-  const [places, planner, reservations, budget, packing, packingStates, participants] = await Promise.all([
+  const [places, planner, reservations, budget, packing, packingStates, participants, importantInfo] = await Promise.all([
     getPlacesForTrip(id),
     getPlannerItemsForTrip(id),
     getReservationsForTrip(id),
@@ -59,6 +60,7 @@ export default async function TripSummaryPage({ params }: TripSummaryPageProps) 
     getPackingItemsForTrip(id),
     getPackingItemStatesForCurrentUser(id),
     getParticipantsForTrip(id),
+    getImportantInfoForTrip(id),
   ]);
 
   return (
@@ -73,6 +75,7 @@ export default async function TripSummaryPage({ params }: TripSummaryPageProps) 
         packing: packing.data || [],
         packingStates: packingStates.data || [],
         participants: participants.data || [],
+        importantInfo: importantInfo.data,
       })}
     />
   );

@@ -97,6 +97,19 @@ coverage.
 - [ ] Confirm deleted trip disappears from `/trips`
 - [ ] Confirm deleted trip disappears from `/dashboard`
 
+## Important Info
+
+- [ ] Owner can add important info
+- [ ] Owner can edit important info
+- [ ] Editor can edit important info
+- [ ] Viewer can read important info but not edit it
+- [ ] Empty state explains what to store in Important Info
+- [ ] Line breaks are preserved
+- [ ] Trip duplication copies important info
+- [ ] Public share does not leak important info
+- [ ] Invite page does not leak important info
+- [ ] Authenticated print summary includes important info
+
 ## Places
 
 - [ ] Create place
@@ -257,6 +270,7 @@ coverage.
 - [ ] Viewer can open read-only summary
 - [ ] Summary does not expose internal IDs
 - [ ] Participant emails are not printed
+- [ ] Important Info appears in authenticated print summary when present
 - [ ] Mock trip summary route remains safe
 
 ## Public read-only share links

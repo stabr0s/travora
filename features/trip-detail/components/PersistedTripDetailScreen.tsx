@@ -21,6 +21,7 @@ import { PersistedTripSettingsSection } from "@/features/trips/components/Persis
 import { PersistedTripHero } from "@/features/trip-detail/components/PersistedTripHero";
 import { PersistedTripOverview } from "@/features/trip-detail/components/PersistedTripOverview";
 import { TripTabs } from "@/features/trip-detail/components/TripTabs";
+import type { TripImportantInfo } from "@/features/trip-detail/types/important-info";
 import type { TripDetailTabId } from "@/features/trip-detail/types/trip-detail";
 import type { PersistedTrip } from "@/features/trips/types/persisted-trip";
 
@@ -44,6 +45,8 @@ type PersistedTripDetailScreenProps = {
   invites: PersistedTripInvite[];
   currentUserRole: ParticipantRole | null;
   participantsError?: string;
+  importantInfo: TripImportantInfo | null;
+  importantInfoError?: string;
 };
 
 export function PersistedTripDetailScreen({
@@ -66,6 +69,8 @@ export function PersistedTripDetailScreen({
   invites,
   currentUserRole,
   participantsError,
+  importantInfo,
+  importantInfoError,
 }: PersistedTripDetailScreenProps) {
   const [activeTab, setActiveTab] = useState<TripDetailTabId>(initialTab);
   const canEditTrip = currentUserRole === "owner" || currentUserRole === "editor";
@@ -85,7 +90,12 @@ export function PersistedTripDetailScreen({
       ) : null}
       <TripTabs activeTab={activeTab} onTabChange={setActiveTab} showSettings />
       {activeTab === "overview" ? (
-        <PersistedTripOverview />
+        <PersistedTripOverview
+          tripId={trip.id}
+          importantInfo={importantInfo}
+          importantInfoError={importantInfoError}
+          canEditTrip={canEditTrip}
+        />
       ) : activeTab === "places" ? (
         <PlacesSection
           tripId={trip.id}
