@@ -27,10 +27,14 @@ Budget settlements are extended by
 Trip Important Info is extended by
 `supabase/migrations/009_trip_important_info.sql`.
 
+Reservation Documents / Travel Links are extended by
+`supabase/migrations/010_travel_links.sql`.
+
 Travora supports two data modes. The four demo trip IDs continue reading local
 mock data, while persisted UUID trips use Supabase for Trips, Places, Planner,
-Reservations, Budget, Packing, and Participants. Map remains a visual
-placeholder, and Dashboard is not yet backed by complete persisted analytics.
+Reservations, Budget, Packing, Participants, Important Info, and Travel Links.
+Map remains a visual placeholder, and Dashboard is not yet backed by complete
+persisted analytics.
 
 ## Tables
 
@@ -38,6 +42,7 @@ placeholder, and Dashboard is not yet backed by complete persisted analytics.
 - `trips` — core trip records owned by a profile.
 - `trip_members` — trip participants, their roles, and invitation status.
 - `trip_important_info` — private multiline trip notes for members.
+- `travel_links` — URL-only trip and reservation resources for authenticated members.
 - `trip_invites` — copyable email-bound invite links for future or existing users.
 - `places` — destinations and ideas assigned to a trip.
 - `planner_items` — dated or ordered itinerary entries, optionally linked to a place.
@@ -53,6 +58,9 @@ placeholder, and Dashboard is not yet backed by complete persisted analytics.
 - A profile can own many trips.
 - A trip can have many members through `trip_members`.
 - A trip can have one private Important Info row through `trip_important_info`.
+- A trip can have many URL-only Travel Links through `travel_links`.
+- A reservation can have many Travel Links. A trigger ensures reservation-level
+  links belong to the same trip as their reservation.
 - A trip can have many pending or historical invite links through `trip_invites`.
 - A profile can appear only once in a given trip membership list.
 - Places, planner items, reservations, expenses, and packing items belong to a trip.
@@ -60,8 +68,8 @@ placeholder, and Dashboard is not yet backed by complete persisted analytics.
   planner item and clears its `place_id`.
 - Deleting a packing item cascades to its personal `packing_item_states`.
 - Deleting a trip cascades to `trip_members`, `trip_important_info`, `places`,
-  `planner_items`, `trip_invites`, `reservations`, `budget_expenses`, and
-  `packing_items`.
+  `planner_items`, `trip_invites`, `travel_links`, `reservations`,
+  `budget_expenses`, and `packing_items`.
 - Deleting a profile cascades to that profile’s custom packing presets, and
   deleting a preset cascades to its preset items.
 
@@ -307,6 +315,40 @@ Important Info is intentionally not included in public share payloads or invite
 preview pages. Authenticated trip summaries can include it for users who
 already have trip access.
 
+## Travel Links
+
+Migration `010_travel_links.sql` adds `travel_links`, a URL-only table for
+booking pages, check-in links, insurance pages, map links, shared folders, and
+other travel resources.
+
+The table stores:
+
+- `trip_id`
+- optional `reservation_id`
+- `title`
+- normalized `url`
+- `link_type`
+- optional `note`
+- `created_by`
+- timestamps
+
+The database checks that titles and URLs are not empty, that URLs begin with
+`http://` or `https://`, and that `link_type` stays within the MVP values:
+`booking`, `transport`, `accommodation`, `ticket`, `check_in`, `insurance`,
+`visa`, `document`, `map`, and `other`.
+
+A trigger prevents attaching a link to a reservation from a different trip.
+RLS lets authenticated trip owners and active members view links. Owners and
+active editors can create, update, and delete links through the existing
+`can_edit_trip(trip_id)` helper. Insert also requires
+`created_by = auth.uid()`. The app sets `created_by` server-side and does not
+allow editing it.
+
+Travel Links are private authenticated trip data. They are intentionally not
+included in public share payloads or invite preview pages. No file uploads,
+Supabase Storage, OCR, email scanning, external APIs, or public document links
+are added in this MVP.
+
 ## Applying the migration manually
 
 1. Open the target Supabase project.
@@ -348,6 +390,11 @@ After reviewing it, apply migration `009` to add private Trip Important Info.
 Migration `009` adds one table, one trigger, and RLS policies scoped to
 authenticated trip members/editors. It does not change public share RPCs.
 
+After reviewing it, apply migration `010` to add private URL-only Travel Links.
+Migration `010` adds one table, reservation consistency and timestamp triggers,
+and RLS policies scoped to authenticated trip members/editors. It does not
+change public share RPCs or expose links publicly.
+
 ## Current limitations
 
 - The migration has not been applied automatically by this repository.
@@ -364,6 +411,8 @@ authenticated trip members/editors. It does not change public share RPCs.
   anonymous public packing state, per-person dashboard, or realtime sync yet.
 - Invite links are manual copy/share only. There is no automatic email sending,
   SMTP provider, notification system, or invite reminder flow yet.
+- Travel Links are URL-only and authenticated-only. There is no file upload,
+  Supabase Storage, OCR, automatic booking import, or public document exposure.
 - Storage, realtime collaboration, and file uploads are not configured.
 - The TypeScript `Database` type is still maintained manually.
 

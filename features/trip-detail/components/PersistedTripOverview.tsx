@@ -3,11 +3,15 @@ import { DatabaseZap } from "lucide-react";
 import { EmptyState } from "@/components/ui";
 import { PersistedImportantInfoCard } from "@/features/trip-detail/components/PersistedImportantInfoCard";
 import type { TripImportantInfo } from "@/features/trip-detail/types/important-info";
+import { TravelLinksCard } from "@/features/travel-links";
+import type { PersistedTravelLink } from "@/features/travel-links/types/travel-link";
 
 type PersistedTripOverviewProps = {
   tripId: string;
   importantInfo: TripImportantInfo | null;
   importantInfoError?: string;
+  travelLinks: PersistedTravelLink[];
+  travelLinksError?: string;
   canEditTrip: boolean;
 };
 
@@ -15,6 +19,8 @@ export function PersistedTripOverview({
   tripId,
   importantInfo,
   importantInfoError,
+  travelLinks,
+  travelLinksError,
   canEditTrip,
 }: PersistedTripOverviewProps) {
   return (
@@ -29,6 +35,12 @@ export function PersistedTripOverview({
         tripId={tripId}
         importantInfo={importantInfo}
         loadError={importantInfoError}
+        canEditTrip={canEditTrip}
+      />
+      <TravelLinksCard
+        tripId={tripId}
+        links={travelLinks}
+        loadError={travelLinksError}
         canEditTrip={canEditTrip}
       />
     </div>

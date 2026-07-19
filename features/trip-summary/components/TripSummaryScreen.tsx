@@ -123,6 +123,25 @@ export function TripSummaryScreen({ tripId, summary }: TripSummaryScreenProps) {
         ) : emptyCopy("reservations")}
       </TripSummarySection>
 
+      <TripSummarySection title="Travel Links">
+        {summary.travelLinks.trip.length || summary.travelLinks.reservations.length ? (
+          <div className="space-y-3">
+            {[...summary.travelLinks.trip, ...summary.travelLinks.reservations].map((link) => (
+              <div key={`${link.title}-${link.url}`} className="break-inside-avoid rounded-xl bg-slate-50 p-3 text-sm print:border print:border-slate-200 print:bg-white">
+                <p className="font-medium text-slate-950">{link.title}</p>
+                <p className="mt-1 text-slate-600">
+                  {[link.type, link.reservationTitle ? `Reservation: ${link.reservationTitle}` : null].filter(Boolean).join(" · ")}
+                </p>
+                <a className="mt-1 block break-all text-slate-600 underline underline-offset-2" href={link.url} target="_blank" rel="noopener noreferrer">
+                  {link.url}
+                </a>
+                {link.note ? <p className="mt-1 text-slate-600">{link.note}</p> : null}
+              </div>
+            ))}
+          </div>
+        ) : emptyCopy("travel links")}
+      </TripSummarySection>
+
       <TripSummarySection title="Budget">
         <div className="space-y-4">
           {summary.budget.totals.length ? (

@@ -81,9 +81,9 @@ export function DuplicateTripCard({ trip }: DuplicateTripCardProps) {
         </div>
 
         <p className="rounded-xl bg-surface px-4 py-3 text-sm leading-relaxed text-muted">
-          Places, planner items, reservations, budget expenses, and packing
-          items will be copied. Members, invites, public share links, and
-          personal packing progress will not be copied.
+          Places, planner items, reservations, travel links, budget expenses,
+          and packing items will be copied. Members, invites, public share
+          links, and personal packing progress will not be copied.
         </p>
 
         {state.message ? (

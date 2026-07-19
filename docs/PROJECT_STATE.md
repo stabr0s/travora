@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 51 — Trip Important Info / Notes MVP
+Sprint 52 — Reservation Documents / Travel Links MVP
 
 Status: IN PROGRESS
 
@@ -771,6 +771,18 @@ Status: IN PROGRESS
 - Migration `009_trip_important_info.sql` added
 - No attachments, rich text editor, markdown engine, comments, notifications, realtime, public share exposure, RLS changes to `trips`, or new dependencies added
 
+## Reservation Documents / Travel Links MVP
+
+- Persisted trips support URL-only Travel Links for trip-level resources
+- Persisted reservations support compact reservation-level Travel Links
+- Owner and editor users can add, edit, and delete Travel Links
+- Viewer users can open Travel Links but cannot manage them
+- Travel Links are included in authenticated print summaries
+- Trip duplication copies trip-level links and remaps reservation-level links when possible
+- Public share and invite pages do not expose Travel Links
+- Migration `010_travel_links.sql` added
+- No file uploads, Supabase Storage, OCR, email scanning, external APIs, RLS changes outside the new table, or new dependencies added
+
 ## Manual Backend Test Checklist
 
 - Login and logout
@@ -851,21 +863,21 @@ Principles:
 
 ## Next Task
 
-Task #051 — Trip Important Info / Notes MVP
+Task #052 — Reservation Documents / Travel Links MVP
 
 Goal:
 
-Add a private Important Info area for practical trip notes.
+Add URL-only travel links for trip-level resources and reservation documents.
 
 The task includes:
 
-- Important Info card in persisted Trip Overview
-- Owner/editor edit access
-- Viewer read-only access
+- Trip-level Travel Links in persisted Overview
+- Reservation-level Travel Links inside persisted reservation cards
+- Owner/editor manage access and viewer read-only access
 - Authenticated print summary support
 - Trip duplication support
 - Public share kept private/safe
 
 Important:
 
-No attachments, rich text, markdown engine, comments, realtime, public exposure, or new dependencies are added.
+No file uploads, Supabase Storage, OCR, email scanning, external APIs, public share exposure, or new dependencies are added.

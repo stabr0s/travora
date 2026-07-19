@@ -6,9 +6,10 @@ The current MVP supports persisted trips, places, planner items, reservations,
 budget expenses, packing items, personal packing progress, participants,
 manual invite links, public read-only share links, and print-friendly trip
 summaries. Budget includes basic equal-split group settlement suggestions, and
-Trip Overview includes private Important Info for key notes. Trips can also be
-duplicated to reuse a previous itinerary as a simple template. Demo trips
-remain available for safe exploration.
+Trip Overview includes private Important Info and URL-only Travel Links for key
+notes, booking pages, check-in links, and shared folders. Trips can also be
+duplicated to reuse a previous itinerary as a simple template. Demo trips remain
+available for safe exploration.
 
 Production: https://travora-theta.vercel.app
 
@@ -54,6 +55,7 @@ secret, database password, or any other secret in the browser.
 - Plan places, daily itinerary items, reservations, budget expenses, and packing.
 - Track basic equal-split group settlements per currency.
 - Keep private Important Info for addresses, check-in details, useful links, and group notes.
+- Save URL-only Travel Links at trip level or on specific reservations.
 - Track personal packed/unpacked progress per authenticated trip member.
 - Manage owner/editor/viewer access.
 - Add existing Travora users directly or create manual email-bound invite links.
@@ -68,6 +70,7 @@ secret, database password, or any other secret in the browser.
 - Budget settlements support equal split only.
 - Travora does not convert currencies or process payments.
 - Important Info is plain text only; attachments, rich text, comments, and realtime notes are postponed.
+- Travel Links are URL-only; file upload, OCR, automatic booking import, and storage are postponed.
 - Manual invite links exist, but Travora does not send emails automatically yet.
 - Full template galleries, public templates, and template categories are postponed.
 - File attachments and calendar export are postponed.

@@ -39,6 +39,14 @@ export type TripSummaryReservation = {
   notes: string | null;
 };
 
+export type TripSummaryTravelLink = {
+  title: string;
+  url: string;
+  type: string | null;
+  note: string | null;
+  reservationTitle: string | null;
+};
+
 export type TripSummaryBudget = {
   totals: { currency: string; amount: number }[];
   expenses: {
@@ -74,6 +82,10 @@ export type TripSummaryData = {
   planner: TripSummaryPlannerGroup[];
   places: TripSummaryPlace[];
   reservations: TripSummaryReservation[];
+  travelLinks: {
+    trip: TripSummaryTravelLink[];
+    reservations: TripSummaryTravelLink[];
+  };
   budget: TripSummaryBudget;
   packing: TripSummaryPacking;
   participants: TripSummaryParticipants;

@@ -18,6 +18,7 @@ import { getPlacesForTrip } from "@/features/places/services/places-service";
 import { getPlannerItemsForTrip } from "@/features/planner/services/planner-service";
 import { getReservationsForTrip } from "@/features/reservations/services/reservations-service";
 import { getImportantInfoForTrip } from "@/features/trip-detail/services/important-info-service";
+import { getTravelLinksForTrip } from "@/features/travel-links/services/travel-links-service";
 import type { TripDetailTabId } from "@/features/trip-detail/types/trip-detail";
 import { getTripById } from "@/features/trips/services/trips-service";
 import { isUuid } from "@/lib/validation/is-uuid";
@@ -71,6 +72,7 @@ export default async function TripDetailPage({ params, searchParams }: TripDetai
       persistedParticipants,
       persistedAccess,
       persistedImportantInfo,
+      persistedTravelLinks,
     ] = await Promise.all([
       getPlacesForTrip(id),
       getPlannerItemsForTrip(id),
@@ -82,6 +84,7 @@ export default async function TripDetailPage({ params, searchParams }: TripDetai
       getParticipantsForTrip(id),
       getCurrentUserTripAccess(id),
       getImportantInfoForTrip(id),
+      getTravelLinksForTrip(id),
     ]);
     const persistedInvites = persistedAccess.data?.role === "owner"
       ? await getTripInvitesForTrip(id)
@@ -110,6 +113,8 @@ export default async function TripDetailPage({ params, searchParams }: TripDetai
         participantsError={persistedParticipants.error?.message || persistedAccess.error?.message || persistedInvites.error?.message}
         importantInfo={persistedImportantInfo.data}
         importantInfoError={persistedImportantInfo.error?.message}
+        travelLinks={persistedTravelLinks.data || []}
+        travelLinksError={persistedTravelLinks.error?.message}
       />
     );
   }

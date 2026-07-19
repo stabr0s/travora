@@ -23,6 +23,7 @@ import { PersistedTripOverview } from "@/features/trip-detail/components/Persist
 import { TripTabs } from "@/features/trip-detail/components/TripTabs";
 import type { TripImportantInfo } from "@/features/trip-detail/types/important-info";
 import type { TripDetailTabId } from "@/features/trip-detail/types/trip-detail";
+import type { PersistedTravelLink } from "@/features/travel-links/types/travel-link";
 import type { PersistedTrip } from "@/features/trips/types/persisted-trip";
 
 type PersistedTripDetailScreenProps = {
@@ -47,6 +48,8 @@ type PersistedTripDetailScreenProps = {
   participantsError?: string;
   importantInfo: TripImportantInfo | null;
   importantInfoError?: string;
+  travelLinks: PersistedTravelLink[];
+  travelLinksError?: string;
 };
 
 export function PersistedTripDetailScreen({
@@ -71,6 +74,8 @@ export function PersistedTripDetailScreen({
   participantsError,
   importantInfo,
   importantInfoError,
+  travelLinks,
+  travelLinksError,
 }: PersistedTripDetailScreenProps) {
   const [activeTab, setActiveTab] = useState<TripDetailTabId>(initialTab);
   const canEditTrip = currentUserRole === "owner" || currentUserRole === "editor";
@@ -94,6 +99,8 @@ export function PersistedTripDetailScreen({
           tripId={trip.id}
           importantInfo={importantInfo}
           importantInfoError={importantInfoError}
+          travelLinks={travelLinks.filter((link) => !link.reservation_id)}
+          travelLinksError={travelLinksError}
           canEditTrip={canEditTrip}
         />
       ) : activeTab === "places" ? (
@@ -120,6 +127,8 @@ export function PersistedTripDetailScreen({
           tripCurrency={trip.currency || undefined}
           loadError={reservationsError}
           canEditTrip={canEditTrip}
+          travelLinks={travelLinks.filter((link) => Boolean(link.reservation_id))}
+          travelLinksError={travelLinksError}
         />
       ) : activeTab === "budget" ? (
         <PersistedBudgetSection

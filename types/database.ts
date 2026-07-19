@@ -105,6 +105,76 @@ export type Database = {
           },
         ];
       };
+      travel_links: {
+        Row: {
+          id: string;
+          trip_id: string;
+          reservation_id: string | null;
+          title: string;
+          url: string;
+          link_type:
+            | "booking"
+            | "transport"
+            | "accommodation"
+            | "ticket"
+            | "check_in"
+            | "insurance"
+            | "visa"
+            | "document"
+            | "map"
+            | "other";
+          note: string | null;
+          created_by: string;
+          created_at: string | null;
+          updated_at: string | null;
+        };
+        Insert: {
+          id?: string;
+          trip_id: string;
+          reservation_id?: string | null;
+          title: string;
+          url: string;
+          link_type?:
+            | "booking"
+            | "transport"
+            | "accommodation"
+            | "ticket"
+            | "check_in"
+            | "insurance"
+            | "visa"
+            | "document"
+            | "map"
+            | "other";
+          note?: string | null;
+          created_by: string;
+          created_at?: string | null;
+          updated_at?: string | null;
+        };
+        Update: Partial<Database["public"]["Tables"]["travel_links"]["Insert"]>;
+        Relationships: [
+          {
+            foreignKeyName: "travel_links_trip_id_fkey";
+            columns: ["trip_id"];
+            isOneToOne: false;
+            referencedRelation: "trips";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "travel_links_reservation_id_fkey";
+            columns: ["reservation_id"];
+            isOneToOne: false;
+            referencedRelation: "reservations";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "travel_links_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       trip_members: {
         Row: {
           id: string;

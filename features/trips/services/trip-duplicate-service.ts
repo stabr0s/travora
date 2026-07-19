@@ -77,16 +77,18 @@ export async function duplicateTrip(
     return { data: null, error: { code: "PERMISSION_DENIED", message: "Only owners and editors can duplicate this trip." } };
   }
 
-  const [places, planner, reservations, budget, packing, importantInfo] = await Promise.all([
+  const [places, planner, reservations, budget, packing, importantInfo, travelLinks] = await Promise.all([
     supabase.from("places").select("*").eq("trip_id", input.tripId),
     supabase.from("planner_items").select("*").eq("trip_id", input.tripId),
     supabase.from("reservations").select("*").eq("trip_id", input.tripId),
     supabase.from("budget_expenses").select("*").eq("trip_id", input.tripId),
     supabase.from("packing_items").select("*").eq("trip_id", input.tripId),
     supabase.from("trip_important_info").select("*").eq("trip_id", input.tripId).maybeSingle(),
+    supabase.from("travel_links").select("*").eq("trip_id", input.tripId),
   ]);
 
-  const readError = places.error || planner.error || reservations.error || budget.error || packing.error || importantInfo.error;
+  const readError = places.error || planner.error || reservations.error
+    || budget.error || packing.error || importantInfo.error || travelLinks.error;
   if (readError) {
     logDuplicateError("source modules read failed", readError);
     return { data: null, error: { code: "LOAD_FAILED", message: "We couldn't load trip content to duplicate." } };
@@ -132,12 +134,14 @@ export async function duplicateTrip(
     placePayloads,
     plannerPayloads,
     reservationPayloads,
+    travelLinkPayloads,
     budgetPayloads,
     packingPayloads,
-  } = buildDuplicateModulePayloads(newTripId, {
+  } = buildDuplicateModulePayloads(newTripId, user.id, {
     places: places.data || [],
     planner: planner.data || [],
     reservations: reservations.data || [],
+    travelLinks: travelLinks.data || [],
     budget: budget.data || [],
     packing: packing.data || [],
   });
@@ -146,6 +150,7 @@ export async function duplicateTrip(
     () => placePayloads.length ? supabase.from("places").insert(placePayloads) : null,
     () => plannerPayloads.length ? supabase.from("planner_items").insert(plannerPayloads) : null,
     () => reservationPayloads.length ? supabase.from("reservations").insert(reservationPayloads) : null,
+    () => travelLinkPayloads.length ? supabase.from("travel_links").insert(travelLinkPayloads) : null,
     () => budgetPayloads.length ? supabase.from("budget_expenses").insert(budgetPayloads) : null,
     () => packingPayloads.length ? supabase.from("packing_items").insert(packingPayloads) : null,
     () => importantInfo.data?.content

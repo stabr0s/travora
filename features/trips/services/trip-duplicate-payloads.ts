@@ -9,12 +9,14 @@ type DuplicateSourceRows = {
   places: TableRow<"places">[];
   planner: TableRow<"planner_items">[];
   reservations: TableRow<"reservations">[];
+  travelLinks: TableRow<"travel_links">[];
   budget: TableRow<"budget_expenses">[];
   packing: TableRow<"packing_items">[];
 };
 
 export function buildDuplicateModulePayloads(
   newTripId: string,
+  createdBy: string,
   source: DuplicateSourceRows,
 ) {
   const placeIdMap = new Map<string, string>();
@@ -55,22 +57,39 @@ export function buildDuplicateModulePayloads(
     order_index: item.order_index,
   } satisfies Database["public"]["Tables"]["planner_items"]["Insert"]));
 
-  const reservationPayloads = source.reservations.map((reservation) => ({
+  const reservationIdMap = new Map<string, string>();
+  const reservationPayloads = source.reservations.map((reservation) => {
+    const id = randomUUID();
+    reservationIdMap.set(reservation.id, id);
+
+    return {
+      id,
+      trip_id: newTripId,
+      type: reservation.type,
+      title: reservation.title,
+      provider: reservation.provider,
+      reservation_number: reservation.reservation_number,
+      start_date: reservation.start_date,
+      end_date: reservation.end_date,
+      location: reservation.location,
+      total_price: reservation.total_price,
+      currency: reservation.currency,
+      status: reservation.status,
+      payer_name: reservation.payer_name,
+      notes: reservation.notes,
+    } satisfies Database["public"]["Tables"]["reservations"]["Insert"];
+  });
+
+  const travelLinkPayloads = source.travelLinks.map((link) => ({
     id: randomUUID(),
     trip_id: newTripId,
-    type: reservation.type,
-    title: reservation.title,
-    provider: reservation.provider,
-    reservation_number: reservation.reservation_number,
-    start_date: reservation.start_date,
-    end_date: reservation.end_date,
-    location: reservation.location,
-    total_price: reservation.total_price,
-    currency: reservation.currency,
-    status: reservation.status,
-    payer_name: reservation.payer_name,
-    notes: reservation.notes,
-  } satisfies Database["public"]["Tables"]["reservations"]["Insert"]));
+    reservation_id: link.reservation_id ? reservationIdMap.get(link.reservation_id) ?? null : null,
+    title: link.title,
+    url: link.url,
+    link_type: link.link_type,
+    note: link.note,
+    created_by: createdBy,
+  } satisfies Database["public"]["Tables"]["travel_links"]["Insert"]));
 
   const budgetPayloads = source.budget.map((expense) => ({
     id: randomUUID(),
@@ -105,6 +124,7 @@ export function buildDuplicateModulePayloads(
     placePayloads,
     plannerPayloads,
     reservationPayloads,
+    travelLinkPayloads,
     budgetPayloads,
     packingPayloads,
   };

@@ -12,7 +12,8 @@ import { getMockReservationsByTripId } from "@/features/reservations/data/mock-r
 import type { PersistedReservation } from "@/features/reservations/types/persisted-reservation";
 import { getMockTripDetail } from "@/features/trip-detail";
 import type { TripImportantInfo } from "@/features/trip-detail/types/important-info";
-import type { TripSummaryBudget, TripSummaryData, TripSummaryPacking, TripSummaryParticipants, TripSummaryPlannerGroup } from "@/features/trip-summary/types/trip-summary";
+import type { TripSummaryBudget, TripSummaryData, TripSummaryPacking, TripSummaryParticipants, TripSummaryPlannerGroup, TripSummaryTravelLink } from "@/features/trip-summary/types/trip-summary";
+import type { PersistedTravelLink } from "@/features/travel-links/types/travel-link";
 import type { PersistedTrip } from "@/features/trips/types/persisted-trip";
 function formatCurrency(amount: number, currency: string | null) {
   return `${amount.toFixed(2)} ${(currency || "EUR").toUpperCase()}`;
@@ -98,6 +99,23 @@ function persistedPlannerGroups(
 
   return Array.from(groups, ([label, groupItems]) => ({ label, items: groupItems }));
 }
+function persistedTravelLinks(
+  links: PersistedTravelLink[],
+  reservations: PersistedReservation[],
+): { trip: TripSummaryTravelLink[]; reservations: TripSummaryTravelLink[] } {
+  const reservationTitles = new Map(reservations.map((reservation) => [reservation.id, reservation.title]));
+  const mapLink = (link: PersistedTravelLink): TripSummaryTravelLink => ({
+    title: link.title,
+    url: link.url,
+    type: link.link_type,
+    note: link.note,
+    reservationTitle: link.reservation_id ? reservationTitles.get(link.reservation_id) || "Reservation" : null,
+  });
+  return {
+    trip: links.filter((link) => !link.reservation_id).map(mapLink),
+    reservations: links.filter((link) => Boolean(link.reservation_id)).map(mapLink),
+  };
+}
 export function buildPersistedSummary(input: {
   trip: PersistedTrip;
   places: PersistedPlace[];
@@ -108,6 +126,7 @@ export function buildPersistedSummary(input: {
   packingStates?: PersistedPackingItemState[];
   participants: PersistedParticipant[];
   importantInfo?: TripImportantInfo | null;
+  travelLinks?: PersistedTravelLink[];
 }): TripSummaryData {
   const stateByItemId = new Map(
     (input.packingStates || []).map((state) => [state.packing_item_id, state.is_packed]),
@@ -142,6 +161,7 @@ export function buildPersistedSummary(input: {
       price: reservation.total_price == null ? null : formatCurrency(reservation.total_price, reservation.currency),
       notes: reservation.notes,
     })),
+    travelLinks: persistedTravelLinks(input.travelLinks || [], input.reservations),
     budget: budgetSummary(input.budget),
     packing: packingSummary(input.packing.map((item) => ({
       ...item,
@@ -194,6 +214,10 @@ export function buildMockSummary(tripId: string): TripSummaryData | null {
       price: formatCurrency(reservation.totalPrice, reservation.currency),
       notes: reservation.notes || null,
     })),
+    travelLinks: {
+      trip: [],
+      reservations: [],
+    },
     budget: budgetSummary(budget?.expenses.map((expense) => ({
       title: expense.title,
       amount: expense.amount,

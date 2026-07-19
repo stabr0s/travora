@@ -110,6 +110,22 @@ coverage.
 - [ ] Invite page does not leak important info
 - [ ] Authenticated print summary includes important info
 
+## Travel Links
+
+- [ ] Owner/editor can add trip-level Travel Link
+- [ ] Owner/editor can edit trip-level Travel Link
+- [ ] Owner/editor can delete trip-level Travel Link
+- [ ] Viewer can open trip-level Travel Link but cannot manage it
+- [ ] Invalid URL protocols such as `javascript:` or `mailto:` are rejected
+- [ ] Owner/editor can add reservation-level Travel Link
+- [ ] Reservation-level Travel Link appears on the matching reservation card
+- [ ] Reservation-level Travel Link cannot be attached to another trip's reservation
+- [ ] Authenticated print summary includes Travel Links
+- [ ] Trip duplication copies trip-level links
+- [ ] Trip duplication remaps reservation-level links to copied reservations
+- [ ] Public share page does not expose Travel Links
+- [ ] Invite pages do not expose Travel Links
+
 ## Places
 
 - [ ] Create place
@@ -149,6 +165,10 @@ coverage.
 ## Reservations
 
 - [ ] Create reservation
+- [ ] Add reservation-level Travel Link
+- [ ] Edit reservation-level Travel Link
+- [ ] Delete reservation-level Travel Link
+- [ ] Viewer can open reservation links but cannot add/edit/delete them
 - [ ] Custom currency can be used in reservation forms
 - [ ] Confirm Add Reservation defaults currency from trip settings
 - [ ] Confirm Edit Reservation keeps existing currency unless user changes it
@@ -271,6 +291,7 @@ coverage.
 - [ ] Summary does not expose internal IDs
 - [ ] Participant emails are not printed
 - [ ] Important Info appears in authenticated print summary when present
+- [ ] Travel Links appear in authenticated print summary when present
 - [ ] Mock trip summary route remains safe
 
 ## Public read-only share links
@@ -285,6 +306,7 @@ coverage.
 - [ ] Public page does not expose participant emails
 - [ ] Public page does not expose user IDs, member IDs, owner IDs, or share token fields
 - [ ] Public page does not expose reservation reference/confirmation number
+- [ ] Public page does not expose Travel Links
 - [ ] Owner can disable public link
 - [ ] Disabled link shows safe not-found behavior
 - [ ] Owner can regenerate public link

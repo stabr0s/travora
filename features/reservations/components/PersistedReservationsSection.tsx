@@ -12,6 +12,7 @@ import { ReservationsHeader } from "@/features/reservations/components/Reservati
 import { useScrollIntoViewOnOpen } from "@/hooks/useScrollIntoViewOnOpen";
 import type { CreateReservationActionState, PersistedReservation } from "@/features/reservations/types/persisted-reservation";
 import type { ReservationFilter } from "@/features/reservations/types/reservation";
+import type { PersistedTravelLink } from "@/features/travel-links/types/travel-link";
 
 type PersistedReservationsSectionProps = {
   tripId: string;
@@ -19,6 +20,8 @@ type PersistedReservationsSectionProps = {
   tripCurrency?: string;
   loadError?: string;
   canEditTrip: boolean;
+  travelLinks?: PersistedTravelLink[];
+  travelLinksError?: string;
 };
 
 function filterReservations(reservations: PersistedReservation[], filter: ReservationFilter) {
@@ -36,6 +39,8 @@ export function PersistedReservationsSection({
   tripCurrency,
   loadError,
   canEditTrip,
+  travelLinks = [],
+  travelLinksError,
 }: PersistedReservationsSectionProps) {
   const [activeFilter, setActiveFilter] = useState<ReservationFilter>("all");
   const [isAddPanelOpen, setIsAddPanelOpen] = useState(false);
@@ -92,6 +97,9 @@ export function PersistedReservationsSection({
                   isPending={isPending}
                   onEdit={canEditTrip ? (selected) => { setEditingReservation(selected); setIsAddPanelOpen(true); } : undefined}
                   onDelete={canEditTrip ? handleDelete : undefined}
+                  canEditTrip={canEditTrip}
+                  travelLinks={travelLinks.filter((link) => link.reservation_id === reservation.id)}
+                  travelLinksError={travelLinksError}
                 />
               ))}
             </div>

@@ -14,12 +14,17 @@ import {
 
 import { Badge, Button, Card } from "@/components/ui";
 import type { PersistedReservation } from "@/features/reservations/types/persisted-reservation";
+import { TravelLinksCard } from "@/features/travel-links";
+import type { PersistedTravelLink } from "@/features/travel-links/types/travel-link";
 
 type PersistedReservationCardProps = {
   reservation: PersistedReservation;
   isPending?: boolean;
   onDelete?: (reservation: PersistedReservation) => void;
   onEdit?: (reservation: PersistedReservation) => void;
+  canEditTrip?: boolean;
+  travelLinks?: PersistedTravelLink[];
+  travelLinksError?: string;
 };
 
 const typeIcons: Record<string, LucideIcon> = {
@@ -60,7 +65,15 @@ function formatCurrency(amount: number, currency: string) {
   }
 }
 
-export function PersistedReservationCard({ reservation, isPending, onDelete, onEdit }: PersistedReservationCardProps) {
+export function PersistedReservationCard({
+  reservation,
+  isPending,
+  onDelete,
+  onEdit,
+  canEditTrip = false,
+  travelLinks = [],
+  travelLinksError,
+}: PersistedReservationCardProps) {
   const Icon = typeIcons[reservation.type || "other"] || ReceiptText;
   const status = statusDetails[reservation.status || "unpaid"];
 
@@ -109,6 +122,18 @@ export function PersistedReservationCard({ reservation, isPending, onDelete, onE
               <Button size="sm" variant="ghost" className="w-full text-error sm:w-auto" onClick={() => onDelete(reservation)} disabled={isPending}>Delete</Button>
             </div>
           ) : null}
+          <div className="mt-5 border-t border-border-subtle pt-4">
+            <TravelLinksCard
+              tripId={reservation.trip_id}
+              reservationId={reservation.id}
+              links={travelLinks}
+              loadError={travelLinksError}
+              canEditTrip={canEditTrip}
+              compact
+              title="Documents & links"
+              emptyDescription="Attach booking pages, check-in links, tickets, or shared folders for this reservation."
+            />
+          </div>
         </div>
       </div>
     </Card>
