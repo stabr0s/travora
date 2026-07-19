@@ -1,172 +1,155 @@
-# Travora — MVP QA Checklist
+# Travora — MVP Beta QA Checklist
 
-Use a disposable test trip for destructive checks.
-
-## Production QA status
+Use a disposable persisted trip for destructive checks.
 
 Production URL: https://travora-theta.vercel.app
 
-Manually checked after first Vercel MVP deploy:
+## Release smoke test
 
-- [x] App loads on production URL
-- [x] Register works
-- [x] Login works
-- [x] Dashboard works
-- [x] Trips list works
-- [x] Create trip works
-- [x] Persisted trip detail works
-- [x] Persisted modules were checked
-- [x] Map tab remains hidden
-- [x] Basic auth redirect works
+- [ ] App loads on production URL
+- [ ] No secrets are visible in the UI or repository
+- [ ] Landing page works on desktop
+- [ ] Landing page works on mobile
+- [ ] Public demo trip opens from landing
+- [ ] Register works
+- [ ] Login works
+- [ ] Logout works
+- [ ] Dashboard works after login
+- [ ] Trips list works after login
+- [ ] Core persisted trip detail loads
+- [ ] No horizontal overflow on key mobile routes
 
-This notes the first manual production smoke test, not exhaustive regression
-coverage.
+## Landing and public demo
 
-## Beta readiness sweep
-
-- [ ] Landing → demo → register/login flow is clear
-- [ ] Register/login → dashboard flow is clear
-- [ ] Create trip flow has clear copy and safe empty states
-- [ ] Dashboard getting started card is visible and helpful
-- [ ] Places empty state explains what to add next
-- [ ] Planner empty state explains quick-add and saved Places
-- [ ] Reservations empty state explains what belongs there
-- [ ] Budget empty state explains how to start tracking costs
-- [ ] Packing empty state explains shared checklist and personal progress
-- [ ] Participants and invite empty states explain access next steps
-- [ ] Public share invalid/disabled state is safe
-- [ ] Invite invalid/revoked/wrong-email states are clear
-- [ ] Known beta limitations are documented without sounding like app errors
+- [ ] `/` explains Travora clearly
+- [ ] Get started opens `/register`
+- [ ] Sign in opens `/login`
+- [ ] View demo trip opens `/trips/japan-2027`
+- [ ] Demo trip is self-contained and does not show app sidebar navigation
+- [ ] Demo trip has Back to landing, Get started, and Sign in actions
+- [ ] Demo trip does not mutate persisted data
+- [ ] Other mock trips render safely
 
 ## Auth
 
 - [ ] Register account
-- [ ] Confirm email link completes through `/auth/callback`
-- [ ] Confirm production email link starts with `https://travora-theta.vercel.app/auth/callback`
-- [ ] Confirm Supabase signup email template uses `{{ .ConfirmationURL }}`
-- [ ] Expired or invalid confirmation link shows friendly login error
+- [ ] Confirmation email link completes through `/auth/callback`
+- [ ] Production confirmation link starts with `https://travora-theta.vercel.app/auth/callback`
+- [ ] Supabase signup email template uses `{{ .ConfirmationURL }}`
+- [ ] Invalid or expired auth callback shows a friendly path back to login
 - [ ] Login
 - [ ] Logout
-- [ ] Confirm `/settings` shows auth state
+- [ ] `/settings` shows signed-in auth state
 
-## Public landing and onboarding
+## Dashboard and trips list
 
-- [ ] Landing page loads on desktop
-- [ ] Landing page loads on mobile
-- [ ] Get started links to `/register`
-- [ ] Sign in links to `/login`
-- [ ] Demo trip link opens `/trips/japan-2027`
-- [ ] Auth page copy is clear for new users
-- [ ] Landing has no horizontal overflow on mobile
-- [ ] Landing does not introduce new backend behavior
+- [ ] Signed-in `/dashboard` shows persisted trip summary
+- [ ] Dashboard empty state works for user with no trips
+- [ ] Dashboard getting started card is visible and useful
+- [ ] Signed-in `/trips` shows persisted trips
+- [ ] Trip cards show role/status/date metadata
+- [ ] Clicking a trip card opens the trip
+- [ ] Trip card buttons still work
+- [ ] Deleted trips disappear after refresh
+- [ ] Logged-out `/dashboard` redirects safely to public demo
+- [ ] Logged-out `/trips` redirects safely to public demo
 
-## Focused public demo trip
-
-- [ ] Landing View demo trip opens `/trips/japan-2027`
-- [ ] Demo trip does not show Dashboard, Trips, or Settings sidebar links
-- [ ] Demo trip has Back to landing, Get started, and Sign in actions
-- [ ] All trips button is not visible on demo trip
-- [ ] Demo trip has no app mobile navigation
-- [ ] Persisted trip navigation still works
-- [ ] No backend behavior changed
-- [ ] No migrations or dependencies added
-
-## Trips
+## Trip lifecycle
 
 - [ ] Create trip
-- [ ] Owner can duplicate persisted trip
-- [ ] Editor can duplicate persisted trip into their own account
+- [ ] Edit trip settings as owner
+- [ ] Viewer sees read-only trip settings
+- [ ] Delete disposable test trip as owner
+- [ ] Duplicate persisted trip as owner
+- [ ] Duplicate persisted trip as editor into own account
 - [ ] Viewer cannot duplicate persisted trip
 - [ ] Copied trip opens successfully
-- [ ] Copied trip is owned by the current user
+- [ ] Copied trip is owned by current user
 - [ ] Copied places belong to copied trip
-- [ ] Copied planner items reference copied places, not original places
+- [ ] Copied planner items reference copied places
 - [ ] Copied reservations belong to copied trip
+- [ ] Copied reservation-level Travel Links remap to copied reservations
 - [ ] Copied budget items belong to copied trip
 - [ ] Copied packing items belong to copied trip
+- [ ] Copied Important Info is present
 - [ ] Personal packing states are not copied
 - [ ] Public share is disabled on copied trip
-- [ ] Invite links are not copied
-- [ ] Members are not copied except current user owner membership
+- [ ] Invite links and members are not copied
 - [ ] Original trip is unchanged after duplication
-- [ ] Mock/demo trips cannot be duplicated
-- [ ] Public share visitors cannot duplicate trips
-- [ ] No service-role/admin client is used for duplication
-- [ ] Edit trip settings
-- [ ] Delete test trip
-- [ ] Confirm deleted trip disappears from `/trips`
-- [ ] Confirm deleted trip disappears from `/dashboard`
 
-## Important Info
+## Trip detail tabs
 
-- [ ] Owner can add important info
-- [ ] Owner can edit important info
-- [ ] Editor can edit important info
-- [ ] Viewer can read important info but not edit it
-- [ ] Empty state explains what to store in Important Info
-- [ ] Line breaks are preserved
-- [ ] Trip duplication copies important info
-- [ ] Public share does not leak important info
-- [ ] Invite page does not leak important info
-- [ ] Authenticated print summary includes important info
+- [ ] Overview tab works
+- [ ] Places tab works
+- [ ] Plan tab works
+- [ ] Reservations tab works
+- [ ] Budget tab works
+- [ ] Packing tab works
+- [ ] Participants tab works
+- [ ] Settings tab works for persisted trips
+- [ ] Map tab remains hidden
+- [ ] Tabs are usable on mobile
 
-## Travel Links
+## Overview, Important Info, and Travel Links
 
+- [ ] Owner/editor can add Important Info
+- [ ] Owner/editor can edit Important Info
+- [ ] Viewer can read Important Info but cannot edit it
+- [ ] Important Info preserves line breaks
+- [ ] Public share does not expose Important Info
+- [ ] Invite page does not expose Important Info
 - [ ] Owner/editor can add trip-level Travel Link
 - [ ] Owner/editor can edit trip-level Travel Link
 - [ ] Owner/editor can delete trip-level Travel Link
-- [ ] Viewer can open trip-level Travel Link but cannot manage it
+- [ ] Viewer can open Travel Links but cannot manage them
 - [ ] Invalid URL protocols such as `javascript:` or `mailto:` are rejected
-- [ ] Owner/editor can add reservation-level Travel Link
-- [ ] Reservation-level Travel Link appears on the matching reservation card
-- [ ] Reservation-level Travel Link cannot be attached to another trip's reservation
-- [ ] Authenticated print summary includes Travel Links
-- [ ] Trip duplication copies trip-level links
-- [ ] Trip duplication remaps reservation-level links to copied reservations
-- [ ] Public share page does not expose Travel Links
-- [ ] Invite pages do not expose Travel Links
+- [ ] Public share does not expose Travel Links
+- [ ] Invite page does not expose Travel Links
 
 ## Places
 
 - [ ] Create place
-- [ ] Add Place pre-fills country from trip destination when safe
-- [ ] Confirm pre-filled country can be changed or cleared
-- [ ] Confirm Edit Place does not overwrite country from trip destination
-- [ ] Owner/editor can quickly change place status from the place card
-- [ ] Viewer cannot quickly change place status
 - [ ] Edit place
 - [ ] Delete place
+- [ ] Add Place pre-fills country from trip destination when safe
+- [ ] Edit Place does not overwrite country from trip destination
+- [ ] Optional latitude/longitude/map order can be saved
+- [ ] Owner/editor can quickly change place status from card
+- [ ] Viewer cannot change place status
 
 ## Planner
 
-- [ ] Owner/editor can quick-add planner item
-- [ ] Viewer cannot quick-add planner item
-- [ ] Create planner item from saved Place quick-add
-- [ ] Confirm planner quick-add stores `place_id`
-- [ ] Adding planner item with `place_id` marks linked Place as planned
-- [ ] Editing planner item to add/change Place marks the new Place as planned
-- [ ] Visited/rejected Place status is not overwritten by Planner linking
-- [ ] Confirm planner item can still be created manually without Place
-- [ ] Owner/editor can copy day
-- [ ] Viewer cannot copy day
-- [ ] Copied day preserves title, description, type, times, place link, and status
-- [ ] Copy day does not overwrite existing target-day items
-- [ ] Copying an empty day shows a friendly error
-- [ ] Copying a day to itself shows a friendly error
-- [ ] Owner/editor can move planner items up/down within one day
-- [ ] Viewer cannot reorder planner items
-- [ ] No drag and drop dependency was added
-- [ ] No planner redesign was added
-- [ ] No planner migration was added
 - [ ] Create planner item
 - [ ] Edit planner item
 - [ ] Delete planner item
+- [ ] Owner/editor can quick-add planner item
+- [ ] Viewer cannot quick-add planner item
+- [ ] Quick-add can use a saved Place
+- [ ] Planner item with `place_id` marks linked Place as planned
+- [ ] Visited/rejected Place status is not overwritten by Planner linking
+- [ ] Owner/editor can copy day
+- [ ] Viewer cannot copy day
+- [ ] Copy day does not overwrite target-day items
+- [ ] Copying empty day shows friendly error
+- [ ] Copying day to itself shows friendly error
+- [ ] Owner/editor can move items up/down
+- [ ] Viewer cannot reorder
+- [ ] No drag and drop dependency exists
 
-## Reservations
+## Reservations and calendar export
 
 - [ ] Create reservation
-- [ ] Reservation with date can export `.ics`
-- [ ] Reservation without date shows disabled/helper calendar export state
+- [ ] Edit reservation
+- [ ] Delete reservation
+- [ ] Custom currency can be used in reservation forms
+- [ ] Reservation can optionally create matching Budget expense
+- [ ] Editing/deleting reservation does not auto-sync created Budget expense
+- [ ] Add reservation-level Travel Link
+- [ ] Edit reservation-level Travel Link
+- [ ] Delete reservation-level Travel Link
+- [ ] Viewer can open reservation links but cannot manage them
+- [ ] Reservation with start date exports `.ics`
+- [ ] Reservation without start date shows disabled/helper calendar export state
 - [ ] Exported `.ics` has sensible title/date/location/description
 - [ ] Owner can export reservation calendar file
 - [ ] Editor can export reservation calendar file
@@ -175,70 +158,50 @@ coverage.
 - [ ] Public share does not expose calendar export
 - [ ] No whole-trip calendar export was added
 - [ ] No planner/place calendar export was added
-- [ ] Add reservation-level Travel Link
-- [ ] Edit reservation-level Travel Link
-- [ ] Delete reservation-level Travel Link
-- [ ] Viewer can open reservation links but cannot add/edit/delete them
-- [ ] Custom currency can be used in reservation forms
-- [ ] Confirm Add Reservation defaults currency from trip settings
-- [ ] Confirm Edit Reservation keeps existing currency unless user changes it
-- [ ] Create reservation with "Add this payment to Budget" checked
-- [ ] Confirm matching budget expense appears after reservation save
-- [ ] Confirm editing/deleting reservation does not auto-sync budget expense
-- [ ] Edit reservation
-- [ ] Delete reservation
 
-## Budget
+## Budget and settlements
 
 - [ ] Create budget expense
-- [ ] Owner/editor can create an expense with paid by and split participants
-- [ ] Owner/editor can edit paid by and split participants
-- [ ] Viewer cannot edit budget expenses or settlement fields
-- [ ] Existing legacy expenses still render
-- [ ] Unassigned expenses are excluded from settlement suggestions
-- [ ] Settlement summary calculates paid/owed/balance per currency
-- [ ] Multi-currency expenses are not converted
-- [ ] Suggested settlements are reasonable
-- [ ] Custom currency can be used in budget forms
-- [ ] Confirm Add Budget Expense defaults currency from trip settings
-- [ ] Confirm Edit Budget Expense keeps existing currency unless user changes it
 - [ ] Edit budget expense
 - [ ] Delete budget expense
-- [ ] Public share remains safe/read-only without settlement details
-- [ ] Trip duplication resets budget settlement participant fields
+- [ ] Custom currency can be used in budget forms
+- [ ] Owner/editor can set payer and split participants
+- [ ] Viewer cannot edit expenses or settlement fields
+- [ ] Legacy/unassigned expenses still render
+- [ ] Unassigned expenses are excluded from settlement suggestions
+- [ ] Settlement summary calculates paid/owed/balance per currency
+- [ ] Suggested settlements are reasonable for equal split
+- [ ] Multi-currency expenses are not converted
+- [ ] Public share remains read-only without settlement details
 
-## Packing
+## Packing and presets
 
-- [ ] Add Weekend packing preset
-- [ ] Add City break packing preset
-- [ ] Add Road trip packing preset
-- [ ] Confirm packing presets skip duplicate item name/category pairs clearly
-- [ ] Create custom packing preset
-- [ ] Add preset items
-- [ ] Edit preset items
-- [ ] Edit custom packing preset
-- [ ] Delete custom packing preset
-- [ ] Apply custom packing preset to a trip
-- [ ] Re-apply same preset and confirm duplicates are skipped
-- [ ] Confirm built-in presets still work
-- [ ] Confirm viewer cannot apply or manage presets
-- [ ] Confirm user cannot access another user’s presets
 - [ ] Create packing item
 - [ ] Edit packing item
+- [ ] Delete packing item
+- [ ] Owner/editor can manage shared packing list
+- [ ] Viewer cannot add/edit/delete packing items
 - [ ] Owner can toggle own packing state
 - [ ] Editor can toggle own packing state
 - [ ] Viewer can toggle own packing state
-- [ ] Owner toggle does not affect viewer state
-- [ ] Viewer toggle does not affect owner state
-- [ ] User cannot update packing state for a trip they are not a member of
-- [ ] Viewer cannot add/edit/delete packing items
-- [ ] Viewer cannot manage presets
-- [ ] Delete packing item
+- [ ] One member's packed state does not affect another member
+- [ ] Built-in presets can be applied by owner/editor
+- [ ] Viewer cannot apply or manage presets
+- [ ] Create custom packing preset
+- [ ] Add preset items
+- [ ] Edit custom packing preset
+- [ ] Delete custom packing preset
+- [ ] Re-applying same preset skips duplicate item name/category pairs clearly
+- [ ] User cannot access another user's presets
 
-## Participants and permissions
+## Participants, invites, and sharing
 
-- [ ] Add existing Travora user by email
-- [ ] Owner can create invite for a new email
+- [ ] Owner can add existing Travora user by email
+- [ ] Owner can edit non-owner participant role/status
+- [ ] Owner can remove non-owner participant
+- [ ] Owner cannot remove/downgrade owner
+- [ ] Editor/viewer see read-only access information
+- [ ] Owner can create invite link for a new email
 - [ ] Owner can copy invite link
 - [ ] Owner can revoke pending invite
 - [ ] Editor/viewer cannot create invite
@@ -249,50 +212,32 @@ coverage.
 - [ ] Accepted invite cannot create duplicate membership
 - [ ] Revoked invite does not work
 - [ ] Invalid token shows safe page
-- [ ] Existing add-user flow still works
 - [ ] No automatic email sending happens
 - [ ] No service-role/admin client is used for invites
-- [ ] Edit non-owner participant role/status
-- [ ] Remove non-owner participant
-- [ ] Confirm owner can manage trip content and people
-- [ ] Confirm editor can edit trip modules but cannot manage people/settings
-- [ ] Confirm viewer has read-only module UI
 
-## Dashboard and trips list
+## Public read-only share
 
-- [ ] Dashboard shows persisted trip summary
-- [ ] Logged-out `/dashboard` redirects to `/trips/japan-2027`
-- [ ] Logged-out `/trips` redirects to `/trips/japan-2027`
-- [ ] Signed-in `/dashboard` still works
-- [ ] Signed-in `/trips` still works
-- [ ] Trips list shows persisted trips
-- [ ] Trips cards show role/status/date metadata
-- [ ] Clicking a trip card opens the trip
-- [ ] Trip card buttons still work
-- [ ] Empty states are clear
+- [ ] Owner can enable public share link
+- [ ] Owner can copy public link
+- [ ] Owner can disable public link
+- [ ] Owner can regenerate public link
+- [ ] Old regenerated link no longer works
+- [ ] Editor/viewer cannot manage public share link
+- [ ] Public link opens without login
+- [ ] Public page is read-only
+- [ ] Public page has no app sidebar/navigation
+- [ ] Public page has no edit/delete/toggle/settings controls
+- [ ] Public share packing is read-only
+- [ ] Public page does not expose participant emails
+- [ ] Public page does not expose user IDs, member IDs, owner IDs, or share token fields
+- [ ] Public page does not expose reservation reference/confirmation number
+- [ ] Public page does not expose Important Info
+- [ ] Public page does not expose Travel Links
+- [ ] Public page does not expose invite data
+- [ ] Public page does not expose calendar export
+- [ ] Invalid/disabled token shows safe not-found behavior
 
-## Route safety and quick UX fixes
-
-- [ ] Custom currency can be used in trip settings and new trip form
-- [ ] `/Dasboard` does not render a trip or confusing page
-- [ ] Valid `/dashboard` still works
-- [ ] Demo trip still works
-- [ ] Focused demo trip still works after logged-out dashboard redirect
-- [ ] Planner was not redesigned
-
-## Mobile UX
-
-- [ ] Dashboard is usable on mobile
-- [ ] Trips list cards stack and wrap correctly on mobile
-- [ ] Trip Detail tabs scroll horizontally and keep active tab clear
-- [ ] Add/Edit forms are usable on mobile
-- [ ] Add/Edit panels scroll into view after user action
-- [ ] Mobile inputs do not auto-zoom on focus
-- [ ] No horizontal overflow on key routes
-- [ ] Key actions are tappable on mobile
-- [ ] Destructive actions remain clearly separated on mobile
-
-## Export / Print Summary
+## Print summary
 
 - [ ] Summary route opens for persisted trip
 - [ ] Print summary button opens browser print
@@ -304,42 +249,92 @@ coverage.
 - [ ] Travel Links appear in authenticated print summary when present
 - [ ] Mock trip summary route remains safe
 
-## Public read-only share links
+## Privacy and role QA
 
-- [ ] Owner can enable public share link
-- [ ] Owner can copy public link
-- [ ] Public link opens without login
-- [ ] Public link is read-only
-- [ ] Public page has no app sidebar navigation
-- [ ] Public page has no edit/delete/toggle/settings controls
-- [ ] Public share packing remains read-only
-- [ ] Public page does not expose participant emails
-- [ ] Public page does not expose user IDs, member IDs, owner IDs, or share token fields
-- [ ] Public page does not expose reservation reference/confirmation number
-- [ ] Public page does not expose Travel Links
-- [ ] Owner can disable public link
-- [ ] Disabled link shows safe not-found behavior
-- [ ] Owner can regenerate public link
-- [ ] Old regenerated link no longer works
-- [ ] Editor/viewer cannot manage public link
-- [ ] Invalid token shows safe not-found behavior
-- [ ] No service-role/admin client is used
+### Owner
 
-## Demo and postponed areas
+- [ ] Owner can manage trip settings
+- [ ] Owner can manage participants
+- [ ] Owner can create/revoke public share link
+- [ ] Owner can create/revoke invite links
+- [ ] Owner can create/edit/delete Places, Planner, Reservations, Budget, and Packing content
+- [ ] Owner can use personal packing progress
+- [ ] Owner can export reservation calendar files
 
-- [ ] Mock/demo trip `/trips/japan-2027` renders safely
-- [ ] Other mock/demo trips render safely
-- [ ] Map tab is hidden from Trip Detail
-- [ ] No automatic email-sending claim appears
-- [ ] Public share is clearly read-only
-- [ ] Public share packing is clearly read-only
-- [ ] Attachments, whole-trip calendar export/API sync, realtime, and AI are documented as postponed
-- [ ] Known limitations are listed in README/project docs
+### Editor
+
+- [ ] Editor can edit trip content modules
+- [ ] Editor can duplicate trip into own account
+- [ ] Editor can use personal packing progress
+- [ ] Editor can export reservation calendar files
+- [ ] Editor cannot manage owner-only settings
+- [ ] Editor cannot manage participants
+- [ ] Editor cannot manage public share links
+- [ ] Editor cannot create/revoke invite links
+
+### Viewer
+
+- [ ] Viewer can view trip content
+- [ ] Viewer can use personal packing progress
+- [ ] Viewer can export reservation calendar files
+- [ ] Viewer cannot edit content modules
+- [ ] Viewer cannot manage budget items or settlement fields
+- [ ] Viewer cannot manage settings
+- [ ] Viewer cannot manage participants
+- [ ] Viewer cannot manage public share or invite links
+
+### Public share
+
+- [ ] Public visitor has read-only access only
+- [ ] Public visitor cannot mutate packing progress
+- [ ] Public visitor cannot see private Important Info
+- [ ] Public visitor cannot see Travel Links
+- [ ] Public visitor cannot see invite data
+- [ ] Public visitor cannot see participant emails/internal IDs
+- [ ] Public visitor cannot export reservation calendar files
+
+### Invite page
+
+- [ ] Invite page shows only safe trip preview
+- [ ] Invite page does not expose private trip content
+- [ ] Invite page does not expose Important Info or Travel Links
+- [ ] Invite acceptance requires login/register
+- [ ] Invite acceptance requires matching email
+
+## Mobile QA
+
+- [ ] Landing page has no horizontal overflow
+- [ ] Dashboard is usable on mobile
+- [ ] Trips list cards stack and wrap correctly
+- [ ] Trip Detail tabs scroll horizontally and active tab is clear
+- [ ] Add/Edit forms are usable on mobile
+- [ ] Add/Edit panels scroll into view after user action
+- [ ] Mobile inputs do not auto-zoom on focus
+- [ ] Key actions are tappable
+- [ ] Destructive actions remain clearly separated
+
+## Known beta limitations
+
+- [ ] No automatic email sending; invite links are copied manually
+- [ ] Public share is read-only
+- [ ] Public share does not include Important Info or Travel Links
+- [ ] Travel Links are URL-only; no uploads/storage
+- [ ] Reservation calendar export is per-reservation `.ics`; no calendar API/sync/global export
+- [ ] Budget settlements are equal split only
+- [ ] No live currency conversion
+- [ ] No online payments
+- [ ] No map rendering yet
+- [ ] No realtime collaboration
+- [ ] No AI planning
+- [ ] No comments or notifications
+- [ ] No advanced per-section public share controls
 
 ## Build and deployment readiness
 
 - [ ] `pnpm lint` passes
 - [ ] `pnpm exec tsc --noEmit` passes
 - [ ] `pnpm build` passes in deployment environment
+- [ ] Supabase migrations are applied in target project
+- [ ] Vercel env vars are configured
 - [ ] No real secrets are committed
 - [ ] `.env.local` remains untracked

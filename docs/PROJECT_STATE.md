@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 53 — Selected Reservation Calendar Export MVP
+Sprint 54 — Final Beta QA / Release Notes
 
 Status: IN PROGRESS
 
@@ -795,6 +795,16 @@ Status: IN PROGRESS
 - Public share pages do not expose calendar export
 - No migrations or new dependencies added
 
+## Final Beta QA / Release Notes
+
+- Final beta QA documentation was updated for current persisted MVP capabilities
+- Release notes were added to README
+- Known beta limitations were clarified
+- Privacy and owner/editor/viewer/public role QA checks were documented
+- No migrations or dependencies were added
+- No new product modules were added
+- App is ready for beta testing after manual QA
+
 ## Manual Backend Test Checklist
 
 - Login and logout
@@ -875,20 +885,20 @@ Principles:
 
 ## Next Task
 
-Task #053 — Selected Reservation Calendar Export MVP
+Task #054 — Final Beta QA / Release Notes
 
 Goal:
 
-Add `.ics` export for selected persisted reservations.
+Prepare Travora for beta release with final QA docs, release notes, and known limitations.
 
 The task includes:
 
-- Add to calendar action on individual persisted reservation cards
-- Client-side `.ics` generation and download
-- Owner/editor/viewer read-only export access
-- Disabled state when a reservation has no date
-- Public share kept unchanged
+- Updated end-to-end MVP QA checklist
+- Privacy and role QA coverage
+- README beta feature list and release notes
+- Clarified known limitations
+- No product feature changes
 
 Important:
 
-No whole-trip export, planner export, Google/Apple Calendar API, OAuth, sync, reminders, migrations, or new dependencies are added.
+No migrations, dependencies, new modules, RLS/RPC changes, auth/backend changes, map rendering, uploads, analytics, payments, realtime, AI, comments, or notifications are added.
