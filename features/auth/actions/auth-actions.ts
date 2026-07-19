@@ -4,6 +4,7 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
 import { createServerSupabaseClient } from "@/lib/supabase/server";
+import { getSafeInviteNextPath } from "@/lib/routing/safe-next";
 import type { AuthActionState } from "@/features/auth/types/auth";
 
 function readField(formData: FormData, name: string) {
@@ -30,6 +31,7 @@ export async function loginAction(
 ): Promise<AuthActionState> {
   const email = readField(formData, "email").trim();
   const password = readField(formData, "password");
+  const safeNext = getSafeInviteNextPath(readField(formData, "next"));
 
   if (!email || !password) {
     return { status: "error", message: "Enter your email and password." };
@@ -45,7 +47,7 @@ export async function loginAction(
     };
   }
 
-  redirect("/dashboard");
+  redirect(safeNext || "/dashboard");
 }
 
 export async function registerAction(
@@ -55,6 +57,7 @@ export async function registerAction(
   const email = readField(formData, "email").trim();
   const password = readField(formData, "password");
   const confirmPassword = readField(formData, "confirmPassword");
+  const safeNext = getSafeInviteNextPath(readField(formData, "next"));
 
   if (!email || !password || !confirmPassword) {
     return { status: "error", message: "Complete all required fields." };
@@ -66,10 +69,13 @@ export async function registerAction(
 
   const supabase = await createServerSupabaseClient();
   const origin = await getRequestOrigin();
+  const callbackUrl = safeNext
+    ? `${origin}/auth/callback?next=${encodeURIComponent(safeNext)}`
+    : `${origin}/auth/callback`;
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
-    options: { emailRedirectTo: `${origin}/auth/callback` },
+    options: { emailRedirectTo: callbackUrl },
   });
 
   if (error) {
@@ -80,7 +86,7 @@ export async function registerAction(
   }
 
   if (data.session) {
-    redirect("/dashboard");
+    redirect(safeNext || "/dashboard");
   }
 
   return {

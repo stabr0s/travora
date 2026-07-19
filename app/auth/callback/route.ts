@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { createServerSupabaseClient } from "@/lib/supabase/server";
+import { getSafeInviteNextPath } from "@/lib/routing/safe-next";
 
 const allowedOtpTypes = [
   "signup",
@@ -14,11 +15,7 @@ const allowedOtpTypes = [
 type AllowedOtpType = (typeof allowedOtpTypes)[number];
 
 function getSafeNextPath(value: string | null) {
-  if (!value?.startsWith("/") || value.startsWith("//") || value.includes("\\")) {
-    return "/dashboard";
-  }
-
-  return value;
+  return getSafeInviteNextPath(value) || "/dashboard";
 }
 
 function loginErrorResponse(request: NextRequest) {

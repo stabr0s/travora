@@ -4,6 +4,7 @@ import {
   TripDetailScreen,
 } from "@/features/trip-detail";
 import { getBudgetExpensesForTrip } from "@/features/budget/services/budget-service";
+import { getTripInvitesForTrip } from "@/features/invites/services/trip-invites-service";
 import { getPackingPresetsForCurrentUser } from "@/features/packing/services/packing-preset-service";
 import {
   getPackingItemsForTrip,
@@ -79,6 +80,9 @@ export default async function TripDetailPage({ params, searchParams }: TripDetai
       getParticipantsForTrip(id),
       getCurrentUserTripRole(id),
     ]);
+    const persistedInvites = persistedRole.data === "owner"
+      ? await getTripInvitesForTrip(id)
+      : { data: [], error: null };
 
     return (
       <PersistedTripDetailScreen
@@ -97,8 +101,9 @@ export default async function TripDetailPage({ params, searchParams }: TripDetai
         packingPresets={persistedPackingPresets.data || []}
         packingError={persistedPacking.error?.message || persistedPackingStates.error?.message}
         participants={persistedParticipants.data || []}
+        invites={persistedInvites.data || []}
         currentUserRole={persistedRole.data}
-        participantsError={persistedParticipants.error?.message || persistedRole.error?.message}
+        participantsError={persistedParticipants.error?.message || persistedRole.error?.message || persistedInvites.error?.message}
       />
     );
   }

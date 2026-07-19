@@ -114,6 +114,60 @@ export type Database = {
           },
         ];
       };
+      trip_invites: {
+        Row: {
+          id: string;
+          trip_id: string;
+          email: string;
+          role: "viewer" | "editor";
+          token: string;
+          status: "pending" | "accepted" | "revoked" | "expired";
+          invited_by: string;
+          accepted_by: string | null;
+          accepted_at: string | null;
+          expires_at: string | null;
+          created_at: string | null;
+          updated_at: string | null;
+        };
+        Insert: {
+          id?: string;
+          trip_id: string;
+          email: string;
+          role: "viewer" | "editor";
+          token: string;
+          status?: "pending" | "accepted" | "revoked" | "expired";
+          invited_by: string;
+          accepted_by?: string | null;
+          accepted_at?: string | null;
+          expires_at?: string | null;
+          created_at?: string | null;
+          updated_at?: string | null;
+        };
+        Update: Partial<Database["public"]["Tables"]["trip_invites"]["Insert"]>;
+        Relationships: [
+          {
+            foreignKeyName: "trip_invites_trip_id_fkey";
+            columns: ["trip_id"];
+            isOneToOne: false;
+            referencedRelation: "trips";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "trip_invites_invited_by_fkey";
+            columns: ["invited_by"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "trip_invites_accepted_by_fkey";
+            columns: ["accepted_by"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       places: {
         Row: {
           id: string;
@@ -467,6 +521,26 @@ export type Database = {
       get_public_trip_share: {
         Args: { target_token: string };
         Returns: Json | null;
+      };
+      get_trip_invite_by_token: {
+        Args: { target_token: string };
+        Returns: Array<{
+          trip_title: string;
+          trip_destination: string | null;
+          invited_email: string;
+          invited_role: string;
+          invite_status: string;
+          expires_at: string | null;
+          is_acceptable: boolean;
+        }>;
+      };
+      accept_trip_invite: {
+        Args: { target_token: string };
+        Returns: Array<{
+          trip_id: string;
+          result_status: string;
+          result_message: string;
+        }>;
       };
     };
     Enums: Record<string, never>;

@@ -7,6 +7,7 @@ import type { PersistedBudgetExpense } from "@/features/budget/types/persisted-b
 import { PersistedPackingSection } from "@/features/packing";
 import type { PackingPresetWithItems } from "@/features/packing/types/packing-preset";
 import type { PersistedPackingItem, PersistedPackingItemState } from "@/features/packing/types/persisted-packing";
+import type { PersistedTripInvite } from "@/features/invites/types/trip-invite";
 import { PersistedParticipantsSection } from "@/features/participants";
 import type { PersistedParticipant } from "@/features/participants/types/persisted-participant";
 import type { ParticipantRole } from "@/features/participants/types/participant";
@@ -39,6 +40,7 @@ type PersistedTripDetailScreenProps = {
   packingPresets: PackingPresetWithItems[];
   packingError?: string;
   participants: PersistedParticipant[];
+  invites: PersistedTripInvite[];
   currentUserRole: ParticipantRole | null;
   participantsError?: string;
 };
@@ -59,6 +61,7 @@ export function PersistedTripDetailScreen({
   packingPresets,
   packingError,
   participants,
+  invites,
   currentUserRole,
   participantsError,
 }: PersistedTripDetailScreenProps) {
@@ -128,6 +131,7 @@ export function PersistedTripDetailScreen({
         <PersistedParticipantsSection
           tripId={trip.id}
           participants={participants}
+          invites={invites}
           canManageParticipants={canManageParticipants}
           loadError={participantsError}
         />

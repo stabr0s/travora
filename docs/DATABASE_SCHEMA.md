@@ -18,6 +18,9 @@ Public read-only share links are extended by
 Personal packing progress is extended by
 `supabase/migrations/006_personal_packing_state.sql`.
 
+Email invite links are extended by
+`supabase/migrations/007_trip_invites.sql`.
+
 Travora supports two data modes. The four demo trip IDs continue reading local
 mock data, while persisted UUID trips use Supabase for Trips, Places, Planner,
 Reservations, Budget, Packing, and Participants. Map remains a visual
@@ -28,6 +31,7 @@ placeholder, and Dashboard is not yet backed by complete persisted analytics.
 - `profiles` — application-facing data linked one-to-one with `auth.users`.
 - `trips` — core trip records owned by a profile.
 - `trip_members` — trip participants, their roles, and invitation status.
+- `trip_invites` — copyable email-bound invite links for future or existing users.
 - `places` — destinations and ideas assigned to a trip.
 - `planner_items` — dated or ordered itinerary entries, optionally linked to a place.
 - `reservations` — flights, stays, tickets, and other bookings.
@@ -41,13 +45,14 @@ placeholder, and Dashboard is not yet backed by complete persisted analytics.
 
 - A profile can own many trips.
 - A trip can have many members through `trip_members`.
+- A trip can have many pending or historical invite links through `trip_invites`.
 - A profile can appear only once in a given trip membership list.
 - Places, planner items, reservations, expenses, and packing items belong to a trip.
 - A planner item can optionally reference a place. Deleting that place keeps the
   planner item and clears its `place_id`.
 - Deleting a packing item cascades to its personal `packing_item_states`.
 - Deleting a trip cascades to `trip_members`, `places`, `planner_items`,
-  `reservations`, `budget_expenses`, and `packing_items`.
+  `trip_invites`, `reservations`, `budget_expenses`, and `packing_items`.
 - Deleting a profile cascades to that profile’s custom packing presets, and
   deleting a preset cascades to its preset items.
 
@@ -94,6 +99,7 @@ users and follow these rules:
 - trip owners can create, update, and delete their trips;
 - owners and active trip members can view trip data;
 - only trip owners can manage membership rows;
+- only trip owners can manage invite rows for their trips;
 - owners and active editors can manage places, planner items, reservations,
   expenses, and packing items.
 - active trip members can manage only their own personal packing item states.
@@ -202,6 +208,45 @@ compatibility and is not removed or migrated. Persisted authenticated UI uses
 `packing_item_states.is_packed` for personal progress. Public share pages remain
 read-only and do not create anonymous packing state.
 
+## Email invite links
+
+Migration `007_trip_invites.sql` adds `trip_invites` for manual copyable invite
+links. The table stores:
+
+- `trip_id`
+- normalized invited `email`
+- invited `role` (`viewer` or `editor`)
+- unguessable `token`
+- `status` (`pending`, `accepted`, `revoked`, or `expired`)
+- inviter and accepter references
+- optional expiration timestamp
+- timestamps
+
+There is one pending invite per trip/email pair. Tokens are unique and are
+generated server-side by the application; they do not encode trip IDs, emails,
+or user IDs.
+
+RLS lets only trip owners select, create, and update invite rows for their own
+trips. There are no public select policies for invite lookup. Public token
+preview and authenticated acceptance go through two narrow `security definer`
+RPC functions with `search_path = public`:
+
+- `get_trip_invite_by_token(target_token)` returns only safe preview fields for
+  a valid pending invite: trip title, destination, invited email, role, status,
+  expiry, and acceptability.
+- `accept_trip_invite(target_token)` requires authentication, verifies the
+  current profile email matches the invited email, checks pending/expiry state,
+  creates or activates the matching `trip_members` row, and marks the invite as
+  accepted.
+
+Invite acceptance never downgrades an owner or existing active member. Existing
+active membership is kept, pending/invited membership can be activated, and
+new membership is created with the invite role. Accepted or revoked invite
+links cannot be reused to create duplicate membership.
+
+No external email provider is configured for this MVP. Invite links are copied
+and sent manually by the trip owner.
+
 ## Applying the migration manually
 
 1. Open the target Supabase project.
@@ -231,6 +276,10 @@ After reviewing it, apply migration `006` to add personal packing progress.
 Migration `006` adds one new table and RLS policies for authenticated users'
 own packing item states.
 
+After reviewing it, apply migration `007` to add manual email invite links.
+Migration `007` adds one new table, owner-only RLS, and token-scoped invite
+preview/acceptance RPCs. It does not add automatic email sending.
+
 ## Current limitations
 
 - The migration has not been applied automatically by this repository.
@@ -245,6 +294,8 @@ own packing item states.
   password protection, section-level visibility, or analytics yet.
 - Packing progress is personal for authenticated members only. There is no
   anonymous public packing state, per-person dashboard, or realtime sync yet.
+- Invite links are manual copy/share only. There is no automatic email sending,
+  SMTP provider, notification system, or invite reminder flow yet.
 - Storage, realtime collaboration, and file uploads are not configured.
 - The TypeScript `Database` type is still maintained manually.
 

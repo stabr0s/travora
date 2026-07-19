@@ -13,9 +13,10 @@ const initialState: AuthActionState = { status: "idle" };
 type LoginFormProps = {
   initialError?: string;
   initialSuccess?: string;
+  nextPath?: string | null;
 };
 
-export function LoginForm({ initialError, initialSuccess }: LoginFormProps) {
+export function LoginForm({ initialError, initialSuccess, nextPath }: LoginFormProps) {
   const [state, formAction] = useActionState(loginAction, initialState);
   const message = state.message ?? initialError ?? initialSuccess;
   const isSuccessMessage = state.status === "success"
@@ -33,6 +34,7 @@ export function LoginForm({ initialError, initialSuccess }: LoginFormProps) {
       </div>
 
       <form action={formAction} className="space-y-5">
+        {nextPath ? <input type="hidden" name="next" value={nextPath} /> : null}
         <AuthField
           label="Email"
           name="email"
@@ -66,7 +68,7 @@ export function LoginForm({ initialError, initialSuccess }: LoginFormProps) {
 
       <p className="mt-6 text-center text-sm text-muted">
         New to Travora? Create a free account and start with your first trip.{" "}
-        <Link href="/register" className="font-medium text-primary hover:text-primary-hover">
+        <Link href={nextPath ? `/register?next=${encodeURIComponent(nextPath)}` : "/register"} className="font-medium text-primary hover:text-primary-hover">
           Get started
         </Link>
       </p>

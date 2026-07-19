@@ -79,7 +79,7 @@ export function PersistedInviteParticipantPanel({
         {!isEditing ? (
           <div className="mt-5 flex items-start gap-2 rounded-xl bg-primary-subtle p-3 text-xs text-primary">
             <Info className="mt-0.5 size-4 shrink-0" />
-            <p>Email invitations are not available yet. Ask the person to create an account first, then add them here.</p>
+            <p>This adds an existing registered Travora user directly. Use the invite link card to invite someone who does not have an account yet.</p>
           </div>
         ) : null}
         {actionState.message ? <p role={actionState.status === "error" ? "alert" : "status"} className={actionState.status === "error" ? "mt-5 rounded-xl bg-error-subtle px-3.5 py-3 text-sm text-error" : "mt-5 rounded-xl bg-success-subtle px-3.5 py-3 text-sm text-success"}>{actionState.message}</p> : null}

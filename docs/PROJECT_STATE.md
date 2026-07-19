@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 46 — Personal Packing Progress
+Sprint 47 — Email Invite Links
 
 Status: IN PROGRESS
 
@@ -705,6 +705,18 @@ Status: IN PROGRESS
 - Persisted authenticated UI uses `packing_item_states.is_packed`
 - Migration `006_personal_packing_state.sql` added
 
+## Email Invite Links
+
+- Owner can create copyable invite links for email addresses
+- Invite links assign viewer or editor role
+- Invitee can accept after login or registration
+- Invite acceptance is tied to the invited email address
+- Owner can revoke pending invite links
+- Existing add-existing-user flow remains available
+- Invite links are manual copy/share only; no automatic email sending added
+- Migration `007_trip_invites.sql` added
+- RPC security model added with `get_trip_invite_by_token` and `accept_trip_invite`
+
 ## Manual Backend Test Checklist
 
 - Login and logout
@@ -785,21 +797,21 @@ Principles:
 
 ## Next Task
 
-Task #046 — Personal Packing Progress
+Task #047 — Email Invite Links for Trip Members
 
 Goal:
 
-Make packing progress personal per authenticated trip member.
+Allow trip owners to invite people by email using copyable invite links.
 
 The task includes:
 
-- New `packing_item_states` table
-- Personal packed/unpacked state for owner/editor/viewer
-- Viewer can toggle only their own packing state
-- Viewer cannot manage shared packing items or presets
-- Public share remains read-only
-- Legacy shared `packing_items.is_packed` kept for compatibility
+- New `trip_invites` table
+- Owner-created invite links for viewer/editor access
+- Public `/invite/{token}` route without app navigation
+- Email-bound invite acceptance after login/register
+- Owner revoke flow for pending invites
+- Safe invite RPCs
 
 Important:
 
-Auth architecture, mock trips, public share editing, map rendering, realtime, and dependencies remain unchanged.
+No automatic email sending, external email provider, realtime, public editing, service-role/admin client, or new dependencies are added.

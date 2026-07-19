@@ -10,7 +10,11 @@ import type { AuthActionState } from "@/features/auth/types/auth";
 
 const initialState: AuthActionState = { status: "idle" };
 
-export function RegisterForm() {
+type RegisterFormProps = {
+  nextPath?: string | null;
+};
+
+export function RegisterForm({ nextPath }: RegisterFormProps) {
   const [state, formAction] = useActionState(registerAction, initialState);
 
   return (
@@ -25,6 +29,7 @@ export function RegisterForm() {
       </div>
 
       <form action={formAction} className="space-y-5">
+        {nextPath ? <input type="hidden" name="next" value={nextPath} /> : null}
         <AuthField
           label="Email"
           name="email"
@@ -70,7 +75,7 @@ export function RegisterForm() {
 
       <p className="mt-6 text-center text-sm text-muted">
         Already have an account?{" "}
-        <Link href="/login" className="font-medium text-primary hover:text-primary-hover">
+        <Link href={nextPath ? `/login?next=${encodeURIComponent(nextPath)}` : "/login"} className="font-medium text-primary hover:text-primary-hover">
           Sign in
         </Link>
       </p>

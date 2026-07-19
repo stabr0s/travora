@@ -151,6 +151,20 @@ coverage.
 ## Participants and permissions
 
 - [ ] Add existing Travora user by email
+- [ ] Owner can create invite for a new email
+- [ ] Owner can copy invite link
+- [ ] Owner can revoke pending invite
+- [ ] Editor/viewer cannot create invite
+- [ ] Invite link opens without login
+- [ ] Invitee must sign in/register
+- [ ] Invite acceptance requires matching email
+- [ ] Accepted invite creates active trip member
+- [ ] Accepted invite cannot create duplicate membership
+- [ ] Revoked invite does not work
+- [ ] Invalid token shows safe page
+- [ ] Existing add-user flow still works
+- [ ] No automatic email sending happens
+- [ ] No service-role/admin client is used for invites
 - [ ] Edit non-owner participant role/status
 - [ ] Remove non-owner participant
 - [ ] Confirm owner can manage trip content and people
@@ -226,7 +240,7 @@ coverage.
 - [ ] Mock/demo trip `/trips/japan-2027` renders safely
 - [ ] Other mock/demo trips render safely
 - [ ] Map tab is hidden from Trip Detail
-- [ ] No email invitation claim appears
+- [ ] No automatic email-sending claim appears
 
 ## Build and deployment readiness
 
