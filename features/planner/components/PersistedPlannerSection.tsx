@@ -9,6 +9,7 @@ import { reorderPlannerItemAction } from "@/features/planner/actions/planner-usa
 import { PersistedAddPlanItemPanel } from "@/features/planner/components/PersistedAddPlanItemPanel";
 import { PersistedCopyDayPanel } from "@/features/planner/components/PersistedCopyDayPanel";
 import { PersistedPlanItemCard } from "@/features/planner/components/PersistedPlanItemCard";
+import { PersistedPlannerPresetPicker } from "@/features/planner/components/PersistedPlannerPresetPicker";
 import { PersistedQuickAddPlanItem } from "@/features/planner/components/PersistedQuickAddPlanItem";
 import { useScrollIntoViewOnOpen } from "@/hooks/useScrollIntoViewOnOpen";
 import type {
@@ -158,12 +159,15 @@ export function PersistedPlannerSection({
                   />
                 ))}
                 {canEditTrip && date !== "unscheduled" ? (
-                  <PersistedQuickAddPlanItem
-                    tripId={tripId}
-                    date={date}
-                    places={places}
-                    plannedPlaceLabels={plannedPlaceLabels}
-                  />
+                  <div className="space-y-2">
+                    <PersistedQuickAddPlanItem
+                      tripId={tripId}
+                      date={date}
+                      places={places}
+                      plannedPlaceLabels={plannedPlaceLabels}
+                    />
+                    <PersistedPlannerPresetPicker tripId={tripId} date={date} />
+                  </div>
                 ) : null}
               </div>
             </Card>

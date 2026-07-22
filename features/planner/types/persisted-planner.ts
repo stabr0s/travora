@@ -36,6 +36,12 @@ export type ReorderPlannerItemInput = {
   siblingOrderIndex: number;
 };
 
+export type AddPlannerPresetInput = {
+  tripId: string;
+  date: string;
+  presetId: string;
+};
+
 export type PlannerItemFormFields = {
   title: string;
   description: string;

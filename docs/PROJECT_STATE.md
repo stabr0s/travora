@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 63 — Planner Density Feedback Fixes
+Sprint 64 — Planner Templates / Day Presets MVP
 
 Status: IN PROGRESS
 
@@ -883,6 +883,15 @@ Status: IN PROGRESS
 - Planner items and day content now dominate each day section
 - No migrations or dependencies were added
 
+## Planner Templates / Day Presets MVP
+
+- Static Planner day presets added
+- Owner/editor can append preset items to a dated day
+- Preset items append after existing day items
+- Viewer and public read-only behavior remains unchanged
+- No migrations, dependencies, or database tables were added
+- No saved template builder, AI planning, or map rendering was added
+
 ## Manual Backend Test Checklist
 
 - Login and logout
@@ -963,19 +972,19 @@ Principles:
 
 ## Next Task
 
-Task #063 — Planner Density Feedback Fixes
+Task #064 — Planner Templates / Day Presets MVP
 
 Goal:
 
-Apply focused density fixes after Planner workbench feedback.
+Add lightweight static day presets to the existing Planner module.
 
 The task includes:
 
-- Compact/collapsible Copy Day
-- Smaller, less dominant Quick Add
-- Planner items remain the visual priority
+- Static travel-focused preset definitions
+- Compact Add preset control inside dated Planner day sections
+- Batch append of preset items after existing day items
 - No migrations or dependencies
 
 Important:
 
-No new dependencies, migrations, drag and drop, backend changes, RLS/RPC changes, auth changes, or new product features are added.
+No new dependencies, migrations, database tables, user-owned templates, template builder, drag and drop, AI planning, map rendering, calendar sync, RLS/RPC changes, or auth changes are added.

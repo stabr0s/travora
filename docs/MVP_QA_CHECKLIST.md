@@ -139,6 +139,12 @@ Production URL: https://travora-theta.vercel.app
 - [ ] Copy Day no longer occupies large default space
 - [ ] Copy Day still works from its compact/collapsible control
 - [ ] Quick Add is compact and visually secondary
+- [ ] Owner/editor can open compact Add preset control
+- [ ] Selecting preset appends multiple items to selected day
+- [ ] Existing day items are preserved after adding a preset
+- [ ] Preset items appear in correct order after existing items
+- [ ] Duplicate preset items are allowed intentionally
+- [ ] Viewer cannot add presets
 - [ ] Create planner item
 - [ ] Edit planner item
 - [ ] Delete planner item
@@ -164,8 +170,12 @@ Production URL: https://travora-theta.vercel.app
 - [ ] Planner item cards are easy to scan on desktop and mobile
 - [ ] Mobile Planner has no horizontal overflow
 - [ ] Public share Planner remains read-only
+- [ ] Public share section controls still work after preset-added items
 - [ ] Print summary still includes Planner
+- [ ] Print summary includes preset-added Planner items
+- [ ] Mobile preset UI has no horizontal overflow
 - [ ] No drag and drop dependency exists
+- [ ] No migration or dependency was added for Planner presets
 - [ ] No migration or dependency was added for Planner density fixes
 - [ ] No migration or dependency was added for Planner workbench polish
 
