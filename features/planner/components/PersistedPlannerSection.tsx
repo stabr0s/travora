@@ -15,6 +15,11 @@ import type {
   CreatePlannerItemActionState,
   PersistedPlannerItem,
 } from "@/features/planner/types/persisted-planner";
+import {
+  formatPlannerDate,
+  getPlannedPlaceLabels,
+  groupPlannerItemsByDay,
+} from "@/features/planner/utils/planner-display";
 import type { PersistedPlace } from "@/features/places/types/persisted-place";
 
 type PersistedPlannerSectionProps = {
@@ -24,42 +29,6 @@ type PersistedPlannerSectionProps = {
   loadError?: string;
   canEditTrip: boolean;
 };
-
-function formatDate(value: string) {
-  return new Intl.DateTimeFormat("en-US", {
-    weekday: "long",
-    month: "long",
-    day: "numeric",
-    timeZone: "UTC",
-  }).format(new Date(`${value}T00:00:00Z`));
-}
-
-function formatShortDate(value: string) {
-  const date = new Date(`${value}T00:00:00Z`);
-
-  return `${date.getUTCMonth() + 1}/${date.getUTCDate()}/${date.getUTCFullYear()}`;
-}
-
-function compareNullable(valueA: string | null, valueB: string | null) {
-  if (valueA && valueB) return valueA.localeCompare(valueB);
-  if (valueA) return -1;
-  if (valueB) return 1;
-  return 0;
-}
-
-function sortDayItems(items: PersistedPlannerItem[]) {
-  return items
-    .map((item, fallbackIndex) => ({ item, fallbackIndex }))
-    .sort((left, right) => {
-      const orderDiff = (left.item.order_index ?? left.fallbackIndex)
-        - (right.item.order_index ?? right.fallbackIndex);
-      if (orderDiff) return orderDiff;
-
-      return compareNullable(left.item.start_time, right.item.start_time)
-        || compareNullable(left.item.created_at, right.item.created_at);
-    })
-    .map(({ item }) => item);
-}
 
 export function PersistedPlannerSection({
   tripId,
@@ -73,42 +42,17 @@ export function PersistedPlannerSection({
   const [message, setMessage] = useState<CreatePlannerItemActionState | null>(null);
   const [isPending, startTransition] = useTransition();
   const panelRef = useScrollIntoViewOnOpen<HTMLDivElement>(isAddPanelOpen);
-  const groups = useMemo(() => {
-    const grouped = new Map<string, PersistedPlannerItem[]>();
-
-    items.forEach((item) => {
-      const key = item.date || "unscheduled";
-      grouped.set(key, [...(grouped.get(key) || []), item]);
-    });
-
-    return Array.from(grouped.entries())
-      .map(([date, groupItems]) => [date, sortDayItems(groupItems)] as const)
-      .sort(([dateA], [dateB]) => {
-        if (dateA === "unscheduled") return 1;
-        if (dateB === "unscheduled") return -1;
-        return dateA.localeCompare(dateB);
-      });
-  }, [items]);
-  const plannedPlaceLabels = useMemo(() => {
-    const labels = new Map<string, string>();
-
-    groups.forEach(([date, groupItems]) => {
-      groupItems.forEach((item) => {
-        if (!item.place_id || labels.has(item.place_id)) return;
-        labels.set(
-          item.place_id,
-          date === "unscheduled" ? "Planned" : `Planned · ${formatShortDate(date)}`,
-        );
-      });
-    });
-
-    return labels;
-  }, [groups]);
+  const groups = useMemo(() => groupPlannerItemsByDay(items), [items]);
+  const plannedPlaceLabels = useMemo(() => getPlannedPlaceLabels(groups), [groups]);
+  const placeById = useMemo(
+    () => new Map(places.map((place) => [place.id, place])),
+    [places],
+  );
   const copyableDays = groups
     .filter(([date]) => date !== "unscheduled")
     .map(([date, groupItems]) => ({
       date,
-      label: formatDate(date),
+      label: formatPlannerDate(date),
       count: groupItems.length,
     }));
 
@@ -173,20 +117,30 @@ export function PersistedPlannerSection({
           icon={CalendarDays}
           title="No plan items yet"
           description={places.length
-            ? "Start with a quick activity, or use a saved Place in the full Add item form."
-            : "Start with a quick activity, then add saved Places when your itinerary grows."}
-          action={canEditTrip ? <Button onClick={openAddPanel}>Add first item</Button> : undefined}
+            ? "Start by adding the first day item, or use a saved Place from the Add item form."
+            : "Start with one activity or travel step. Saved Places can be linked later."}
+          action={canEditTrip ? <Button onClick={openAddPanel}>Add first plan item</Button> : undefined}
         />
       ) : (
         <div className="space-y-8">
           {message?.message ? <Card padding="sm" className={message.status === "error" ? "text-sm text-error" : "text-sm text-success"}>{message.message}</Card> : null}
-          {groups.map(([date, groupItems]) => (
-            <div key={date} className="space-y-3">
-              <div className="flex items-baseline justify-between gap-4 border-b border-border-subtle pb-2">
-                <h2 className="text-lg font-semibold tracking-tight text-foreground">
-                  {date === "unscheduled" ? "Unscheduled" : formatDate(date)}
-                </h2>
-                <span className="text-xs text-muted">
+          {groups.map(([date, groupItems], dayIndex) => (
+            <Card key={date} padding="md" className="space-y-4">
+              <div className="flex flex-col gap-3 border-b border-border-subtle pb-4 sm:flex-row sm:items-start sm:justify-between">
+                <div className="min-w-0">
+                  <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">
+                    {date === "unscheduled" ? "Flexible ideas" : `Day ${dayIndex + 1}`}
+                  </p>
+                  <h2 className="mt-1 break-words text-xl font-semibold tracking-tight text-foreground">
+                    {date === "unscheduled" ? "Unscheduled" : formatPlannerDate(date)}
+                  </h2>
+                  <p className="mt-1 text-sm text-muted">
+                    {date === "unscheduled"
+                      ? "Keep flexible ideas here until they have a date."
+                      : "Quick add is attached to this day, so new items land in the right place."}
+                  </p>
+                </div>
+                <span className="inline-flex w-fit items-center rounded-full border border-border bg-background px-3 py-1 text-xs font-medium text-muted">
                   {groupItems.length} {groupItems.length === 1 ? "item" : "items"}
                 </span>
               </div>
@@ -203,6 +157,7 @@ export function PersistedPlannerSection({
                   <PersistedPlanItemCard
                     key={item.id}
                     item={item}
+                    linkedPlace={item.place_id ? placeById.get(item.place_id) : undefined}
                     isPending={isPending}
                     onEdit={canEditTrip ? (selected) => { setEditingItem(selected); setIsAddPanelOpen(true); } : undefined}
                     onDelete={canEditTrip ? handleDelete : undefined}
@@ -211,7 +166,7 @@ export function PersistedPlannerSection({
                   />
                 ))}
               </div>
-            </div>
+            </Card>
           ))}
         </div>
       )}

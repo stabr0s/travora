@@ -6,6 +6,7 @@ import { Plus } from "lucide-react";
 import { Button, Card } from "@/components/ui";
 import { createPlannerItemAction } from "@/features/planner/actions/planner-actions";
 import type { CreatePlannerItemActionState } from "@/features/planner/types/persisted-planner";
+import { typeFromPlace } from "@/features/planner/utils/planner-display";
 import type { PersistedPlace } from "@/features/places/types/persisted-place";
 
 const fieldClassName =
@@ -18,13 +19,6 @@ type PersistedQuickAddPlanItemProps = {
   places: PersistedPlace[];
   plannedPlaceLabels?: Map<string, string>;
 };
-
-function typeFromPlace(place: PersistedPlace) {
-  if (["attraction", "restaurant", "hotel", "transport", "other"].includes(place.category || "")) {
-    return place.category || "other";
-  }
-  return "other";
-}
 
 export function PersistedQuickAddPlanItem({
   tripId,
@@ -60,13 +54,33 @@ export function PersistedQuickAddPlanItem({
         <input type="hidden" name="status" value="planned" />
         <input type="hidden" name="placeId" value={selectedPlaceId} />
 
-        <div className="grid gap-3 lg:grid-cols-[minmax(0,1.4fr)_9rem_10rem_10rem_auto] lg:items-end">
-          <label className="text-xs font-medium text-muted">
-            Quick add
+        <div className="flex flex-col gap-3 lg:flex-row lg:items-end">
+          <div className="min-w-0 flex-1">
+            <p className="text-sm font-semibold text-foreground">Add to this day</p>
+            <p className="mt-1 text-xs text-muted">
+              Add a quick activity, or start from a saved place.
+            </p>
+          </div>
+          <label className="min-w-0 text-xs font-medium text-muted lg:w-56">
+            Saved place
+            <select className={`${fieldClassName} mt-1.5`} value={selectedPlaceId} onChange={(event) => handlePlaceChange(event.target.value)}>
+              <option value="">Optional</option>
+              {sortedPlaces.map((place) => (
+                <option key={place.id} value={place.id}>
+                  {place.title}{plannedPlaceLabels?.get(place.id) ? ` · ${plannedPlaceLabels.get(place.id)}` : ""}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
+
+        <div className="grid gap-3 md:grid-cols-[minmax(0,1.4fr)_8.5rem_10rem_auto] md:items-end">
+          <label className="min-w-0 text-xs font-medium text-muted">
+            Item
             <input
               className={`${fieldClassName} mt-1.5`}
               name="title"
-              placeholder="Add a plan item"
+              placeholder="e.g. Lunch near the station"
               required
               value={title}
               onChange={(event) => setTitle(event.target.value)}
@@ -89,18 +103,7 @@ export function PersistedQuickAddPlanItem({
               <option value="other">Other</option>
             </select>
           </label>
-          <label className="text-xs font-medium text-muted">
-            Saved place
-            <select className={`${fieldClassName} mt-1.5`} value={selectedPlaceId} onChange={(event) => handlePlaceChange(event.target.value)}>
-              <option value="">Optional</option>
-              {sortedPlaces.map((place) => (
-                <option key={place.id} value={place.id}>
-                  {place.title}{plannedPlaceLabels?.get(place.id) ? ` · ${plannedPlaceLabels.get(place.id)}` : ""}
-                </option>
-              ))}
-            </select>
-          </label>
-          <Button type="submit" size="md" className="w-full lg:w-auto" disabled={isPending}>
+          <Button type="submit" size="md" className="w-full md:w-auto" disabled={isPending}>
             <Plus className="size-4" />
             {isPending ? "Adding…" : "Add"}
           </Button>
@@ -113,7 +116,7 @@ export function PersistedQuickAddPlanItem({
         ) : null}
         {sortedPlaces.length ? (
           <p className="text-xs text-muted">
-            Planned places can still be added again intentionally.
+            Planned places can still be added again.
           </p>
         ) : null}
       </form>

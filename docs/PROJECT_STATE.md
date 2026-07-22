@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 61 — Budget Settlements Polish
+Sprint 62 — Planner Workbench UX Polish
 
 Status: IN PROGRESS
 
@@ -867,6 +867,15 @@ Status: IN PROGRESS
 - No migrations or dependencies were added
 - No payments, live FX, custom splits, or settled status were added
 
+## Planner Workbench UX Polish
+
+- Planner day hierarchy improved for faster day-by-day scanning
+- Planner item cards were made easier to scan
+- Quick Add and saved-place flow were polished
+- Planner empty states and mobile layout were reviewed
+- No migrations or dependencies were added
+- No drag and drop, map rendering, calendar sync, or AI planning was added
+
 ## Manual Backend Test Checklist
 
 - Login and logout
@@ -947,20 +956,20 @@ Principles:
 
 ## Next Task
 
-Task #061 — Budget Settlements Polish
+Task #062 — Planner Workbench UX Polish
 
 Goal:
 
-Polish the existing Budget settlements experience without adding a new product module.
+Polish the existing Planner workbench experience without adding a new product module.
 
 The task includes:
 
-- Clearer settlement summaries
-- Assigned/unassigned expense clarity
-- More readable multi-currency copy
-- Expense card and form helper polish
+- Clearer day hierarchy
+- More scannable Planner item cards
+- Cleaner Quick Add and saved-place flow
+- Mobile readability and wrapping checks
 - No migrations or dependencies
 
 Important:
 
-No new dependencies, migrations, custom splits, mark-as-settled, payment state, online payments, live FX, RLS/RPC changes, public settlement details, or large redesign is added.
+No new dependencies, migrations, drag and drop, map rendering, AI planning, calendar sync, backend changes, RLS/RPC changes, or large redesign is added.

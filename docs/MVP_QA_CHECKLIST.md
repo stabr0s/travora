@@ -133,6 +133,9 @@ Production URL: https://travora-theta.vercel.app
 
 ## Planner
 
+- [ ] Planner days are easy to scan
+- [ ] Planner day headers clearly show the day/date and item count
+- [ ] Planner empty state explains how to start
 - [ ] Create planner item
 - [ ] Edit planner item
 - [ ] Delete planner item
@@ -140,6 +143,7 @@ Production URL: https://travora-theta.vercel.app
 - [ ] Owner/editor can quick-add planner item
 - [ ] Viewer cannot quick-add planner item
 - [ ] Quick-add can use a saved Place
+- [ ] Quick-add feels attached to the selected day
 - [ ] Saved Place controls indicate places already used in the plan
 - [ ] Saved Place planned indicator is compact
 - [ ] Planned saved Places can still be intentionally added again
@@ -154,7 +158,12 @@ Production URL: https://travora-theta.vercel.app
 - [ ] Copying day to itself shows friendly error
 - [ ] Owner/editor can move items up/down
 - [ ] Viewer cannot reorder
+- [ ] Planner item cards are easy to scan on desktop and mobile
+- [ ] Mobile Planner has no horizontal overflow
+- [ ] Public share Planner remains read-only
+- [ ] Print summary still includes Planner
 - [ ] No drag and drop dependency exists
+- [ ] No migration or dependency was added for Planner workbench polish
 
 ## Reservations and calendar export
 

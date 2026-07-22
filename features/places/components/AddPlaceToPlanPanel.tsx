@@ -6,6 +6,10 @@ import { CalendarPlus, X } from "lucide-react";
 import { Button, Card } from "@/components/ui";
 import { createPlannerItemAction } from "@/features/planner/actions/planner-actions";
 import type { CreatePlannerItemActionState } from "@/features/planner/types/persisted-planner";
+import {
+  descriptionFromPlace,
+  typeFromPlace,
+} from "@/features/planner/utils/planner-display";
 import type { PersistedPlace } from "@/features/places/types/persisted-place";
 
 const fieldClassName =
@@ -20,24 +24,6 @@ type AddPlaceToPlanPanelProps = {
 };
 
 const initialState: CreatePlannerItemActionState = { status: "idle" };
-
-function typeFromPlace(place: PersistedPlace) {
-  if (["attraction", "restaurant", "hotel", "transport", "other"].includes(place.category || "")) {
-    return place.category || "other";
-  }
-
-  return "other";
-}
-
-function descriptionFromPlace(place: PersistedPlace) {
-  const details = [
-    place.category ? `Category: ${place.category}` : "",
-    place.address ? `Address: ${place.address}` : "",
-    place.website_url ? `Website: ${place.website_url}` : "",
-  ].filter(Boolean);
-
-  return details.length ? `From saved place. ${details.join(". ")}.` : "From saved place.";
-}
 
 function toDateInput(value?: string | null) {
   return value ? value.slice(0, 10) : undefined;
@@ -75,7 +61,7 @@ export function AddPlaceToPlanPanel({
                 Add “{place.title}” to plan
               </h2>
               <p className="mt-1 text-sm text-muted">
-                Choose a day for this saved place. You can refine details in the Plan tab.
+                Pick the exact day for this saved place. You can refine the item later in Plan.
               </p>
             </div>
           </div>

@@ -34,7 +34,7 @@ export function PersistedCopyDayPanel({
   if (!days.length) return null;
 
   return (
-    <Card padding="sm">
+    <Card padding="sm" className="bg-surface/60">
       <form action={formAction} className="space-y-3">
         <input type="hidden" name="tripId" value={tripId} />
         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
@@ -44,10 +44,10 @@ export function PersistedCopyDayPanel({
               Copy day
             </h2>
             <p className="mt-1 text-sm text-muted">
-              Duplicate a planned day into another date. Existing target-day items stay in place.
+              Reuse a day on another date. Existing target-day items stay in place.
             </p>
           </div>
-          <div className="grid w-full gap-3 sm:grid-cols-[minmax(0,1fr)_12rem_auto] lg:max-w-2xl">
+          <div className="grid w-full gap-3 sm:grid-cols-[minmax(0,1fr)_12rem_auto] lg:max-w-xl">
             <label className="text-xs font-medium text-muted">
               Source day
               <select className={fieldClassName} name="sourceDate" required>
@@ -62,7 +62,7 @@ export function PersistedCopyDayPanel({
               Target date
               <input className={fieldClassName} name="targetDate" type="date" required />
             </label>
-            <Button type="submit" size="md" className="w-full sm:self-end" disabled={isPending}>
+            <Button type="submit" size="md" variant="outline" className="w-full sm:self-end" disabled={isPending}>
               {isPending ? "Copying…" : "Copy day"}
             </Button>
           </div>

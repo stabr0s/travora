@@ -8,6 +8,10 @@ import {
   createPlannerItemAction,
   updatePlannerItemAction,
 } from "@/features/planner/actions/planner-actions";
+import {
+  descriptionFromPlace,
+  typeFromPlace,
+} from "@/features/planner/utils/planner-display";
 import type {
   CreatePlannerItemActionState,
   PersistedPlannerItem,
@@ -26,23 +30,6 @@ type PersistedAddPlanItemPanelProps = {
 };
 
 const initialState: CreatePlannerItemActionState = { status: "idle" };
-
-function typeFromPlace(place: PersistedPlace) {
-  if (["attraction", "restaurant", "hotel", "transport", "other"].includes(place.category || "")) {
-    return place.category || "other";
-  }
-  return "other";
-}
-
-function descriptionFromPlace(place: PersistedPlace) {
-  const details = [
-    place.category ? `Category: ${place.category}` : "",
-    place.address ? `Address: ${place.address}` : "",
-    place.website_url ? `Website: ${place.website_url}` : "",
-  ].filter(Boolean);
-
-  return details.length ? `From saved place. ${details.join(". ")}.` : "From saved place.";
-}
 
 export function PersistedAddPlanItemPanel({
   tripId,
@@ -94,7 +81,9 @@ export function PersistedAddPlanItemPanel({
             </span>
             <div>
               <h2 className="text-lg font-semibold tracking-tight text-foreground">{isEditing ? "Edit plan item" : "Add plan item"}</h2>
-              <p className="mt-1 text-sm text-muted">{isEditing ? "Update this saved itinerary item." : "Add a dated or unscheduled item to this trip."}</p>
+              <p className="mt-1 text-sm text-muted">
+                {isEditing ? "Update the day, time, saved place, and details." : "Create a dated item or keep it unscheduled for later."}
+              </p>
             </div>
           </div>
           <Button type="button" variant="ghost" size="sm" onClick={onClose} aria-label="Close add item panel">
@@ -119,7 +108,7 @@ export function PersistedAddPlanItemPanel({
                 ))}
               </select>
               <span className="mt-1 block text-xs text-muted">
-                Planned places can still be added again intentionally.
+                Planned places can still be added again.
               </span>
             </label>
           ) : null}
