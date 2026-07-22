@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 64 — Planner Templates / Day Presets MVP
+Sprint 65 — Planner Presets Placement & Duplicate Guard
 
 Status: IN PROGRESS
 
@@ -892,6 +892,14 @@ Status: IN PROGRESS
 - No migrations, dependencies, or database tables were added
 - No saved template builder, AI planning, or map rendering was added
 
+## Planner Presets Placement & Duplicate Guard
+
+- Add preset moved to a compact top Planner utility
+- Target day selection added before applying a preset
+- Duplicate preset guard added for obvious same-day duplicates
+- Viewer and public read-only behavior remains unchanged
+- No migrations, dependencies, or database tables were added
+
 ## Manual Backend Test Checklist
 
 - Login and logout
@@ -972,19 +980,19 @@ Principles:
 
 ## Next Task
 
-Task #064 — Planner Templates / Day Presets MVP
+Task #065 — Planner Presets Placement & Duplicate Guard
 
 Goal:
 
-Add lightweight static day presets to the existing Planner module.
+Polish Planner preset placement and prevent accidental duplicate preset additions.
 
 The task includes:
 
-- Static travel-focused preset definitions
-- Compact Add preset control inside dated Planner day sections
-- Batch append of preset items after existing day items
+- Compact top Add preset utility
+- Explicit target day selection
+- Duplicate guard for same-day preset titles
 - No migrations or dependencies
 
 Important:
 
-No new dependencies, migrations, database tables, user-owned templates, template builder, drag and drop, AI planning, map rendering, calendar sync, RLS/RPC changes, or auth changes are added.
+No new dependencies, migrations, database tables, preset tracking columns, RLS/RPC changes, auth changes, drag and drop, AI planning, map rendering, or calendar sync are added.

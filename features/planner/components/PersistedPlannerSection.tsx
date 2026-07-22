@@ -9,7 +9,10 @@ import { reorderPlannerItemAction } from "@/features/planner/actions/planner-usa
 import { PersistedAddPlanItemPanel } from "@/features/planner/components/PersistedAddPlanItemPanel";
 import { PersistedCopyDayPanel } from "@/features/planner/components/PersistedCopyDayPanel";
 import { PersistedPlanItemCard } from "@/features/planner/components/PersistedPlanItemCard";
-import { PersistedPlannerPresetPicker } from "@/features/planner/components/PersistedPlannerPresetPicker";
+import {
+  PersistedPlannerPresetPicker,
+  type PlannerPresetDayOption,
+} from "@/features/planner/components/PersistedPlannerPresetPicker";
 import { PersistedQuickAddPlanItem } from "@/features/planner/components/PersistedQuickAddPlanItem";
 import { useScrollIntoViewOnOpen } from "@/hooks/useScrollIntoViewOnOpen";
 import type {
@@ -54,6 +57,13 @@ export function PersistedPlannerSection({
     .map(([date, groupItems]) => ({
       date,
       label: formatPlannerDate(date),
+      count: groupItems.length,
+    }));
+  const presetDays: PlannerPresetDayOption[] = groups
+    .filter(([date]) => date !== "unscheduled")
+    .map(([date, groupItems], index) => ({
+      date,
+      label: `Day ${index + 1} · ${formatPlannerDate(date)}`,
       count: groupItems.length,
     }));
 
@@ -111,7 +121,12 @@ export function PersistedPlannerSection({
         </div>
       ) : null}
 
-      {canEditTrip ? <PersistedCopyDayPanel tripId={tripId} days={copyableDays} /> : null}
+      {canEditTrip ? (
+        <div className="flex flex-col gap-3 lg:flex-row lg:items-start">
+          <PersistedCopyDayPanel tripId={tripId} days={copyableDays} />
+          <PersistedPlannerPresetPicker tripId={tripId} days={presetDays} />
+        </div>
+      ) : null}
 
       {loadError ? <Card padding="sm" className="text-sm text-error">{loadError}</Card> : !items.length ? (
         <EmptyState
@@ -166,7 +181,6 @@ export function PersistedPlannerSection({
                       places={places}
                       plannedPlaceLabels={plannedPlaceLabels}
                     />
-                    <PersistedPlannerPresetPicker tripId={tripId} date={date} />
                   </div>
                 ) : null}
               </div>

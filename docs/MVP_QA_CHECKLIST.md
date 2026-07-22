@@ -140,10 +140,14 @@ Production URL: https://travora-theta.vercel.app
 - [ ] Copy Day still works from its compact/collapsible control
 - [ ] Quick Add is compact and visually secondary
 - [ ] Owner/editor can open compact Add preset control
+- [ ] Add preset appears as compact top utility, not repeated in every day
+- [ ] Owner/editor can choose target day and preset
 - [ ] Selecting preset appends multiple items to selected day
 - [ ] Existing day items are preserved after adding a preset
 - [ ] Preset items appear in correct order after existing items
-- [ ] Duplicate preset items are allowed intentionally
+- [ ] Different presets can still be added to the same day
+- [ ] Adding same preset twice to same day is blocked or safely warned
+- [ ] Adding same preset to another day works
 - [ ] Viewer cannot add presets
 - [ ] Create planner item
 - [ ] Edit planner item

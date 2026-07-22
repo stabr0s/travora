@@ -38,7 +38,7 @@ export type ReorderPlannerItemInput = {
 
 export type AddPlannerPresetInput = {
   tripId: string;
-  date: string;
+  targetDate: string;
   presetId: string;
 };
 

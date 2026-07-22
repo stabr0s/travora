@@ -18,14 +18,14 @@ export async function addPlannerPresetAction(
   formData: FormData,
 ): Promise<CreatePlannerItemActionState> {
   const tripId = readField(formData, "tripId");
-  const date = readField(formData, "date");
+  const targetDate = readField(formData, "targetDate");
   const presetId = readField(formData, "presetId");
 
   if (!isUuid(tripId)) return { status: "error", message: "This saved trip is not available." };
-  if (!datePattern.test(date)) return { status: "error", message: "Choose a valid day for this preset." };
+  if (!datePattern.test(targetDate)) return { status: "error", message: "Choose a valid day for this preset." };
   if (!getPlannerDayPreset(presetId)) return { status: "error", message: "Choose a valid planner preset." };
 
-  const result = await addPlannerPresetToDay({ tripId, date, presetId });
+  const result = await addPlannerPresetToDay({ tripId, targetDate, presetId });
   if (result.error) return { status: "error", message: result.error.message };
 
   revalidatePath(`/trips/${tripId}`);
