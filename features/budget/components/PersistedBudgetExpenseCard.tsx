@@ -50,10 +50,14 @@ export function PersistedBudgetExpenseCard({
   const participantMap = new Map(participants.map((participant) => [participant.userId, participant.name]));
   const splitIds = expense.split_between_user_ids || [];
   const splitNames = splitIds.map((id) => participantMap.get(id)).filter(Boolean);
-  const payerName = expense.paid_by_user_id
-    ? participantMap.get(expense.paid_by_user_id) || "Unknown participant"
-    : expense.paid_by_name || "Unassigned";
+  const hasSettlementPayer = Boolean(expense.paid_by_user_id && participantMap.has(expense.paid_by_user_id));
+  const hasSettlementSplit = splitIds.length > 0 && splitNames.length === splitIds.length;
+  const isIncludedInSettlements = hasSettlementPayer && hasSettlementSplit;
+  const payerName = hasSettlementPayer
+    ? participantMap.get(expense.paid_by_user_id || "") || "Unknown participant"
+    : expense.paid_by_name || "Not assigned";
   const splitCount = splitNames.length;
+  const canEdit = Boolean(onEdit && onDelete);
 
   return (
     <Card padding="sm">
@@ -62,6 +66,7 @@ export function PersistedBudgetExpenseCard({
           <div className="flex flex-wrap items-center gap-2">
             {expense.category ? <Badge variant="outline" className="capitalize">{expense.category}</Badge> : null}
             <Badge variant={status.variant}>{status.label}</Badge>
+            {!isIncludedInSettlements ? <Badge variant="outline">Needs payer/split</Badge> : null}
           </div>
           <h3 className="mt-3 break-words font-semibold tracking-tight text-foreground">{expense.title}</h3>
           <div className="mt-2 flex flex-wrap gap-x-4 gap-y-2 text-xs text-muted">
@@ -72,19 +77,24 @@ export function PersistedBudgetExpenseCard({
           {splitNames.length ? (
             <p className="mt-2 break-words text-xs text-muted">Split between {splitNames.join(", ")}</p>
           ) : (
-            <p className="mt-2 text-xs text-muted">Settlement participants are not assigned yet.</p>
+            <p className="mt-2 text-xs text-muted">Split participants are not assigned yet.</p>
           )}
+          {!isIncludedInSettlements ? (
+            <p className="mt-2 rounded-xl bg-surface px-3 py-2 text-xs leading-relaxed text-muted">
+              Not included in settlements. {canEdit ? "Edit expense to assign payer and split." : "Payer or split details are missing."}
+            </p>
+          ) : null}
           {expense.notes ? <p className="mt-3 break-words text-xs leading-relaxed text-muted">{expense.notes}</p> : null}
-          {onEdit && onDelete ? (
+          {canEdit ? (
             <div className="mt-4 flex flex-col gap-2 border-t border-border-subtle pt-3 sm:flex-row">
-              <Button size="sm" variant="outline" className="w-full sm:w-auto" onClick={() => onEdit(expense)} disabled={isPending}>Edit</Button>
-              <Button size="sm" variant="ghost" className="w-full text-error sm:w-auto" onClick={() => onDelete(expense)} disabled={isPending}>Delete</Button>
+              <Button size="sm" variant="outline" className="w-full sm:w-auto" onClick={() => onEdit?.(expense)} disabled={isPending}>Edit</Button>
+              <Button size="sm" variant="ghost" className="w-full text-error sm:w-auto" onClick={() => onDelete?.(expense)} disabled={isPending}>Delete</Button>
             </div>
           ) : null}
         </div>
         <div className="min-w-0 shrink-0 sm:text-right">
           <p className="break-words text-xl font-semibold tracking-tight text-foreground">{formatCurrency(expense.amount, currency)}</p>
-          {splitCount ? <p className="mt-1 text-xs text-muted">{formatCurrency(expense.amount / splitCount, currency)} / person</p> : null}
+          {isIncludedInSettlements ? <p className="mt-1 text-xs text-muted">{formatCurrency(expense.amount / splitCount, currency)} / person</p> : null}
         </div>
       </div>
     </Card>

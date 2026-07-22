@@ -68,7 +68,7 @@ export function PersistedAddExpensePanel({
         <div className="mt-6 grid gap-5 sm:grid-cols-2">
           <label className="text-sm font-medium text-foreground sm:col-span-2">Title<input className={fieldClassName} defaultValue={expense?.title} name="title" type="text" placeholder="e.g. Apartment deposit" required /></label>
           <label className="text-sm font-medium text-foreground">Category<select className={fieldClassName} defaultValue={expense?.category || "hotels"} name="category"><option value="flights">Flights</option><option value="hotels">Hotels</option><option value="transport">Transport</option><option value="attractions">Attractions</option><option value="insurance">Insurance</option><option value="food">Food</option><option value="other">Other</option></select></label>
-          <label className="text-sm font-medium text-foreground">Paid by<select className={fieldClassName} defaultValue={defaultPayerId} name="paidByUserId"><option value="">Unassigned</option>{participants.map((participant) => <option key={participant.userId} value={participant.userId}>{participant.name}</option>)}</select></label>
+          <label className="text-sm font-medium text-foreground">Paid by<select className={fieldClassName} defaultValue={defaultPayerId} name="paidByUserId"><option value="">Unassigned</option>{participants.map((participant) => <option key={participant.userId} value={participant.userId}>{participant.name}</option>)}</select><span className="mt-1 block text-xs text-muted">Unassigned expenses are saved, but they are not included in settlement suggestions.</span></label>
           <label className="text-sm font-medium text-foreground">Amount<input className={fieldClassName} defaultValue={expense?.amount} name="amount" type="number" min="0.01" step="0.01" placeholder="0" required /></label>
           <label className="text-sm font-medium text-foreground">Currency<input className={fieldClassName} defaultValue={defaultCurrency} list="budget-currency-options" maxLength={12} name="currency" type="text" placeholder="EUR" required /><datalist id="budget-currency-options"><option value="EUR" /><option value="USD" /><option value="PLN" /><option value="JOD" /><option value="CNY" /><option value="MAD" /></datalist><span className="mt-1 block text-xs text-muted">Currency defaults from trip settings. Custom codes are supported.</span></label>
           <label className="text-sm font-medium text-foreground">Status<select className={fieldClassName} defaultValue={expense?.status || "paid"} name="status"><option value="paid">Paid</option><option value="deposit">Deposit</option><option value="unpaid">Unpaid</option></select></label>
@@ -77,6 +77,7 @@ export function PersistedAddExpensePanel({
             <div>
               <p>Split between</p>
               <p className="mt-1 text-xs font-normal text-muted">Split equally between selected people.</p>
+              <p className="mt-1 text-xs font-normal text-muted">Expenses without split participants are not included in settlement suggestions.</p>
             </div>
             {participants.length ? (
               <div className="grid gap-2 sm:grid-cols-2">

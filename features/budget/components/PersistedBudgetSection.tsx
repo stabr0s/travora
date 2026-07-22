@@ -123,7 +123,9 @@ export function PersistedBudgetSection({
         <EmptyState
           icon={WalletCards}
           title="No expenses yet"
-          description="Track flights, stays, food, and shared costs here. Add the first expense when money starts moving."
+          description={canEditTrip
+            ? "Track shared costs like flights, stays, food, transport, and activities. Add the first expense when money starts moving."
+            : "Shared costs like flights, stays, food, transport, and activities will appear here when someone adds them."}
           action={canEditTrip ? <Button onClick={openAddPanel}>Add first expense</Button> : undefined}
         />
       ) : (
@@ -131,7 +133,7 @@ export function PersistedBudgetSection({
           {message?.message ? <Card padding="sm" className={message.status === "error" ? "text-sm text-error" : "text-sm text-success"}>{message.message}</Card> : null}
           <PersistedBudgetStats totals={summaries.totals} />
           <PersistedBudgetCategoryBreakdown categories={summaries.categories} />
-          <PersistedSettlementSummary summaries={settlementSummaries} />
+          <PersistedSettlementSummary summaries={settlementSummaries} canEditTrip={canEditTrip} />
           <section className="space-y-3" aria-label="Saved expenses">
             {expenses.map((expense) => (
               <PersistedBudgetExpenseCard

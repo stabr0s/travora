@@ -5,6 +5,7 @@ import type { BudgetSettlementCurrencySummary } from "@/features/budget/types/pe
 
 type PersistedSettlementSummaryProps = {
   summaries: BudgetSettlementCurrencySummary[];
+  canEditTrip: boolean;
 };
 
 function formatCurrency(amount: number, currency: string) {
@@ -15,17 +16,36 @@ function formatCurrency(amount: number, currency: string) {
   }
 }
 
-export function PersistedSettlementSummary({ summaries }: PersistedSettlementSummaryProps) {
+function balanceLabel(balance: number, currency: string) {
+  if (Math.abs(balance) < 0.01) return "Balanced";
+  if (balance > 0) return `Gets back ${formatCurrency(balance, currency)}`;
+  return `Owes ${formatCurrency(Math.abs(balance), currency)}`;
+}
+
+function unassignedCopy(count: number, canEditTrip: boolean) {
+  const label = `${count} ${count === 1 ? "expense is" : "expenses are"} not included yet.`;
+  return canEditTrip
+    ? `${label} Edit expenses to assign payer and split.`
+    : `${label} Payer or split details are missing.`;
+}
+
+export function PersistedSettlementSummary({
+  summaries,
+  canEditTrip,
+}: PersistedSettlementSummaryProps) {
   const hasAssignedExpenses = summaries.some((summary) => summary.assignedExpenseCount > 0);
-  const hasUnassignedExpenses = summaries.some((summary) => summary.unassignedExpenseCount > 0);
+  const unassignedExpenseCount = summaries.reduce(
+    (total, summary) => total + summary.unassignedExpenseCount,
+    0,
+  );
 
   return (
     <Card padding="md" className="space-y-5">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <p className="text-sm font-semibold text-foreground">Who owes whom</p>
+          <p className="text-sm font-semibold text-foreground">Settlements</p>
           <p className="mt-1 text-sm text-muted">
-            Equal split suggestions are calculated separately per currency. Currencies are not converted.
+            Settlements are calculated separately per currency. Currencies are not converted.
           </p>
         </div>
         <Badge variant="outline">Settlements MVP</Badge>
@@ -33,7 +53,9 @@ export function PersistedSettlementSummary({ summaries }: PersistedSettlementSum
 
       {!hasAssignedExpenses ? (
         <div className="rounded-2xl bg-surface px-4 py-4 text-sm text-muted">
-          Add a payer and split participants to expenses to see suggested settlements.
+          {canEditTrip
+            ? "Add a payer and split participants to expenses to see suggested settlements."
+            : "Expenses need payer and split details before settlement suggestions appear."}
         </div>
       ) : (
         <div className="space-y-4">
@@ -48,11 +70,12 @@ export function PersistedSettlementSummary({ summaries }: PersistedSettlementSum
                 {summary.balances.map((person) => (
                   <div key={person.userId} className="rounded-xl bg-surface px-3 py-3 text-sm">
                     <p className="break-words font-medium text-foreground">{person.name}</p>
-                    <p className="mt-1 text-xs text-muted">
-                      Paid {formatCurrency(person.paid, summary.currency)} · Owes {formatCurrency(person.owed, summary.currency)}
-                    </p>
-                    <p className={person.balance >= 0 ? "mt-2 text-sm font-semibold text-success" : "mt-2 text-sm font-semibold text-error"}>
-                      {person.balance >= 0 ? "+" : ""}{formatCurrency(person.balance, summary.currency)}
+                    <div className="mt-2 grid gap-1 text-xs text-muted">
+                      <p>Paid {formatCurrency(person.paid, summary.currency)}</p>
+                      <p>Owes {formatCurrency(person.owed, summary.currency)}</p>
+                    </div>
+                    <p className={person.balance >= 0 ? "mt-2 text-sm font-semibold text-success" : "mt-2 text-sm font-semibold text-warning"}>
+                      {balanceLabel(person.balance, summary.currency)}
                     </p>
                   </div>
                 ))}
@@ -68,11 +91,8 @@ export function PersistedSettlementSummary({ summaries }: PersistedSettlementSum
                       <span className="inline-flex min-w-0 items-center gap-2">
                         <ArrowRightLeft className="size-4 shrink-0 text-muted" />
                         <span className="break-words text-foreground">
-                          {suggestion.fromName} pays {suggestion.toName}
+                          {suggestion.fromName} pays {suggestion.toName} {formatCurrency(suggestion.amount, summary.currency)}
                         </span>
-                      </span>
-                      <span className="font-semibold text-foreground">
-                        {formatCurrency(suggestion.amount, summary.currency)}
                       </span>
                     </div>
                   ))}
@@ -85,10 +105,10 @@ export function PersistedSettlementSummary({ summaries }: PersistedSettlementSum
         </div>
       )}
 
-      {hasUnassignedExpenses ? (
+      {unassignedExpenseCount > 0 ? (
         <p className="inline-flex items-start gap-2 text-xs leading-relaxed text-muted">
           <Info className="mt-0.5 size-3.5 shrink-0" />
-          Some expenses are unassigned and are not included in settlements yet.
+          {unassignedCopy(unassignedExpenseCount, canEditTrip)}
         </p>
       ) : null}
     </Card>

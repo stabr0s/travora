@@ -197,11 +197,21 @@ Production URL: https://travora-theta.vercel.app
 - [ ] Owner/editor can set payer and split participants
 - [ ] Viewer cannot edit expenses or settlement fields
 - [ ] Legacy/unassigned expenses still render
+- [ ] Unassigned expenses are clearly marked as needing payer/split
 - [ ] Unassigned expenses are excluded from settlement suggestions
+- [ ] Owner/editor can edit expenses to assign payer and split
+- [ ] Viewer can view unassigned explanation but cannot edit
+- [ ] Expense cards show paid by, split between, per-person share, status, and date clearly
 - [ ] Settlement summary calculates paid/owed/balance per currency
+- [ ] Settlement summary is easy to understand
+- [ ] Per-currency settlements are separated
+- [ ] Multi-currency copy says currencies are not converted
 - [ ] Suggested settlements are reasonable for equal split
 - [ ] Multi-currency expenses are not converted
 - [ ] Public share remains read-only without settlement details
+- [ ] Public share Budget remains safe/read-only
+- [ ] No settlement details are exposed publicly
+- [ ] No migration or dependency was added for Budget polish
 
 ## Packing and presets
 

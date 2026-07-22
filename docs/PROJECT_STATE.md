@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 60 — Reservations UX Polish
+Sprint 61 — Budget Settlements Polish
 
 Status: IN PROGRESS
 
@@ -858,6 +858,15 @@ Status: IN PROGRESS
 - Empty state copy now explains useful reservation examples
 - No migrations or dependencies were added
 
+## Budget Settlements Polish
+
+- Settlement summary readability improved
+- Assigned and unassigned expense clarity improved
+- Multi-currency copy improved
+- Expense cards and form helper copy polished
+- No migrations or dependencies were added
+- No payments, live FX, custom splits, or settled status were added
+
 ## Manual Backend Test Checklist
 
 - Login and logout
@@ -938,20 +947,20 @@ Principles:
 
 ## Next Task
 
-Task #060 — Reservations UX Polish
+Task #061 — Budget Settlements Polish
 
 Goal:
 
-Polish the existing Reservations module without adding a new product module.
+Polish the existing Budget settlements experience without adding a new product module.
 
 The task includes:
 
-- Clearer reservation sorting and hierarchy
-- More compact persisted reservation cards
-- Easier access to reservation Travel Links and calendar export
-- Better reservation empty states
+- Clearer settlement summaries
+- Assigned/unassigned expense clarity
+- More readable multi-currency copy
+- Expense card and form helper polish
 - No migrations or dependencies
 
 Important:
 
-No new dependencies, migrations, database status/type changes, RLS/RPC changes, public Travel Links, print-summary Reservations, global calendar export, or large redesign is added.
+No new dependencies, migrations, custom splits, mark-as-settled, payment state, online payments, live FX, RLS/RPC changes, public settlement details, or large redesign is added.
