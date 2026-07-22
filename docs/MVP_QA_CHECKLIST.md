@@ -111,11 +111,15 @@ Production URL: https://travora-theta.vercel.app
 - [ ] Create place
 - [ ] Edit place
 - [ ] Delete place
+- [ ] Add Place keeps typed values after validation/save error
+- [ ] Add Place can be corrected and resubmitted after an error
 - [ ] Add Place pre-fills country from trip destination when safe
 - [ ] Edit Place does not overwrite country from trip destination
 - [ ] Optional latitude/longitude/map order can be saved
 - [ ] Owner/editor can quickly change place status from card
 - [ ] Viewer cannot change place status
+- [ ] Owner/editor can add a persisted Place to a selected plan day
+- [ ] Viewer cannot add a Place to the plan
 
 ## Planner
 
@@ -125,8 +129,12 @@ Production URL: https://travora-theta.vercel.app
 - [ ] Owner/editor can quick-add planner item
 - [ ] Viewer cannot quick-add planner item
 - [ ] Quick-add can use a saved Place
+- [ ] Saved Place controls indicate places already used in the plan
+- [ ] Planned saved Places can still be intentionally added again
 - [ ] Planner item with `place_id` marks linked Place as planned
 - [ ] Visited/rejected Place status is not overwritten by Planner linking
+- [ ] Place added from the Places tab appears in the selected plan day
+- [ ] Original full Add/Edit planner flow still works
 - [ ] Owner/editor can copy day
 - [ ] Viewer cannot copy day
 - [ ] Copy day does not overwrite target-day items
@@ -246,7 +254,14 @@ Production URL: https://travora-theta.vercel.app
 - [ ] Summary does not expose internal IDs
 - [ ] Participant emails are not printed
 - [ ] Important Info appears in authenticated print summary when present
-- [ ] Travel Links appear in authenticated print summary when present
+- [ ] Planner/itinerary appears in authenticated print summary
+- [ ] Packing appears in authenticated print summary
+- [ ] Trip-level Travel Links appear in authenticated print summary when present
+- [ ] Places are not printed in authenticated summary
+- [ ] Reservations are not printed in authenticated summary
+- [ ] Reservation-level Travel Links are not printed in authenticated summary
+- [ ] Budget is not printed in authenticated summary
+- [ ] Participants are not printed in authenticated summary
 - [ ] Mock trip summary route remains safe
 
 ## Privacy and role QA

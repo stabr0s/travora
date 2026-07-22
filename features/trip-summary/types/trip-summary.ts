@@ -20,41 +20,12 @@ export type TripSummaryPlannerGroup = {
   }[];
 };
 
-export type TripSummaryPlace = {
-  title: string;
-  category: string | null;
-  location: string | null;
-  website: string | null;
-  notes: string | null;
-};
-
-export type TripSummaryReservation = {
-  title: string;
-  type: string | null;
-  dates: string | null;
-  provider: string | null;
-  reference: string | null;
-  status: string | null;
-  price: string | null;
-  notes: string | null;
-};
-
 export type TripSummaryTravelLink = {
   title: string;
   url: string;
   type: string | null;
   note: string | null;
-  reservationTitle: string | null;
-};
-
-export type TripSummaryBudget = {
-  totals: { currency: string; amount: number }[];
-  expenses: {
-    title: string;
-    category: string | null;
-    status: string | null;
-    amount: string;
-  }[];
+  reservationId: string | null;
 };
 
 export type TripSummaryPacking = {
@@ -67,26 +38,9 @@ export type TripSummaryPacking = {
   }[];
 };
 
-export type TripSummaryParticipants = {
-  total: number;
-  owners: number;
-  editors: number;
-  viewers: number;
-  active: number;
-  pending: number;
-  invited: number;
-};
-
 export type TripSummaryData = {
   overview: TripSummaryOverview;
   planner: TripSummaryPlannerGroup[];
-  places: TripSummaryPlace[];
-  reservations: TripSummaryReservation[];
-  travelLinks: {
-    trip: TripSummaryTravelLink[];
-    reservations: TripSummaryTravelLink[];
-  };
-  budget: TripSummaryBudget;
+  travelLinks: TripSummaryTravelLink[];
   packing: TripSummaryPacking;
-  participants: TripSummaryParticipants;
 };

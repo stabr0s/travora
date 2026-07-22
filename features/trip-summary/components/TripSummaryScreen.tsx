@@ -93,45 +93,13 @@ export function TripSummaryScreen({ tripId, summary }: TripSummaryScreenProps) {
         ) : emptyCopy("planner items")}
       </TripSummarySection>
 
-      <TripSummarySection title="Places">
-        {summary.places.length ? (
-          <div className="grid gap-3 sm:grid-cols-2">
-            {summary.places.map((place) => (
-              <div key={`${place.title}-${place.location}`} className="break-inside-avoid rounded-xl bg-slate-50 p-3 text-sm print:border print:border-slate-200 print:bg-white">
-                <p className="font-medium text-slate-950">{place.title}</p>
-                <p className="mt-1 text-slate-600">{[place.category, place.location].filter(Boolean).join(" · ")}</p>
-                {place.website ? <p className="mt-1 break-words text-slate-600">{place.website}</p> : null}
-                {place.notes ? <p className="mt-1 text-slate-600">{place.notes}</p> : null}
-              </div>
-            ))}
-          </div>
-        ) : emptyCopy("places")}
-      </TripSummarySection>
-
-      <TripSummarySection title="Reservations">
-        {summary.reservations.length ? (
-          <div className="space-y-3">
-            {summary.reservations.map((reservation) => (
-              <div key={`${reservation.title}-${reservation.dates}`} className="break-inside-avoid rounded-xl bg-slate-50 p-3 text-sm print:border print:border-slate-200 print:bg-white">
-                <p className="font-medium text-slate-950">{reservation.title}</p>
-                <p className="mt-1 text-slate-600">{[reservation.type, reservation.dates, reservation.status].filter(Boolean).join(" · ")}</p>
-                <p className="mt-1 text-slate-600">{[reservation.provider, reservation.reference, reservation.price].filter(Boolean).join(" · ")}</p>
-                {reservation.notes ? <p className="mt-1 text-slate-600">{reservation.notes}</p> : null}
-              </div>
-            ))}
-          </div>
-        ) : emptyCopy("reservations")}
-      </TripSummarySection>
-
       <TripSummarySection title="Travel Links">
-        {summary.travelLinks.trip.length || summary.travelLinks.reservations.length ? (
+        {summary.travelLinks.length ? (
           <div className="space-y-3">
-            {[...summary.travelLinks.trip, ...summary.travelLinks.reservations].map((link) => (
+            {summary.travelLinks.map((link) => (
               <div key={`${link.title}-${link.url}`} className="break-inside-avoid rounded-xl bg-slate-50 p-3 text-sm print:border print:border-slate-200 print:bg-white">
                 <p className="font-medium text-slate-950">{link.title}</p>
-                <p className="mt-1 text-slate-600">
-                  {[link.type, link.reservationTitle ? `Reservation: ${link.reservationTitle}` : null].filter(Boolean).join(" · ")}
-                </p>
+                {link.type ? <p className="mt-1 text-slate-600">{link.type}</p> : null}
                 <a className="mt-1 block break-all text-slate-600 underline underline-offset-2" href={link.url} target="_blank" rel="noopener noreferrer">
                   {link.url}
                 </a>
@@ -140,30 +108,6 @@ export function TripSummaryScreen({ tripId, summary }: TripSummaryScreenProps) {
             ))}
           </div>
         ) : emptyCopy("travel links")}
-      </TripSummarySection>
-
-      <TripSummarySection title="Budget">
-        <div className="space-y-4">
-          {summary.budget.totals.length ? (
-            <div className="flex flex-wrap gap-2">
-              {summary.budget.totals.map((total) => (
-                <span key={total.currency} className="rounded-full bg-slate-100 px-3 py-1 text-sm font-medium">
-                  {total.amount.toFixed(2)} {total.currency}
-                </span>
-              ))}
-            </div>
-          ) : emptyCopy("budget totals")}
-          {summary.budget.expenses.length ? (
-            <ul className="space-y-2 text-sm">
-              {summary.budget.expenses.map((expense) => (
-                <li key={`${expense.title}-${expense.amount}`} className="flex flex-col gap-1 rounded-xl bg-slate-50 p-3 sm:flex-row sm:justify-between print:border print:border-slate-200 print:bg-white">
-                  <span>{expense.title} {expense.category ? `· ${expense.category}` : ""} {expense.status ? `· ${expense.status}` : ""}</span>
-                  <span className="font-medium">{expense.amount}</span>
-                </li>
-              ))}
-            </ul>
-          ) : null}
-        </div>
       </TripSummarySection>
 
       <TripSummarySection title="Packing">
@@ -184,14 +128,6 @@ export function TripSummaryScreen({ tripId, summary }: TripSummaryScreenProps) {
         ) : null}
       </TripSummarySection>
 
-      <TripSummarySection title="Participants">
-        <div className="grid gap-2 text-sm text-slate-600 sm:grid-cols-2">
-          <p>Total participants: {summary.participants.total}</p>
-          <p>Roles: {summary.participants.owners} owner · {summary.participants.editors} editor · {summary.participants.viewers} viewer</p>
-          <p>Status: {summary.participants.active} active · {summary.participants.pending} pending · {summary.participants.invited} invited</p>
-          <p className="text-slate-500">Participant emails are intentionally omitted from print summary.</p>
-        </div>
-      </TripSummarySection>
     </main>
   );
 }

@@ -1,5 +1,5 @@
 import type { ChangeEvent } from "react";
-import { CalendarDays, Clock3, MapPin, Wallet } from "lucide-react";
+import { CalendarDays, CalendarPlus, Clock3, MapPin, Wallet } from "lucide-react";
 
 import { Badge, Button, Card } from "@/components/ui";
 import type {
@@ -34,6 +34,8 @@ type PlaceCardProps = {
   onDelete?: (place: Place) => void;
   onEdit?: (place: Place) => void;
   onStatusChange?: (place: Place, status: PlaceStatus) => void;
+  onAddToPlan?: (place: Place) => void;
+  plannedLabel?: string;
 };
 
 function formatDuration(minutes: number): string {
@@ -62,6 +64,8 @@ export function PlaceCard({
   onDelete,
   onEdit,
   onStatusChange,
+  onAddToPlan,
+  plannedLabel,
 }: PlaceCardProps) {
   const priority = place.priority ? priorityDetails[place.priority] : null;
   const status = place.status ? statusDetails[place.status] : null;
@@ -71,6 +75,7 @@ export function PlaceCard({
     place.estimatedCost !== null ||
     Boolean(place.plannedDay);
   const canChangeStatus = Boolean(onStatusChange);
+  const hasActions = Boolean(onAddToPlan || onEdit || onDelete);
 
   function handleStatusChange(event: ChangeEvent<HTMLSelectElement>) {
     onStatusChange?.(place, event.target.value as PlaceStatus);
@@ -122,6 +127,7 @@ export function PlaceCard({
               <Badge variant="outline">Status not set</Badge>
             )}
           {place.plannedDay ? <Badge variant="outline">Day {place.plannedDay}</Badge> : null}
+          {plannedLabel ? <Badge variant="success">{plannedLabel}</Badge> : null}
         </div>
 
         <p className="line-clamp-2 min-h-10 text-sm leading-relaxed text-muted">
@@ -160,10 +166,20 @@ export function PlaceCard({
             ) : null}
           </div>
         ) : null}
-        {onEdit && onDelete ? (
-          <div className="flex gap-2 border-t border-border-subtle pt-4">
-            <Button size="sm" variant="outline" onClick={() => onEdit(place)} disabled={isPending}>Edit</Button>
-            <Button size="sm" variant="ghost" className="text-error" onClick={() => onDelete(place)} disabled={isPending}>Delete</Button>
+        {hasActions ? (
+          <div className="flex flex-col gap-2 border-t border-border-subtle pt-4 sm:flex-row sm:flex-wrap">
+            {onAddToPlan ? (
+              <Button size="sm" variant="outline" className="w-full sm:w-auto" onClick={() => onAddToPlan(place)} disabled={isPending}>
+                <CalendarPlus className="size-4" />
+                Add to plan
+              </Button>
+            ) : null}
+            {onEdit ? (
+              <Button size="sm" variant="outline" className="w-full sm:w-auto" onClick={() => onEdit(place)} disabled={isPending}>Edit</Button>
+            ) : null}
+            {onDelete ? (
+              <Button size="sm" variant="ghost" className="w-full text-error sm:w-auto" onClick={() => onDelete(place)} disabled={isPending}>Delete</Button>
+            ) : null}
           </div>
         ) : null}
       </div>

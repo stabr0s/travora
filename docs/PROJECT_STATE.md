@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 54 — Final Beta QA / Release Notes
+Sprint 55 — Feedback Fixes: Print, Places & Planner
 
 Status: IN PROGRESS
 
@@ -805,6 +805,15 @@ Status: IN PROGRESS
 - No new product modules were added
 - App is ready for beta testing after manual QA
 
+## Feedback Fixes: Print, Places & Planner
+
+- Authenticated print summary was simplified to Overview, Important Info, Planner, Packing, and trip-level Travel Links
+- Add Place error states preserve typed form values so users can correct and resubmit
+- Planner saved-place controls now indicate places already linked to plan items
+- Persisted Places can be added directly to a selected plan day by owner/editor users
+- Viewer/public share behavior remains read-only
+- No migrations or dependencies were added
+
 ## Manual Backend Test Checklist
 
 - Login and logout
@@ -885,20 +894,20 @@ Principles:
 
 ## Next Task
 
-Task #054 — Final Beta QA / Release Notes
+Task #055 — Feedback Fixes: Print, Places & Planner
 
 Goal:
 
-Prepare Travora for beta release with final QA docs, release notes, and known limitations.
+Apply focused feedback fixes for authenticated print summaries, Add Place error handling, and the Places/Planner workflow.
 
 The task includes:
 
-- Updated end-to-end MVP QA checklist
-- Privacy and role QA coverage
-- README beta feature list and release notes
-- Clarified known limitations
-- No product feature changes
+- Simplified authenticated print summary content
+- Add Place form values preserved on validation/save errors
+- Saved Places marked when already used in Planner
+- Add to plan action from persisted Place cards
+- No migrations, dependencies, or backend architecture changes
 
 Important:
 
-No migrations, dependencies, new modules, RLS/RPC changes, auth/backend changes, map rendering, uploads, analytics, payments, realtime, AI, comments, or notifications are added.
+No migrations, dependencies, RLS/RPC changes, auth/backend architecture changes, map rendering, drag and drop, AI, or public share changes are added.

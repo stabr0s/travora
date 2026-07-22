@@ -21,6 +21,7 @@ type PersistedAddPlanItemPanelProps = {
   tripId: string;
   item?: PersistedPlannerItem | null;
   places?: PersistedPlace[];
+  plannedPlaceLabels?: Map<string, string>;
   onClose: () => void;
 };
 
@@ -47,6 +48,7 @@ export function PersistedAddPlanItemPanel({
   tripId,
   item,
   places = [],
+  plannedPlaceLabels,
   onClose,
 }: PersistedAddPlanItemPanelProps) {
   const isEditing = Boolean(item);
@@ -108,12 +110,12 @@ export function PersistedAddPlanItemPanel({
                 <option value="">No saved place</option>
                 {sortedPlaces.map((place) => (
                   <option key={place.id} value={place.id}>
-                    {place.title}{place.city ? ` · ${place.city}` : ""}
+                    {place.title}{place.city ? ` · ${place.city}` : ""}{plannedPlaceLabels?.get(place.id) ? ` · ${plannedPlaceLabels.get(place.id)}` : ""}
                   </option>
                 ))}
               </select>
               <span className="mt-1 block text-xs text-muted">
-                Use a saved place to fill this faster or link this item to Places.
+                Use a saved place to fill this faster or link this item to Places. Planned places can be added again if they appear on another day.
               </span>
             </label>
           ) : null}

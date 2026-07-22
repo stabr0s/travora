@@ -12,6 +12,8 @@ type PlacesGridProps = {
   onDeletePlace?: (place: Place) => void;
   onEditPlace?: (place: Place) => void;
   onStatusChange?: (place: Place, status: PlaceStatus) => void;
+  onAddToPlan?: (place: Place) => void;
+  plannedPlaceLabels?: Map<string, string>;
 };
 
 export function PlacesGrid({
@@ -21,6 +23,8 @@ export function PlacesGrid({
   onDeletePlace,
   onEditPlace,
   onStatusChange,
+  onAddToPlan,
+  plannedPlaceLabels,
 }: PlacesGridProps) {
   return (
     <section className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
@@ -32,6 +36,8 @@ export function PlacesGrid({
           onDelete={onDeletePlace}
           onEdit={onEditPlace}
           onStatusChange={onStatusChange}
+          onAddToPlan={onAddToPlan}
+          plannedLabel={plannedPlaceLabels?.get(place.id)}
         />
       ))}
 

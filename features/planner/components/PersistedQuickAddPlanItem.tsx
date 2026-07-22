@@ -16,6 +16,7 @@ type PersistedQuickAddPlanItemProps = {
   tripId: string;
   date: string;
   places: PersistedPlace[];
+  plannedPlaceLabels?: Map<string, string>;
 };
 
 function typeFromPlace(place: PersistedPlace) {
@@ -29,6 +30,7 @@ export function PersistedQuickAddPlanItem({
   tripId,
   date,
   places,
+  plannedPlaceLabels,
 }: PersistedQuickAddPlanItemProps) {
   const [selectedPlaceId, setSelectedPlaceId] = useState("");
   const [title, setTitle] = useState("");
@@ -93,7 +95,7 @@ export function PersistedQuickAddPlanItem({
               <option value="">Optional</option>
               {sortedPlaces.map((place) => (
                 <option key={place.id} value={place.id}>
-                  {place.title}
+                  {place.title}{plannedPlaceLabels?.get(place.id) ? ` · ${plannedPlaceLabels.get(place.id)}` : ""}
                 </option>
               ))}
             </select>
@@ -107,6 +109,11 @@ export function PersistedQuickAddPlanItem({
         {actionState.message ? (
           <p role={actionState.status === "error" ? "alert" : "status"} className={actionState.status === "error" ? "text-sm text-error" : "text-sm text-success"}>
             {actionState.message}
+          </p>
+        ) : null}
+        {sortedPlaces.length ? (
+          <p className="text-xs text-muted">
+            Planned saved places can be added again if this place appears on another day.
           </p>
         ) : null}
       </form>

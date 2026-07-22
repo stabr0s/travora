@@ -8,12 +8,32 @@ import {
   updatePlace,
   updatePlaceStatus,
 } from "@/features/places/services/places-service";
-import type { CreatePlaceActionState } from "@/features/places/types/persisted-place";
+import type {
+  CreatePlaceActionState,
+  PlaceFormFields,
+} from "@/features/places/types/persisted-place";
 import type { PlaceCategory, PlacePriority, PlaceStatus } from "@/features/places/types/place";
 import { isUuid } from "@/lib/validation/is-uuid";
 
 function readField(formData: FormData, name: string) {
   return String(formData.get(name) ?? "").trim();
+}
+
+function readPlaceFields(formData: FormData): PlaceFormFields {
+  return {
+    title: readField(formData, "title"),
+    category: readField(formData, "category"),
+    address: readField(formData, "address"),
+    city: readField(formData, "city"),
+    country: readField(formData, "country"),
+    status: readField(formData, "status"),
+    priority: readField(formData, "priority"),
+    notes: readField(formData, "notes"),
+    websiteUrl: readField(formData, "websiteUrl"),
+    latitude: readField(formData, "latitude"),
+    longitude: readField(formData, "longitude"),
+    mapOrder: readField(formData, "mapOrder"),
+  };
 }
 
 type ParsedMapFields =
@@ -47,35 +67,36 @@ export async function createPlaceAction(
   formData: FormData,
 ): Promise<CreatePlaceActionState> {
   const tripId = readField(formData, "tripId");
-  const title = readField(formData, "title");
+  const fields = readPlaceFields(formData);
+  const title = fields.title;
 
   if (!isUuid(tripId)) {
-    return { status: "error", message: "This saved trip is not available." };
+    return { status: "error", message: "This saved trip is not available.", fields };
   }
 
   if (!title) {
-    return { status: "error", message: "Enter a name for this place." };
+    return { status: "error", message: "Enter a name for this place.", fields };
   }
 
   const mapFields = readMapFields(formData);
-  if (mapFields.error) return { status: "error", message: mapFields.error };
+  if (mapFields.error) return { status: "error", message: mapFields.error, fields };
 
   const result = await createPlace({
     tripId,
     title,
-    category: readField(formData, "category") as PlaceCategory,
-    address: readField(formData, "address"),
-    city: readField(formData, "city"),
-    country: readField(formData, "country"),
-    status: readField(formData, "status") as PlaceStatus,
-    priority: readField(formData, "priority") as PlacePriority,
-    notes: readField(formData, "notes"),
-    websiteUrl: readField(formData, "websiteUrl"),
+    category: fields.category as PlaceCategory,
+    address: fields.address,
+    city: fields.city,
+    country: fields.country,
+    status: fields.status as PlaceStatus,
+    priority: fields.priority as PlacePriority,
+    notes: fields.notes,
+    websiteUrl: fields.websiteUrl,
     ...mapFields.data,
   });
 
   if (result.error) {
-    return { status: "error", message: result.error.message };
+    return { status: "error", message: result.error.message, fields };
   }
 
   revalidatePath(`/trips/${tripId}`);
@@ -88,31 +109,32 @@ export async function updatePlaceAction(
 ): Promise<CreatePlaceActionState> {
   const tripId = readField(formData, "tripId");
   const id = readField(formData, "recordId");
-  const title = readField(formData, "title");
+  const fields = readPlaceFields(formData);
+  const title = fields.title;
 
-  if (!isUuid(tripId)) return { status: "error", message: "This saved trip is not available." };
-  if (!isUuid(id)) return { status: "error", message: "This place is not available." };
-  if (!title) return { status: "error", message: "Enter a name for this place." };
+  if (!isUuid(tripId)) return { status: "error", message: "This saved trip is not available.", fields };
+  if (!isUuid(id)) return { status: "error", message: "This place is not available.", fields };
+  if (!title) return { status: "error", message: "Enter a name for this place.", fields };
 
   const mapFields = readMapFields(formData);
-  if (mapFields.error) return { status: "error", message: mapFields.error };
+  if (mapFields.error) return { status: "error", message: mapFields.error, fields };
 
   const result = await updatePlace({
     id,
     tripId,
     title,
-    category: readField(formData, "category") as PlaceCategory,
-    address: readField(formData, "address"),
-    city: readField(formData, "city"),
-    country: readField(formData, "country"),
-    status: readField(formData, "status") as PlaceStatus,
-    priority: readField(formData, "priority") as PlacePriority,
-    notes: readField(formData, "notes"),
-    websiteUrl: readField(formData, "websiteUrl"),
+    category: fields.category as PlaceCategory,
+    address: fields.address,
+    city: fields.city,
+    country: fields.country,
+    status: fields.status as PlaceStatus,
+    priority: fields.priority as PlacePriority,
+    notes: fields.notes,
+    websiteUrl: fields.websiteUrl,
     ...mapFields.data,
   });
 
-  if (result.error) return { status: "error", message: result.error.message };
+  if (result.error) return { status: "error", message: result.error.message, fields };
   revalidatePath(`/trips/${tripId}`);
   return { status: "success", message: "Place updated." };
 }

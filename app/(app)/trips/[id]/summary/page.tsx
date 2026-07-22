@@ -1,15 +1,12 @@
 import { FileText } from "lucide-react";
 
 import { EmptyState } from "@/components/ui";
-import { getBudgetExpensesForTrip } from "@/features/budget/services/budget-service";
 import {
   getPackingItemsForTrip,
   getPackingItemStatesForCurrentUser,
 } from "@/features/packing/services/packing-service";
-import { getParticipantsForTrip } from "@/features/participants/services/participants-service";
 import { getPlacesForTrip } from "@/features/places/services/places-service";
 import { getPlannerItemsForTrip } from "@/features/planner/services/planner-service";
-import { getReservationsForTrip } from "@/features/reservations/services/reservations-service";
 import {
   buildMockSummary,
   buildPersistedSummary,
@@ -56,21 +53,15 @@ export default async function TripSummaryPage({ params }: TripSummaryPageProps) 
   const [
     places,
     planner,
-    reservations,
-    budget,
     packing,
     packingStates,
-    participants,
     importantInfo,
     travelLinks,
   ] = await Promise.all([
     getPlacesForTrip(id),
     getPlannerItemsForTrip(id),
-    getReservationsForTrip(id),
-    getBudgetExpensesForTrip(id),
     getPackingItemsForTrip(id),
     getPackingItemStatesForCurrentUser(id),
-    getParticipantsForTrip(id),
     getImportantInfoForTrip(id),
     getTravelLinksForTrip(id),
   ]);
@@ -82,11 +73,8 @@ export default async function TripSummaryPage({ params }: TripSummaryPageProps) 
         trip: trip.data,
         places: places.data || [],
         planner: planner.data || [],
-        reservations: reservations.data || [],
-        budget: budget.data || [],
         packing: packing.data || [],
         packingStates: packingStates.data || [],
-        participants: participants.data || [],
         importantInfo: importantInfo.data,
         travelLinks: travelLinks.data || [],
       })}

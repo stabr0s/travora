@@ -83,6 +83,21 @@ export function PersistedPlannerSection({
         return dateA.localeCompare(dateB);
       });
   }, [items]);
+  const plannedPlaceLabels = useMemo(() => {
+    const labels = new Map<string, string>();
+
+    groups.forEach(([date, groupItems]) => {
+      groupItems.forEach((item) => {
+        if (!item.place_id || labels.has(item.place_id)) return;
+        labels.set(
+          item.place_id,
+          date === "unscheduled" ? "Planned · unscheduled" : `Planned · ${formatDate(date)}`,
+        );
+      });
+    });
+
+    return labels;
+  }, [groups]);
   const copyableDays = groups
     .filter(([date]) => date !== "unscheduled")
     .map(([date, groupItems]) => ({
@@ -139,6 +154,7 @@ export function PersistedPlannerSection({
             tripId={tripId}
             item={editingItem}
             places={places}
+            plannedPlaceLabels={plannedPlaceLabels}
             onClose={() => setIsAddPanelOpen(false)}
           />
         </div>
@@ -170,7 +186,12 @@ export function PersistedPlannerSection({
               </div>
               <div className="space-y-3">
                 {canEditTrip && date !== "unscheduled" ? (
-                  <PersistedQuickAddPlanItem tripId={tripId} date={date} places={places} />
+                  <PersistedQuickAddPlanItem
+                    tripId={tripId}
+                    date={date}
+                    places={places}
+                    plannedPlaceLabels={plannedPlaceLabels}
+                  />
                 ) : null}
                 {groupItems.map((item, index) => (
                   <PersistedPlanItemCard

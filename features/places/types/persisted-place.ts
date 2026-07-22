@@ -29,6 +29,21 @@ export type UpdatePlaceStatusInput = {
 
 export type DeletePlaceInput = { tripId: string; id: string };
 
+export type PlaceFormFields = {
+  title: string;
+  category: string;
+  address: string;
+  city: string;
+  country: string;
+  status: string;
+  priority: string;
+  notes: string;
+  websiteUrl: string;
+  latitude: string;
+  longitude: string;
+  mapOrder: string;
+};
+
 export type PlacesServiceResult<T> =
   | { data: T; error: null }
   | {
@@ -49,4 +64,5 @@ export type PlacesServiceResult<T> =
 export type CreatePlaceActionState = {
   status: "idle" | "error" | "success";
   message?: string;
+  fields?: Partial<PlaceFormFields>;
 };

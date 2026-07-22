@@ -54,10 +54,14 @@ export function AddPlacePanel({
     isEditing ? updatePlaceAction : createPlaceAction,
     initialState,
   );
+  const fields = actionState.fields;
+  const formKey = fields
+    ? Object.values(fields).join("|")
+    : place?.id || "new";
 
   return (
     <Card padding="md" className="border-primary/15 shadow-md">
-      <form action={isPersisted ? formAction : undefined}>
+      <form key={formKey} action={isPersisted ? formAction : undefined}>
         <input type="hidden" name="tripId" value={tripId} />
         {place ? <input type="hidden" name="recordId" value={place.id} /> : null}
 
@@ -83,15 +87,15 @@ export function AddPlacePanel({
         <div className="mt-6 grid gap-5 sm:grid-cols-2">
           <label className="text-sm font-medium text-foreground sm:col-span-2">
             Place name
-            <input className={fieldClassName} defaultValue={place?.title} name="title" type="text" placeholder="e.g. Senso-ji Temple" required={isPersisted} />
+            <input className={fieldClassName} defaultValue={fields?.title ?? place?.title} name="title" type="text" placeholder="e.g. Senso-ji Temple" required={isPersisted} />
           </label>
           <label className="text-sm font-medium text-foreground">
             City
-            <input className={fieldClassName} defaultValue={place?.city || ""} name="city" type="text" placeholder="Tokyo" />
+            <input className={fieldClassName} defaultValue={fields?.city ?? place?.city ?? ""} name="city" type="text" placeholder="Tokyo" />
           </label>
           <label className="text-sm font-medium text-foreground">
             Country
-            <input className={fieldClassName} defaultValue={place?.country || countryDefault} name="country" type="text" placeholder="Japan" />
+            <input className={fieldClassName} defaultValue={fields?.country ?? place?.country ?? countryDefault} name="country" type="text" placeholder="Japan" />
             {isPersisted && !isEditing && countryDefault ? (
               <span className="mt-1 block text-xs text-muted">
                 Prefilled from trip destination. You can change or clear it.
@@ -100,11 +104,11 @@ export function AddPlacePanel({
           </label>
           <label className="text-sm font-medium text-foreground sm:col-span-2">
             Address
-            <input className={fieldClassName} defaultValue={place?.address || ""} name="address" type="text" placeholder="Optional street address" />
+            <input className={fieldClassName} defaultValue={fields?.address ?? place?.address ?? ""} name="address" type="text" placeholder="Optional street address" />
           </label>
           <label className="text-sm font-medium text-foreground">
             Category
-            <select className={fieldClassName} defaultValue={place?.category || "attraction"} name="category">
+            <select className={fieldClassName} defaultValue={fields?.category ?? place?.category ?? "attraction"} name="category">
               <option value="attraction">Attraction</option>
               <option value="restaurant">Restaurant</option>
               <option value="viewpoint">Viewpoint</option>
@@ -117,7 +121,7 @@ export function AddPlacePanel({
           </label>
           <label className="text-sm font-medium text-foreground">
             Priority
-            <select className={fieldClassName} defaultValue={place?.priority || "recommended"} name="priority">
+            <select className={fieldClassName} defaultValue={fields?.priority ?? place?.priority ?? "recommended"} name="priority">
               <option value="must-see">Must see</option>
               <option value="recommended">Recommended</option>
               <option value="optional">Optional</option>
@@ -125,7 +129,7 @@ export function AddPlacePanel({
           </label>
           <label className="text-sm font-medium text-foreground">
             Status
-            <select className={fieldClassName} defaultValue={place?.status || "idea"} name="status">
+            <select className={fieldClassName} defaultValue={fields?.status ?? place?.status ?? "idea"} name="status">
               <option value="idea">Idea</option>
               <option value="planned">Planned</option>
               <option value="visited">Visited</option>
@@ -134,21 +138,21 @@ export function AddPlacePanel({
           </label>
           <label className="text-sm font-medium text-foreground">
             Website
-            <input className={fieldClassName} defaultValue={place?.website_url || ""} name="websiteUrl" type="url" placeholder="https://" />
+            <input className={fieldClassName} defaultValue={fields?.websiteUrl ?? place?.website_url ?? ""} name="websiteUrl" type="url" placeholder="https://" />
           </label>
           {isPersisted ? (
             <div className="grid gap-5 sm:col-span-2 sm:grid-cols-3">
               <label className="text-sm font-medium text-foreground">
                 Latitude
-                <input className={fieldClassName} defaultValue={place?.latitude ?? ""} name="latitude" type="number" min="-90" max="90" step="any" placeholder="35.6762" />
+                <input className={fieldClassName} defaultValue={fields?.latitude ?? place?.latitude ?? ""} name="latitude" type="number" min="-90" max="90" step="any" placeholder="35.6762" />
               </label>
               <label className="text-sm font-medium text-foreground">
                 Longitude
-                <input className={fieldClassName} defaultValue={place?.longitude ?? ""} name="longitude" type="number" min="-180" max="180" step="any" placeholder="139.6503" />
+                <input className={fieldClassName} defaultValue={fields?.longitude ?? place?.longitude ?? ""} name="longitude" type="number" min="-180" max="180" step="any" placeholder="139.6503" />
               </label>
               <label className="text-sm font-medium text-foreground">
                 Map order
-                <input className={fieldClassName} defaultValue={place?.map_order ?? ""} name="mapOrder" type="number" min="0" step="1" placeholder="0" />
+                <input className={fieldClassName} defaultValue={fields?.mapOrder ?? place?.map_order ?? ""} name="mapOrder" type="number" min="0" step="1" placeholder="0" />
               </label>
               <p className="text-xs leading-relaxed text-muted sm:col-span-3">
                 Coordinates are optional and will be used by the map later. Providing both gives the best map preview.
@@ -160,7 +164,7 @@ export function AddPlacePanel({
             <textarea
               className="mt-2 min-h-28 w-full resize-none rounded-xl border border-border bg-background px-3.5 py-3 text-sm text-foreground shadow-xs outline-none transition-colors placeholder:text-muted-foreground focus:border-primary/40 focus:ring-2 focus:ring-primary/15"
               name="notes"
-              defaultValue={place?.notes || ""}
+              defaultValue={fields?.notes ?? place?.notes ?? ""}
               placeholder="What makes this place worth adding?"
             />
           </label>
