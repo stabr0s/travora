@@ -2,7 +2,6 @@ import Link from "next/link";
 import { Plane, Plus } from "lucide-react";
 
 import { EmptyState, SectionHeader } from "@/components/ui";
-import { DashboardHero } from "@/features/dashboard/components/DashboardHero";
 import { GettingStartedCard } from "@/features/dashboard/components/GettingStartedCard";
 import { NextTripCard } from "@/features/dashboard/components/NextTripCard";
 import { QuickActions } from "@/features/dashboard/components/QuickActions";
@@ -19,10 +18,10 @@ type DashboardScreenProps = {
 
 export function DashboardScreen({ data = mockDashboardData }: DashboardScreenProps) {
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <SectionHeader
         title="Dashboard"
-        description="Overview of your trips, progress, and upcoming plans."
+        description="Open the trip that needs attention and keep planning moving."
         action={
           <Link
             href="/trips/new"
@@ -34,42 +33,37 @@ export function DashboardScreen({ data = mockDashboardData }: DashboardScreenPro
         }
       />
 
-      <DashboardHero
-        user={data.user}
-        persisted={data.isPersisted}
-        tripCount={Number(data.stats[0]?.value || 0)}
-      />
+      <div className="grid gap-4 xl:grid-cols-[minmax(0,1.25fr)_minmax(19rem,0.75fr)]">
+        {data.nextTrip ? (
+          <NextTripCard trip={data.nextTrip} />
+        ) : (
+          <EmptyState
+            icon={Plane}
+            title="No upcoming trips yet"
+            description="Create a trip with dates to make it your next adventure."
+            className="min-h-44"
+            action={
+              <Link
+                href="/trips/new"
+                className="inline-flex h-9 items-center justify-center rounded-lg bg-primary px-3.5 text-sm font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary-hover"
+              >
+                Create trip
+              </Link>
+            }
+          />
+        )}
+        {data.isPersisted ? <RecentTrips trips={data.recentTrips} /> : <StatsGrid stats={data.stats} />}
+      </div>
 
-      {data.nextTrip ? (
-        <NextTripCard trip={data.nextTrip} />
-      ) : (
-        <EmptyState
-          icon={Plane}
-          title="No upcoming trips yet"
-          description="Create a trip with dates to make it your next adventure."
-          className="min-h-56"
-          action={
-            <Link
-              href="/trips/new"
-              className="inline-flex h-10 items-center justify-center rounded-xl bg-primary px-4 text-sm font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary-hover"
-            >
-              Create trip
-            </Link>
-          }
-        />
-      )}
+      {data.isPersisted ? <StatsGrid stats={data.stats} /> : null}
 
-      {data.isPersisted ? <RecentTrips trips={data.recentTrips} /> : null}
-
-      <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_22rem]">
+      <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_20rem]">
         <QuickActions actions={data.quickActions} />
         <GettingStartedCard />
       </div>
 
-      <StatsGrid stats={data.stats} />
-
       {!data.isPersisted ? (
-        <div className="grid gap-5 lg:grid-cols-2">
+        <div className="grid gap-4 lg:grid-cols-2">
           <RecentPlaces places={data.recentPlaces} />
           <UpcomingReservations reservations={data.upcomingReservations} />
         </div>

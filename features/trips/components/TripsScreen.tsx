@@ -27,7 +27,7 @@ export function TripsScreen({ trips, mode = "saved" }: TripsScreenProps) {
   const isSavedEmptyState = mode === "saved" && trips.length === 0;
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-4">
       <TripsHeader />
       {mode !== "saved" ? <TripsAccessNotice mode={mode} /> : null}
       <TripsStats trips={trips} />

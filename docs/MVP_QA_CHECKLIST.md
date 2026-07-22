@@ -17,6 +17,7 @@ Production URL: https://travora-theta.vercel.app
 - [ ] Dashboard works after login
 - [ ] Trips list works after login
 - [ ] Core persisted trip detail loads
+- [ ] App builds successfully
 - [ ] No horizontal overflow on key mobile routes
 
 ## Landing and public demo
@@ -48,6 +49,7 @@ Production URL: https://travora-theta.vercel.app
 - [ ] Dashboard empty state works for user with no trips
 - [ ] Dashboard getting started card is visible and useful
 - [ ] Signed-in `/trips` shows persisted trips
+- [ ] Trips shows more cards above the fold after strong hierarchy pass
 - [ ] Trips cards are compact and readable on desktop/mobile
 - [ ] Trip cards show role/status/date metadata
 - [ ] Clicking a trip card opens the trip
@@ -116,6 +118,7 @@ Production URL: https://travora-theta.vercel.app
 - [ ] Edit place
 - [ ] Delete place
 - [ ] Places shows more content above the fold
+- [ ] Places shows more place cards above the fold after strong hierarchy pass
 - [ ] Places cards remain scannable on desktop/mobile
 - [ ] Add Place keeps typed values after validation/save error
 - [ ] Add Place can be corrected and resubmitted after an error

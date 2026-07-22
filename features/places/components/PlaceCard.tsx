@@ -82,11 +82,11 @@ export function PlaceCard({
 
   return (
     <Card padding="none" className="overflow-hidden">
-      <div className="space-y-3 p-4">
+      <div className="space-y-2.5 p-3.5">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
             <h3 className="break-words text-base font-semibold tracking-tight text-foreground">{place.name}</h3>
-            <p className="mt-1 flex items-center gap-1.5 text-xs font-medium text-muted">
+            <p className="mt-0.5 flex items-center gap-1.5 text-xs font-medium text-muted">
               <MapPin className="size-3.5 shrink-0 text-muted-foreground" />
               <span className="truncate">{location || "Location not set"}</span>
             </p>
@@ -96,12 +96,12 @@ export function PlaceCard({
           </Badge>
         </div>
 
-        <div className="flex flex-wrap items-center gap-1.5">
+        <div className="flex flex-wrap items-center gap-1">
           {canChangeStatus ? (
-            <label className="flex items-center gap-2 text-xs font-medium text-muted">
-              Status
+            <label className="flex items-center gap-1.5 text-xs font-medium text-muted">
+              <span className="sr-only">Status</span>
               <select
-                className="h-8 rounded-lg border border-border bg-background px-2.5 text-xs text-foreground outline-none transition-colors focus:border-primary/40 focus:ring-2 focus:ring-primary/15 disabled:bg-surface disabled:text-muted"
+                className="h-7 rounded-md border border-border bg-background px-2 text-xs text-foreground outline-none transition-colors focus:border-primary/40 focus:ring-2 focus:ring-primary/15 disabled:bg-surface disabled:text-muted"
                 value={place.status || "idea"}
                 onChange={handleStatusChange}
                 disabled={isPending}
@@ -122,7 +122,7 @@ export function PlaceCard({
           {priority ? <Badge variant={priority.variant}>{priority.label}</Badge> : null}
         </div>
 
-        <p className="line-clamp-2 text-sm leading-relaxed text-muted">
+        <p className="line-clamp-1 text-sm leading-relaxed text-muted">
           {place.notes || "No notes yet."}
         </p>
 
@@ -137,7 +137,7 @@ export function PlaceCard({
         ) : null}
 
         {hasPlanningDetails ? (
-          <div className="flex flex-wrap gap-x-4 gap-y-2 border-t border-border-subtle pt-3 text-xs text-muted">
+          <div className="flex flex-wrap gap-x-3 gap-y-1.5 border-t border-border-subtle pt-2.5 text-xs text-muted">
             {place.estimatedDuration !== null ? (
               <span className="inline-flex items-center gap-1.5">
                 <Clock3 className="size-3.5 text-muted-foreground" />
@@ -159,18 +159,18 @@ export function PlaceCard({
           </div>
         ) : null}
         {hasActions ? (
-          <div className="flex flex-col gap-2 border-t border-border-subtle pt-3 sm:flex-row sm:flex-wrap">
+          <div className="flex flex-col gap-1.5 border-t border-border-subtle pt-2.5 sm:flex-row sm:flex-wrap">
             {onAddToPlan ? (
-              <Button size="sm" variant="outline" className="w-full sm:w-auto" onClick={() => onAddToPlan(place)} disabled={isPending}>
-                <CalendarPlus className="size-4" />
+              <Button size="sm" variant="outline" className="h-7 w-full px-2.5 sm:w-auto" onClick={() => onAddToPlan(place)} disabled={isPending}>
+                <CalendarPlus className="size-3.5" />
                 Add to plan
               </Button>
             ) : null}
             {onEdit ? (
-              <Button size="sm" variant="outline" className="w-full sm:w-auto" onClick={() => onEdit(place)} disabled={isPending}>Edit</Button>
+              <Button size="sm" variant="outline" className="h-7 w-full px-2.5 sm:w-auto" onClick={() => onEdit(place)} disabled={isPending}>Edit</Button>
             ) : null}
             {onDelete ? (
-              <Button size="sm" variant="ghost" className="w-full text-error sm:w-auto" onClick={() => onDelete(place)} disabled={isPending}>Delete</Button>
+              <Button size="sm" variant="ghost" className="h-7 w-full px-2.5 text-error sm:w-auto" onClick={() => onDelete(place)} disabled={isPending}>Delete</Button>
             ) : null}
           </div>
         ) : null}

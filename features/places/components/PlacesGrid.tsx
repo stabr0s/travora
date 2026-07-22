@@ -27,7 +27,7 @@ export function PlacesGrid({
   plannedPlaceLabels,
 }: PlacesGridProps) {
   return (
-    <section className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+    <section className="grid gap-2.5 md:grid-cols-2 xl:grid-cols-3">
       {places.map((place) => (
         <PlaceCard
           key={place.id}

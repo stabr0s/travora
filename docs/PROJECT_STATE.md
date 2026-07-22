@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 57 — Visual Hierarchy & Density Polish
+Sprint 58 — Strong Visual Hierarchy Pass
 
 Status: IN PROGRESS
 
@@ -831,6 +831,16 @@ Status: IN PROGRESS
 - No migrations, dependencies, backend, RLS/RPC, or auth changes were added
 - No maps, table view, compact mode toggle, or new product modules were added
 
+## Strong Visual Hierarchy Pass
+
+- Previous visual pass was too subtle, so this pass made stronger UI hierarchy changes
+- Dashboard greeting/hero dominance was removed in favor of immediate trip workspace content
+- Trips cards were made significantly more compact and less cover/gradient-driven
+- Places stats and cards were made significantly denser for faster scanning
+- Border-first cleanup was strengthened across the focused Dashboard, Trips, and Places surfaces
+- Sidebar and trip tabs were tightened further
+- No migrations, dependencies, backend, RLS/RPC, or auth changes were added
+
 ## Manual Backend Test Checklist
 
 - Login and logout
@@ -911,18 +921,18 @@ Principles:
 
 ## Next Task
 
-Task #057 — Visual Hierarchy & Density Polish
+Task #058 — Strong Visual Hierarchy Pass
 
 Goal:
 
-Improve visual hierarchy, information density, and daily-use ergonomics without redesigning the whole app.
+Make the visual hierarchy and density improvements clearly noticeable across Dashboard, Trips, and Places.
 
 The task includes:
 
-- Dashboard hierarchy and density polish
-- More compact Trips cards
-- Denser Places screen and cards
-- Lighter shared Card, sidebar, and trip tabs
+- Dashboard hero reduced/replaced with trip-first workspace content
+- Trips cards made significantly more compact
+- Places stats/cards made significantly denser
+- Stronger border-first cleanup
 - No migrations, dependencies, or backend architecture changes
 
 Important:

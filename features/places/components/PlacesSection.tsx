@@ -128,7 +128,7 @@ export function PlacesSection({
   );
 
   return (
-    <section className="space-y-4">
+    <section className="space-y-3">
       <PlacesHeader onAddPlace={canMutate ? openAddPanel : undefined} />
 
       {isAddPanelOpen && canMutate ? (

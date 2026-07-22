@@ -19,7 +19,7 @@ export function PlacesFilters({
   onFilterChange,
 }: PlacesFiltersProps) {
   return (
-    <div className="flex gap-1 overflow-x-auto rounded-xl border border-border bg-background p-1" aria-label="Filter places">
+    <div className="flex gap-0.5 overflow-x-auto rounded-lg border border-border bg-background p-0.5" aria-label="Filter places">
       {filters.map((filter) => {
         const isActive = filter.value === activeFilter;
 
@@ -30,7 +30,7 @@ export function PlacesFilters({
             aria-pressed={isActive}
             onClick={() => onFilterChange(filter.value)}
             className={cn(
-              "h-8 shrink-0 rounded-lg px-3.5 text-sm font-medium transition-colors",
+              "h-7 shrink-0 rounded-md px-3 text-xs font-medium transition-colors",
               "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30",
               isActive
                 ? "bg-surface text-foreground"

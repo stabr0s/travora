@@ -3,7 +3,6 @@ import { ArrowRight, Calendar, MapPin, Users } from "lucide-react";
 
 import { Badge, Card } from "@/components/ui";
 import type { NextTrip } from "@/features/dashboard/types/dashboard";
-import { cn } from "@/lib/utils";
 
 type NextTripCardProps = {
   trip: NextTrip;
@@ -42,29 +41,31 @@ export function NextTripCard({ trip }: NextTripCardProps) {
     <Card padding="none" className="relative overflow-hidden">
       <Link
         href={`/trips/${trip.id}`}
-        className="absolute inset-0 z-10 rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:ring-offset-2"
+        className="absolute inset-0 z-10 rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:ring-offset-2"
         aria-label={`Open ${trip.title}`}
       />
-      <div className="grid lg:grid-cols-5">
-        <div
-          className={cn(
-            "relative flex min-h-36 flex-col justify-end bg-gradient-to-br p-4 lg:col-span-2 lg:min-h-full",
-            trip.coverGradient,
-          )}
-        >
-          <div className="absolute inset-0 bg-gradient-to-t from-black/45 to-black/5" />
-          <div className="relative space-y-2">
-            <Badge variant="outline" className="border-white/30 bg-white/15 text-white">
-              Next trip
-            </Badge>
-            <p className="text-sm font-medium text-white/80">{trip.country}</p>
-            <h3 className="break-words text-xl font-semibold tracking-tight text-white">
+
+      <div className="p-4">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+          <div className="min-w-0">
+            <div className="flex flex-wrap items-center gap-2">
+              <Badge variant="default">Current trip</Badge>
+              <span className="text-xs font-medium text-muted">{trip.country}</span>
+            </div>
+            <h3 className="mt-2 break-words text-xl font-semibold tracking-tight text-foreground">
               {trip.title}
             </h3>
           </div>
+          <Link
+            href={`/trips/${trip.id}`}
+            className="relative z-20 inline-flex h-9 w-full items-center justify-center gap-2 rounded-lg bg-primary px-3.5 text-sm font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary-hover sm:w-auto"
+          >
+            View trip
+            <ArrowRight className="size-4" />
+          </Link>
         </div>
 
-        <div className="flex flex-col justify-between gap-4 p-4 lg:col-span-3">
+        <div className="mt-4 grid gap-3 border-t border-border-subtle pt-3 lg:grid-cols-[minmax(0,1fr)_15rem] lg:items-end">
           <div className="space-y-3">
             <div className="flex flex-wrap gap-x-4 gap-y-2 text-sm text-muted">
               <span className="inline-flex items-center gap-1.5">
@@ -101,26 +102,16 @@ export function NextTripCard({ trip }: NextTripCardProps) {
             )}
           </div>
 
-          <div className="flex flex-col gap-3 border-t border-border-subtle pt-3 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
-                Cost per person
-              </p>
-              <p className="text-xl font-semibold tracking-tight text-foreground">
-                {formatCurrency(trip.costPerPerson, trip.currency)}
-              </p>
-              <p className="mt-1 text-sm text-muted">
-                {trip.daysUntil === null ? "Dates are still flexible" : `${trip.daysUntil} days until departure`}
-              </p>
-            </div>
-
-            <Link
-              href={`/trips/${trip.id}`}
-              className="relative z-20 inline-flex h-9 w-full items-center justify-center gap-2 rounded-lg bg-primary px-3.5 text-sm font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary-hover sm:w-auto"
-            >
-              View trip
-              <ArrowRight className="size-4" />
-            </Link>
+          <div className="rounded-lg border border-border-subtle bg-surface px-3 py-2">
+            <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+              Cost per person
+            </p>
+            <p className="text-lg font-semibold tracking-tight text-foreground">
+              {formatCurrency(trip.costPerPerson, trip.currency)}
+            </p>
+            <p className="mt-0.5 text-xs text-muted">
+              {trip.daysUntil === null ? "Flexible dates" : `${trip.daysUntil} days until departure`}
+            </p>
           </div>
         </div>
       </div>

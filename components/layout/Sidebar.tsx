@@ -17,7 +17,7 @@ export function Sidebar() {
         <Logo href={getLogoHrefForPathname(pathname)} />
       </div>
 
-      <nav className="flex flex-1 flex-col gap-1 px-2.5 py-3">
+      <nav className="flex flex-1 flex-col gap-0.5 px-2 py-3">
         <p className="mb-1.5 px-2.5 text-xs font-medium uppercase tracking-wider text-muted-foreground">
           Menu
         </p>
@@ -31,7 +31,7 @@ export function Sidebar() {
               key={item.href}
               href={item.href}
               className={cn(
-                "group flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-sm font-medium transition-colors duration-150",
+                "group flex items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-sm font-medium transition-colors duration-150",
                 isActive
                   ? "bg-primary-subtle text-primary"
                   : "text-muted hover:bg-surface hover:text-foreground active:bg-border-subtle",
