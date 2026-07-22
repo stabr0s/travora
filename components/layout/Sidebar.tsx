@@ -13,12 +13,12 @@ export function Sidebar() {
 
   return (
     <aside className="hidden w-[var(--sidebar-width)] shrink-0 flex-col border-r border-border bg-background print:hidden md:flex">
-      <div className="flex h-[var(--topbar-height)] items-center px-5">
+      <div className="flex h-[var(--topbar-height)] items-center px-4">
         <Logo href={getLogoHrefForPathname(pathname)} />
       </div>
 
-      <nav className="flex flex-1 flex-col gap-1 px-3 py-4">
-        <p className="mb-2 px-3 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+      <nav className="flex flex-1 flex-col gap-1 px-2.5 py-3">
+        <p className="mb-1.5 px-2.5 text-xs font-medium uppercase tracking-wider text-muted-foreground">
           Menu
         </p>
 
@@ -31,9 +31,9 @@ export function Sidebar() {
               key={item.href}
               href={item.href}
               className={cn(
-                "group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-150",
+                "group flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-sm font-medium transition-colors duration-150",
                 isActive
-                  ? "bg-primary-subtle text-primary shadow-xs"
+                  ? "bg-primary-subtle text-primary"
                   : "text-muted hover:bg-surface hover:text-foreground active:bg-border-subtle",
               )}
             >
@@ -50,8 +50,8 @@ export function Sidebar() {
         })}
       </nav>
 
-      <div className="border-t border-border-subtle p-4">
-        <div className="rounded-xl bg-surface px-3 py-3">
+      <div className="border-t border-border-subtle p-3">
+        <div className="rounded-lg bg-surface px-3 py-2.5">
           <p className="text-xs font-medium text-foreground">Plan your next trip</p>
           <p className="mt-0.5 text-xs text-muted">Start organizing destinations and routes.</p>
         </div>

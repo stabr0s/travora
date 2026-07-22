@@ -6,9 +6,9 @@ type CardProps = React.HTMLAttributes<HTMLDivElement> & {
 
 const paddingStyles = {
   none: "",
-  sm: "p-4",
-  md: "p-6",
-  lg: "p-8",
+  sm: "p-3.5",
+  md: "p-5",
+  lg: "p-6",
 } as const;
 
 export function Card({
@@ -20,8 +20,7 @@ export function Card({
   return (
     <div
       className={cn(
-        "rounded-2xl border border-border bg-surface-elevated shadow-sm",
-        "transition-shadow duration-150 hover:shadow-md",
+        "rounded-xl border border-border bg-surface-elevated shadow-xs",
         paddingStyles[padding],
         className,
       )}

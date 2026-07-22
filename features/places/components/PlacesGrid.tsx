@@ -27,7 +27,7 @@ export function PlacesGrid({
   plannedPlaceLabels,
 }: PlacesGridProps) {
   return (
-    <section className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+    <section className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
       {places.map((place) => (
         <PlaceCard
           key={place.id}
@@ -46,7 +46,7 @@ export function PlacesGrid({
           icon={MapPinOff}
           title="No places in this view"
           description="Places keep restaurants, sights, hotels, and ideas in one list. Add the first place or try another filter."
-          className="min-h-[24rem] md:col-span-2"
+          className="min-h-72 md:col-span-2"
           action={onAddPlace ? (
             <Button size="md" onClick={onAddPlace}>
               <Plus className="size-4" />

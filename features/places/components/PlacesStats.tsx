@@ -28,7 +28,7 @@ export function PlacesStats({ places }: PlacesStatsProps) {
   ];
 
   return (
-    <section aria-label="Place statistics" className="grid grid-cols-2 gap-4 xl:grid-cols-4">
+    <section aria-label="Place statistics" className="grid grid-cols-2 gap-3 xl:grid-cols-4">
       {stats.map((stat) => {
         const Icon = stat.icon;
 
@@ -37,9 +37,9 @@ export function PlacesStats({ places }: PlacesStatsProps) {
             <div className="flex items-center justify-between gap-3">
               <div>
                 <p className="text-xs font-medium text-muted sm:text-sm">{stat.label}</p>
-                <p className="mt-1 text-2xl font-semibold tracking-tight text-foreground">{stat.value}</p>
+                <p className="mt-0.5 text-xl font-semibold tracking-tight text-foreground">{stat.value}</p>
               </div>
-              <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-primary-subtle">
+              <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary-subtle">
                 <Icon className="size-4 text-primary" strokeWidth={1.75} />
               </span>
             </div>

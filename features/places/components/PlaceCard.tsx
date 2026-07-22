@@ -7,7 +7,6 @@ import type {
   PlacePriority,
   PlaceStatus,
 } from "@/features/places/types/place";
-import { cn } from "@/lib/utils";
 
 const priorityDetails: Record<
   PlacePriority,
@@ -83,34 +82,26 @@ export function PlaceCard({
 
   return (
     <Card padding="none" className="overflow-hidden">
-      <div className={cn("relative flex min-h-36 flex-col justify-between bg-gradient-to-br p-5", place.coverGradient)}>
-        <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/5 to-black/10" />
-        <div className="relative flex flex-wrap gap-2">
-          <Badge variant="outline" className="border-white/20 bg-white/90 capitalize">
-            {place.category || "Uncategorized"}
+      <div className="space-y-3 p-4">
+        <div className="flex items-start justify-between gap-3">
+          <div className="min-w-0">
+            <h3 className="break-words text-base font-semibold tracking-tight text-foreground">{place.name}</h3>
+            <p className="mt-1 flex items-center gap-1.5 text-xs font-medium text-muted">
+              <MapPin className="size-3.5 shrink-0 text-muted-foreground" />
+              <span className="truncate">{location || "Location not set"}</span>
+            </p>
+          </div>
+          <Badge variant="outline" className="shrink-0 capitalize">
+            {place.category || "Other"}
           </Badge>
-          {priority ? (
-            <Badge variant={priority.variant} className="border-white/20 bg-white/90">
-              {priority.label}
-            </Badge>
-          ) : null}
         </div>
-        <div className="relative">
-          <p className="flex items-center gap-1.5 text-xs font-medium text-white/80">
-            <MapPin className="size-3.5" />
-            {location || "Location not set"}
-          </p>
-          <h3 className="mt-1.5 text-xl font-semibold tracking-tight text-white">{place.name}</h3>
-        </div>
-      </div>
 
-      <div className="space-y-4 p-5">
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-wrap items-center gap-1.5">
           {canChangeStatus ? (
             <label className="flex items-center gap-2 text-xs font-medium text-muted">
               Status
               <select
-                className="h-8 rounded-lg border border-border bg-background px-2.5 text-xs text-foreground shadow-xs outline-none transition-colors focus:border-primary/40 focus:ring-2 focus:ring-primary/15 disabled:bg-surface disabled:text-muted"
+                className="h-8 rounded-lg border border-border bg-background px-2.5 text-xs text-foreground outline-none transition-colors focus:border-primary/40 focus:ring-2 focus:ring-primary/15 disabled:bg-surface disabled:text-muted"
                 value={place.status || "idea"}
                 onChange={handleStatusChange}
                 disabled={isPending}
@@ -128,9 +119,10 @@ export function PlaceCard({
             )}
           {place.plannedDay ? <Badge variant="outline">Day {place.plannedDay}</Badge> : null}
           {plannedLabel ? <Badge variant="success">{plannedLabel}</Badge> : null}
+          {priority ? <Badge variant={priority.variant}>{priority.label}</Badge> : null}
         </div>
 
-        <p className="line-clamp-2 min-h-10 text-sm leading-relaxed text-muted">
+        <p className="line-clamp-2 text-sm leading-relaxed text-muted">
           {place.notes || "No notes yet."}
         </p>
 
@@ -145,7 +137,7 @@ export function PlaceCard({
         ) : null}
 
         {hasPlanningDetails ? (
-          <div className="flex flex-wrap gap-x-4 gap-y-2 border-t border-border-subtle pt-4 text-xs text-muted">
+          <div className="flex flex-wrap gap-x-4 gap-y-2 border-t border-border-subtle pt-3 text-xs text-muted">
             {place.estimatedDuration !== null ? (
               <span className="inline-flex items-center gap-1.5">
                 <Clock3 className="size-3.5 text-muted-foreground" />
@@ -167,7 +159,7 @@ export function PlaceCard({
           </div>
         ) : null}
         {hasActions ? (
-          <div className="flex flex-col gap-2 border-t border-border-subtle pt-4 sm:flex-row sm:flex-wrap">
+          <div className="flex flex-col gap-2 border-t border-border-subtle pt-3 sm:flex-row sm:flex-wrap">
             {onAddToPlan ? (
               <Button size="sm" variant="outline" className="w-full sm:w-auto" onClick={() => onAddToPlan(place)} disabled={isPending}>
                 <CalendarPlus className="size-4" />

@@ -36,14 +36,14 @@ export function GettingStartedCard() {
         </CardDescription>
       </CardHeader>
 
-      <ol className="mt-4 grid gap-2">
+      <ol className="mt-3 grid gap-1.5">
         {steps.map((step) => {
           const Icon = step.icon;
 
           return (
-            <li key={step.label} className="flex min-w-0 items-center gap-3 rounded-xl bg-surface px-3 py-2.5">
-              <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary-subtle">
-                <Icon className="size-4 text-primary" strokeWidth={1.75} />
+            <li key={step.label} className="flex min-w-0 items-center gap-2.5 rounded-lg bg-surface px-3 py-2">
+              <span className="flex size-7 shrink-0 items-center justify-center rounded-lg bg-primary-subtle">
+                <Icon className="size-3.5 text-primary" strokeWidth={1.75} />
               </span>
               <span className="min-w-0 break-words text-sm text-foreground">
                 {step.label}
@@ -55,7 +55,7 @@ export function GettingStartedCard() {
 
       <Link
         href="/trips/new"
-        className="mt-4 inline-flex h-10 w-full items-center justify-center rounded-xl bg-primary px-4 text-sm font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary-hover sm:w-auto"
+        className="mt-3 inline-flex h-9 w-full items-center justify-center rounded-lg bg-primary px-3.5 text-sm font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary-hover sm:w-auto"
       >
         Start a trip
       </Link>

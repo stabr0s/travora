@@ -44,9 +44,11 @@ Production URL: https://travora-theta.vercel.app
 ## Dashboard and trips list
 
 - [ ] Signed-in `/dashboard` shows persisted trip summary
+- [ ] Dashboard shows useful trip information above the fold
 - [ ] Dashboard empty state works for user with no trips
 - [ ] Dashboard getting started card is visible and useful
 - [ ] Signed-in `/trips` shows persisted trips
+- [ ] Trips cards are compact and readable on desktop/mobile
 - [ ] Trip cards show role/status/date metadata
 - [ ] Clicking a trip card opens the trip
 - [ ] Trip card buttons still work
@@ -89,6 +91,8 @@ Production URL: https://travora-theta.vercel.app
 - [ ] Settings tab works for persisted trips
 - [ ] Map tab remains hidden
 - [ ] Tabs are usable on mobile
+- [ ] Sidebar and trip tabs remain usable on desktop/mobile
+- [ ] No horizontal mobile overflow after density polish
 
 ## Overview, Important Info, and Travel Links
 
@@ -111,6 +115,8 @@ Production URL: https://travora-theta.vercel.app
 - [ ] Create place
 - [ ] Edit place
 - [ ] Delete place
+- [ ] Places shows more content above the fold
+- [ ] Places cards remain scannable on desktop/mobile
 - [ ] Add Place keeps typed values after validation/save error
 - [ ] Add Place can be corrected and resubmitted after an error
 - [ ] Add Place pre-fills country from trip destination when safe
@@ -120,6 +126,7 @@ Production URL: https://travora-theta.vercel.app
 - [ ] Viewer cannot change place status
 - [ ] Owner/editor can add a persisted Place to a selected plan day
 - [ ] Viewer cannot add a Place to the plan
+- [ ] Places features still work after density polish
 
 ## Planner
 

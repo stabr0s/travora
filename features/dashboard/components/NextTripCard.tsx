@@ -48,25 +48,25 @@ export function NextTripCard({ trip }: NextTripCardProps) {
       <div className="grid lg:grid-cols-5">
         <div
           className={cn(
-            "relative flex min-h-48 flex-col justify-end bg-gradient-to-br p-6 lg:col-span-2 lg:min-h-full",
+            "relative flex min-h-36 flex-col justify-end bg-gradient-to-br p-4 lg:col-span-2 lg:min-h-full",
             trip.coverGradient,
           )}
         >
-          <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/45 to-black/5" />
           <div className="relative space-y-2">
             <Badge variant="outline" className="border-white/30 bg-white/15 text-white">
               Next trip
             </Badge>
             <p className="text-sm font-medium text-white/80">{trip.country}</p>
-            <h3 className="text-2xl font-semibold tracking-tight text-white">
+            <h3 className="break-words text-xl font-semibold tracking-tight text-white">
               {trip.title}
             </h3>
           </div>
         </div>
 
-        <div className="flex flex-col justify-between gap-6 p-6 lg:col-span-3">
-          <div className="space-y-4">
-            <div className="flex flex-wrap gap-4 text-sm text-muted">
+        <div className="flex flex-col justify-between gap-4 p-4 lg:col-span-3">
+          <div className="space-y-3">
+            <div className="flex flex-wrap gap-x-4 gap-y-2 text-sm text-muted">
               <span className="inline-flex items-center gap-1.5">
                 <Calendar className="size-4 shrink-0 text-muted-foreground" />
                 {formatDateRange(trip.startDate, trip.endDate)}
@@ -82,7 +82,7 @@ export function NextTripCard({ trip }: NextTripCardProps) {
             </div>
 
             {trip.progress === null ? (
-              <div className="rounded-xl bg-surface px-3 py-2 text-sm text-muted">
+              <div className="rounded-lg bg-surface px-3 py-2 text-sm text-muted">
                 Trip preparation is connected inside the trip workspace.
               </div>
             ) : (
@@ -101,12 +101,12 @@ export function NextTripCard({ trip }: NextTripCardProps) {
             )}
           </div>
 
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+          <div className="flex flex-col gap-3 border-t border-border-subtle pt-3 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
                 Cost per person
               </p>
-              <p className="text-2xl font-semibold tracking-tight text-foreground">
+              <p className="text-xl font-semibold tracking-tight text-foreground">
                 {formatCurrency(trip.costPerPerson, trip.currency)}
               </p>
               <p className="mt-1 text-sm text-muted">
@@ -116,7 +116,7 @@ export function NextTripCard({ trip }: NextTripCardProps) {
 
             <Link
               href={`/trips/${trip.id}`}
-              className="relative z-20 inline-flex h-10 w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 text-sm font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary-hover sm:w-auto"
+              className="relative z-20 inline-flex h-9 w-full items-center justify-center gap-2 rounded-lg bg-primary px-3.5 text-sm font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary-hover sm:w-auto"
             >
               View trip
               <ArrowRight className="size-4" />

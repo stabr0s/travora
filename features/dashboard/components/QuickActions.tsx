@@ -33,7 +33,7 @@ export function QuickActions({ actions }: QuickActionsProps) {
         <CardDescription>Jump into the most common planning tasks.</CardDescription>
       </CardHeader>
 
-      <div className="grid gap-2 pt-4 sm:grid-cols-2">
+      <div className="grid gap-2 pt-3 sm:grid-cols-2">
         {actions.map((action) => {
           const Icon = iconMap[action.icon];
 
@@ -42,12 +42,12 @@ export function QuickActions({ actions }: QuickActionsProps) {
               key={action.id}
               href={action.href}
               className={cn(
-                "group flex items-start gap-3 rounded-xl border border-border-subtle bg-surface p-3",
-                "transition-all duration-150 hover:border-border hover:bg-background hover:shadow-xs",
+                "group flex items-start gap-2.5 rounded-lg border border-border-subtle bg-surface px-3 py-2.5",
+                "transition-colors duration-150 hover:border-border hover:bg-background",
                 "active:bg-border-subtle",
               )}
             >
-              <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-primary-subtle transition-colors group-hover:bg-primary/10">
+              <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary-subtle transition-colors group-hover:bg-primary/10">
                 <Icon className="size-4 text-primary" strokeWidth={1.75} />
               </span>
               <span className="min-w-0">

@@ -19,7 +19,7 @@ export function TripsGrid({
   emptyAction,
 }: TripsGridProps) {
   return (
-    <section className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+    <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
       {trips.map((trip) => (
         <TripCard key={trip.id} trip={trip} />
       ))}

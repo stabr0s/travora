@@ -76,47 +76,39 @@ export function TripCard({ trip }: TripCardProps) {
     <Card padding="none" className="group relative flex h-full flex-col overflow-hidden">
       <Link
         href={`/trips/${trip.id}`}
-        className="absolute inset-0 z-10 rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:ring-offset-2"
+        className="absolute inset-0 z-10 rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:ring-offset-2"
         aria-label={`Open ${trip.title}`}
       />
-      <div className={cn("relative flex min-h-44 flex-col justify-between bg-gradient-to-br p-5", trip.coverGradient)}>
-        <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-black/5 to-black/10" />
-        <div className="relative flex justify-between gap-2">
-          <div className="flex flex-wrap gap-2">
-            {trip.isDemo ? (
-              <Badge variant="outline" className="border-white/20 bg-white/85 text-slate-700">
-                Demo
-              </Badge>
-            ) : null}
-            {role ? <Badge variant={role.variant}>{role.label}</Badge> : null}
-          </div>
-          <div className="shrink-0">
+      <div className={cn("relative flex min-h-28 flex-col justify-end bg-gradient-to-br p-4", trip.coverGradient)}>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/55 to-black/10" />
+        <div className="relative min-w-0">
+          <div className="mb-2 flex flex-wrap gap-1.5">
+            {trip.isDemo ? <Badge variant="outline" className="border-white/20 bg-white/85 text-slate-700">Demo</Badge> : null}
+            {role ? <Badge variant={role.variant} className="border-white/20 bg-white/90">{role.label}</Badge> : null}
             <Badge variant={status.variant} className={cn(trip.status !== "archived" && "border-white/20 bg-white/90")}>
               {status.label}
             </Badge>
           </div>
-        </div>
-        <div className="relative min-w-0">
-          <p className="break-words text-sm font-medium text-white/80">{trip.country}</p>
-          <h2 className="mt-1 break-words text-xl font-semibold tracking-tight text-white">{trip.title}</h2>
+          <h2 className="break-words text-lg font-semibold tracking-tight text-white">{trip.title}</h2>
+          <p className="mt-0.5 break-words text-xs font-medium text-white/80">{trip.country}</p>
         </div>
       </div>
 
-      <div className="flex flex-1 flex-col space-y-5 p-5">
-        <div className="space-y-2.5 text-sm text-muted">
-          <p className="flex items-center gap-2">
+      <div className="flex flex-1 flex-col space-y-3 p-4">
+        <div className="space-y-2 text-sm text-muted">
+          <p className="flex items-center gap-2 leading-snug">
             <CalendarDays className="size-4 shrink-0 text-muted-foreground" />
             {formatDateRange(trip.startDate, trip.endDate)}
           </p>
-          <div className="flex flex-wrap gap-x-4 gap-y-2">
+          <div className="flex flex-wrap gap-x-3 gap-y-1.5 text-xs">
             <span className="inline-flex items-center gap-2">
-              <Users className="size-4 text-muted-foreground" />
+              <Users className="size-3.5 text-muted-foreground" />
               {trip.participants === null
                 ? "Travelers not connected"
                 : `${trip.participants} travelers`}
             </span>
             <span className="inline-flex items-center gap-2">
-              <MapPin className="size-4 text-muted-foreground" />
+              <MapPin className="size-3.5 text-muted-foreground" />
               {trip.placesCount === null
                 ? "Places not connected"
                 : `${trip.placesCount} places`}
@@ -125,7 +117,7 @@ export function TripCard({ trip }: TripCardProps) {
         </div>
 
         {trip.progress === null ? (
-          <div className="flex items-center justify-between rounded-xl bg-surface px-3 py-2 text-xs">
+          <div className="flex items-center justify-between rounded-lg bg-surface px-3 py-2 text-xs">
             <span className="font-medium text-foreground">Trip preparation</span>
             <span className="text-muted">Planning</span>
           </div>
@@ -139,11 +131,11 @@ export function TripCard({ trip }: TripCardProps) {
           </div>
         )}
 
-        <div className="mt-auto border-t border-border-subtle pt-4">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div className="mt-auto border-t border-border-subtle pt-3">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div className="min-w-0">
             <p className="text-xs text-muted">Cost per person</p>
-            <p className="mt-0.5 break-words text-lg font-semibold tracking-tight text-foreground">
+            <p className="mt-0.5 break-words text-base font-semibold tracking-tight text-foreground">
               {trip.costPerPerson === null
                 ? "Budget not set"
                 : formatCurrency(trip.costPerPerson, trip.currency)}
@@ -158,7 +150,7 @@ export function TripCard({ trip }: TripCardProps) {
               {trip.role === "owner" ? (
                 <Link
                   href={`/trips/${trip.id}?tab=settings`}
-                  className="relative z-20 inline-flex h-10 w-full items-center justify-center gap-1.5 rounded-lg border border-border bg-background px-3 text-xs font-medium text-foreground shadow-xs transition-colors hover:bg-surface sm:w-auto"
+                  className="relative z-20 inline-flex h-9 w-full items-center justify-center gap-1.5 rounded-lg border border-border bg-background px-3 text-xs font-medium text-foreground transition-colors hover:bg-surface sm:w-auto"
                 >
                   <Settings className="size-3.5" />
                   Settings
@@ -166,7 +158,7 @@ export function TripCard({ trip }: TripCardProps) {
               ) : null}
               <Link
                 href={`/trips/${trip.id}`}
-                className="relative z-20 inline-flex h-10 w-full items-center justify-center rounded-lg bg-primary px-3 text-xs font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary-hover sm:w-auto"
+                className="relative z-20 inline-flex h-9 w-full items-center justify-center rounded-lg bg-primary px-3 text-xs font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary-hover sm:w-auto"
               >
                 Open trip
               </Link>

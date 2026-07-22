@@ -18,7 +18,7 @@ export function TripsFilters({
   onFilterChange,
 }: TripsFiltersProps) {
   return (
-    <div className="flex gap-1 overflow-x-auto rounded-xl bg-background p-1 shadow-xs" aria-label="Filter trips">
+    <div className="flex gap-1 overflow-x-auto rounded-xl border border-border bg-background p-1" aria-label="Filter trips">
       {filters.map((filter) => {
         const isActive = activeFilter === filter.value;
 
@@ -29,10 +29,10 @@ export function TripsFilters({
             aria-pressed={isActive}
             onClick={() => onFilterChange(filter.value)}
             className={cn(
-              "h-9 shrink-0 rounded-lg px-4 text-sm font-medium transition-colors",
+              "h-8 shrink-0 rounded-lg px-3.5 text-sm font-medium transition-colors",
               "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30",
               isActive
-                ? "bg-surface-elevated text-foreground shadow-sm"
+                ? "bg-surface text-foreground"
                 : "text-muted hover:text-foreground",
             )}
           >

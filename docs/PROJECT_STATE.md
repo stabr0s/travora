@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 56 — Quick Planner Feedback Fixes
+Sprint 57 — Visual Hierarchy & Density Polish
 
 Status: IN PROGRESS
 
@@ -821,6 +821,16 @@ Status: IN PROGRESS
 - Planned saved places can still be intentionally added again
 - No migrations or dependencies were added
 
+## Visual Hierarchy & Density Polish
+
+- Dashboard hierarchy was tightened so useful trip information appears earlier
+- Trips cards were made more compact and easier to scan
+- Places page density was improved with lighter stats, filters, cards, and add-place CTA
+- Shadows, gradients, and decorative color use were reduced in the focused surfaces
+- Sidebar was narrowed and trip tabs were made more compact
+- No migrations, dependencies, backend, RLS/RPC, or auth changes were added
+- No maps, table view, compact mode toggle, or new product modules were added
+
 ## Manual Backend Test Checklist
 
 - Login and logout
@@ -901,18 +911,20 @@ Principles:
 
 ## Next Task
 
-Task #056 — Quick Planner Feedback Fixes
+Task #057 — Visual Hierarchy & Density Polish
 
 Goal:
 
-Apply focused Planner feedback fixes after Task #055.
+Improve visual hierarchy, information density, and daily-use ergonomics without redesigning the whole app.
 
 The task includes:
 
-- Planner Add Item form values preserved after errors
-- Short saved-place planned indicators
+- Dashboard hierarchy and density polish
+- More compact Trips cards
+- Denser Places screen and cards
+- Lighter shared Card, sidebar, and trip tabs
 - No migrations, dependencies, or backend architecture changes
 
 Important:
 
-No migrations, dependencies, RLS/RPC changes, auth/backend architecture changes, map rendering, drag and drop, AI, or public share changes are added.
+No migrations, dependencies, RLS/RPC changes, auth/backend architecture changes, map rendering, table view, compact mode toggle, drag and drop, AI, or public share changes are added.

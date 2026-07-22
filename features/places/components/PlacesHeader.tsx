@@ -10,7 +10,7 @@ export function PlacesHeader({ onAddPlace }: PlacesHeaderProps) {
   return (
     <SectionHeader
       title="Places"
-      description="Collect the sights, meals, stays, and small discoveries that will shape this trip."
+      description="Saved stops, meals, stays, and ideas for this trip."
       className="mb-0"
       action={onAddPlace ? (
         <Button size="md" onClick={onAddPlace}>
