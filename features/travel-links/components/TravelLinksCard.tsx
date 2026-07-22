@@ -52,14 +52,16 @@ export function TravelLinksCard({
     <>
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div className="flex min-w-0 items-start gap-3">
-          <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary-subtle">
-            <Link2 className="size-5 text-primary" />
-          </span>
+          {!compact ? (
+            <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary-subtle">
+              <Link2 className="size-5 text-primary" />
+            </span>
+          ) : null}
           <div className="min-w-0">
             <h2 className={compact ? "font-semibold tracking-tight text-foreground" : "text-lg font-semibold tracking-tight text-foreground"}>
-              {title}
+              {compact ? `${title} · ${links.length}` : title}
             </h2>
-            <p className="mt-1 text-sm text-muted">{emptyDescription}</p>
+            {!compact || !links.length ? <p className="mt-1 text-sm text-muted">{emptyDescription}</p> : null}
           </div>
         </div>
         {canEditTrip && !isFormOpen ? (
@@ -84,11 +86,12 @@ export function TravelLinksCard({
         />
       ) : null}
       {links.length ? (
-        <div className="space-y-3">
+        <div className={compact ? "space-y-2" : "space-y-3"}>
           {links.map((link) => (
             <TravelLinkItem
               key={link.id}
               link={link}
+              compact={compact}
               canEditTrip={canEditTrip}
               isPending={isPending}
               onEdit={openForm}
@@ -105,7 +108,7 @@ export function TravelLinksCard({
   );
 
   return compact ? (
-    <div className="space-y-4 rounded-2xl border border-border-subtle bg-surface p-4">{content}</div>
+    <div className="space-y-3 rounded-2xl border border-border-subtle bg-surface px-3 py-3">{content}</div>
   ) : (
     <Card padding="md" className="space-y-5">{content}</Card>
   );

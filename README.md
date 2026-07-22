@@ -102,5 +102,5 @@ backend enforcement layer for persisted trip access.
 - No realtime collaboration.
 - No AI planning.
 - No comments or notifications.
-- No advanced per-section public share controls.
+- Public share has MVP section toggles, but no advanced per-viewer controls.
 - Application routes are public; Supabase RLS is the backend enforcement layer.

@@ -43,7 +43,7 @@ export function ReservationCalendarButton({ reservation }: ReservationCalendarBu
       title={canExport ? "Download an .ics file for this reservation." : "Add a date to export."}
     >
       <CalendarPlus className="size-4" />
-      {canExport ? "Add to calendar" : "Add a date to export"}
+      {canExport ? "Add to calendar" : "Needs date"}
     </Button>
   );
 }

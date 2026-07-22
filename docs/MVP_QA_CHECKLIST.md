@@ -158,12 +158,16 @@ Production URL: https://travora-theta.vercel.app
 
 ## Reservations and calendar export
 
+- [ ] Reservations are sorted clearly: dated first, earliest date first, undated last
 - [ ] Create reservation
 - [ ] Edit reservation
 - [ ] Delete reservation
+- [ ] Reservation card shows title, type, date, status, provider, reference, location, and price clearly
+- [ ] Long reservation notes do not dominate the card
 - [ ] Custom currency can be used in reservation forms
 - [ ] Reservation can optionally create matching Budget expense
 - [ ] Editing/deleting reservation does not auto-sync created Budget expense
+- [ ] Travel Links are easy to find from reservation cards
 - [ ] Add reservation-level Travel Link
 - [ ] Edit reservation-level Travel Link
 - [ ] Delete reservation-level Travel Link
@@ -176,8 +180,13 @@ Production URL: https://travora-theta.vercel.app
 - [ ] Viewer can export reservation calendar file
 - [ ] Viewer still cannot edit/delete reservation
 - [ ] Public share does not expose calendar export
+- [ ] Public share reservations remain safe and read-only
+- [ ] Public share section controls still work for Reservations
+- [ ] Public share does not expose reservation Travel Links
+- [ ] Print summary still excludes Reservations
 - [ ] No whole-trip calendar export was added
 - [ ] No planner/place calendar export was added
+- [ ] No migration or dependency was added for Reservations polish
 
 ## Budget and settlements
 

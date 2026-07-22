@@ -10,6 +10,7 @@ import { PersistedReservationCard } from "@/features/reservations/components/Per
 import { ReservationsFilters } from "@/features/reservations/components/ReservationsFilters";
 import { ReservationsHeader } from "@/features/reservations/components/ReservationsHeader";
 import { useScrollIntoViewOnOpen } from "@/hooks/useScrollIntoViewOnOpen";
+import { sortPersistedReservations } from "@/features/reservations/utils/reservation-display";
 import type { CreateReservationActionState, PersistedReservation } from "@/features/reservations/types/persisted-reservation";
 import type { ReservationFilter } from "@/features/reservations/types/reservation";
 import type { PersistedTravelLink } from "@/features/travel-links/types/travel-link";
@@ -48,9 +49,13 @@ export function PersistedReservationsSection({
   const [message, setMessage] = useState<CreateReservationActionState | null>(null);
   const [isPending, startTransition] = useTransition();
   const panelRef = useScrollIntoViewOnOpen<HTMLDivElement>(isAddPanelOpen);
+  const sortedReservations = useMemo(
+    () => sortPersistedReservations(reservations),
+    [reservations],
+  );
   const filteredReservations = useMemo(
-    () => filterReservations(reservations, activeFilter),
-    [activeFilter, reservations],
+    () => filterReservations(sortedReservations, activeFilter),
+    [activeFilter, sortedReservations],
   );
 
   function openAddPanel() {
@@ -81,7 +86,9 @@ export function PersistedReservationsSection({
         <EmptyState
           icon={ReceiptText}
           title="No reservations yet"
-          description="Keep flights, stays, tickets, and transport bookings together. Add the first reservation when you book something."
+          description={canEditTrip
+            ? "Save flights, hotels, trains, car rentals, and activities so the important booking details stay easy to find."
+            : "Flights, hotels, trains, car rentals, and activities will appear here when someone adds them."}
           action={canEditTrip ? <Button onClick={openAddPanel}>Add first reservation</Button> : undefined}
         />
       ) : (

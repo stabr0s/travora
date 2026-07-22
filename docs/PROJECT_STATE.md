@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 59 — Public Share Section Controls
+Sprint 60 — Reservations UX Polish
 
 Status: IN PROGRESS
 
@@ -850,6 +850,14 @@ Status: IN PROGRESS
 - Disabled sections are not returned by the public RPC and are not rendered publicly
 - Migration `011_public_share_sections.sql` added
 
+## Reservations UX Polish
+
+- Reservations sorting and hierarchy were polished
+- Persisted reservation cards were made more compact and readable
+- Reservation Travel Links and calendar actions are easier to access
+- Empty state copy now explains useful reservation examples
+- No migrations or dependencies were added
+
 ## Manual Backend Test Checklist
 
 - Login and logout
@@ -930,20 +938,20 @@ Principles:
 
 ## Next Task
 
-Task #059 — Public Share Section Controls
+Task #060 — Reservations UX Polish
 
 Goal:
 
-Let trip owners choose which MVP sections are visible on the public read-only share page.
+Polish the existing Reservations module without adding a new product module.
 
 The task includes:
 
-- `public_share_sections` JSONB settings on trips
-- Owner-only settings controls for Places, Planner, Reservations, Budget, and Packing
-- Public share RPC returns only enabled section data
-- Overview remains locked and always visible
-- Important Info and Travel Links remain private
+- Clearer reservation sorting and hierarchy
+- More compact persisted reservation cards
+- Easier access to reservation Travel Links and calendar export
+- Better reservation empty states
+- No migrations or dependencies
 
 Important:
 
-No new dependencies, new tables, service-role/admin client, public editing, Important Info sharing, Travel Links sharing, participant public list, or unrelated UI redesign is added.
+No new dependencies, migrations, database status/type changes, RLS/RPC changes, public Travel Links, print-summary Reservations, global calendar export, or large redesign is added.
