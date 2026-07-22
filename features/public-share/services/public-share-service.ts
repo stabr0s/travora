@@ -1,5 +1,6 @@
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import type {
+  PublicShareSections,
   PublicSharedTrip,
   PublicShareServiceResult,
 } from "@/features/public-share/types/public-share";
@@ -25,18 +26,43 @@ function hasSafeTokenShape(token: string) {
   return token.length >= 32 && token.length <= 160 && /^[A-Za-z0-9_-]+$/.test(token);
 }
 
+const defaultSections: PublicShareSections = {
+  overview: true,
+  places: true,
+  planner: true,
+  reservations: true,
+  budget: true,
+  packing: true,
+};
+
+function normalizeSections(input: unknown): PublicShareSections {
+  if (!input || typeof input !== "object") return defaultSections;
+  const candidate = input as Partial<Record<keyof PublicShareSections, unknown>>;
+
+  return {
+    overview: true,
+    places: typeof candidate.places === "boolean" ? candidate.places : true,
+    planner: typeof candidate.planner === "boolean" ? candidate.planner : true,
+    reservations: typeof candidate.reservations === "boolean" ? candidate.reservations : true,
+    budget: typeof candidate.budget === "boolean" ? candidate.budget : true,
+    packing: typeof candidate.packing === "boolean" ? candidate.packing : true,
+  };
+}
+
 function normalizePayload(payload: unknown): PublicSharedTrip | null {
   if (!payload || typeof payload !== "object") return null;
   const candidate = payload as PublicSharedTrip;
   if (!candidate.trip || typeof candidate.trip.title !== "string") return null;
+  const sections = normalizeSections(candidate.sections);
 
   return {
     trip: candidate.trip,
-    places: Array.isArray(candidate.places) ? candidate.places : [],
-    planner: Array.isArray(candidate.planner) ? candidate.planner : [],
-    reservations: Array.isArray(candidate.reservations) ? candidate.reservations : [],
-    budget: Array.isArray(candidate.budget) ? candidate.budget : [],
-    packing: Array.isArray(candidate.packing) ? candidate.packing : [],
+    sections,
+    places: sections.places && Array.isArray(candidate.places) ? candidate.places : [],
+    planner: sections.planner && Array.isArray(candidate.planner) ? candidate.planner : [],
+    reservations: sections.reservations && Array.isArray(candidate.reservations) ? candidate.reservations : [],
+    budget: sections.budget && Array.isArray(candidate.budget) ? candidate.budget : [],
+    packing: sections.packing && Array.isArray(candidate.packing) ? candidate.packing : [],
   };
 }
 

@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 58 — Strong Visual Hierarchy Pass
+Sprint 59 — Public Share Section Controls
 
 Status: IN PROGRESS
 
@@ -372,7 +372,7 @@ Status: IN PROGRESS
 - Persistence includes Trips, Places, Planner, Reservations, Budget, Packing, and Participants
 - Forms in modules not yet connected to persistence remain preview-only
 - Persisted Map uses Places data but does not render real map tiles yet
-- Real email invitations and public sharing are not implemented
+- Automatic email sending is not implemented; public sharing remains read-only
 
 ## Supabase Foundation
 
@@ -733,7 +733,7 @@ Status: IN PROGRESS
 - Public share pages are read-only, including packing
 - Manual email-bound invite links exist, but automatic email sending is postponed
 - File attachments and whole-trip calendar export/API sync are postponed
-- Realtime collaboration, AI planning, analytics, comments, payments, and advanced per-section privacy controls are postponed
+- Realtime collaboration, AI planning, analytics, comments, payments, and advanced public privacy controls beyond MVP section toggles are postponed
 
 ## Trip Duplicate / Templates MVP
 
@@ -841,6 +841,15 @@ Status: IN PROGRESS
 - Sidebar and trip tabs were tightened further
 - No migrations, dependencies, backend, RLS/RPC, or auth changes were added
 
+## Public Share Section Controls
+
+- Owner can choose visible sections for a public share link
+- Overview remains always visible on public shares
+- Public share remains read-only
+- Important Info and Travel Links stay private
+- Disabled sections are not returned by the public RPC and are not rendered publicly
+- Migration `011_public_share_sections.sql` added
+
 ## Manual Backend Test Checklist
 
 - Login and logout
@@ -921,20 +930,20 @@ Principles:
 
 ## Next Task
 
-Task #058 — Strong Visual Hierarchy Pass
+Task #059 — Public Share Section Controls
 
 Goal:
 
-Make the visual hierarchy and density improvements clearly noticeable across Dashboard, Trips, and Places.
+Let trip owners choose which MVP sections are visible on the public read-only share page.
 
 The task includes:
 
-- Dashboard hero reduced/replaced with trip-first workspace content
-- Trips cards made significantly more compact
-- Places stats/cards made significantly denser
-- Stronger border-first cleanup
-- No migrations, dependencies, or backend architecture changes
+- `public_share_sections` JSONB settings on trips
+- Owner-only settings controls for Places, Planner, Reservations, Budget, and Packing
+- Public share RPC returns only enabled section data
+- Overview remains locked and always visible
+- Important Info and Travel Links remain private
 
 Important:
 
-No migrations, dependencies, RLS/RPC changes, auth/backend architecture changes, map rendering, table view, compact mode toggle, drag and drop, AI, or public share changes are added.
+No new dependencies, new tables, service-role/admin client, public editing, Important Info sharing, Travel Links sharing, participant public list, or unrelated UI redesign is added.

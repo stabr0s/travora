@@ -177,9 +177,29 @@ Migration `005_public_trip_share.sql` adds public share metadata directly to
 - `public_share_token`
 - `public_share_created_at`
 - `public_share_updated_at`
+- `public_share_sections`
 
 The migration also adds a partial unique index on non-null share tokens, a
 lookup index for enabled tokens, and a minimum token-length constraint.
+
+Migration `011_public_share_sections.sql` adds section-level public share
+settings to `trips`:
+
+```json
+{
+  "overview": true,
+  "places": true,
+  "planner": true,
+  "reservations": true,
+  "budget": true,
+  "packing": true
+}
+```
+
+The `public_share_sections` column is `jsonb`, defaults all MVP public sections
+to visible, and has a simple object-type check constraint. The default preserves
+existing public share behavior after the migration is applied. Overview is
+treated as always visible in the application UI.
 
 Public data access is intentionally narrow. The migration does not add public
 `select` policies to `trips`, `places`, `planner_items`, `reservations`,
@@ -192,9 +212,15 @@ or null tokens return no public trip data. Execute permission is granted to
 `anon` and `authenticated`, while direct table access remains governed by
 existing RLS.
 
+After migration `011`, the public share RPC also returns `sections` metadata
+and only aggregates rows for sections enabled in `public_share_sections`.
+Disabled Places, Planner, Reservations, Budget, or Packing sections are not
+returned in the public payload and are not rendered by the public share UI.
+
 The public payload omits owner IDs, user IDs, member IDs, participant emails,
-share tokens, auth/session data, and reservation reference numbers. It is meant
-only for read-only public trip previews.
+share tokens, auth/session data, reservation reference numbers, invite data,
+Important Info, and Travel Links. It is meant only for read-only public trip
+previews.
 
 ## Personal packing progress
 
@@ -395,6 +421,12 @@ Migration `010` adds one table, reservation consistency and timestamp triggers,
 and RLS policies scoped to authenticated trip members/editors. It does not
 change public share RPCs or expose links publicly.
 
+After reviewing it, apply migration `011` to add public share section controls.
+Migration `011` adds the `public_share_sections` JSONB column to `trips` and
+updates the public share RPC so disabled sections are not returned publicly.
+It does not add public table policies, expose Important Info, expose Travel
+Links, or change authenticated trip-member RLS.
+
 ## Current limitations
 
 - The migration has not been applied automatically by this repository.
@@ -406,7 +438,7 @@ change public share RPCs or expose links publicly.
   archive, or restore flow yet.
 - Application routes are not protected.
 - Public share links are bearer links and read-only; there is no expiry,
-  password protection, section-level visibility, or analytics yet.
+  password protection, analytics, or advanced per-viewer visibility yet.
 - Packing progress is personal for authenticated members only. There is no
   anonymous public packing state, per-person dashboard, or realtime sync yet.
 - Invite links are manual copy/share only. There is no automatic email sending,

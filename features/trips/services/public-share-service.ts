@@ -7,10 +7,20 @@ import type {
   PersistedTrip,
   TripsServiceResult,
 } from "@/features/trips/types/persisted-trip";
+import type { PublicShareSections } from "@/features/public-share/types/public-share";
 
 const ownerOnlyMessage = "Only the trip owner can manage public sharing.";
 
 type ShareMode = "enable" | "disable" | "regenerate";
+
+const defaultPublicShareSections: PublicShareSections = {
+  overview: true,
+  places: true,
+  planner: true,
+  reservations: true,
+  budget: true,
+  packing: true,
+};
 
 type SupabaseDiagnostic = {
   code?: string;
@@ -31,6 +41,20 @@ function logPublicShareError(operation: string, error: SupabaseDiagnostic) {
 
 function generateShareToken() {
   return randomBytes(32).toString("base64url");
+}
+
+function sanitizePublicShareSections(input: unknown): PublicShareSections {
+  if (!input || typeof input !== "object") return defaultPublicShareSections;
+  const candidate = input as Partial<Record<keyof PublicShareSections, unknown>>;
+
+  return {
+    overview: true,
+    places: typeof candidate.places === "boolean" ? candidate.places : true,
+    planner: typeof candidate.planner === "boolean" ? candidate.planner : true,
+    reservations: typeof candidate.reservations === "boolean" ? candidate.reservations : true,
+    budget: typeof candidate.budget === "boolean" ? candidate.budget : true,
+    packing: typeof candidate.packing === "boolean" ? candidate.packing : true,
+  };
 }
 
 async function getAuthContext() {
@@ -123,4 +147,53 @@ export async function updatePublicShare(
   }
 
   return { data: null, error: { code: "UPDATE_FAILED", message: "We couldn't generate a unique public link. Try again." } };
+}
+
+export async function updatePublicShareSections(
+  tripId: string,
+  sections: unknown,
+): Promise<TripsServiceResult<PersistedTrip>> {
+  if (!isUuid(tripId)) {
+    return { data: null, error: { code: "INVALID_TRIP", message: "This saved trip is not available." } };
+  }
+
+  const { supabase, user } = await getAuthContext();
+  if (!user) {
+    return { data: null, error: { code: "AUTH_REQUIRED", message: "Sign in to manage public sharing." } };
+  }
+
+  const { data: existingTrip, error: readError } = await supabase
+    .from("trips")
+    .select("owner_id")
+    .eq("id", tripId)
+    .maybeSingle();
+
+  if (readError) {
+    logPublicShareError("trip owner read failed", readError);
+    return { data: null, error: { code: "LOAD_FAILED", message: "We couldn't load public sharing settings." } };
+  }
+  if (!existingTrip) {
+    return { data: null, error: { code: "NOT_FOUND", message: "This trip is not available." } };
+  }
+  if (existingTrip.owner_id !== user.id) {
+    return { data: null, error: { code: "PERMISSION_DENIED", message: ownerOnlyMessage } };
+  }
+
+  const payload: Database["public"]["Tables"]["trips"]["Update"] = {
+    public_share_sections: sanitizePublicShareSections(sections),
+    public_share_updated_at: new Date().toISOString(),
+  };
+
+  const { error: updateError } = await supabase
+    .from("trips")
+    .update(payload)
+    .eq("id", tripId)
+    .eq("owner_id", user.id);
+
+  if (updateError) {
+    logPublicShareError("public share sections update failed", updateError);
+    return { data: null, error: { code: "UPDATE_FAILED", message: "We couldn't update public sharing sections." } };
+  }
+
+  return readUpdatedTrip(supabase, tripId, user.id);
 }

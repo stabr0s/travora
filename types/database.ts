@@ -47,6 +47,7 @@ export type Database = {
           public_share_token: string | null;
           public_share_created_at: string | null;
           public_share_updated_at: string | null;
+          public_share_sections: Json;
           created_at: string | null;
           updated_at: string | null;
         };
@@ -65,6 +66,7 @@ export type Database = {
           public_share_token?: string | null;
           public_share_created_at?: string | null;
           public_share_updated_at?: string | null;
+          public_share_sections?: Json;
           created_at?: string | null;
           updated_at?: string | null;
         };

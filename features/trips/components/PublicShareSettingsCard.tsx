@@ -9,13 +9,39 @@ import {
   disablePublicShareAction,
   enablePublicShareAction,
   regeneratePublicShareAction,
+  updatePublicShareSectionsAction,
 } from "@/features/trips/actions/public-share-actions";
+import { PublicShareSectionControls } from "@/features/trips/components/PublicShareSectionControls";
+import type { PublicShareSections } from "@/features/public-share/types/public-share";
 import type { PersistedTrip } from "@/features/trips/types/persisted-trip";
 
 type PublicShareSettingsCardProps = {
   trip: PersistedTrip;
   canManageSettings: boolean;
 };
+
+function normalizeSections(input: unknown): PublicShareSections {
+  if (!input || typeof input !== "object") {
+    return {
+      overview: true,
+      places: true,
+      planner: true,
+      reservations: true,
+      budget: true,
+      packing: true,
+    };
+  }
+
+  const candidate = input as Partial<Record<keyof PublicShareSections, unknown>>;
+  return {
+    overview: true,
+    places: typeof candidate.places === "boolean" ? candidate.places : true,
+    planner: typeof candidate.planner === "boolean" ? candidate.planner : true,
+    reservations: typeof candidate.reservations === "boolean" ? candidate.reservations : true,
+    budget: typeof candidate.budget === "boolean" ? candidate.budget : true,
+    packing: typeof candidate.packing === "boolean" ? candidate.packing : true,
+  };
+}
 
 export function PublicShareSettingsCard({
   trip,
@@ -24,13 +50,24 @@ export function PublicShareSettingsCard({
   const router = useRouter();
   const [message, setMessage] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
+  const initialSections = normalizeSections(trip.public_share_sections);
+  const [sections, setSections] = useState<PublicShareSections>(initialSections);
 
   const sharePath = trip.public_share_token ? `/share/${trip.public_share_token}` : "";
   const isEnabled = trip.public_share_enabled && Boolean(trip.public_share_token);
+  const hasSectionChanges = JSON.stringify(sections) !== JSON.stringify(initialSections);
 
   function runAction(action: (tripId: string) => Promise<{ status: string; message?: string }>) {
     startTransition(async () => {
       const result = await action(trip.id);
+      setMessage(result.message || null);
+      if (result.status === "success") router.refresh();
+    });
+  }
+
+  function saveSections() {
+    startTransition(async () => {
+      const result = await updatePublicShareSectionsAction(trip.id, sections);
       setMessage(result.message || null);
       if (result.status === "success") router.refresh();
     });
@@ -88,6 +125,15 @@ export function PublicShareSettingsCard({
           </a>
         </div>
       ) : null}
+
+      <PublicShareSectionControls
+        sections={sections}
+        canManageSettings={canManageSettings}
+        isPending={isPending}
+        hasSectionChanges={hasSectionChanges}
+        onChange={setSections}
+        onSave={saveSections}
+      />
 
       {canManageSettings ? (
         <div className="flex flex-col gap-2 border-t border-border-subtle pt-4 sm:flex-row">

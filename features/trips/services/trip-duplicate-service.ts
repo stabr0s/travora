@@ -191,6 +191,14 @@ export async function duplicateTrip(
     public_share_token: null,
     public_share_created_at: null,
     public_share_updated_at: null,
+    public_share_sections: {
+      overview: true,
+      places: true,
+      planner: true,
+      reservations: true,
+      budget: true,
+      packing: true,
+    },
     created_at: null,
     updated_at: null,
   };

@@ -243,6 +243,13 @@ Production URL: https://travora-theta.vercel.app
 - [ ] Owner can regenerate public link
 - [ ] Old regenerated link no longer works
 - [ ] Editor/viewer cannot manage public share link
+- [ ] Owner can toggle visible public share sections
+- [ ] Editor/viewer cannot manage public share section controls
+- [ ] Overview remains visible and cannot be disabled
+- [ ] Existing public shares default to showing Places, Planner, Reservations, Budget, and Packing
+- [ ] Public share shows enabled sections
+- [ ] Public share hides disabled sections
+- [ ] Disabled sections are not returned in the public payload
 - [ ] Public link opens without login
 - [ ] Public page is read-only
 - [ ] Public page has no app sidebar/navigation
@@ -319,6 +326,7 @@ Production URL: https://travora-theta.vercel.app
 - [ ] Public visitor cannot see invite data
 - [ ] Public visitor cannot see participant emails/internal IDs
 - [ ] Public visitor cannot export reservation calendar files
+- [ ] Public visitor sees only sections enabled by the owner
 
 ### Invite page
 
@@ -354,7 +362,7 @@ Production URL: https://travora-theta.vercel.app
 - [ ] No realtime collaboration
 - [ ] No AI planning
 - [ ] No comments or notifications
-- [ ] No advanced per-section public share controls
+- [ ] Advanced public share controls beyond MVP section toggles are postponed
 
 ## Build and deployment readiness
 

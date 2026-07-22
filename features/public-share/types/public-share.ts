@@ -57,10 +57,21 @@ export type PublicSharePackingItem = {
   category: string | null;
   priority: string | null;
   notes: string | null;
+  isPacked?: boolean;
+};
+
+export type PublicShareSections = {
+  overview: boolean;
+  places: boolean;
+  planner: boolean;
+  reservations: boolean;
+  budget: boolean;
+  packing: boolean;
 };
 
 export type PublicSharedTrip = {
   trip: PublicShareTrip;
+  sections: PublicShareSections;
   places: PublicSharePlace[];
   planner: PublicSharePlannerItem[];
   reservations: PublicShareReservation[];
