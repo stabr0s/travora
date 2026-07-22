@@ -10,6 +10,7 @@ import {
 } from "@/features/planner/services/planner-service";
 import type {
   CreatePlannerItemActionState,
+  PlannerItemFormFields,
   PlannerItemStatus,
 } from "@/features/planner/types/persisted-planner";
 import { isUuid } from "@/lib/validation/is-uuid";
@@ -22,41 +23,56 @@ function readField(formData: FormData, name: string) {
   return String(formData.get(name) ?? "").trim();
 }
 
+function readPlannerItemFields(formData: FormData): PlannerItemFormFields {
+  return {
+    title: readField(formData, "title"),
+    description: readField(formData, "description"),
+    date: readField(formData, "date"),
+    startTime: readField(formData, "startTime"),
+    endTime: readField(formData, "endTime"),
+    placeId: readField(formData, "placeId"),
+    type: readField(formData, "type"),
+    status: readField(formData, "status"),
+    orderIndex: readField(formData, "orderIndex"),
+  };
+}
+
 export async function createPlannerItemAction(
   _previousState: CreatePlannerItemActionState,
   formData: FormData,
 ): Promise<CreatePlannerItemActionState> {
   const tripId = readField(formData, "tripId");
-  const title = readField(formData, "title");
-  const date = readField(formData, "date");
-  const startTime = readField(formData, "startTime");
-  const endTime = readField(formData, "endTime");
-  const placeId = readField(formData, "placeId");
-  const requestedStatus = readField(formData, "status") as PlannerItemStatus;
-  const orderIndexValue = readField(formData, "orderIndex");
+  const fields = readPlannerItemFields(formData);
+  const title = fields.title;
+  const date = fields.date;
+  const startTime = fields.startTime;
+  const endTime = fields.endTime;
+  const placeId = fields.placeId;
+  const requestedStatus = fields.status as PlannerItemStatus;
+  const orderIndexValue = fields.orderIndex;
 
   if (!isUuid(tripId)) {
-    return { status: "error", message: "This saved trip is not available." };
+    return { status: "error", message: "This saved trip is not available.", fields };
   }
 
   if (!title) {
-    return { status: "error", message: "Enter a title for this plan item." };
+    return { status: "error", message: "Enter a title for this plan item.", fields };
   }
 
   if (date && !datePattern.test(date)) {
-    return { status: "error", message: "Enter a valid date." };
+    return { status: "error", message: "Enter a valid date.", fields };
   }
 
   if ((startTime && !timePattern.test(startTime)) || (endTime && !timePattern.test(endTime))) {
-    return { status: "error", message: "Enter a valid start and end time." };
+    return { status: "error", message: "Enter a valid start and end time.", fields };
   }
 
   if (startTime && endTime && endTime < startTime) {
-    return { status: "error", message: "End time cannot be earlier than start time." };
+    return { status: "error", message: "End time cannot be earlier than start time.", fields };
   }
 
   if (placeId && !isUuid(placeId)) {
-    return { status: "error", message: "Choose a valid saved place or leave it empty." };
+    return { status: "error", message: "Choose a valid saved place or leave it empty.", fields };
   }
 
   const parsedOrderIndex = orderIndexValue ? Number.parseInt(orderIndexValue, 10) : undefined;
@@ -66,17 +82,17 @@ export async function createPlannerItemAction(
     tripId,
     title,
     placeId: placeId || undefined,
-    description: readField(formData, "description"),
+    description: fields.description,
     date,
     startTime,
     endTime,
-    type: readField(formData, "type"),
+    type: fields.type,
     status,
     orderIndex,
   });
 
   if (result.error) {
-    return { status: "error", message: result.error.message };
+    return { status: "error", message: result.error.message, fields };
   }
 
   if (placeId) {
@@ -100,26 +116,27 @@ export async function updatePlannerItemAction(
 ): Promise<CreatePlannerItemActionState> {
   const tripId = readField(formData, "tripId");
   const id = readField(formData, "recordId");
-  const title = readField(formData, "title");
-  const date = readField(formData, "date");
-  const startTime = readField(formData, "startTime");
-  const endTime = readField(formData, "endTime");
-  const placeId = readField(formData, "placeId");
-  const requestedStatus = readField(formData, "status") as PlannerItemStatus;
-  const parsedOrderIndex = Number.parseInt(readField(formData, "orderIndex") || "0", 10);
+  const fields = readPlannerItemFields(formData);
+  const title = fields.title;
+  const date = fields.date;
+  const startTime = fields.startTime;
+  const endTime = fields.endTime;
+  const placeId = fields.placeId;
+  const requestedStatus = fields.status as PlannerItemStatus;
+  const parsedOrderIndex = Number.parseInt(fields.orderIndex || "0", 10);
 
-  if (!isUuid(tripId)) return { status: "error", message: "This saved trip is not available." };
-  if (!isUuid(id)) return { status: "error", message: "This plan item is not available." };
-  if (!title) return { status: "error", message: "Enter a title for this plan item." };
-  if (date && !datePattern.test(date)) return { status: "error", message: "Enter a valid date." };
+  if (!isUuid(tripId)) return { status: "error", message: "This saved trip is not available.", fields };
+  if (!isUuid(id)) return { status: "error", message: "This plan item is not available.", fields };
+  if (!title) return { status: "error", message: "Enter a title for this plan item.", fields };
+  if (date && !datePattern.test(date)) return { status: "error", message: "Enter a valid date.", fields };
   if ((startTime && !timePattern.test(startTime)) || (endTime && !timePattern.test(endTime))) {
-    return { status: "error", message: "Enter a valid start and end time." };
+    return { status: "error", message: "Enter a valid start and end time.", fields };
   }
   if (startTime && endTime && endTime < startTime) {
-    return { status: "error", message: "End time cannot be earlier than start time." };
+    return { status: "error", message: "End time cannot be earlier than start time.", fields };
   }
   if (placeId && !isUuid(placeId)) {
-    return { status: "error", message: "Choose a valid saved place or leave it empty." };
+    return { status: "error", message: "Choose a valid saved place or leave it empty.", fields };
   }
 
   const result = await updatePlannerItem({
@@ -127,16 +144,16 @@ export async function updatePlannerItemAction(
     tripId,
     placeId: placeId || undefined,
     title,
-    description: readField(formData, "description"),
+    description: fields.description,
     date,
     startTime,
     endTime,
-    type: readField(formData, "type"),
+    type: fields.type,
     status: validStatuses.includes(requestedStatus) ? requestedStatus : "planned",
     orderIndex: Number.isFinite(parsedOrderIndex) ? parsedOrderIndex : 0,
   });
 
-  if (result.error) return { status: "error", message: result.error.message };
+  if (result.error) return { status: "error", message: result.error.message, fields };
   if (placeId) {
     const placeResult = await markPlacePlannedIfSafe({ tripId, id: placeId });
     if (placeResult.error) {

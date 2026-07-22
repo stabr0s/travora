@@ -36,6 +36,18 @@ export type ReorderPlannerItemInput = {
   siblingOrderIndex: number;
 };
 
+export type PlannerItemFormFields = {
+  title: string;
+  description: string;
+  date: string;
+  startTime: string;
+  endTime: string;
+  placeId: string;
+  type: string;
+  status: string;
+  orderIndex: string;
+};
+
 export type PlannerServiceResult<T> =
   | { data: T; error: null }
   | {
@@ -56,4 +68,5 @@ export type PlannerServiceResult<T> =
 export type CreatePlannerItemActionState = {
   status: "idle" | "error" | "success";
   message?: string;
+  fields?: Partial<PlannerItemFormFields>;
 };

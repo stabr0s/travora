@@ -126,10 +126,12 @@ Production URL: https://travora-theta.vercel.app
 - [ ] Create planner item
 - [ ] Edit planner item
 - [ ] Delete planner item
+- [ ] Planner Add Item failed submit keeps typed title/date/time/place/notes
 - [ ] Owner/editor can quick-add planner item
 - [ ] Viewer cannot quick-add planner item
 - [ ] Quick-add can use a saved Place
 - [ ] Saved Place controls indicate places already used in the plan
+- [ ] Saved Place planned indicator is compact
 - [ ] Planned saved Places can still be intentionally added again
 - [ ] Planner item with `place_id` marks linked Place as planned
 - [ ] Visited/rejected Place status is not overwritten by Planner linking

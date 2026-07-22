@@ -64,6 +64,10 @@ export function PersistedAddPlanItemPanel({
     isEditing ? updatePlannerItemAction : createPlannerItemAction,
     initialState,
   );
+  const fields = actionState.fields;
+  const formKey = fields
+    ? Object.values(fields).join("|")
+    : item?.id || "new";
 
   function handlePlaceChange(value: string) {
     setSelectedPlaceId(value);
@@ -77,7 +81,7 @@ export function PersistedAddPlanItemPanel({
 
   return (
     <Card padding="md" className="border-primary/15 shadow-md">
-      <form action={formAction}>
+      <form key={formKey} action={formAction}>
         <input type="hidden" name="tripId" value={tripId} />
         {item ? <input type="hidden" name="recordId" value={item.id} /> : null}
         {item ? <input type="hidden" name="orderIndex" value={item.order_index ?? 0} /> : null}
@@ -115,7 +119,7 @@ export function PersistedAddPlanItemPanel({
                 ))}
               </select>
               <span className="mt-1 block text-xs text-muted">
-                Use a saved place to fill this faster or link this item to Places. Planned places can be added again if they appear on another day.
+                Planned places can still be added again intentionally.
               </span>
             </label>
           ) : null}
@@ -151,19 +155,19 @@ export function PersistedAddPlanItemPanel({
           </label>
           <label className="text-sm font-medium text-foreground">
             Date
-            <input className={fieldClassName} defaultValue={item?.date || ""} name="date" type="date" />
+            <input className={fieldClassName} defaultValue={fields?.date ?? item?.date ?? ""} name="date" type="date" />
           </label>
           <label className="text-sm font-medium text-foreground">
             Start time
-            <input className={fieldClassName} defaultValue={item?.start_time?.slice(0, 5) || ""} name="startTime" type="time" />
+            <input className={fieldClassName} defaultValue={fields?.startTime ?? item?.start_time?.slice(0, 5) ?? ""} name="startTime" type="time" />
           </label>
           <label className="text-sm font-medium text-foreground">
             End time
-            <input className={fieldClassName} defaultValue={item?.end_time?.slice(0, 5) || ""} name="endTime" type="time" />
+            <input className={fieldClassName} defaultValue={fields?.endTime ?? item?.end_time?.slice(0, 5) ?? ""} name="endTime" type="time" />
           </label>
           <label className="text-sm font-medium text-foreground sm:col-span-2">
             Status
-            <select className={fieldClassName} defaultValue={item?.status || "planned"} name="status">
+            <select className={fieldClassName} defaultValue={fields?.status ?? item?.status ?? "planned"} name="status">
               <option value="planned">Planned</option>
               <option value="completed">Completed</option>
               <option value="cancelled">Cancelled</option>

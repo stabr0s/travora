@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 55 — Feedback Fixes: Print, Places & Planner
+Sprint 56 — Quick Planner Feedback Fixes
 
 Status: IN PROGRESS
 
@@ -814,6 +814,13 @@ Status: IN PROGRESS
 - Viewer/public share behavior remains read-only
 - No migrations or dependencies were added
 
+## Quick Planner Feedback Fixes
+
+- Planner Add Item preserves submitted form values after validation or save errors
+- Saved place indicators were shortened to `Planned` or `Planned · MM/DD/YYYY`
+- Planned saved places can still be intentionally added again
+- No migrations or dependencies were added
+
 ## Manual Backend Test Checklist
 
 - Login and logout
@@ -894,18 +901,16 @@ Principles:
 
 ## Next Task
 
-Task #055 — Feedback Fixes: Print, Places & Planner
+Task #056 — Quick Planner Feedback Fixes
 
 Goal:
 
-Apply focused feedback fixes for authenticated print summaries, Add Place error handling, and the Places/Planner workflow.
+Apply focused Planner feedback fixes after Task #055.
 
 The task includes:
 
-- Simplified authenticated print summary content
-- Add Place form values preserved on validation/save errors
-- Saved Places marked when already used in Planner
-- Add to plan action from persisted Place cards
+- Planner Add Item form values preserved after errors
+- Short saved-place planned indicators
 - No migrations, dependencies, or backend architecture changes
 
 Important:

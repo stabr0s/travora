@@ -34,6 +34,12 @@ function formatDate(value: string) {
   }).format(new Date(`${value}T00:00:00Z`));
 }
 
+function formatShortDate(value: string) {
+  const date = new Date(`${value}T00:00:00Z`);
+
+  return `${date.getUTCMonth() + 1}/${date.getUTCDate()}/${date.getUTCFullYear()}`;
+}
+
 function compareNullable(valueA: string | null, valueB: string | null) {
   if (valueA && valueB) return valueA.localeCompare(valueB);
   if (valueA) return -1;
@@ -91,7 +97,7 @@ export function PersistedPlannerSection({
         if (!item.place_id || labels.has(item.place_id)) return;
         labels.set(
           item.place_id,
-          date === "unscheduled" ? "Planned · unscheduled" : `Planned · ${formatDate(date)}`,
+          date === "unscheduled" ? "Planned" : `Planned · ${formatShortDate(date)}`,
         );
       });
     });

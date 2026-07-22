@@ -113,7 +113,7 @@ export function PersistedQuickAddPlanItem({
         ) : null}
         {sortedPlaces.length ? (
           <p className="text-xs text-muted">
-            Planned saved places can be added again if this place appears on another day.
+            Planned places can still be added again intentionally.
           </p>
         ) : null}
       </form>
