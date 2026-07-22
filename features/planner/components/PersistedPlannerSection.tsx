@@ -145,14 +145,6 @@ export function PersistedPlannerSection({
                 </span>
               </div>
               <div className="space-y-3">
-                {canEditTrip && date !== "unscheduled" ? (
-                  <PersistedQuickAddPlanItem
-                    tripId={tripId}
-                    date={date}
-                    places={places}
-                    plannedPlaceLabels={plannedPlaceLabels}
-                  />
-                ) : null}
                 {groupItems.map((item, index) => (
                   <PersistedPlanItemCard
                     key={item.id}
@@ -165,6 +157,14 @@ export function PersistedPlannerSection({
                     onMoveDown={canEditTrip && index < groupItems.length - 1 ? (selected) => handleMove(groupItems, selected, "down") : undefined}
                   />
                 ))}
+                {canEditTrip && date !== "unscheduled" ? (
+                  <PersistedQuickAddPlanItem
+                    tripId={tripId}
+                    date={date}
+                    places={places}
+                    plannedPlaceLabels={plannedPlaceLabels}
+                  />
+                ) : null}
               </div>
             </Card>
           ))}

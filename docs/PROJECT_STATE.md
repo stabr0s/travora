@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 62 — Planner Workbench UX Polish
+Sprint 63 — Planner Density Feedback Fixes
 
 Status: IN PROGRESS
 
@@ -876,6 +876,13 @@ Status: IN PROGRESS
 - No migrations or dependencies were added
 - No drag and drop, map rendering, calendar sync, or AI planning was added
 
+## Planner Density Feedback Fixes
+
+- Copy Day moved to a compact collapsible control
+- Quick Add reduced in visual weight and moved below itinerary items
+- Planner items and day content now dominate each day section
+- No migrations or dependencies were added
+
 ## Manual Backend Test Checklist
 
 - Login and logout
@@ -956,20 +963,19 @@ Principles:
 
 ## Next Task
 
-Task #062 — Planner Workbench UX Polish
+Task #063 — Planner Density Feedback Fixes
 
 Goal:
 
-Polish the existing Planner workbench experience without adding a new product module.
+Apply focused density fixes after Planner workbench feedback.
 
 The task includes:
 
-- Clearer day hierarchy
-- More scannable Planner item cards
-- Cleaner Quick Add and saved-place flow
-- Mobile readability and wrapping checks
+- Compact/collapsible Copy Day
+- Smaller, less dominant Quick Add
+- Planner items remain the visual priority
 - No migrations or dependencies
 
 Important:
 
-No new dependencies, migrations, drag and drop, map rendering, AI planning, calendar sync, backend changes, RLS/RPC changes, or large redesign is added.
+No new dependencies, migrations, drag and drop, backend changes, RLS/RPC changes, auth changes, or new product features are added.

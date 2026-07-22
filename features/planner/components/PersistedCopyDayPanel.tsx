@@ -1,7 +1,7 @@
 "use client";
 
-import { useActionState } from "react";
-import { Copy } from "lucide-react";
+import { useActionState, useState } from "react";
+import { Copy, X } from "lucide-react";
 
 import { Button, Card } from "@/components/ui";
 import { copyPlannerDayAction } from "@/features/planner/actions/planner-usability-actions";
@@ -26,6 +26,7 @@ export function PersistedCopyDayPanel({
   tripId,
   days,
 }: PersistedCopyDayPanelProps) {
+  const [isOpen, setIsOpen] = useState(false);
   const [actionState, formAction, isPending] = useActionState(
     copyPlannerDayAction,
     initialState,
@@ -33,16 +34,42 @@ export function PersistedCopyDayPanel({
 
   if (!days.length) return null;
 
+  if (!isOpen) {
+    return (
+      <button
+        type="button"
+        className="flex w-full items-center justify-between gap-3 rounded-xl border border-border-subtle bg-background px-3.5 py-3 text-left transition-colors hover:bg-surface sm:w-auto sm:min-w-80"
+        onClick={() => setIsOpen(true)}
+      >
+        <span className="min-w-0">
+          <span className="inline-flex items-center gap-2 text-sm font-semibold text-foreground">
+            <Copy className="size-4 text-muted" />
+            Copy day
+          </span>
+          <span className="mt-0.5 block text-xs text-muted">
+            Reuse this plan on another day
+          </span>
+        </span>
+        <span className="text-xs font-medium text-primary">Open</span>
+      </button>
+    );
+  }
+
   return (
     <Card padding="sm" className="bg-surface/60">
       <form action={formAction} className="space-y-3">
         <input type="hidden" name="tripId" value={tripId} />
         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div className="min-w-0">
-            <h2 className="inline-flex items-center gap-2 text-sm font-semibold text-foreground">
-              <Copy className="size-4 text-primary" />
-              Copy day
-            </h2>
+            <div className="flex items-start justify-between gap-3">
+              <h2 className="inline-flex items-center gap-2 text-sm font-semibold text-foreground">
+                <Copy className="size-4 text-primary" />
+                Copy day
+              </h2>
+              <Button type="button" size="sm" variant="ghost" onClick={() => setIsOpen(false)} aria-label="Close copy day panel">
+                <X className="size-4" />
+              </Button>
+            </div>
             <p className="mt-1 text-sm text-muted">
               Reuse a day on another date. Existing target-day items stay in place.
             </p>

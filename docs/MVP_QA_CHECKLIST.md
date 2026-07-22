@@ -136,6 +136,9 @@ Production URL: https://travora-theta.vercel.app
 - [ ] Planner days are easy to scan
 - [ ] Planner day headers clearly show the day/date and item count
 - [ ] Planner empty state explains how to start
+- [ ] Copy Day no longer occupies large default space
+- [ ] Copy Day still works from its compact/collapsible control
+- [ ] Quick Add is compact and visually secondary
 - [ ] Create planner item
 - [ ] Edit planner item
 - [ ] Delete planner item
@@ -163,6 +166,7 @@ Production URL: https://travora-theta.vercel.app
 - [ ] Public share Planner remains read-only
 - [ ] Print summary still includes Planner
 - [ ] No drag and drop dependency exists
+- [ ] No migration or dependency was added for Planner density fixes
 - [ ] No migration or dependency was added for Planner workbench polish
 
 ## Reservations and calendar export
