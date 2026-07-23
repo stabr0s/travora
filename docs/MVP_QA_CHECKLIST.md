@@ -186,6 +186,18 @@ Production URL: https://travora-theta.vercel.app
 ## Reservations and calendar export
 
 - [ ] Reservations are sorted clearly: dated first, earliest date first, undated last
+- [ ] Owner/editor sees Add to planner on persisted reservation cards
+- [ ] Viewer does not see Add to planner
+- [ ] Reservation with a date creates a Planner item on the correct day
+- [ ] Reservation start time maps correctly when available
+- [ ] Same-day reservation end time maps only when safe
+- [ ] Provider, reference, location, status, and notes are included safely
+- [ ] Reservation without a date shows a safe disabled state
+- [ ] Adding the same reservation-looking item twice is blocked or clearly warned
+- [ ] Planner item created from a reservation can still be edited, deleted, and moved
+- [ ] Planner Quick Add, presets, and Copy Day still work
+- [ ] Public share remains read-only and section controls still work
+- [ ] Print summary includes the resulting regular Planner item
 - [ ] Create reservation
 - [ ] Edit reservation
 - [ ] Delete reservation
@@ -214,6 +226,7 @@ Production URL: https://travora-theta.vercel.app
 - [ ] No whole-trip calendar export was added
 - [ ] No planner/place calendar export was added
 - [ ] No migration or dependency was added for Reservations polish
+- [ ] No migration or dependency was added for Reservation to Planner Quick Add
 
 ## Budget and settlements
 

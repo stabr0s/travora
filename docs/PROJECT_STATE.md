@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 65 — Planner Presets Placement & Duplicate Guard
+Sprint 66 — Reservation to Planner Quick Add
 
 Status: IN PROGRESS
 
@@ -900,6 +900,14 @@ Status: IN PROGRESS
 - Viewer and public read-only behavior remains unchanged
 - No migrations, dependencies, or database tables were added
 
+## Reservation to Planner Quick Add
+
+- Owner and editor can create a regular Planner item from a reservation
+- Reservation date, time, title, type, provider, reference, location, status, and notes are mapped safely
+- Duplicate guard prevents accidental same-day Planner duplicates
+- Viewer and public read-only behavior remains unchanged
+- No migrations, dependencies, database fields, or persistent reservation-to-planner relation were added
+
 ## Manual Backend Test Checklist
 
 - Login and logout
@@ -980,19 +988,19 @@ Principles:
 
 ## Next Task
 
-Task #065 — Planner Presets Placement & Duplicate Guard
+Task #066 — Reservation to Planner Quick Add
 
 Goal:
 
-Polish Planner preset placement and prevent accidental duplicate preset additions.
+Create a lightweight Planner item directly from a persisted reservation.
 
 The task includes:
 
-- Compact top Add preset utility
-- Explicit target day selection
-- Duplicate guard for same-day preset titles
+- Owner/editor-only Add to planner action
+- Safe reservation-to-planner field mapping
+- Duplicate guard for same-day title and time
 - No migrations or dependencies
 
 Important:
 
-No new dependencies, migrations, database tables, preset tracking columns, RLS/RPC changes, auth changes, drag and drop, AI planning, map rendering, or calendar sync are added.
+No new dependencies, migrations, database tables, relation columns, RLS/RPC changes, auth changes, calendar sync, AI planning, or map rendering are added.

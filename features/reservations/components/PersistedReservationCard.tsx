@@ -14,6 +14,7 @@ import {
 
 import { Badge, Button, Card } from "@/components/ui";
 import { ReservationCalendarButton } from "@/features/reservations/components/ReservationCalendarButton";
+import { ReservationPlannerButton } from "@/features/reservations/components/ReservationPlannerButton";
 import type { PersistedReservation } from "@/features/reservations/types/persisted-reservation";
 import {
   formatReservationCurrency,
@@ -104,6 +105,7 @@ export function PersistedReservationCard({
 
           <div className="mt-4 flex flex-col gap-2 border-t border-border-subtle pt-3 sm:flex-row sm:flex-wrap">
             <ReservationCalendarButton reservation={reservation} />
+            {canEditTrip ? <ReservationPlannerButton reservation={reservation} /> : null}
             {onEdit && onDelete ? (
               <>
                 <Button size="sm" variant="outline" className="w-full sm:w-auto" onClick={() => onEdit(reservation)} disabled={isPending}>Edit</Button>
