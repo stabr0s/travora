@@ -5,10 +5,12 @@ import { Info, X } from "lucide-react";
 
 import { Button, Card } from "@/components/ui";
 import { saveImportantInfoAction } from "@/features/trip-detail/actions/important-info-actions";
+import { ImportantInfoTemplatePicker } from "@/features/trip-detail/components/ImportantInfoTemplatePicker";
 import type {
   ImportantInfoActionState,
   TripImportantInfo,
 } from "@/features/trip-detail/types/important-info";
+import type { ImportantInfoTemplate } from "@/features/trip-detail/utils/important-info-templates";
 
 type PersistedImportantInfoCardProps = {
   tripId: string;
@@ -28,6 +30,8 @@ export function PersistedImportantInfoCard({
   canEditTrip,
 }: PersistedImportantInfoCardProps) {
   const [isEditing, setIsEditing] = useState(false);
+  const content = importantInfo?.content?.trim() || "";
+  const [draftContent, setDraftContent] = useState(content);
   const [state, formAction, isPending] = useActionState(
     async (previousState: ImportantInfoActionState, formData: FormData) => {
       const nextState = await saveImportantInfoAction(previousState, formData);
@@ -36,7 +40,22 @@ export function PersistedImportantInfoCard({
     },
     initialState,
   );
-  const content = importantInfo?.content?.trim() || "";
+
+  function openEditor() {
+    setDraftContent(content);
+    setIsEditing(true);
+  }
+
+  function cancelEditing() {
+    setDraftContent(content);
+    setIsEditing(false);
+  }
+
+  function insertTemplate(template: ImportantInfoTemplate) {
+    setDraftContent((current) => current.trim()
+      ? `${current.trimEnd()}\n\n${template.content}`
+      : template.content);
+  }
 
   return (
     <Card padding="md" className="space-y-5">
@@ -53,7 +72,7 @@ export function PersistedImportantInfoCard({
           </div>
         </div>
         {canEditTrip && !isEditing ? (
-          <Button type="button" size="sm" variant="outline" onClick={() => setIsEditing(true)}>
+          <Button type="button" size="sm" variant="outline" onClick={openEditor}>
             {content ? "Edit" : "Add info"}
           </Button>
         ) : null}
@@ -64,12 +83,14 @@ export function PersistedImportantInfoCard({
       {isEditing && canEditTrip ? (
         <form action={formAction} className="space-y-4">
           <input type="hidden" name="tripId" value={tripId} />
+          <ImportantInfoTemplatePicker onInsert={insertTemplate} />
           <label className="block text-sm font-medium text-foreground">
             Notes
             <textarea
               className={textareaClassName}
               name="content"
-              defaultValue={content}
+              value={draftContent}
+              onChange={(event) => setDraftContent(event.target.value)}
               placeholder="Accommodation address, check-in details, emergency contacts, group notes…"
             />
           </label>
@@ -87,7 +108,7 @@ export function PersistedImportantInfoCard({
             </p>
           ) : null}
           <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
-            <Button type="button" variant="outline" className="w-full sm:w-auto" onClick={() => setIsEditing(false)}>
+            <Button type="button" variant="outline" className="w-full sm:w-auto" onClick={cancelEditing}>
               <X className="size-4" />
               Cancel
             </Button>

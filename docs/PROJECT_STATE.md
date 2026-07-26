@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 66 — Reservation to Planner Quick Add
+Sprint 67 — Important Info Templates
 
 Status: IN PROGRESS
 
@@ -908,6 +908,15 @@ Status: IN PROGRESS
 - Viewer and public read-only behavior remains unchanged
 - No migrations, dependencies, database fields, or persistent reservation-to-planner relation were added
 
+## Important Info Templates
+
+- Static Important Info templates were added inside `trip-detail`
+- Owner and editor can insert editable starter content into the existing content field
+- Existing content is appended to and never silently overwritten
+- Viewer read-only behavior remains unchanged
+- Important Info remains private and excluded from public share
+- No migrations, dependencies, database tables, AI generation, or template builder were added
+
 ## Manual Backend Test Checklist
 
 - Login and logout
@@ -988,19 +997,19 @@ Principles:
 
 ## Next Task
 
-Task #066 — Reservation to Planner Quick Add
+Task #067 — Important Info Templates
 
 Goal:
 
-Create a lightweight Planner item directly from a persisted reservation.
+Make Important Info faster to use with practical static starter templates.
 
 The task includes:
 
-- Owner/editor-only Add to planner action
-- Safe reservation-to-planner field mapping
-- Duplicate guard for same-day title and time
+- Eight editable Important Info templates
+- Compact owner/editor-only template picker
+- Safe append behavior that preserves existing content
 - No migrations or dependencies
 
 Important:
 
-No new dependencies, migrations, database tables, relation columns, RLS/RPC changes, auth changes, calendar sync, AI planning, or map rendering are added.
+No new dependencies, migrations, database tables, fields, RLS/RPC changes, auth changes, AI generation, public exposure, or saved template builder are added.

@@ -100,9 +100,20 @@ Production URL: https://travora-theta.vercel.app
 
 - [ ] Owner/editor can add Important Info
 - [ ] Owner/editor can edit Important Info
+- [ ] Owner/editor can open the compact Insert template control
+- [ ] Selecting a template fills empty Important Info content
+- [ ] Selecting a template with existing content appends without overwriting it
+- [ ] Template content can be edited before saving
+- [ ] Cancel after inserting a template restores the last saved content
+- [ ] Validation or save errors preserve the textarea content
+- [ ] Saved template content appears as normal Important Info
 - [ ] Viewer can read Important Info but cannot edit it
+- [ ] Viewer cannot insert Important Info templates
 - [ ] Important Info preserves line breaks
 - [ ] Public share does not expose Important Info
+- [ ] Print summary includes saved Important Info template content
+- [ ] Important Info template picker has no mobile overflow
+- [ ] No migration or dependency was added for Important Info templates
 - [ ] Invite page does not expose Important Info
 - [ ] Owner/editor can add trip-level Travel Link
 - [ ] Owner/editor can edit trip-level Travel Link
