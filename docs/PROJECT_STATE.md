@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 69 — Reservation Budget Create Flow Polish
+Sprint 70 — Trip Overview Command Center
 
 Status: IN PROGRESS
 
@@ -936,6 +936,17 @@ Status: IN PROGRESS
 - Existing reservation cards still do not include an Add to Budget action
 - No migrations, dependencies, database relation, RLS, RPC, or auth changes were added
 
+## Trip Overview Command Center
+
+- Persisted Overview was upgraded into a compact trip command center
+- The next Planner items and upcoming Reservations are summarized from data already loaded by Trip Detail
+- Budget, personal Packing, Important Info, and Public Share status are surfaced without FX conversion or settlement details
+- Quick links guide owners and editors to existing trip workspaces without duplicating forms
+- Viewer read-only behavior is preserved
+- Public share tokens are hidden from non-owner client payloads
+- Mock Overview, public share routes, and print summary remain unchanged
+- No migrations, dependencies, queries, schema, RLS, RPC, auth, or backend architecture changes were added
+
 ## Manual Backend Test Checklist
 
 - Login and logout
@@ -1016,19 +1027,19 @@ Principles:
 
 ## Next Task
 
-Task #069 — Reservation Budget Create Flow Polish
+Task #070 — Trip Overview Command Center
 
 Goal:
 
-Clarify and harden the existing create-time Reservation to Budget flow.
+Turn persisted Overview into a compact command center for the trip.
 
 The task includes:
 
-- Accurate copy for the separate, unsynced Budget expense
-- Clear current-user payer and active-member equal-split behavior
-- Improved partial-success guidance
-- Protection against accidental repeat submission after a successful create
+- Next Planner items and upcoming Reservations
+- Budget, personal Packing, Important Info, and Public Share status
+- Compact role-aware links to existing trip workspaces
+- Server-side public share token sanitization for non-owners
 
 Important:
 
-No card-level Add to Budget action, migrations, dependencies, schema relation, RLS/RPC/auth changes, custom settlement split, payment integration, or live FX are added.
+No migrations, dependencies, extra queries, new tabs, duplicated forms, schema, RLS/RPC/auth changes, analytics, charts, AI, map, notifications, or external integrations are added.

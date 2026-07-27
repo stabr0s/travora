@@ -89,10 +89,13 @@ export default async function TripDetailPage({ params, searchParams }: TripDetai
     const persistedInvites = persistedAccess.data?.role === "owner"
       ? await getTripInvitesForTrip(id)
       : { data: [], error: null };
+    const tripForClient = persistedAccess.data?.role === "owner"
+      ? persistedTrip.data
+      : { ...persistedTrip.data, public_share_token: null };
 
     return (
       <PersistedTripDetailScreen
-        trip={persistedTrip.data}
+        trip={tripForClient}
         initialTab={readInitialTab(query?.tab)}
         places={persistedPlaces.data || []}
         placesError={persistedPlaces.error?.message}

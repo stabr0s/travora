@@ -98,6 +98,22 @@ Production URL: https://travora-theta.vercel.app
 
 ## Overview, Important Info, and Travel Links
 
+- [ ] Persisted Overview shows the next Planner items
+- [ ] Persisted Overview shows upcoming Reservations
+- [ ] Empty Planner and Reservations summaries provide helpful next steps
+- [ ] Persisted Overview groups Budget totals by currency without FX conversion
+- [ ] Persisted Overview marks expenses missing payer or split when available
+- [ ] Persisted Overview shows current-user Packing progress
+- [ ] Persisted Overview shows Important Info status
+- [ ] Persisted Overview shows Public Share status safely
+- [ ] Owner/editor sees quick links to existing trip workspaces
+- [ ] Viewer sees read-only links and no edit/add controls
+- [ ] Editor/viewer does not receive public share token or link controls
+- [ ] Mock trip Overview still renders safely
+- [ ] Public share route and payload remain unchanged
+- [ ] Print summary content remains unchanged
+- [ ] Persisted Overview has no mobile overflow
+- [ ] No migration or dependency was added for Trip Overview Command Center
 - [ ] Owner/editor can add Important Info
 - [ ] Owner/editor can edit Important Info
 - [ ] Owner/editor can open the compact Insert template control

@@ -97,11 +97,28 @@ export function PersistedTripDetailScreen({
       {activeTab === "overview" ? (
         <PersistedTripOverview
           tripId={trip.id}
+          plannerItems={plannerItems}
+          plannerError={plannerError}
+          reservations={reservations}
+          reservationsError={reservationsError}
+          budgetExpenses={budgetExpenses}
+          budgetError={budgetError}
+          packingItems={packingItems}
+          packingItemStates={packingItemStates}
+          packingError={packingError}
           importantInfo={importantInfo}
           importantInfoError={importantInfoError}
           travelLinks={travelLinks.filter((link) => !link.reservation_id)}
           travelLinksError={travelLinksError}
           canEditTrip={canEditTrip}
+          isOwner={canManageSettings}
+          publicShareEnabled={trip.public_share_enabled}
+          publicSharePath={
+            canManageSettings && trip.public_share_enabled && trip.public_share_token
+              ? `/share/${trip.public_share_token}`
+              : undefined
+          }
+          onNavigate={setActiveTab}
         />
       ) : activeTab === "places" ? (
         <PlacesSection
