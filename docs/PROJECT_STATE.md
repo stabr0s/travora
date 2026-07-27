@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 68 — Public Share Preview & Share UX Polish
+Sprint 69 — Reservation Budget Create Flow Polish
 
 Status: IN PROGRESS
 
@@ -926,6 +926,16 @@ Status: IN PROGRESS
 - Public share controls were reviewed for mobile wrapping and overflow
 - No migrations, dependencies, or backend changes were added
 
+## Reservation Budget Create Flow Polish
+
+- The existing create-time Reservation to Budget flow was clarified
+- Checkbox copy explains that the Budget expense is separate and is not kept in sync with the reservation
+- Settlement behavior is described accurately: the current user is the payer and the cost is split equally between active trip members
+- Partial-success copy directs users to add the expense manually in Budget when automatic expense creation fails
+- A successfully submitted create form cannot be submitted again from the same success state
+- Existing reservation cards still do not include an Add to Budget action
+- No migrations, dependencies, database relation, RLS, RPC, or auth changes were added
+
 ## Manual Backend Test Checklist
 
 - Login and logout
@@ -1006,19 +1016,19 @@ Principles:
 
 ## Next Task
 
-Task #068 — Public Share Preview & Share UX Polish
+Task #069 — Reservation Budget Create Flow Polish
 
 Goal:
 
-Make existing public sharing easier for owners to understand, copy, and preview.
+Clarify and harden the existing create-time Reservation to Budget flow.
 
 The task includes:
 
-- Clear enabled and disabled public share states
-- Compact Copy link and Preview public share actions
-- Clearer public and private section explanations
-- No migrations or dependencies
+- Accurate copy for the separate, unsynced Budget expense
+- Clear current-user payer and active-member equal-split behavior
+- Improved partial-success guidance
+- Protection against accidental repeat submission after a successful create
 
 Important:
 
-No new dependencies, migrations, database tables, fields, RLS/RPC changes, auth changes, public payload fields, preview routes, or backend behavior are added.
+No card-level Add to Budget action, migrations, dependencies, schema relation, RLS/RPC/auth changes, custom settlement split, payment integration, or live FX are added.

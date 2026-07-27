@@ -118,7 +118,7 @@ export async function createReservationAction(
       participantsCount: 1,
       status: validStatuses.includes(requestedStatus) ? requestedStatus : "unpaid",
       expenseDate: toExpenseDate(startTimestamp),
-      notes: "Created from a reservation. Reservation edits and deletes do not update this budget expense automatically.",
+      notes: "Created from a reservation during reservation creation. The reservation and Budget expense are separate and are not kept in sync.",
     });
 
     revalidatePath(`/trips/${tripId}`);
@@ -126,7 +126,7 @@ export async function createReservationAction(
     if (budgetResult.error) {
       return {
         status: "success",
-        message: "Reservation saved, but the budget expense could not be created.",
+        message: "Reservation saved, but the Budget expense was not created. You can add it manually in Budget.",
       };
     }
 

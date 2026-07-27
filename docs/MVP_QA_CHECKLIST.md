@@ -216,6 +216,19 @@ Production URL: https://travora-theta.vercel.app
 - [ ] Long reservation notes do not dominate the card
 - [ ] Custom currency can be used in reservation forms
 - [ ] Reservation can optionally create matching Budget expense
+- [ ] Reservation create form explains the separate Budget expense clearly
+- [ ] Budget checkbox explains that the expense is not kept in sync with the reservation
+- [ ] Budget checkbox accurately describes the current user as payer and equal split across active trip members
+- [ ] Reservation with a price can create a Budget expense
+- [ ] Created reservation expense appears in Budget
+- [ ] Settlement summary reflects the generated expense correctly
+- [ ] Failed Budget expense creation shows a clear partial-success message
+- [ ] Successful reservation create cannot be submitted repeatedly from the same form state
+- [ ] Existing reservation cards do not show a duplicate Add to Budget action
+- [ ] Reservation to Planner flow still works
+- [ ] Public share remains safe and read-only after Reservation to Budget polish
+- [ ] Print summary still excludes Budget
+- [ ] No migration or dependency was added for Reservation to Budget polish
 - [ ] Editing/deleting reservation does not auto-sync created Budget expense
 - [ ] Travel Links are easy to find from reservation cards
 - [ ] Add reservation-level Travel Link

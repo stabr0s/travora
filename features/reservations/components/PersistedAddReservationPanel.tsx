@@ -41,6 +41,7 @@ export function PersistedAddReservationPanel({
     isEditing ? updateReservationAction : createReservationAction,
     initialState,
   );
+  const isCreateSaved = !isEditing && actionState.status === "success";
 
   return (
     <Card padding="md" className="border-primary/15 shadow-md">
@@ -140,9 +141,14 @@ export function PersistedAddReservationPanel({
                 type="checkbox"
               />
               <span>
-                <span className="block font-medium text-foreground">Add this payment to Budget</span>
+                <span className="block font-medium text-foreground">
+                  Also add this as a Budget expense
+                </span>
                 <span className="mt-1 block text-xs leading-relaxed text-muted">
-                  You can also add this payment to Budget. If the price is greater than zero, Travora will create a matching budget expense when this reservation is saved.
+                  With a price above zero, this creates a separate Budget expense that
+                  will not stay synced with the reservation. For settlements, your
+                  account is the payer and the cost is split equally between active trip
+                  members. You can change the details later in Budget.
                 </span>
               </span>
             </label>
@@ -160,8 +166,12 @@ export function PersistedAddReservationPanel({
         ) : null}
 
         <div className="mt-6 flex flex-col-reverse gap-3 border-t border-border-subtle pt-5 sm:flex-row sm:justify-end">
-          <Button type="button" variant="outline" size="md" className="w-full sm:w-auto" onClick={onClose}>Cancel</Button>
-          <Button type="submit" size="md" className="w-full sm:w-auto" disabled={isPending}>{isPending ? "Saving reservation…" : isEditing ? "Update reservation" : "Save reservation"}</Button>
+          <Button type="button" variant="outline" size="md" className="w-full sm:w-auto" onClick={onClose}>
+            {isCreateSaved ? "Close" : "Cancel"}
+          </Button>
+          <Button type="submit" size="md" className="w-full sm:w-auto" disabled={isPending || isCreateSaved}>
+            {isCreateSaved ? "Reservation saved" : isPending ? "Saving reservation…" : isEditing ? "Update reservation" : "Save reservation"}
+          </Button>
         </div>
       </form>
     </Card>
