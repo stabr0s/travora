@@ -9,7 +9,7 @@ const travelLinkTypeLabels: Record<TravelLinkType, string> = {
   insurance: "Insurance",
   visa: "Visa / entry",
   document: "Document / folder",
-  map: "Map",
+  map: "Google My Maps / map",
   other: "Other",
 };
 

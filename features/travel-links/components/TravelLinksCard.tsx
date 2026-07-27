@@ -39,10 +39,10 @@ export function TravelLinksCard({
     : "Trip documents & links";
   const description = isReservationLevel
     ? "Keep confirmation pages, tickets, vouchers, and check-in links with this booking."
-    : "Keep insurance, visa guidance, itineraries, maps, and shared folders useful for the whole trip.";
+    : "Keep insurance, visa guidance, itineraries, Google My Maps, and shared folders useful for the whole trip.";
   const emptyDescription = isReservationLevel
     ? "No documents or links for this reservation yet."
-    : "No trip documents yet. Add a useful link when insurance, entry guidance, an itinerary, map, or shared folder is ready.";
+    : "No trip documents yet. You can add insurance, entry guidance, an itinerary, a shared folder, or a Google My Maps link here.";
 
   function openForm(link?: PersistedTravelLink) {
     setEditingLink(link || null);

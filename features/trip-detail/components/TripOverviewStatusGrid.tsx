@@ -129,7 +129,7 @@ export function TripOverviewStatusGrid({
         <p className="mt-3 text-xs leading-relaxed text-muted">
           {tripDocumentsError
             ? "Trip document status could not be loaded."
-            : "Insurance, entry guidance, itineraries, maps, and shared folders."}
+            : "Insurance, entry guidance, itineraries, Google My Maps, and shared folders."}
         </p>
       </Card>
 

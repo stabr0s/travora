@@ -1,7 +1,6 @@
 import {
   LayoutDashboard,
   Luggage,
-  Map,
   MapPin,
   Settings,
   Wallet,
@@ -21,13 +20,6 @@ export const navigationItems: NavItem[] = [
     label: "Trips",
     href: "/trips",
     icon: MapPin,
-    sidebar: true,
-    mobile: true,
-  },
-  {
-    label: "Map",
-    href: "/map",
-    icon: Map,
     sidebar: true,
     mobile: true,
   },

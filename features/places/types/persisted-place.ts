@@ -14,9 +14,6 @@ export type CreatePlaceInput = {
   priority?: PlacePriority;
   notes?: string;
   websiteUrl?: string;
-  latitude?: number | null;
-  longitude?: number | null;
-  mapOrder?: number | null;
 };
 
 export type UpdatePlaceInput = CreatePlaceInput & { id: string };
@@ -39,9 +36,6 @@ export type PlaceFormFields = {
   priority: string;
   notes: string;
   websiteUrl: string;
-  latitude: string;
-  longitude: string;
-  mapOrder: string;
 };
 
 export type PlacesServiceResult<T> =

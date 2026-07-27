@@ -92,6 +92,8 @@ Production URL: https://travora-theta.vercel.app
 - [ ] Participants tab works
 - [ ] Settings tab works for persisted trips
 - [ ] Map tab remains hidden
+- [ ] Global navigation does not show Map
+- [ ] Legacy `/map` redirects to `/trips`
 - [ ] Tabs are usable on mobile
 - [ ] Sidebar and trip tabs remain usable on desktop/mobile
 - [ ] No horizontal mobile overflow after density polish
@@ -148,6 +150,8 @@ Production URL: https://travora-theta.vercel.app
 - [ ] Authenticated print summary behavior remains unchanged
 - [ ] No upload, storage, OCR, migration, or dependency was added for document UX polish
 - [ ] Invalid URL protocols such as `javascript:` or `mailto:` are rejected
+- [ ] Google My Maps can be saved as a trip-level Travel Link with the map type
+- [ ] Google My Maps link opens as a normal private Travel Link
 - [ ] Public share does not expose Travel Links
 - [ ] Invite page does not expose Travel Links
 
@@ -163,7 +167,13 @@ Production URL: https://travora-theta.vercel.app
 - [ ] Add Place can be corrected and resubmitted after an error
 - [ ] Add Place pre-fills country from trip destination when safe
 - [ ] Edit Place does not overwrite country from trip destination
-- [ ] Optional latitude/longitude/map order can be saved
+- [ ] Add Place does not show latitude
+- [ ] Add Place does not show longitude
+- [ ] Add Place does not show map order
+- [ ] Edit Place preserves historical coordinate/order values without showing them
+- [ ] Place cards do not show coordinates or map order
+- [ ] Places CRUD still works without map-specific fields
+- [ ] Places to Planner flow still works
 - [ ] Owner/editor can quickly change place status from card
 - [ ] Viewer cannot change place status
 - [ ] Owner/editor can add a persisted Place to a selected plan day
@@ -486,7 +496,7 @@ Production URL: https://travora-theta.vercel.app
 - [ ] Budget settlements are equal split only
 - [ ] No live currency conversion
 - [ ] No online payments
-- [ ] No map rendering yet
+- [ ] No internal map UI or rendering; Google My Maps can be stored as a private Travel Link
 - [ ] No realtime collaboration
 - [ ] No AI planning
 - [ ] No comments or notifications
@@ -501,3 +511,4 @@ Production URL: https://travora-theta.vercel.app
 - [ ] Vercel env vars are configured
 - [ ] No real secrets are committed
 - [ ] `.env.local` remains untracked
+- [ ] No migration or dependency was added for map-field cleanup

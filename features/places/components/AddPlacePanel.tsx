@@ -74,7 +74,7 @@ export function AddPlacePanel({
               <h2 className="text-lg font-semibold tracking-tight text-foreground">{isEditing ? "Edit place" : "Add a place"}</h2>
               <p className="mt-1 text-sm text-muted">
                 {isPersisted
-                  ? isEditing ? "Update this saved place." : "Save a place to this trip. Map features will be connected later."
+                  ? isEditing ? "Update this saved place." : "Save a place to this trip."
                   : "This is a preview. Mock trips do not save places."}
               </p>
             </div>
@@ -140,25 +140,6 @@ export function AddPlacePanel({
             Website
             <input className={fieldClassName} defaultValue={fields?.websiteUrl ?? place?.website_url ?? ""} name="websiteUrl" type="url" placeholder="https://" />
           </label>
-          {isPersisted ? (
-            <div className="grid gap-5 sm:col-span-2 sm:grid-cols-3">
-              <label className="text-sm font-medium text-foreground">
-                Latitude
-                <input className={fieldClassName} defaultValue={fields?.latitude ?? place?.latitude ?? ""} name="latitude" type="number" min="-90" max="90" step="any" placeholder="35.6762" />
-              </label>
-              <label className="text-sm font-medium text-foreground">
-                Longitude
-                <input className={fieldClassName} defaultValue={fields?.longitude ?? place?.longitude ?? ""} name="longitude" type="number" min="-180" max="180" step="any" placeholder="139.6503" />
-              </label>
-              <label className="text-sm font-medium text-foreground">
-                Map order
-                <input className={fieldClassName} defaultValue={fields?.mapOrder ?? place?.map_order ?? ""} name="mapOrder" type="number" min="0" step="1" placeholder="0" />
-              </label>
-              <p className="text-xs leading-relaxed text-muted sm:col-span-3">
-                Coordinates are optional and will be used by the map later. Providing both gives the best map preview.
-              </p>
-            </div>
-          ) : null}
           <label className="text-sm font-medium text-foreground sm:col-span-2">
             Notes
             <textarea

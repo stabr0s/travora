@@ -98,7 +98,7 @@ backend enforcement layer for persisted trip access.
 - Budget settlements support equal split only; no custom percentages or custom amounts.
 - No live currency conversion.
 - No online payments.
-- Map rendering is postponed, though map-ready place fields exist.
+- Map planning stays in external tools such as Google My Maps and can be saved as a private trip-level Travel Link.
 - No realtime collaboration.
 - No AI planning.
 - No comments or notifications.

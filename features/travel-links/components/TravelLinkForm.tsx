@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { Link2, X } from "lucide-react";
 
 import { Button } from "@/components/ui";
@@ -11,6 +11,7 @@ import {
 import type {
   PersistedTravelLink,
   TravelLinkActionState,
+  TravelLinkType,
 } from "@/features/travel-links/types/travel-link";
 import { travelLinkTypes } from "@/features/travel-links/types/travel-link";
 import { getTravelLinkTypeLabel } from "@/features/travel-links/utils/travel-link-display";
@@ -36,6 +37,7 @@ export function TravelLinkForm({
 }: TravelLinkFormProps) {
   const isEditing = Boolean(link);
   const isReservationLink = Boolean(reservationId);
+  const [linkType, setLinkType] = useState<TravelLinkType>(link?.link_type || "other");
   const [state, formAction, isPending] = useActionState(
     async (previousState: TravelLinkActionState, formData: FormData) => {
       const nextState = isEditing
@@ -83,13 +85,23 @@ export function TravelLinkForm({
         </label>
         <label className="text-sm font-medium text-foreground">
           Type
-          <select className={fieldClassName} name="linkType" defaultValue={link?.link_type || "other"}>
+          <select
+            className={fieldClassName}
+            name="linkType"
+            value={linkType}
+            onChange={(event) => setLinkType(event.target.value as TravelLinkType)}
+          >
             {travelLinkTypes.map((type) => (
               <option key={type} value={type}>
                 {getTravelLinkTypeLabel(type)}
               </option>
             ))}
           </select>
+          {linkType === "map" ? (
+            <span className="mt-1 block text-xs leading-relaxed text-muted">
+              Use this for a Google My Maps route or shared trip map.
+            </span>
+          ) : null}
         </label>
         <label className="text-sm font-medium text-foreground sm:col-span-2">
           URL

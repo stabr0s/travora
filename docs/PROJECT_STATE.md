@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 72 — Packing Checklist UX & Density Polish
+Sprint 73 — Remove Map Fields & Google My Maps Link Polish
 
 Status: IN PROGRESS
 
@@ -971,6 +971,16 @@ Status: IN PROGRESS
 - Public share Packing remains a separate read-only view
 - No migrations, dependencies, schema, RLS, RPC, auth, or backend changes were added
 
+## Remove Map Fields & Google My Maps Link Polish
+
+- Map-specific Places fields were removed from the user-facing Add/Edit UI
+- Latitude, longitude, and map order remain unused in the database for historical compatibility
+- Map was removed from global desktop and mobile navigation
+- The legacy `/map` route redirects safely to `/trips`
+- Google My Maps can be stored as a private trip-level Travel Link with the map type
+- Public share remains private and does not expose Travel Links or map URLs
+- No migrations, dependencies, schema, RLS, RPC, auth, or public-share changes were added
+
 ## Manual Backend Test Checklist
 
 - Login and logout
@@ -1051,19 +1061,18 @@ Principles:
 
 ## Next Task
 
-Task #072 — Packing Checklist UX & Density Polish
+Task #073 — Remove Map Fields & Google My Maps Link Polish
 
 Goal:
 
-Make Packing feel like a fast personal checklist instead of a collection of large cards.
+Remove internal map-management UI and clarify the private Google My Maps Travel Link flow.
 
 The task includes:
 
-- Compact checklist rows and larger checkbox tap targets
-- Personal All, Missing, and Packed filters
-- Clearer category labels and grouped checklist display
-- Compact progress summary and collapsible presets
+- Removing map-specific fields and copy from Places
+- Removing Map from navigation and redirecting the legacy route
+- Clarifying Google My Maps as a private trip-level Travel Link
 
 Important:
 
-No quantity field, uploads, AI packing, migrations, dependencies, schema, RLS/RPC/auth changes, new app tab, or inventory system is added.
+Historical database columns and migration 003 remain unchanged. No migrations, dependencies, map rendering, Google APIs, or public Travel Links are added.
