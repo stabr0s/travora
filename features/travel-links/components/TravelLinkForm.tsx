@@ -13,6 +13,7 @@ import type {
   TravelLinkActionState,
 } from "@/features/travel-links/types/travel-link";
 import { travelLinkTypes } from "@/features/travel-links/types/travel-link";
+import { getTravelLinkTypeLabel } from "@/features/travel-links/utils/travel-link-display";
 
 type TravelLinkFormProps = {
   tripId: string;
@@ -27,10 +28,6 @@ const fieldClassName =
 const textareaClassName =
   "mt-2 min-h-24 w-full resize-none rounded-xl border border-border bg-background px-3.5 py-3 text-sm text-foreground shadow-xs outline-none transition-colors placeholder:text-muted-foreground focus:border-primary/40 focus:ring-2 focus:ring-primary/15";
 
-function labelForType(type: string) {
-  return type.replace("_", " ");
-}
-
 export function TravelLinkForm({
   tripId,
   reservationId,
@@ -38,6 +35,7 @@ export function TravelLinkForm({
   onClose,
 }: TravelLinkFormProps) {
   const isEditing = Boolean(link);
+  const isReservationLink = Boolean(reservationId);
   const [state, formAction, isPending] = useActionState(
     async (previousState: TravelLinkActionState, formData: FormData) => {
       const nextState = isEditing
@@ -61,10 +59,15 @@ export function TravelLinkForm({
           </span>
           <div className="min-w-0">
             <h3 className="font-semibold tracking-tight text-foreground">
-              {isEditing ? "Edit travel link" : "Add travel link"}
+              {isEditing
+                ? `Edit ${isReservationLink ? "reservation" : "trip"} link`
+                : `Add ${isReservationLink ? "reservation" : "trip"} link`}
             </h3>
             <p className="mt-1 text-xs leading-relaxed text-muted">
-              URL-only for now. File uploads and automatic email parsing are planned for later.
+              {isReservationLink
+                ? "Save a URL tied to this booking, such as a confirmation, voucher, ticket, or check-in page."
+                : "Save a URL useful across the trip, such as insurance, visa guidance, an itinerary, map, or shared folder."}
+              {" "}URL-only for now.
             </p>
           </div>
         </div>
@@ -82,8 +85,8 @@ export function TravelLinkForm({
           Type
           <select className={fieldClassName} name="linkType" defaultValue={link?.link_type || "other"}>
             {travelLinkTypes.map((type) => (
-              <option key={type} value={type} className="capitalize">
-                {labelForType(type)}
+              <option key={type} value={type}>
+                {getTravelLinkTypeLabel(type)}
               </option>
             ))}
           </select>

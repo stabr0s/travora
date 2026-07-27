@@ -135,6 +135,18 @@ Production URL: https://travora-theta.vercel.app
 - [ ] Owner/editor can edit trip-level Travel Link
 - [ ] Owner/editor can delete trip-level Travel Link
 - [ ] Viewer can open Travel Links but cannot manage them
+- [ ] Trip-level documents and links are easy to find
+- [ ] Reservation-level documents and links remain easy to find but compact
+- [ ] Travel Links card explains trip-level versus reservation-level documents
+- [ ] Existing link types have clear display labels
+- [ ] Travel Link titles, URLs, and actions do not overflow on mobile
+- [ ] Owner/editor can add, edit, and delete both trip and reservation links
+- [ ] Viewer can view and open links but cannot edit or delete them
+- [ ] Overview shows the trip document count and status
+- [ ] Overview quick link scrolls to trip-level documents
+- [ ] Public share section controls still work without exposing Travel Links
+- [ ] Authenticated print summary behavior remains unchanged
+- [ ] No upload, storage, OCR, migration, or dependency was added for document UX polish
 - [ ] Invalid URL protocols such as `javascript:` or `mailto:` are rejected
 - [ ] Public share does not expose Travel Links
 - [ ] Invite page does not expose Travel Links

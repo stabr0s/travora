@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 import { Link2 } from "lucide-react";
 
-import { Button, Card } from "@/components/ui";
+import { Badge, Button, Card } from "@/components/ui";
 import { deleteTravelLinkAction } from "@/features/travel-links/actions/travel-link-actions";
 import { TravelLinkForm } from "@/features/travel-links/components/TravelLinkForm";
 import { TravelLinkItem } from "@/features/travel-links/components/TravelLinkItem";
@@ -18,8 +18,6 @@ type TravelLinksCardProps = {
   links: PersistedTravelLink[];
   loadError?: string;
   canEditTrip: boolean;
-  title?: string;
-  emptyDescription?: string;
   compact?: boolean;
 };
 
@@ -29,14 +27,22 @@ export function TravelLinksCard({
   links,
   loadError,
   canEditTrip,
-  title = "Travel Links",
-  emptyDescription = "Save booking pages, check-in links, insurance documents, and shared folders in one place.",
   compact,
 }: TravelLinksCardProps) {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingLink, setEditingLink] = useState<PersistedTravelLink | null>(null);
   const [message, setMessage] = useState<TravelLinkActionState | null>(null);
   const [isPending, startTransition] = useTransition();
+  const isReservationLevel = Boolean(reservationId);
+  const title = isReservationLevel
+    ? "Reservation documents & links"
+    : "Trip documents & links";
+  const description = isReservationLevel
+    ? "Keep confirmation pages, tickets, vouchers, and check-in links with this booking."
+    : "Keep insurance, visa guidance, itineraries, maps, and shared folders useful for the whole trip.";
+  const emptyDescription = isReservationLevel
+    ? "No documents or links for this reservation yet."
+    : "No trip documents yet. Add a useful link when insurance, entry guidance, an itinerary, map, or shared folder is ready.";
 
   function openForm(link?: PersistedTravelLink) {
     setEditingLink(link || null);
@@ -58,15 +64,20 @@ export function TravelLinksCard({
             </span>
           ) : null}
           <div className="min-w-0">
-            <h2 className={compact ? "font-semibold tracking-tight text-foreground" : "text-lg font-semibold tracking-tight text-foreground"}>
-              {compact ? `${title} · ${links.length}` : title}
-            </h2>
-            {!compact || !links.length ? <p className="mt-1 text-sm text-muted">{emptyDescription}</p> : null}
+            <div className="flex flex-wrap items-center gap-2">
+              <h2 className={compact ? "font-semibold tracking-tight text-foreground" : "text-lg font-semibold tracking-tight text-foreground"}>
+                {title}
+              </h2>
+              <Badge variant="outline">{links.length}</Badge>
+            </div>
+            {!compact ? (
+              <p className="mt-1 text-sm leading-relaxed text-muted">{description}</p>
+            ) : null}
           </div>
         </div>
         {canEditTrip && !isFormOpen ? (
           <Button type="button" size="sm" variant="outline" className="w-full sm:w-auto" onClick={() => openForm()}>
-            Add link
+            {isReservationLevel ? "Add reservation link" : "Add trip link"}
           </Button>
         ) : null}
       </div>

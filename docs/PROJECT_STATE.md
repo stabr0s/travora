@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 70 — Trip Overview Command Center
+Sprint 71 — Trip Documents / Links Hub Polish
 
 Status: IN PROGRESS
 
@@ -947,6 +947,18 @@ Status: IN PROGRESS
 - Mock Overview, public share routes, and print summary remain unchanged
 - No migrations, dependencies, queries, schema, RLS, RPC, auth, or backend architecture changes were added
 
+## Trip Documents / Links Hub Polish
+
+- Travel Links and document UX was polished without changing the existing URL-only model
+- Trip-level and reservation-level documents are explained and labeled separately
+- Existing link types have clearer presentation labels without database changes
+- Trip document count and status are surfaced in Overview
+- Owner/editor can jump to manage trip links, while viewer access remains read-only
+- Travel Links cards, empty states, actions, URL wrapping, and compact mobile presentation were improved
+- Public share remains private and does not expose Travel Links
+- Authenticated print summary behavior is unchanged
+- No uploads, storage, OCR, migrations, dependencies, schema, RLS, RPC, auth, or backend changes were added
+
 ## Manual Backend Test Checklist
 
 - Login and logout
@@ -1027,19 +1039,19 @@ Principles:
 
 ## Next Task
 
-Task #070 — Trip Overview Command Center
+Task #071 — Trip Documents / Links Hub Polish
 
 Goal:
 
-Turn persisted Overview into a compact command center for the trip.
+Make existing trip and reservation documents easier to understand and access.
 
 The task includes:
 
-- Next Planner items and upcoming Reservations
-- Budget, personal Packing, Important Info, and Public Share status
-- Compact role-aware links to existing trip workspaces
-- Server-side public share token sanitization for non-owners
+- Clear trip-level and reservation-level document contexts
+- Improved display labels for existing link types
+- Compact document status and navigation in Overview
+- Better empty states, mobile wrapping, and link actions
 
 Important:
 
-No migrations, dependencies, extra queries, new tabs, duplicated forms, schema, RLS/RPC/auth changes, analytics, charts, AI, map, notifications, or external integrations are added.
+No uploads, storage, OCR, migrations, dependencies, new link types, schema, RLS/RPC/auth changes, public Travel Links exposure, or external integrations are added.

@@ -1,4 +1,4 @@
-import { CircleDollarSign, Info, Luggage, Share2 } from "lucide-react";
+import { CircleDollarSign, FileText, Info, Luggage, Share2 } from "lucide-react";
 
 import { Badge, Card, Progress } from "@/components/ui";
 import type { OverviewCurrencyTotal } from "@/features/trip-detail/utils/trip-overview-summary";
@@ -14,6 +14,8 @@ type TripOverviewStatusGridProps = {
   hasImportantInfo: boolean;
   importantInfoError?: string;
   publicShareEnabled: boolean;
+  tripDocumentCount: number;
+  tripDocumentsError?: string;
 };
 
 function formatMoney(total: OverviewCurrencyTotal) {
@@ -39,11 +41,13 @@ export function TripOverviewStatusGrid({
   hasImportantInfo,
   importantInfoError,
   publicShareEnabled,
+  tripDocumentCount,
+  tripDocumentsError,
 }: TripOverviewStatusGridProps) {
   const packingProgress = packingTotal ? Math.round((packedCount / packingTotal) * 100) : 0;
 
   return (
-    <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
       <Card padding="sm" className="min-w-0">
         <div className="flex items-center gap-2 text-sm font-medium text-foreground">
           <CircleDollarSign className="size-4 text-primary" />
@@ -105,6 +109,27 @@ export function TripOverviewStatusGrid({
           {hasImportantInfo
             ? "Private trip notes are ready."
             : "Add essential addresses, contacts, and group notes."}
+        </p>
+      </Card>
+
+      <Card padding="sm" className="min-w-0">
+        <div className="flex items-center gap-2 text-sm font-medium text-foreground">
+          <FileText className="size-4 text-primary" />
+          Trip documents
+        </div>
+        <div className="mt-4">
+          <Badge variant={tripDocumentsError ? "error" : tripDocumentCount ? "success" : "outline"}>
+            {tripDocumentsError
+              ? "Unavailable"
+              : tripDocumentCount
+                ? `Documents added · ${tripDocumentCount}`
+                : "No trip documents yet"}
+          </Badge>
+        </div>
+        <p className="mt-3 text-xs leading-relaxed text-muted">
+          {tripDocumentsError
+            ? "Trip document status could not be loaded."
+            : "Insurance, entry guidance, itineraries, maps, and shared folders."}
         </p>
       </Card>
 

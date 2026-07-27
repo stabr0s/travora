@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowUpRight, Info, ListChecks, ReceiptText, Share2, WalletCards } from "lucide-react";
+import { ArrowUpRight, FileText, Info, ListChecks, ReceiptText, Share2, WalletCards } from "lucide-react";
 
 import { Button, Card } from "@/components/ui";
 import type { TripDetailTabId } from "@/features/trip-detail/types/trip-detail";
@@ -22,6 +22,13 @@ export function TripOverviewQuickActions({
 }: TripOverviewQuickActionsProps) {
   function scrollToImportantInfo() {
     document.getElementById("trip-important-info")?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  }
+
+  function scrollToTravelLinks() {
+    document.getElementById("trip-travel-links")?.scrollIntoView({
       behavior: "smooth",
       block: "start",
     });
@@ -52,6 +59,10 @@ export function TripOverviewQuickActions({
           <Button size="sm" variant="outline" className="w-full sm:w-auto" onClick={scrollToImportantInfo}>
             <Info className="size-4" />
             Important Info
+          </Button>
+          <Button size="sm" variant="outline" className="w-full sm:w-auto" onClick={scrollToTravelLinks}>
+            <FileText className="size-4" />
+            {canEditTrip ? "Manage trip links" : "View trip links"}
           </Button>
           {isOwner ? (
             <Button size="sm" variant="outline" className="w-full sm:w-auto" onClick={() => onNavigate("settings")}>

@@ -98,6 +98,8 @@ export function PersistedTripOverview({
         hasImportantInfo={hasImportantInfo}
         importantInfoError={importantInfoError}
         publicShareEnabled={publicShareEnabled}
+        tripDocumentCount={travelLinks.length}
+        tripDocumentsError={travelLinksError}
       />
       <div id="trip-important-info" className="scroll-mt-6">
         <PersistedImportantInfoCard
@@ -107,12 +109,14 @@ export function PersistedTripOverview({
           canEditTrip={canEditTrip}
         />
       </div>
-      <TravelLinksCard
-        tripId={tripId}
-        links={travelLinks}
-        loadError={travelLinksError}
-        canEditTrip={canEditTrip}
-      />
+      <div id="trip-travel-links" className="scroll-mt-6">
+        <TravelLinksCard
+          tripId={tripId}
+          links={travelLinks}
+          loadError={travelLinksError}
+          canEditTrip={canEditTrip}
+        />
+      </div>
     </div>
   );
 }

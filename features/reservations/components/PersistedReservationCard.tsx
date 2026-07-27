@@ -121,8 +121,6 @@ export function PersistedReservationCard({
               loadError={travelLinksError}
               canEditTrip={canEditTrip}
               compact
-              title="Documents & links"
-              emptyDescription="Attach booking pages, check-in links, tickets, or shared folders for this reservation."
             />
           </div>
         </div>
