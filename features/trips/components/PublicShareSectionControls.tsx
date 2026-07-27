@@ -33,7 +33,8 @@ export function PublicShareSectionControls({
       <div>
         <h4 className="text-sm font-semibold text-foreground">Visible sections</h4>
         <p className="mt-1 text-sm leading-relaxed text-muted">
-          Choose what guests can see on the public read-only link.
+          Overview is always public when the link is enabled. Choose whether guests can
+          also see Places, Planner, Reservations, Budget, and Packing.
         </p>
       </div>
       <div className="grid gap-2 sm:grid-cols-2">
@@ -67,9 +68,10 @@ export function PublicShareSectionControls({
           </label>
         ))}
       </div>
-      <p className="rounded-2xl bg-surface px-4 py-3 text-sm text-muted">
-        Important Info and Travel Links stay private and are not included in public shares.
-      </p>
+      <div className="rounded-2xl bg-surface px-4 py-3 text-sm leading-relaxed text-muted">
+        <p>Important Info and Travel Links stay private.</p>
+        <p className="mt-1">Participants, emails, and internal IDs are never included.</p>
+      </div>
       {canManageSettings ? (
         <Button
           variant="outline"

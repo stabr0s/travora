@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { Copy, ExternalLink, LinkIcon, RotateCw } from "lucide-react";
+import { LinkIcon, RotateCw } from "lucide-react";
 
 import { Badge, Button, Card } from "@/components/ui";
 import {
@@ -11,6 +11,7 @@ import {
   regeneratePublicShareAction,
   updatePublicShareSectionsAction,
 } from "@/features/trips/actions/public-share-actions";
+import { PublicShareLinkPanel } from "@/features/trips/components/PublicShareLinkPanel";
 import { PublicShareSectionControls } from "@/features/trips/components/PublicShareSectionControls";
 import type { PublicShareSections } from "@/features/public-share/types/public-share";
 import type { PersistedTrip } from "@/features/trips/types/persisted-trip";
@@ -73,58 +74,35 @@ export function PublicShareSettingsCard({
     });
   }
 
-  function copyLink() {
-    if (!sharePath) return;
-    const shareUrl = `${window.location.origin}${sharePath}`;
-    navigator.clipboard.writeText(shareUrl)
-      .then(() => setMessage("Public link copied."))
-      .catch(() => setMessage("Copy the public link manually."));
-  }
-
   return (
     <Card className="space-y-5">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-2">
             <h3 className="text-base font-semibold tracking-tight text-foreground">Public share link</h3>
-            <Badge variant={isEnabled ? "success" : "outline"}>{isEnabled ? "Enabled" : "Off"}</Badge>
+            <Badge variant={isEnabled ? "success" : "outline"}>
+              {isEnabled ? "Enabled" : "Disabled"}
+            </Badge>
           </div>
           <p className="mt-2 text-sm leading-relaxed text-muted">
-            Share a read-only trip page without app navigation. Editing, participant emails,
-            reservation references and internal IDs stay hidden.
+            {isEnabled
+              ? "Anyone with this link can view the selected public sections."
+              : "The public page is unavailable. Enable the link when you are ready to share a read-only view."}
           </p>
         </div>
         <LinkIcon className="size-5 shrink-0 text-muted" />
       </div>
 
       {!canManageSettings ? (
-        <div className="rounded-2xl bg-surface px-4 py-3 text-sm text-muted">
-          Only the trip owner can manage public sharing.
+        <div className="rounded-2xl bg-surface px-4 py-3 text-sm leading-relaxed text-muted">
+          Only the trip owner can manage public sharing. Editors and viewers are managed
+          separately through trip members.
         </div>
       ) : null}
 
-      {isEnabled && sharePath ? (
-        <div className="space-y-2">
-          <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">Read-only URL</p>
-          <div className="flex flex-col gap-2 sm:flex-row">
-            <code className="min-w-0 flex-1 break-all rounded-xl border border-border bg-background px-3 py-2 text-sm text-foreground">
-              {sharePath}
-            </code>
-            <Button variant="outline" className="w-full sm:w-auto" onClick={copyLink} disabled={!canManageSettings || isPending}>
-              <Copy className="size-4" />
-              Copy
-            </Button>
-          </div>
-          <a
-            href={sharePath}
-            className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:text-primary-hover"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Open public page <ExternalLink className="size-3.5" />
-          </a>
-        </div>
-      ) : null}
+      {canManageSettings && isEnabled && sharePath
+        ? <PublicShareLinkPanel sharePath={sharePath} isPending={isPending} />
+        : null}
 
       <PublicShareSectionControls
         sections={sections}
@@ -136,32 +114,37 @@ export function PublicShareSettingsCard({
       />
 
       {canManageSettings ? (
-        <div className="flex flex-col gap-2 border-t border-border-subtle pt-4 sm:flex-row">
+        isEnabled ? (
+          <div className="flex flex-col gap-2 border-t border-border-subtle pt-4 sm:flex-row sm:flex-wrap">
+            <Button
+              size="sm"
+              variant="outline"
+              className="w-full sm:w-auto"
+              onClick={() => runAction(regeneratePublicShareAction)}
+              disabled={isPending}
+            >
+              <RotateCw className="size-4" />
+              Regenerate link
+            </Button>
+            <Button
+              size="sm"
+              variant="ghost"
+              className="w-full text-error sm:w-auto"
+              onClick={() => runAction(disablePublicShareAction)}
+              disabled={isPending}
+            >
+              Disable link
+            </Button>
+          </div>
+        ) : (
           <Button
             className="w-full sm:w-auto"
             onClick={() => runAction(enablePublicShareAction)}
-            disabled={isPending || isEnabled}
+            disabled={isPending}
           >
             Enable public link
           </Button>
-          <Button
-            variant="outline"
-            className="w-full sm:w-auto"
-            onClick={() => runAction(regeneratePublicShareAction)}
-            disabled={isPending}
-          >
-            <RotateCw className="size-4" />
-            Regenerate link
-          </Button>
-          <Button
-            variant="ghost"
-            className="w-full text-error sm:w-auto"
-            onClick={() => runAction(disablePublicShareAction)}
-            disabled={isPending || !isEnabled}
-          >
-            Disable link
-          </Button>
-        </div>
+        )
       ) : null}
 
       {message ? <p className="text-sm text-muted">{message}</p> : null}

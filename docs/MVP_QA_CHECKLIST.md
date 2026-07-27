@@ -308,8 +308,12 @@ Production URL: https://travora-theta.vercel.app
 ## Public read-only share
 
 - [ ] Owner can enable public share link
+- [ ] Owner sees enabled and disabled public share status clearly
 - [ ] Owner can copy public link
+- [ ] Owner can preview the public share route in a new tab
+- [ ] Preview uses the existing `/share/[token]` route
 - [ ] Owner can disable public link
+- [ ] Disabling public share blocks public access
 - [ ] Owner can regenerate public link
 - [ ] Old regenerated link no longer works
 - [ ] Editor/viewer cannot manage public share link
@@ -333,6 +337,8 @@ Production URL: https://travora-theta.vercel.app
 - [ ] Public page does not expose invite data
 - [ ] Public page does not expose calendar export
 - [ ] Invalid/disabled token shows safe not-found behavior
+- [ ] Public share controls have no mobile overflow
+- [ ] No migration or dependency was added for Public Share UX polish
 
 ## Print summary
 

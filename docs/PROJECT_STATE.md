@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 67 — Important Info Templates
+Sprint 68 — Public Share Preview & Share UX Polish
 
 Status: IN PROGRESS
 
@@ -917,6 +917,15 @@ Status: IN PROGRESS
 - Important Info remains private and excluded from public share
 - No migrations, dependencies, database tables, AI generation, or template builder were added
 
+## Public Share Preview & Share UX Polish
+
+- Public share enabled and disabled status was clarified
+- Copy link and Preview public share UX was improved
+- Public and private section boundaries are explained more clearly
+- Editor and viewer read-only share settings were clarified
+- Public share controls were reviewed for mobile wrapping and overflow
+- No migrations, dependencies, or backend changes were added
+
 ## Manual Backend Test Checklist
 
 - Login and logout
@@ -997,19 +1006,19 @@ Principles:
 
 ## Next Task
 
-Task #067 — Important Info Templates
+Task #068 — Public Share Preview & Share UX Polish
 
 Goal:
 
-Make Important Info faster to use with practical static starter templates.
+Make existing public sharing easier for owners to understand, copy, and preview.
 
 The task includes:
 
-- Eight editable Important Info templates
-- Compact owner/editor-only template picker
-- Safe append behavior that preserves existing content
+- Clear enabled and disabled public share states
+- Compact Copy link and Preview public share actions
+- Clearer public and private section explanations
 - No migrations or dependencies
 
 Important:
 
-No new dependencies, migrations, database tables, fields, RLS/RPC changes, auth changes, AI generation, public exposure, or saved template builder are added.
+No new dependencies, migrations, database tables, fields, RLS/RPC changes, auth changes, public payload fields, preview routes, or backend behavior are added.
