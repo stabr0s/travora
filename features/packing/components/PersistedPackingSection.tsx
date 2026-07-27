@@ -11,7 +11,7 @@ import {
 import { PackingCategoryTabs } from "@/features/packing/components/PackingCategoryTabs";
 import { PackingHeader } from "@/features/packing/components/PackingHeader";
 import { PackingProgressCard } from "@/features/packing/components/PackingProgressCard";
-import { PackingStats } from "@/features/packing/components/PackingStats";
+import { PackingStatusFilters } from "@/features/packing/components/PackingStatusFilters";
 import { PersistedAddPackingItemPanel } from "@/features/packing/components/PersistedAddPackingItemPanel";
 import { PersistedPackingItemRow } from "@/features/packing/components/PersistedPackingItemRow";
 import { PackingPresetManager } from "@/features/packing/components/PackingPresetManager";
@@ -24,10 +24,15 @@ import type {
 } from "@/features/packing/types/persisted-packing";
 import type { PackingPresetWithItems } from "@/features/packing/types/packing-preset";
 import type {
-  PackingCategory,
   PackingCategoryFilter,
   PackingItem,
 } from "@/features/packing/types/packing";
+import {
+  getPackingCategory,
+  packingCategories,
+  packingCategoryLabels,
+  type PackingStatusFilter,
+} from "@/features/packing/utils/packing-display";
 
 type PersistedPackingSectionProps = {
   tripId: string;
@@ -39,26 +44,12 @@ type PersistedPackingSectionProps = {
   canTogglePersonalState: boolean;
 };
 
-const categories: PackingCategory[] = [
-  "documents", "electronics", "clothes", "toiletries", "health", "travel", "other",
-];
-const categoryLabels: Record<PackingCategory, string> = {
-  documents: "Documents", electronics: "Electronics", clothes: "Clothes",
-  toiletries: "Toiletries", health: "Health", travel: "Travel", other: "Other",
-};
-
-function categoryOf(item: PersistedPackingItem): PackingCategory {
-  return categories.includes(item.category as PackingCategory)
-    ? item.category as PackingCategory
-    : "other";
-}
-
 function toPackingItem(item: PersistedPackingItemWithPersonalState): PackingItem {
   return {
     id: item.id,
     tripId: item.trip_id,
     name: item.name,
-    category: categoryOf(item),
+    category: getPackingCategory(item.category),
     isShared: item.is_shared ?? true,
     isPacked: item.isPackedForCurrentUser,
     priority: item.priority || "recommended",
@@ -75,6 +66,7 @@ export function PersistedPackingSection({
   canEditTrip,
   canTogglePersonalState,
 }: PersistedPackingSectionProps) {
+  const [activeStatus, setActiveStatus] = useState<PackingStatusFilter>("all");
   const [activeCategory, setActiveCategory] = useState<PackingCategoryFilter>("all");
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<PersistedPackingItem | null>(null);
@@ -89,12 +81,20 @@ export function PersistedPackingSection({
     }));
   }, [items, itemStates]);
   const uiItems = useMemo(() => itemsWithPersonalState.map(toPackingItem), [itemsWithPersonalState]);
-  const filteredItems = activeCategory === "all"
-    ? itemsWithPersonalState
-    : itemsWithPersonalState.filter((item) => categoryOf(item) === activeCategory);
   const packedCount = itemsWithPersonalState.filter((item) => item.isPackedForCurrentUser).length;
-  const groupedItems = categories
-    .map((category) => ({ category, items: filteredItems.filter((item) => categoryOf(item) === category) }))
+  const statusFilteredItems = itemsWithPersonalState.filter((item) => (
+    activeStatus === "all"
+    || (activeStatus === "packed" && item.isPackedForCurrentUser)
+    || (activeStatus === "missing" && !item.isPackedForCurrentUser)
+  ));
+  const filteredItems = activeCategory === "all"
+    ? statusFilteredItems
+    : statusFilteredItems.filter((item) => getPackingCategory(item.category) === activeCategory);
+  const groupedItems = packingCategories
+    .map((category) => ({
+      category,
+      items: filteredItems.filter((item) => getPackingCategory(item.category) === category),
+    }))
     .filter((group) => group.items.length);
 
   function openAddPanel() {
@@ -114,7 +114,7 @@ export function PersistedPackingSection({
   }
 
   return (
-    <section className="space-y-6">
+    <section className="space-y-4">
       <PackingHeader onAddItem={canEditTrip ? openAddPanel : undefined} />
       {isPanelOpen && canEditTrip ? (
         <div ref={panelRef}>
@@ -132,21 +132,35 @@ export function PersistedPackingSection({
         <EmptyState
           icon={Luggage}
           title="No packing items yet"
-          description="Build a shared checklist, then each traveler can track their own packed progress."
+          description={canEditTrip
+            ? "Build a shared checklist, then every traveler can track personal packing progress. Add an item or open Packing presets above."
+            : "The shared checklist is empty. When an editor adds items, you can track your own packed progress here."}
           action={canEditTrip ? <Button onClick={openAddPanel}>Add first item</Button> : undefined}
         />
       ) : (
         <>
-          <PackingStats items={uiItems} mode="personal" />
           <PackingProgressCard totalItems={items.length} packedItems={packedCount} mode="personal" />
-          <PackingCategoryTabs categories={categories} items={uiItems} activeCategory={activeCategory} onCategoryChange={setActiveCategory} />
+          <div className="space-y-2">
+            <PackingStatusFilters
+              activeFilter={activeStatus}
+              totalCount={items.length}
+              packedCount={packedCount}
+              onChange={setActiveStatus}
+            />
+            <PackingCategoryTabs
+              categories={packingCategories}
+              items={uiItems}
+              activeCategory={activeCategory}
+              onCategoryChange={setActiveCategory}
+            />
+          </div>
           {groupedItems.length ? (
-            <div className="space-y-5">
+            <div className="space-y-3">
               {groupedItems.map((group) => (
                 <Card key={group.category} padding="none" className="overflow-hidden">
-                  <div className="flex items-center justify-between border-b border-border-subtle px-5 py-4">
-                    <h2 className="font-semibold tracking-tight text-foreground">{categoryLabels[group.category]}</h2>
-                    <span className="text-xs text-muted">{group.items.length} items</span>
+                  <div className="flex items-center justify-between border-b border-border-subtle px-4 py-2.5">
+                    <h2 className="text-sm font-semibold tracking-tight text-foreground">{packingCategoryLabels[group.category]}</h2>
+                    <span className="text-xs text-muted">{group.items.length} {group.items.length === 1 ? "item" : "items"}</span>
                   </div>
                   <div className="divide-y divide-border-subtle">
                     {group.items.map((item) => (
@@ -165,7 +179,16 @@ export function PersistedPackingSection({
               ))}
             </div>
           ) : (
-            <EmptyState icon={Luggage} title="No items in this category" description="Choose another category, or add an item if this section needs something." className="min-h-80" />
+            <EmptyState
+              icon={Luggage}
+              title={activeStatus === "missing" ? "Nothing missing here" : activeStatus === "packed" ? "Nothing packed here yet" : "No items in this category"}
+              description={activeStatus === "missing"
+                ? "Everything in this view is packed, or another category contains the remaining items."
+                : activeStatus === "packed"
+                  ? "Mark an item as packed, or choose another category."
+                  : "Choose another category to see the rest of your checklist."}
+              className="min-h-56"
+            />
           )}
         </>
       )}

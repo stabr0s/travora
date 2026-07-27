@@ -1,7 +1,11 @@
-import { UserRound } from "lucide-react";
+import { Pencil, Trash2, UserRound } from "lucide-react";
 
 import { Badge, Button } from "@/components/ui";
 import type { PersistedPackingItemWithPersonalState } from "@/features/packing/types/persisted-packing";
+import {
+  getPackingCategory,
+  packingCategoryLabels,
+} from "@/features/packing/utils/packing-display";
 import { cn } from "@/lib/utils";
 
 type PersistedPackingItemRowProps = {
@@ -30,45 +34,50 @@ export function PersistedPackingItemRow({
   const priority = priorityDetails[item.priority || "recommended"];
   const isShared = item.is_shared ?? true;
   const canToggle = canTogglePersonalState && Boolean(onToggle);
+  const categoryLabel = packingCategoryLabels[getPackingCategory(item.category)];
 
   return (
-    <div className="flex items-start gap-3 px-4 py-4 sm:px-5">
-      <input
-        type="checkbox"
-        checked={item.isPackedForCurrentUser}
-        disabled={isPending || !canToggle}
-        onChange={() => {
-          if (!canToggle) return;
-          onToggle?.(item);
-        }}
-        aria-label={`Mark ${item.name} as ${item.isPackedForCurrentUser ? "not packed" : "packed"} for you`}
-        aria-disabled={!canToggle}
-        className={cn(
-          "mt-0.5 size-5 shrink-0 accent-primary disabled:cursor-not-allowed",
-          canToggle ? "cursor-pointer" : "cursor-not-allowed",
-        )}
-      />
+    <div className="flex min-w-0 items-start gap-2 px-3 py-2.5 sm:px-4">
+      <label className={cn(
+        "-ml-1 flex size-10 shrink-0 items-center justify-center rounded-lg",
+        canToggle ? "cursor-pointer hover:bg-surface" : "cursor-not-allowed",
+      )}>
+        <input
+          type="checkbox"
+          checked={item.isPackedForCurrentUser}
+          disabled={isPending || !canToggle}
+          onChange={() => {
+            if (!canToggle) return;
+            onToggle?.(item);
+          }}
+          aria-label={`Mark ${item.name} as ${item.isPackedForCurrentUser ? "not packed" : "packed"} for you`}
+          aria-disabled={!canToggle}
+          className="size-5 shrink-0 accent-primary disabled:cursor-not-allowed"
+        />
+      </label>
       <div className="min-w-0 flex-1">
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+        <div className="flex min-w-0 items-start justify-between gap-2">
           <div className="min-w-0">
             <p className={cn("break-words font-medium text-foreground", item.isPackedForCurrentUser && "text-muted line-through")}>{item.name}</p>
-            {item.notes ? <p className="mt-1 break-words text-xs leading-relaxed text-muted">{item.notes}</p> : null}
           </div>
-          <div className="flex flex-wrap gap-1.5">
-            <Badge variant={priority.variant}>{priority.label}</Badge>
-            <Badge variant={isShared ? "success" : "outline"}>{isShared ? "Shared" : "Private label"}</Badge>
-          </div>
+          {onEdit && onDelete ? (
+            <div className="flex shrink-0 gap-1">
+              <Button size="sm" variant="ghost" className="size-8 px-0" onClick={() => onEdit(item)} disabled={isPending} aria-label={`Edit ${item.name}`}>
+                <Pencil className="size-3.5" />
+              </Button>
+              <Button size="sm" variant="ghost" className="size-8 px-0 text-error" onClick={() => onDelete(item)} disabled={isPending} aria-label={`Delete ${item.name}`}>
+                <Trash2 className="size-3.5" />
+              </Button>
+            </div>
+          ) : null}
         </div>
-        <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-muted">
-          <span className="capitalize">{item.category || "Other"}</span>
+        <div className="mt-1.5 flex flex-wrap items-center gap-x-2.5 gap-y-1.5 text-xs text-muted">
+          <span>{categoryLabel}</span>
+          <Badge variant={priority.variant}>{priority.label}</Badge>
+          <Badge variant={isShared ? "success" : "outline"}>{isShared ? "Shared" : "Private"}</Badge>
           {item.assigned_to_name ? <span className="inline-flex min-w-0 items-center gap-1.5"><UserRound className="size-3.5 shrink-0" /><span className="break-words">{item.assigned_to_name}</span></span> : null}
         </div>
-        {onEdit && onDelete ? (
-          <div className="mt-4 flex flex-col gap-2 border-t border-border-subtle pt-3 sm:flex-row">
-            <Button size="sm" variant="outline" className="w-full sm:w-auto" onClick={() => onEdit(item)} disabled={isPending}>Edit</Button>
-            <Button size="sm" variant="ghost" className="w-full text-error sm:w-auto" onClick={() => onDelete(item)} disabled={isPending}>Delete</Button>
-          </div>
-        ) : null}
+        {item.notes ? <p className="mt-1.5 line-clamp-2 break-words text-xs leading-relaxed text-muted">{item.notes}</p> : null}
       </div>
     </div>
   );

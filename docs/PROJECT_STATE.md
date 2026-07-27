@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 71 — Trip Documents / Links Hub Polish
+Sprint 72 — Packing Checklist UX & Density Polish
 
 Status: IN PROGRESS
 
@@ -959,6 +959,18 @@ Status: IN PROGRESS
 - Authenticated print summary behavior is unchanged
 - No uploads, storage, OCR, migrations, dependencies, schema, RLS, RPC, auth, or backend changes were added
 
+## Packing Checklist UX & Density Polish
+
+- Packing items were redesigned as compact, checklist-like rows
+- Personal All, Missing, and Packed filters were added
+- Existing category values have clearer presentation labels without schema changes
+- Packing progress was simplified to packed, missing, and percentage status
+- Packing presets now sit behind a lighter collapsible opener
+- Empty states, tap targets, wrapping, and mobile density were reviewed
+- Personal packed state remains available to owner, editor, and viewer
+- Public share Packing remains a separate read-only view
+- No migrations, dependencies, schema, RLS, RPC, auth, or backend changes were added
+
 ## Manual Backend Test Checklist
 
 - Login and logout
@@ -1039,19 +1051,19 @@ Principles:
 
 ## Next Task
 
-Task #071 — Trip Documents / Links Hub Polish
+Task #072 — Packing Checklist UX & Density Polish
 
 Goal:
 
-Make existing trip and reservation documents easier to understand and access.
+Make Packing feel like a fast personal checklist instead of a collection of large cards.
 
 The task includes:
 
-- Clear trip-level and reservation-level document contexts
-- Improved display labels for existing link types
-- Compact document status and navigation in Overview
-- Better empty states, mobile wrapping, and link actions
+- Compact checklist rows and larger checkbox tap targets
+- Personal All, Missing, and Packed filters
+- Clearer category labels and grouped checklist display
+- Compact progress summary and collapsible presets
 
 Important:
 
-No uploads, storage, OCR, migrations, dependencies, new link types, schema, RLS/RPC/auth changes, public Travel Links exposure, or external integrations are added.
+No quantity field, uploads, AI packing, migrations, dependencies, schema, RLS/RPC/auth changes, new app tab, or inventory system is added.

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { PackageCheck, Pencil, Plus, Trash2 } from "lucide-react";
+import { ChevronDown, ChevronUp, PackageCheck, Pencil, Plus, Trash2 } from "lucide-react";
 
 import { Button, Card } from "@/components/ui";
 import {
@@ -26,6 +26,7 @@ export function PackingPresetManager({
   tripId,
   presets,
 }: PackingPresetManagerProps) {
+  const [isExpanded, setIsExpanded] = useState(false);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingPreset, setEditingPreset] = useState<PackingPresetWithItems | null>(null);
   const [message, setMessage] = useState<PackingPresetActionState | null>(null);
@@ -33,13 +34,20 @@ export function PackingPresetManager({
   const formRef = useScrollIntoViewOnOpen<HTMLDivElement>(isFormOpen);
 
   function openCreateForm() {
+    setIsExpanded(true);
     setEditingPreset(null);
     setIsFormOpen(true);
   }
 
   function openEditForm(preset: PackingPresetWithItems) {
+    setIsExpanded(true);
     setEditingPreset(preset);
     setIsFormOpen(true);
+  }
+
+  function togglePresets() {
+    if (isExpanded) setIsFormOpen(false);
+    setIsExpanded((current) => !current);
   }
 
   function applyBuiltInPreset(presetId: string) {
@@ -65,21 +73,37 @@ export function PackingPresetManager({
   return (
     <div className="space-y-4">
       <Card padding="sm">
-        <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div className="min-w-0">
             <h2 className="text-sm font-semibold text-foreground">Packing presets</h2>
-            <p className="mt-1 text-sm text-muted">
-              Apply a built-in starter or create private presets for repeatable trips.
+            <p className="mt-1 text-xs text-muted">
+              Add a starter checklist without distracting from your current items.
             </p>
           </div>
-          <Button type="button" size="sm" className="w-full sm:w-auto" onClick={openCreateForm}>
-            <Plus className="size-4" />
-            New preset
-          </Button>
+          <div className="flex flex-col gap-2 sm:flex-row">
+            {isExpanded ? (
+              <Button type="button" size="sm" variant="outline" className="w-full sm:w-auto" onClick={openCreateForm}>
+                <Plus className="size-4" />
+                New preset
+              </Button>
+            ) : null}
+            <Button
+              type="button"
+              size="sm"
+              variant="ghost"
+              className="w-full sm:w-auto"
+              onClick={togglePresets}
+              aria-expanded={isExpanded}
+            >
+              {isExpanded ? <ChevronUp className="size-4" /> : <ChevronDown className="size-4" />}
+              {isExpanded ? "Hide presets" : "Open presets"}
+            </Button>
+          </div>
         </div>
 
-        <div className="mt-4 grid gap-3 lg:grid-cols-2">
-          <div className="rounded-2xl border border-border-subtle bg-background p-4">
+        {isExpanded ? (
+          <div className="mt-3 grid gap-3 border-t border-border-subtle pt-3 lg:grid-cols-2">
+          <div className="rounded-xl border border-border-subtle bg-background p-3">
             <h3 className="text-sm font-semibold text-foreground">Built-in presets</h3>
             <p className="mt-1 text-xs text-muted">Code-only starters. They are not editable.</p>
             <div className="mt-3 flex flex-wrap gap-2">
@@ -99,7 +123,7 @@ export function PackingPresetManager({
             </div>
           </div>
 
-          <div className="rounded-2xl border border-border-subtle bg-background p-4">
+          <div className="rounded-xl border border-border-subtle bg-background p-3">
             <h3 className="text-sm font-semibold text-foreground">My presets</h3>
             <p className="mt-1 text-xs text-muted">Saved to your account and visible only to you.</p>
             <div className="mt-3 space-y-3">
@@ -135,7 +159,8 @@ export function PackingPresetManager({
               )}
             </div>
           </div>
-        </div>
+          </div>
+        ) : null}
       </Card>
 
       {message?.message ? (

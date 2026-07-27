@@ -307,6 +307,10 @@ Production URL: https://travora-theta.vercel.app
 
 ## Packing and presets
 
+- [ ] Packing items are compact and easy to scan
+- [ ] All, Missing, and Packed filters work
+- [ ] Missing and Packed filters reflect the current user's personal packed state
+- [ ] Category and group labels are clear
 - [ ] Create packing item
 - [ ] Edit packing item
 - [ ] Delete packing item
@@ -315,6 +319,13 @@ Production URL: https://travora-theta.vercel.app
 - [ ] Owner can toggle own packing state
 - [ ] Editor can toggle own packing state
 - [ ] Viewer can toggle own packing state
+- [ ] Public share Packing remains read-only without personal state controls
+- [ ] Packing progress shows packed, missing, and percentage clearly
+- [ ] Packing empty and filtered states are helpful
+- [ ] Packing presets open and collapse without losing existing actions
+- [ ] Overview Packing progress remains correct
+- [ ] Mobile Packing has no horizontal overflow
+- [ ] No migration or dependency was added for Packing density polish
 - [ ] One member's packed state does not affect another member
 - [ ] Built-in presets can be applied by owner/editor
 - [ ] Viewer cannot apply or manage presets

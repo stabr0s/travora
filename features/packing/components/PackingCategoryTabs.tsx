@@ -3,12 +3,8 @@ import type {
   PackingCategoryFilter,
   PackingItem,
 } from "@/features/packing/types/packing";
+import { packingCategoryLabels } from "@/features/packing/utils/packing-display";
 import { cn } from "@/lib/utils";
-
-const categoryLabels: Record<PackingCategory, string> = {
-  documents: "Documents", electronics: "Electronics", clothes: "Clothes",
-  toiletries: "Toiletries", health: "Health", travel: "Travel", other: "Other",
-};
 
 type PackingCategoryTabsProps = {
   categories: PackingCategory[];
@@ -25,16 +21,18 @@ export function PackingCategoryTabs({
 }: PackingCategoryTabsProps) {
   const tabs: Array<{ value: PackingCategoryFilter; label: string; count: number }> = [
     { value: "all", label: "All", count: items.length },
-    ...categories.map((category) => ({
-      value: category,
-      label: categoryLabels[category],
-      count: items.filter((item) => item.category === category).length,
-    })),
+    ...categories
+      .map((category) => ({
+        value: category,
+        label: packingCategoryLabels[category],
+        count: items.filter((item) => item.category === category).length,
+      }))
+      .filter((tab) => tab.count > 0 || tab.value === activeCategory),
   ];
 
   return (
-    <div className="overflow-x-auto rounded-2xl border border-border bg-surface-elevated p-1.5 shadow-sm">
-      <div className="flex min-w-max gap-1" role="tablist" aria-label="Packing categories">
+    <div className="max-w-full overflow-x-auto rounded-lg border border-border bg-background p-0.5">
+      <div className="flex min-w-max gap-0.5" role="tablist" aria-label="Packing categories">
         {tabs.map((tab) => {
           const isActive = tab.value === activeCategory;
 
@@ -46,10 +44,10 @@ export function PackingCategoryTabs({
               aria-selected={isActive}
               onClick={() => onCategoryChange(tab.value)}
               className={cn(
-                "inline-flex h-9 items-center gap-2 rounded-xl px-3 text-sm font-medium transition-colors",
+                "inline-flex h-8 items-center gap-1.5 rounded-md px-2.5 text-xs font-medium transition-colors",
                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30",
                 isActive
-                  ? "bg-primary text-primary-foreground shadow-sm"
+                  ? "bg-primary text-primary-foreground"
                   : "text-muted hover:bg-surface hover:text-foreground",
               )}
             >
