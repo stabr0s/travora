@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 73 — Remove Map Fields & Google My Maps Link Polish
+Sprint 74 — Trip Templates / Duplicate Improvements
 
 Status: IN PROGRESS
 
@@ -738,7 +738,7 @@ Status: IN PROGRESS
 ## Trip Duplicate / Templates MVP
 
 - Owner and editor users can duplicate persisted trips into their own account
-- Duplicated trips copy supported modules: Places, Planner, Reservations, Budget, and Packing
+- Template flow can selectively copy Places, Planner, Reservations, Budget, and Packing
 - Planner items remap copied `place_id` values to copied Places
 - Members, invite links, public share settings/tokens, and personal packing states are not copied
 - Mock/demo trips and public share pages cannot be duplicated
@@ -981,6 +981,18 @@ Status: IN PROGRESS
 - Public share remains private and does not expose Travel Links or map URLs
 - No migrations, dependencies, schema, RLS, RPC, auth, or public-share changes were added
 
+## Trip Templates / Duplicate Improvements
+
+- Trip duplication now uses a positive Use as template flow
+- Module copy options clearly show what will be included in the new trip
+- Places, Planner, Packing items, and Important Info are selected by default
+- Reservations, Budget expenses, and Travel Links are off by default
+- Dates and times are copied as-is with a clear manual-adjustment warning
+- Travel Links copy only when selected; reservation links also require Reservations
+- Members, invites, public share state, personal packing states, and participant references are never copied
+- Historical latitude, longitude, and map order values are not copied into new Places
+- No migrations, dependencies, schema, RLS, RPC, auth, or backend architecture changes were added
+
 ## Manual Backend Test Checklist
 
 - Login and logout
@@ -1061,18 +1073,19 @@ Principles:
 
 ## Next Task
 
-Task #073 — Remove Map Fields & Google My Maps Link Polish
+Task #074 — Trip Templates / Duplicate Improvements
 
 Goal:
 
-Remove internal map-management UI and clarify the private Google My Maps Travel Link flow.
+Improve trip duplication into a practical, selective Use as template flow.
 
 The task includes:
 
-- Removing map-specific fields and copy from Places
-- Removing Map from navigation and redirecting the legacy route
-- Clarifying Google My Maps as a private trip-level Travel Link
+- Clear module copy options with safe defaults
+- Selective server-side source loading and copying
+- Safe handling of Planner place links and reservation-level Travel Links
+- Explicit never-copy rules for members, sharing, and personal state
 
 Important:
 
-Historical database columns and migration 003 remain unchanged. No migrations, dependencies, map rendering, Google APIs, or public Travel Links are added.
+Dates and times remain unchanged and may need manual adjustment. No migrations, dependencies, schema, RLS, RPC, auth, or public-share changes are added.

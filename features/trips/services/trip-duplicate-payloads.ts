@@ -1,18 +1,8 @@
 import { randomUUID } from "node:crypto";
 
+import type { DuplicateSourceRows } from "@/features/trips/services/trip-duplicate-source";
+import type { PersistedTrip } from "@/features/trips/types/persisted-trip";
 import type { Database } from "@/types/database";
-
-type TableRow<TableName extends keyof Database["public"]["Tables"]> =
-  Database["public"]["Tables"][TableName]["Row"];
-
-type DuplicateSourceRows = {
-  places: TableRow<"places">[];
-  planner: TableRow<"planner_items">[];
-  reservations: TableRow<"reservations">[];
-  travelLinks: TableRow<"travel_links">[];
-  budget: TableRow<"budget_expenses">[];
-  packing: TableRow<"packing_items">[];
-};
 
 export function buildDuplicateModulePayloads(
   newTripId: string,
@@ -32,9 +22,6 @@ export function buildDuplicateModulePayloads(
       address: place.address,
       city: place.city,
       country: place.country,
-      latitude: place.latitude,
-      longitude: place.longitude,
-      map_order: place.map_order,
       status: place.status,
       priority: place.priority,
       notes: place.notes,
@@ -75,21 +62,28 @@ export function buildDuplicateModulePayloads(
       total_price: reservation.total_price,
       currency: reservation.currency,
       status: reservation.status,
-      payer_name: reservation.payer_name,
+      payer_name: null,
       notes: reservation.notes,
     } satisfies Database["public"]["Tables"]["reservations"]["Insert"];
   });
 
-  const travelLinkPayloads = source.travelLinks.map((link) => ({
-    id: randomUUID(),
-    trip_id: newTripId,
-    reservation_id: link.reservation_id ? reservationIdMap.get(link.reservation_id) ?? null : null,
-    title: link.title,
-    url: link.url,
-    link_type: link.link_type,
-    note: link.note,
-    created_by: createdBy,
-  } satisfies Database["public"]["Tables"]["travel_links"]["Insert"]));
+  const travelLinkPayloads = source.travelLinks.flatMap((link) => {
+    const reservationId = link.reservation_id
+      ? reservationIdMap.get(link.reservation_id)
+      : null;
+    if (link.reservation_id && !reservationId) return [];
+
+    return [{
+      id: randomUUID(),
+      trip_id: newTripId,
+      reservation_id: reservationId,
+      title: link.title,
+      url: link.url,
+      link_type: link.link_type,
+      note: link.note,
+      created_by: createdBy,
+    } satisfies Database["public"]["Tables"]["travel_links"]["Insert"]];
+  });
 
   const budgetPayloads = source.budget.map((expense) => ({
     id: randomUUID(),
@@ -113,7 +107,7 @@ export function buildDuplicateModulePayloads(
     trip_id: newTripId,
     name: item.name,
     category: item.category,
-    assigned_to_name: item.assigned_to_name,
+    assigned_to_name: null,
     is_shared: item.is_shared,
     is_packed: false,
     priority: item.priority,
@@ -127,5 +121,38 @@ export function buildDuplicateModulePayloads(
     travelLinkPayloads,
     budgetPayloads,
     packingPayloads,
+  };
+}
+
+export function buildDuplicateFallbackTrip(
+  id: string,
+  ownerId: string,
+  payload: Database["public"]["Tables"]["trips"]["Insert"],
+): PersistedTrip {
+  return {
+    id,
+    owner_id: ownerId,
+    title: payload.title,
+    destination: payload.destination || null,
+    start_date: payload.start_date || null,
+    end_date: payload.end_date || null,
+    cover_image_url: payload.cover_image_url || null,
+    status: "planning",
+    description: payload.description || null,
+    currency: payload.currency || "EUR",
+    public_share_enabled: false,
+    public_share_token: null,
+    public_share_created_at: null,
+    public_share_updated_at: null,
+    public_share_sections: {
+      overview: true,
+      places: true,
+      planner: true,
+      reservations: true,
+      budget: true,
+      packing: true,
+    },
+    created_at: null,
+    updated_at: null,
   };
 }

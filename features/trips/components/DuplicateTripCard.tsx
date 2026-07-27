@@ -24,6 +24,51 @@ type DuplicateTripCardProps = {
   trip: PersistedTrip;
 };
 
+const copyOptions = [
+  {
+    name: "copyPlaces",
+    label: "Places",
+    description: "Saved places without historical map fields.",
+    defaultChecked: true,
+  },
+  {
+    name: "copyPlanner",
+    label: "Planner",
+    description: "Day plans, dates, and times copied as-is.",
+    defaultChecked: true,
+  },
+  {
+    name: "copyPacking",
+    label: "Packing items",
+    description: "Checklist items with packed progress reset.",
+    defaultChecked: true,
+  },
+  {
+    name: "copyImportantInfo",
+    label: "Important Info",
+    description: "Private trip notes and reference details.",
+    defaultChecked: true,
+  },
+  {
+    name: "copyReservations",
+    label: "Reservations",
+    description: "Booking details and dates copied as-is.",
+    defaultChecked: false,
+  },
+  {
+    name: "copyBudget",
+    label: "Budget expenses",
+    description: "Expenses without payer or split references.",
+    defaultChecked: false,
+  },
+  {
+    name: "copyTravelLinks",
+    label: "Trip-level Travel Links",
+    description: "Only copy reusable links, such as a Google My Maps link or planning folder.",
+    defaultChecked: false,
+  },
+] as const;
+
 export function DuplicateTripCard({ trip }: DuplicateTripCardProps) {
   const [state, formAction, isPending] = useActionState(
     duplicateTripAction,
@@ -38,9 +83,9 @@ export function DuplicateTripCard({ trip }: DuplicateTripCardProps) {
             <Copy className="size-5" />
           </span>
           <div>
-            <CardTitle>Duplicate trip</CardTitle>
+            <CardTitle>Use as template</CardTitle>
             <CardDescription>
-              Use this trip as a starting point for a new one.
+              Create a new trip from this one.
             </CardDescription>
           </div>
         </div>
@@ -80,11 +125,41 @@ export function DuplicateTripCard({ trip }: DuplicateTripCardProps) {
           </label>
         </div>
 
-        <p className="rounded-xl bg-surface px-4 py-3 text-sm leading-relaxed text-muted">
-          Places, planner items, reservations, travel links, budget expenses,
-          and packing items will be copied. Members, invites, public share
-          links, and personal packing progress will not be copied.
-        </p>
+        <fieldset>
+          <legend className="text-sm font-semibold text-foreground">
+            Choose what to copy into the new trip
+          </legend>
+          <div className="mt-3 grid gap-2.5 sm:grid-cols-2">
+            {copyOptions.map((option) => (
+              <label
+                key={option.name}
+                className="flex min-w-0 cursor-pointer items-start gap-3 rounded-xl border border-border-subtle bg-surface px-3.5 py-3"
+              >
+                <input
+                  className="mt-0.5 size-4 shrink-0 accent-primary"
+                  type="checkbox"
+                  name={option.name}
+                  defaultChecked={option.defaultChecked}
+                />
+                <span className="min-w-0">
+                  <span className="block text-sm font-medium text-foreground">
+                    {option.label}
+                  </span>
+                  <span className="mt-0.5 block text-xs leading-relaxed text-muted">
+                    {option.description}
+                  </span>
+                </span>
+              </label>
+            ))}
+          </div>
+        </fieldset>
+
+        <div className="space-y-1.5 rounded-xl bg-surface px-4 py-3 text-sm leading-relaxed text-muted">
+          <p>Dates and times are copied as-is and may need manual adjustment.</p>
+          <p>Reservations and Budget are usually trip-specific, so they are off by default.</p>
+          <p>Members, invites, public share links, and personal packing progress are never copied.</p>
+          <p>Reservation links require both Reservations and Travel Links to be selected.</p>
+        </div>
 
         {state.message ? (
           <p
@@ -97,7 +172,7 @@ export function DuplicateTripCard({ trip }: DuplicateTripCardProps) {
 
         <div className="flex justify-end">
           <Button type="submit" className="w-full sm:w-auto" disabled={isPending}>
-            {isPending ? "Duplicating trip…" : "Duplicate trip"}
+            {isPending ? "Creating trip…" : "Create trip from template"}
           </Button>
         </div>
       </form>

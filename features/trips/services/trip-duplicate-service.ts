@@ -2,8 +2,13 @@ import { randomUUID } from "node:crypto";
 
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { isUuid } from "@/lib/validation/is-uuid";
-import { buildDuplicateModulePayloads } from "@/features/trips/services/trip-duplicate-payloads";
+import {
+  buildDuplicateFallbackTrip,
+  buildDuplicateModulePayloads,
+} from "@/features/trips/services/trip-duplicate-payloads";
+import { loadDuplicateSource } from "@/features/trips/services/trip-duplicate-source";
 import type {
+  DuplicateTripOptions,
   DuplicateTripInput,
   PersistedTrip,
   TripsServiceResult,
@@ -37,6 +42,20 @@ async function cleanupNewTrip(
 
 function canDuplicate(role: string | null | undefined, isOwner: boolean) {
   return isOwner || role === "editor" || role === "owner";
+}
+
+function normalizeOptions(
+  options: DuplicateTripInput["options"] | null | undefined,
+): DuplicateTripOptions {
+  return {
+    places: options?.places === true,
+    planner: options?.planner === true,
+    packing: options?.packing === true,
+    importantInfo: options?.importantInfo === true,
+    reservations: options?.reservations === true,
+    budget: options?.budget === true,
+    travelLinks: options?.travelLinks === true,
+  };
 }
 
 export async function duplicateTrip(
@@ -77,20 +96,10 @@ export async function duplicateTrip(
     return { data: null, error: { code: "PERMISSION_DENIED", message: "Only owners and editors can duplicate this trip." } };
   }
 
-  const [places, planner, reservations, budget, packing, importantInfo, travelLinks] = await Promise.all([
-    supabase.from("places").select("*").eq("trip_id", input.tripId),
-    supabase.from("planner_items").select("*").eq("trip_id", input.tripId),
-    supabase.from("reservations").select("*").eq("trip_id", input.tripId),
-    supabase.from("budget_expenses").select("*").eq("trip_id", input.tripId),
-    supabase.from("packing_items").select("*").eq("trip_id", input.tripId),
-    supabase.from("trip_important_info").select("*").eq("trip_id", input.tripId).maybeSingle(),
-    supabase.from("travel_links").select("*").eq("trip_id", input.tripId),
-  ]);
-
-  const readError = places.error || planner.error || reservations.error
-    || budget.error || packing.error || importantInfo.error || travelLinks.error;
-  if (readError) {
-    logDuplicateError("source modules read failed", readError);
+  const options = normalizeOptions(input.options);
+  const source = await loadDuplicateSource(supabase, input.tripId, options);
+  if (source.error) {
+    logDuplicateError("source modules read failed", source.error);
     return { data: null, error: { code: "LOAD_FAILED", message: "We couldn't load trip content to duplicate." } };
   }
 
@@ -137,14 +146,7 @@ export async function duplicateTrip(
     travelLinkPayloads,
     budgetPayloads,
     packingPayloads,
-  } = buildDuplicateModulePayloads(newTripId, user.id, {
-    places: places.data || [],
-    planner: planner.data || [],
-    reservations: reservations.data || [],
-    travelLinks: travelLinks.data || [],
-    budget: budget.data || [],
-    packing: packing.data || [],
-  });
+  } = buildDuplicateModulePayloads(newTripId, user.id, source.data);
 
   const copySteps = [
     () => placePayloads.length ? supabase.from("places").insert(placePayloads) : null,
@@ -153,8 +155,11 @@ export async function duplicateTrip(
     () => travelLinkPayloads.length ? supabase.from("travel_links").insert(travelLinkPayloads) : null,
     () => budgetPayloads.length ? supabase.from("budget_expenses").insert(budgetPayloads) : null,
     () => packingPayloads.length ? supabase.from("packing_items").insert(packingPayloads) : null,
-    () => importantInfo.data?.content
-      ? supabase.from("trip_important_info").insert({ trip_id: newTripId, content: importantInfo.data.content })
+    () => source.data.importantInfo?.content
+      ? supabase.from("trip_important_info").insert({
+          trip_id: newTripId,
+          content: source.data.importantInfo.content,
+        })
       : null,
   ];
 
@@ -176,32 +181,11 @@ export async function duplicateTrip(
     .maybeSingle();
 
   if (readErrorAfterCopy) logDuplicateError("new trip readback failed", readErrorAfterCopy);
-  const fallbackTrip: PersistedTrip = {
-    id: newTripId,
-    owner_id: user.id,
-    title: newTripPayload.title,
-    destination: newTripPayload.destination || null,
-    start_date: newTripPayload.start_date || null,
-    end_date: newTripPayload.end_date || null,
-    cover_image_url: newTripPayload.cover_image_url || null,
-    status: "planning",
-    description: newTripPayload.description || null,
-    currency: newTripPayload.currency || "EUR",
-    public_share_enabled: false,
-    public_share_token: null,
-    public_share_created_at: null,
-    public_share_updated_at: null,
-    public_share_sections: {
-      overview: true,
-      places: true,
-      planner: true,
-      reservations: true,
-      budget: true,
-      packing: true,
-    },
-    created_at: null,
-    updated_at: null,
-  };
+  const fallbackTrip = buildDuplicateFallbackTrip(
+    newTripId,
+    user.id,
+    newTripPayload,
+  );
 
   return { data: newTrip || fallbackTrip, error: null };
 }

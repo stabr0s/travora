@@ -40,6 +40,17 @@ export type DuplicateTripInput = {
   title: string;
   startDate?: string;
   endDate?: string;
+  options: DuplicateTripOptions;
+};
+
+export type DuplicateTripOptions = {
+  places: boolean;
+  planner: boolean;
+  packing: boolean;
+  importantInfo: boolean;
+  reservations: boolean;
+  budget: boolean;
+  travelLinks: boolean;
 };
 
 export type TripsServiceErrorCode =

@@ -64,22 +64,37 @@ Production URL: https://travora-theta.vercel.app
 - [ ] Edit trip settings as owner
 - [ ] Viewer sees read-only trip settings
 - [ ] Delete disposable test trip as owner
-- [ ] Duplicate persisted trip as owner
-- [ ] Duplicate persisted trip as editor into own account
+- [ ] Use as template action is easy to find
+- [ ] Template flow explains what will and will not be copied
+- [ ] Owner can create a trip from a template
+- [ ] Editor can create a trip from a template into own account
 - [ ] Viewer cannot duplicate persisted trip
+- [ ] Places, Planner, Packing items, and Important Info are checked by default
+- [ ] Reservations, Budget expenses, and Travel Links are unchecked by default
+- [ ] User can change every module copy option
 - [ ] Copied trip opens successfully
 - [ ] Copied trip is owned by current user
-- [ ] Copied places belong to copied trip
-- [ ] Copied planner items reference copied places
-- [ ] Copied reservations belong to copied trip
-- [ ] Copied reservation-level Travel Links remap to copied reservations
-- [ ] Copied budget items belong to copied trip
-- [ ] Copied packing items belong to copied trip
-- [ ] Copied Important Info is present
+- [ ] Places copy only when selected and belong to the copied trip
+- [ ] Copied Places do not retain latitude, longitude, or map order
+- [ ] Planner copies only when selected
+- [ ] Planner place IDs map to copied Places when Places are selected
+- [ ] Planner place IDs are null when Places are not selected
+- [ ] Reservations copy only when selected
+- [ ] Budget expenses copy only when selected
+- [ ] Copied Budget expenses have no payer or split participant references
+- [ ] Packing items copy only when selected and packed state is reset
+- [ ] Important Info copies only when selected
+- [ ] Trip-level Travel Links copy only when Travel Links are selected
+- [ ] Reservation-level Travel Links require Reservations and Travel Links
+- [ ] Unmapped reservation-level Travel Links are skipped safely
 - [ ] Personal packing states are not copied
 - [ ] Public share is disabled on copied trip
 - [ ] Invite links and members are not copied
+- [ ] Source public share section settings are not copied
+- [ ] Dates and times are copied as-is with a visible warning
+- [ ] Template flow has no mobile overflow
 - [ ] Original trip is unchanged after duplication
+- [ ] No migration or dependency was added for template improvements
 
 ## Trip detail tabs
 

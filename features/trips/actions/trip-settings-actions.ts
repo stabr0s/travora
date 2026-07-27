@@ -117,6 +117,15 @@ export async function duplicateTripAction(
   const title = readField(formData, "title");
   const startDate = readField(formData, "startDate");
   const endDate = readField(formData, "endDate");
+  const options = {
+    places: formData.get("copyPlaces") === "on",
+    planner: formData.get("copyPlanner") === "on",
+    packing: formData.get("copyPacking") === "on",
+    importantInfo: formData.get("copyImportantInfo") === "on",
+    reservations: formData.get("copyReservations") === "on",
+    budget: formData.get("copyBudget") === "on",
+    travelLinks: formData.get("copyTravelLinks") === "on",
+  };
 
   if (!isUuid(tripId)) return { status: "error", message: "This saved trip is not available." };
   if (title.length < 2) return { status: "error", message: "Trip name must be at least 2 characters." };
@@ -127,7 +136,13 @@ export async function duplicateTripAction(
     return { status: "error", message: "End date must be the same as or later than start date." };
   }
 
-  const result = await duplicateTrip({ tripId, title, startDate, endDate });
+  const result = await duplicateTrip({
+    tripId,
+    title,
+    startDate,
+    endDate,
+    options,
+  });
   if (result.error) return { status: "error", message: result.error.message };
 
   revalidatePath("/dashboard");
