@@ -115,6 +115,24 @@ Production URL: https://travora-theta.vercel.app
 
 ## Overview, Important Info, and Travel Links
 
+- [ ] Search input appears at the start of persisted Overview
+- [ ] Planner item title returns a Planner result
+- [ ] Place name returns a Places result
+- [ ] Reservation provider or visible reference returns a Reservations result
+- [ ] Budget expense returns a Budget result
+- [ ] Packing item returns a Packing result
+- [ ] Travel Link title, type, note, or URL domain returns a Travel Links result
+- [ ] Important Info content returns an Important Info result
+- [ ] Clicking a result switches to the correct existing tab or Overview section
+- [ ] Queries shorter than two characters do not show results
+- [ ] Search clear button resets the query
+- [ ] Empty search result shows `No results in this trip.`
+- [ ] Viewer can search and navigate without receiving edit controls
+- [ ] Participants, emails, invites, tokens, personal states, and internal IDs are not searched or displayed
+- [ ] Public share has no search and remains unchanged
+- [ ] Mock trips render without persisted quick search
+- [ ] Trip search has no mobile overflow
+- [ ] No migration, dependency, or backend search was added
 - [ ] Persisted Overview shows the next Planner items
 - [ ] Persisted Overview shows upcoming Reservations
 - [ ] Empty Planner and Reservations summaries provide helpful next steps

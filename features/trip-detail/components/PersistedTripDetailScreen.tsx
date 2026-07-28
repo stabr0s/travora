@@ -20,6 +20,7 @@ import type { PersistedReservation } from "@/features/reservations/types/persist
 import { PersistedTripSettingsSection } from "@/features/trips/components/PersistedTripSettingsSection";
 import { PersistedTripHero } from "@/features/trip-detail/components/PersistedTripHero";
 import { PersistedTripOverview } from "@/features/trip-detail/components/PersistedTripOverview";
+import { TripQuickSearch } from "@/features/trip-detail/components/TripQuickSearch";
 import { TripTabs } from "@/features/trip-detail/components/TripTabs";
 import type { TripImportantInfo } from "@/features/trip-detail/types/important-info";
 import type { TripDetailTabId } from "@/features/trip-detail/types/trip-detail";
@@ -79,9 +80,7 @@ export function PersistedTripDetailScreen({
 }: PersistedTripDetailScreenProps) {
   const [activeTab, setActiveTab] = useState<TripDetailTabId>(initialTab);
   const canEditTrip = currentUserRole === "owner" || currentUserRole === "editor";
-  const canTogglePackingState = currentUserRole === "owner"
-    || currentUserRole === "editor"
-    || currentUserRole === "viewer";
+  const canTogglePackingState = currentUserRole === "owner" || currentUserRole === "editor" || currentUserRole === "viewer";
   const canManageParticipants = currentUserRole === "owner";
   const canManageSettings = currentUserRole === "owner";
 
@@ -95,31 +94,40 @@ export function PersistedTripDetailScreen({
       ) : null}
       <TripTabs activeTab={activeTab} onTabChange={setActiveTab} showSettings />
       {activeTab === "overview" ? (
-        <PersistedTripOverview
-          tripId={trip.id}
-          plannerItems={plannerItems}
-          plannerError={plannerError}
-          reservations={reservations}
-          reservationsError={reservationsError}
-          budgetExpenses={budgetExpenses}
-          budgetError={budgetError}
-          packingItems={packingItems}
-          packingItemStates={packingItemStates}
-          packingError={packingError}
-          importantInfo={importantInfo}
-          importantInfoError={importantInfoError}
-          travelLinks={travelLinks.filter((link) => !link.reservation_id)}
-          travelLinksError={travelLinksError}
-          canEditTrip={canEditTrip}
-          isOwner={canManageSettings}
-          publicShareEnabled={trip.public_share_enabled}
-          publicSharePath={
-            canManageSettings && trip.public_share_enabled && trip.public_share_token
-              ? `/share/${trip.public_share_token}`
-              : undefined
-          }
-          onNavigate={setActiveTab}
-        />
+        <>
+          <TripQuickSearch
+            places={places}
+            plannerItems={plannerItems}
+            reservations={reservations}
+            budgetExpenses={budgetExpenses}
+            packingItems={packingItems}
+            travelLinks={travelLinks}
+            importantInfo={importantInfo}
+            onNavigate={setActiveTab}
+          />
+          <PersistedTripOverview
+            tripId={trip.id}
+            plannerItems={plannerItems}
+            plannerError={plannerError}
+            reservations={reservations}
+            reservationsError={reservationsError}
+            budgetExpenses={budgetExpenses}
+            budgetError={budgetError}
+            packingItems={packingItems}
+            packingItemStates={packingItemStates}
+            packingError={packingError}
+            importantInfo={importantInfo}
+            importantInfoError={importantInfoError}
+            travelLinks={travelLinks.filter((link) => !link.reservation_id)}
+            travelLinksError={travelLinksError}
+            canEditTrip={canEditTrip}
+            isOwner={canManageSettings}
+            publicShareEnabled={trip.public_share_enabled}
+            publicSharePath={canManageSettings && trip.public_share_enabled && trip.public_share_token
+              ? `/share/${trip.public_share_token}` : undefined}
+            onNavigate={setActiveTab}
+          />
+        </>
       ) : activeTab === "places" ? (
         <PlacesSection
           tripId={trip.id}

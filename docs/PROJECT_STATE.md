@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 74 — Trip Templates / Duplicate Improvements
+Sprint 75 — Trip Quick Search
 
 Status: IN PROGRESS
 
@@ -993,6 +993,16 @@ Status: IN PROGRESS
 - Historical latitude, longitude, and map order values are not copied into new Places
 - No migrations, dependencies, schema, RLS, RPC, auth, or backend architecture changes were added
 
+## Trip Quick Search
+
+- A compact client-side search was added to persisted Trip Overview
+- Search uses already-loaded Planner, Places, Reservations, Budget, Packing, Travel Links, and Important Info data
+- Results navigate to existing tabs or private Overview sections
+- Viewer access remains read-only with no mutation controls in results
+- Participants, emails, invites, tokens, personal packing states, and internal IDs are excluded
+- Public share and mock trip behavior remain unchanged
+- No migrations, dependencies, backend search, schema, RLS, RPC, or auth changes were added
+
 ## Manual Backend Test Checklist
 
 - Login and logout
@@ -1073,19 +1083,19 @@ Principles:
 
 ## Next Task
 
-Task #074 — Trip Templates / Duplicate Improvements
+Task #075 — Trip Quick Search / Find Anything
 
 Goal:
 
-Improve trip duplication into a practical, selective Use as template flow.
+Add lightweight search across the already-loaded data of one persisted trip.
 
 The task includes:
 
-- Clear module copy options with safe defaults
-- Selective server-side source loading and copying
-- Safe handling of Planner place links and reservation-level Travel Links
-- Explicit never-copy rules for members, sharing, and personal state
+- A compact Search this trip input on persisted Overview
+- Ranked results across core private trip modules
+- Navigation to existing tabs and Overview anchors
+- Read-only search for viewers without new backend behavior
 
 Important:
 
-Dates and times remain unchanged and may need manual adjustment. No migrations, dependencies, schema, RLS, RPC, auth, or public-share changes are added.
+Search uses data already loaded by Trip Detail. No migrations, dependencies, backend search, schema, RLS, RPC, auth, or public-share changes are added.
