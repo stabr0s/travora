@@ -40,6 +40,7 @@ export type DuplicateTripInput = {
   title: string;
   startDate?: string;
   endDate?: string;
+  shiftDates: boolean;
   options: DuplicateTripOptions;
 };
 

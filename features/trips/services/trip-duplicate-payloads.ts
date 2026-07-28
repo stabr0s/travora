@@ -2,12 +2,17 @@ import { randomUUID } from "node:crypto";
 
 import type { DuplicateSourceRows } from "@/features/trips/services/trip-duplicate-source";
 import type { PersistedTrip } from "@/features/trips/types/persisted-trip";
+import {
+  shiftDateOnly,
+  shiftTimestamp,
+} from "@/features/trips/utils/trip-date-shift";
 import type { Database } from "@/types/database";
 
 export function buildDuplicateModulePayloads(
   newTripId: string,
   createdBy: string,
   source: DuplicateSourceRows,
+  dateShiftDays = 0,
 ) {
   const placeIdMap = new Map<string, string>();
   const placePayloads = source.places.map((place) => {
@@ -36,7 +41,7 @@ export function buildDuplicateModulePayloads(
     place_id: item.place_id ? placeIdMap.get(item.place_id) ?? null : null,
     title: item.title,
     description: item.description,
-    date: item.date,
+    date: shiftDateOnly(item.date, dateShiftDays),
     start_time: item.start_time,
     end_time: item.end_time,
     type: item.type,
@@ -56,8 +61,8 @@ export function buildDuplicateModulePayloads(
       title: reservation.title,
       provider: reservation.provider,
       reservation_number: reservation.reservation_number,
-      start_date: reservation.start_date,
-      end_date: reservation.end_date,
+      start_date: shiftTimestamp(reservation.start_date, dateShiftDays),
+      end_date: shiftTimestamp(reservation.end_date, dateShiftDays),
       location: reservation.location,
       total_price: reservation.total_price,
       currency: reservation.currency,
@@ -98,7 +103,7 @@ export function buildDuplicateModulePayloads(
     split_between_user_ids: null,
     split_type: "equal",
     status: expense.status,
-    expense_date: expense.expense_date,
+    expense_date: shiftDateOnly(expense.expense_date, dateShiftDays),
     notes: expense.notes,
   } satisfies Database["public"]["Tables"]["budget_expenses"]["Insert"]));
 

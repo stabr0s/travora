@@ -13,6 +13,7 @@ import type {
   PersistedTrip,
   TripsServiceResult,
 } from "@/features/trips/types/persisted-trip";
+import { resolveDateShift } from "@/features/trips/utils/trip-date-shift";
 import type { Database } from "@/types/database";
 
 type SupabaseDiagnostic = {
@@ -96,6 +97,11 @@ export async function duplicateTrip(
     return { data: null, error: { code: "PERMISSION_DENIED", message: "Only owners and editors can duplicate this trip." } };
   }
 
+  const dateShift = resolveDateShift(sourceTrip.start_date, input.startDate, input.shiftDates === true);
+  if (dateShift.days === null) {
+    return { data: null, error: { code: "INVALID_TRIP", message: dateShift.error } };
+  }
+
   const options = normalizeOptions(input.options);
   const source = await loadDuplicateSource(supabase, input.tripId, options);
   if (source.error) {
@@ -146,7 +152,7 @@ export async function duplicateTrip(
     travelLinkPayloads,
     budgetPayloads,
     packingPayloads,
-  } = buildDuplicateModulePayloads(newTripId, user.id, source.data);
+  } = buildDuplicateModulePayloads(newTripId, user.id, source.data, dateShift.days);
 
   const copySteps = [
     () => placePayloads.length ? supabase.from("places").insert(placePayloads) : null,

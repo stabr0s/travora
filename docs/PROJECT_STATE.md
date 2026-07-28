@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 75 — Trip Quick Search
+Sprint 76 — Template Date Shift
 
 Status: IN PROGRESS
 
@@ -1003,6 +1003,17 @@ Status: IN PROGRESS
 - Public share and mock trip behavior remain unchanged
 - No migrations, dependencies, backend search, schema, RLS, RPC, or auth changes were added
 
+## Template Date Shift
+
+- Use as template can optionally shift copied dates relative to the new trip start
+- The day offset is calculated from the original and new trip start dates
+- Planner dates, Reservation start/end timestamps, and Budget expense dates shift only when their modules are selected
+- Planner times and Reservation time/duration are preserved
+- Places, Packing, Important Info, Travel Links, members, invites, and public share state are not date-shifted
+- Missing source or target start dates disable date shifting safely
+- Existing module defaults, copy relationships, rollback behavior, and permissions remain unchanged
+- No migrations, dependencies, schema, RLS, RPC, auth, or backend architecture changes were added
+
 ## Manual Backend Test Checklist
 
 - Login and logout
@@ -1083,19 +1094,19 @@ Principles:
 
 ## Next Task
 
-Task #075 — Trip Quick Search / Find Anything
+Task #076 — Template Date Shift
 
 Goal:
 
-Add lightweight search across the already-loaded data of one persisted trip.
+Make copied trip content optionally follow the new trip dates.
 
 The task includes:
 
-- A compact Search this trip input on persisted Overview
-- Ranked results across core private trip modules
-- Navigation to existing tabs and Overview anchors
-- Read-only search for viewers without new backend behavior
+- An optional date-shift control in Use as template
+- A safe day offset based on original and new trip start dates
+- Shifted Planner, Reservation, and Budget dates
+- Preserved times, durations, module defaults, and rollback behavior
 
 Important:
 
-Search uses data already loaded by Trip Detail. No migrations, dependencies, backend search, schema, RLS, RPC, auth, or public-share changes are added.
+No migrations, dependencies, schema, RLS, RPC, auth, or public-share changes are added.

@@ -91,10 +91,21 @@ Production URL: https://travora-theta.vercel.app
 - [ ] Public share is disabled on copied trip
 - [ ] Invite links and members are not copied
 - [ ] Source public share section settings are not copied
-- [ ] Dates and times are copied as-is with a visible warning
+- [ ] Date shift defaults on when the source trip has a start date
+- [ ] Changing the new trip start date updates date-shift availability and copy
+- [ ] Disabling date shift copies dates and times as-is with a visible warning
+- [ ] Missing source or target start date disables shifting with clear guidance
+- [ ] Matching source and target start dates produce a safe zero-day shift
+- [ ] Selected Planner item dates shift by the trip start-date offset
+- [ ] Planner start/end times remain unchanged
+- [ ] Selected Reservation start/end timestamps shift by the same day offset
+- [ ] Reservation time of day and duration remain unchanged
+- [ ] Selected Budget expense dates shift by the same day offset
+- [ ] Places, Packing, Important Info, and Travel Links are not date-shifted
+- [ ] Date shift does not change module selection defaults
 - [ ] Template flow has no mobile overflow
 - [ ] Original trip is unchanged after duplication
-- [ ] No migration or dependency was added for template improvements
+- [ ] No migration or dependency was added for template date shifting
 
 ## Trip detail tabs
 

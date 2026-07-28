@@ -117,6 +117,7 @@ export async function duplicateTripAction(
   const title = readField(formData, "title");
   const startDate = readField(formData, "startDate");
   const endDate = readField(formData, "endDate");
+  const shiftDates = formData.get("shiftDates") === "on";
   const options = {
     places: formData.get("copyPlaces") === "on",
     planner: formData.get("copyPlanner") === "on",
@@ -141,6 +142,7 @@ export async function duplicateTripAction(
     title,
     startDate,
     endDate,
+    shiftDates,
     options,
   });
   if (result.error) return { status: "error", message: result.error.message };

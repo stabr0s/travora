@@ -1,7 +1,7 @@
 "use client";
 
 import { Copy } from "lucide-react";
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 
 import {
   Button,
@@ -25,42 +25,12 @@ type DuplicateTripCardProps = {
 };
 
 const copyOptions = [
-  {
-    name: "copyPlaces",
-    label: "Places",
-    description: "Saved places without historical map fields.",
-    defaultChecked: true,
-  },
-  {
-    name: "copyPlanner",
-    label: "Planner",
-    description: "Day plans, dates, and times copied as-is.",
-    defaultChecked: true,
-  },
-  {
-    name: "copyPacking",
-    label: "Packing items",
-    description: "Checklist items with packed progress reset.",
-    defaultChecked: true,
-  },
-  {
-    name: "copyImportantInfo",
-    label: "Important Info",
-    description: "Private trip notes and reference details.",
-    defaultChecked: true,
-  },
-  {
-    name: "copyReservations",
-    label: "Reservations",
-    description: "Booking details and dates copied as-is.",
-    defaultChecked: false,
-  },
-  {
-    name: "copyBudget",
-    label: "Budget expenses",
-    description: "Expenses without payer or split references.",
-    defaultChecked: false,
-  },
+  { name: "copyPlaces", label: "Places", description: "Saved places without historical map fields.", defaultChecked: true },
+  { name: "copyPlanner", label: "Planner", description: "Day plans, dates, and times.", defaultChecked: true },
+  { name: "copyPacking", label: "Packing items", description: "Checklist items with packed progress reset.", defaultChecked: true },
+  { name: "copyImportantInfo", label: "Important Info", description: "Private trip notes and reference details.", defaultChecked: true },
+  { name: "copyReservations", label: "Reservations", description: "Booking details, dates, and times.", defaultChecked: false },
+  { name: "copyBudget", label: "Budget expenses", description: "Expenses without payer or split references.", defaultChecked: false },
   {
     name: "copyTravelLinks",
     label: "Trip-level Travel Links",
@@ -70,10 +40,14 @@ const copyOptions = [
 ] as const;
 
 export function DuplicateTripCard({ trip }: DuplicateTripCardProps) {
+  const [startDate, setStartDate] = useState(trip.start_date || "");
+  const [shiftDates, setShiftDates] = useState(Boolean(trip.start_date));
   const [state, formAction, isPending] = useActionState(
     duplicateTripAction,
     initialState,
   );
+  const canShiftDates = Boolean(trip.start_date && startDate);
+  const isShiftEnabled = canShiftDates && shiftDates;
 
   return (
     <Card padding="lg">
@@ -111,7 +85,8 @@ export function DuplicateTripCard({ trip }: DuplicateTripCardProps) {
               className={fieldClassName}
               name="startDate"
               type="date"
-              defaultValue={trip.start_date || ""}
+              value={startDate}
+              onChange={(event) => setStartDate(event.target.value)}
             />
           </label>
           <label className="block text-sm font-medium text-foreground">
@@ -123,6 +98,34 @@ export function DuplicateTripCard({ trip }: DuplicateTripCardProps) {
               defaultValue={trip.end_date || ""}
             />
           </label>
+        </div>
+
+        <div className="rounded-xl border border-border-subtle bg-surface px-4 py-3">
+          <label className="flex min-w-0 items-start gap-3">
+            <input
+              className="mt-0.5 size-4 shrink-0 accent-primary"
+              name="shiftDates"
+              type="checkbox"
+              checked={isShiftEnabled}
+              onChange={(event) => setShiftDates(event.target.checked)}
+              disabled={!canShiftDates}
+            />
+            <span className="min-w-0">
+              <span className="block text-sm font-medium text-foreground">
+                Shift copied dates to the new trip dates
+              </span>
+              <span className="mt-0.5 block text-xs leading-relaxed text-muted">
+                Moves copied Planner, Reservations and Budget dates by the difference between the original start date and the new start date.
+              </span>
+            </span>
+          </label>
+          <p className="mt-2 text-xs leading-relaxed text-muted">
+            {!canShiftDates
+              ? "Add a start date to both trips to shift copied dates."
+              : isShiftEnabled
+                ? "Dates will be shifted relative to the new trip start."
+                : "Dates and times will be copied as-is and may need manual adjustment."}
+          </p>
         </div>
 
         <fieldset>
@@ -155,7 +158,6 @@ export function DuplicateTripCard({ trip }: DuplicateTripCardProps) {
         </fieldset>
 
         <div className="space-y-1.5 rounded-xl bg-surface px-4 py-3 text-sm leading-relaxed text-muted">
-          <p>Dates and times are copied as-is and may need manual adjustment.</p>
           <p>Reservations and Budget are usually trip-specific, so they are off by default.</p>
           <p>Members, invites, public share links, and personal packing progress are never copied.</p>
           <p>Reservation links require both Reservations and Travel Links to be selected.</p>
