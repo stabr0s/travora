@@ -5,15 +5,26 @@ type DateShiftResolution =
   | { days: number; error: null }
   | { days: null; error: string };
 
-function parseDateOnly(value: string) {
+function parseDateOnlyUtc(value: string) {
   if (!dateOnlyPattern.test(value)) return null;
 
-  const timestamp = Date.parse(`${value}T00:00:00Z`);
-  if (Number.isNaN(timestamp)) return null;
+  const [year, month, day] = value.split("-").map(Number);
+  const timestamp = Date.UTC(year, month - 1, day);
+  const parsed = new Date(timestamp);
 
-  return new Date(timestamp).toISOString().slice(0, 10) === value
+  return parsed.getUTCFullYear() === year
+    && parsed.getUTCMonth() === month - 1
+    && parsed.getUTCDate() === day
     ? timestamp
     : null;
+}
+
+function formatDateOnlyUtc(timestamp: number) {
+  const date = new Date(timestamp);
+  const year = String(date.getUTCFullYear()).padStart(4, "0");
+  const month = String(date.getUTCMonth() + 1).padStart(2, "0");
+  const day = String(date.getUTCDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
 }
 
 export function resolveDateShift(
@@ -29,8 +40,8 @@ export function resolveDateShift(
     };
   }
 
-  const sourceTimestamp = parseDateOnly(sourceStartDate);
-  const targetTimestamp = parseDateOnly(targetStartDate);
+  const sourceTimestamp = parseDateOnlyUtc(sourceStartDate);
+  const targetTimestamp = parseDateOnlyUtc(targetStartDate);
   if (sourceTimestamp === null || targetTimestamp === null) {
     return {
       days: null,
@@ -50,12 +61,10 @@ export function shiftDateOnly(
 ) {
   if (!value || days === 0) return value;
 
-  const timestamp = parseDateOnly(value);
+  const timestamp = parseDateOnlyUtc(value);
   if (timestamp === null) return value;
 
-  return new Date(timestamp + days * millisecondsPerDay)
-    .toISOString()
-    .slice(0, 10);
+  return formatDateOnlyUtc(timestamp + days * millisecondsPerDay);
 }
 
 export function shiftTimestamp(

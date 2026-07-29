@@ -1007,6 +1007,8 @@ Status: IN PROGRESS
 
 - Use as template can optionally shift copied dates relative to the new trip start
 - The day offset is calculated from the original and new trip start dates
+- Hotfix #076A made date-only parsing deterministic with manual UTC calendar math
+- The offset direction is always new trip start minus original trip start
 - Planner dates, Reservation start/end timestamps, and Budget expense dates shift only when their modules are selected
 - Planner times and Reservation time/duration are preserved
 - Places, Packing, Important Info, Travel Links, members, invites, and public share state are not date-shifted

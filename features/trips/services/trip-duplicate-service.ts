@@ -97,7 +97,9 @@ export async function duplicateTrip(
     return { data: null, error: { code: "PERMISSION_DENIED", message: "Only owners and editors can duplicate this trip." } };
   }
 
-  const dateShift = resolveDateShift(sourceTrip.start_date, input.startDate, input.shiftDates === true);
+  const sourceStartDate = sourceTrip.start_date;
+  const targetStartDate = input.startDate;
+  const dateShift = resolveDateShift(sourceStartDate, targetStartDate, input.shiftDates === true);
   if (dateShift.days === null) {
     return { data: null, error: { code: "INVALID_TRIP", message: dateShift.error } };
   }

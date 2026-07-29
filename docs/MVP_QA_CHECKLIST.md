@@ -96,6 +96,11 @@ Production URL: https://travora-theta.vercel.app
 - [ ] Disabling date shift copies dates and times as-is with a visible warning
 - [ ] Missing source or target start date disables shifting with clear guidance
 - [ ] Matching source and target start dates produce a safe zero-day shift
+- [ ] Source `2026-05-01` to target `2026-06-10` produces a `+40` day offset
+- [ ] Planner date `2026-05-02` shifted by `+40` becomes `2026-06-11`
+- [ ] Source `2026-06-10` to target `2026-05-01` produces a `-40` day offset
+- [ ] Invalid anchor dates fail safely before the copied trip is created
+- [ ] Null child dates remain null and invalid child dates remain unchanged
 - [ ] Selected Planner item dates shift by the trip start-date offset
 - [ ] Planner start/end times remain unchanged
 - [ ] Selected Reservation start/end timestamps shift by the same day offset
