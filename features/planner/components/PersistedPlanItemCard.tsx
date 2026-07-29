@@ -12,6 +12,7 @@ import {
 import { Badge, Button, Card } from "@/components/ui";
 import type { PersistedPlace } from "@/features/places/types/persisted-place";
 import type { PersistedPlannerItem } from "@/features/planner/types/persisted-planner";
+import { tripSearchAnchors } from "@/features/trip-detail/utils/trip-search-anchors";
 
 type PersistedPlanItemCardProps = {
   item: PersistedPlannerItem;
@@ -63,7 +64,11 @@ export function PersistedPlanItemCard({
     : null;
 
   return (
-    <Card padding="sm" className="bg-background/70">
+    <Card
+      id={tripSearchAnchors.plannerItem(item.id)}
+      padding="sm"
+      className="scroll-mt-24 bg-background/70"
+    >
       <div className="flex flex-col gap-3 sm:flex-row">
         <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary-subtle">
           <CalendarClock className="size-5 text-primary" strokeWidth={1.75} />

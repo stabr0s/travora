@@ -6,6 +6,7 @@ import {
   getPackingCategory,
   packingCategoryLabels,
 } from "@/features/packing/utils/packing-display";
+import { tripSearchAnchors } from "@/features/trip-detail/utils/trip-search-anchors";
 import { cn } from "@/lib/utils";
 
 type PersistedPackingItemRowProps = {
@@ -37,7 +38,10 @@ export function PersistedPackingItemRow({
   const categoryLabel = packingCategoryLabels[getPackingCategory(item.category)];
 
   return (
-    <div className="flex min-w-0 items-start gap-2 px-3 py-2.5 sm:px-4">
+    <div
+      id={tripSearchAnchors.packingItem(item.id)}
+      className="flex min-w-0 scroll-mt-24 items-start gap-2 px-3 py-2.5 sm:px-4"
+    >
       <label className={cn(
         "-ml-1 flex size-10 shrink-0 items-center justify-center rounded-lg",
         canToggle ? "cursor-pointer hover:bg-surface" : "cursor-not-allowed",

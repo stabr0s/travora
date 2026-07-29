@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { Card } from "@/components/ui";
 import { PersistedBudgetSection } from "@/features/budget";
 import type { PersistedBudgetExpense } from "@/features/budget/types/persisted-budget";
@@ -22,6 +21,7 @@ import { PersistedTripHero } from "@/features/trip-detail/components/PersistedTr
 import { PersistedTripOverview } from "@/features/trip-detail/components/PersistedTripOverview";
 import { TripQuickSearch } from "@/features/trip-detail/components/TripQuickSearch";
 import { TripTabs } from "@/features/trip-detail/components/TripTabs";
+import { useTripSearchNavigation } from "@/features/trip-detail/hooks/useTripSearchNavigation";
 import type { TripImportantInfo } from "@/features/trip-detail/types/important-info";
 import type { TripDetailTabId } from "@/features/trip-detail/types/trip-detail";
 import type { PersistedTravelLink } from "@/features/travel-links/types/travel-link";
@@ -78,7 +78,8 @@ export function PersistedTripDetailScreen({
   travelLinks,
   travelLinksError,
 }: PersistedTripDetailScreenProps) {
-  const [activeTab, setActiveTab] = useState<TripDetailTabId>(initialTab);
+  const { activeTab, handleSearchNavigate, handleTabChange } =
+    useTripSearchNavigation(initialTab);
   const canEditTrip = currentUserRole === "owner" || currentUserRole === "editor";
   const canTogglePackingState = currentUserRole === "owner" || currentUserRole === "editor" || currentUserRole === "viewer";
   const canManageParticipants = currentUserRole === "owner";
@@ -92,7 +93,7 @@ export function PersistedTripDetailScreen({
           You have view-only access to trip content. You can still update your own packing progress.
         </Card>
       ) : null}
-      <TripTabs activeTab={activeTab} onTabChange={setActiveTab} showSettings />
+      <TripTabs activeTab={activeTab} onTabChange={handleTabChange} showSettings />
       {activeTab === "overview" ? (
         <>
           <TripQuickSearch
@@ -103,7 +104,7 @@ export function PersistedTripDetailScreen({
             packingItems={packingItems}
             travelLinks={travelLinks}
             importantInfo={importantInfo}
-            onNavigate={setActiveTab}
+            onNavigate={handleSearchNavigate}
           />
           <PersistedTripOverview
             tripId={trip.id}
@@ -125,7 +126,7 @@ export function PersistedTripDetailScreen({
             publicShareEnabled={trip.public_share_enabled}
             publicSharePath={canManageSettings && trip.public_share_enabled && trip.public_share_token
               ? `/share/${trip.public_share_token}` : undefined}
-            onNavigate={setActiveTab}
+            onNavigate={handleTabChange}
           />
         </>
       ) : activeTab === "places" ? (

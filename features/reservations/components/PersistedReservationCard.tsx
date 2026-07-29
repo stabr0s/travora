@@ -22,6 +22,7 @@ import {
   getReservationStatusDetails,
   getReservationTypeLabel,
 } from "@/features/reservations/utils/reservation-display";
+import { tripSearchAnchors } from "@/features/trip-detail/utils/trip-search-anchors";
 import { TravelLinksCard } from "@/features/travel-links";
 import type { PersistedTravelLink } from "@/features/travel-links/types/travel-link";
 
@@ -65,7 +66,11 @@ export function PersistedReservationCard({
   const notes = shortenNotes(reservation.notes);
 
   return (
-    <Card padding="sm" className="h-full">
+    <Card
+      id={tripSearchAnchors.reservation(reservation.id)}
+      padding="sm"
+      className="h-full scroll-mt-24"
+    >
       <div className="flex flex-col gap-3 sm:flex-row">
         <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary-subtle">
           <Icon className="size-5 text-primary" strokeWidth={1.75} />

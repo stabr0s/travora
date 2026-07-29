@@ -11,6 +11,7 @@ import { TripOverviewStatusGrid } from "@/features/trip-detail/components/TripOv
 import { TripOverviewUpcoming } from "@/features/trip-detail/components/TripOverviewUpcoming";
 import type { TripImportantInfo } from "@/features/trip-detail/types/important-info";
 import type { TripDetailTabId } from "@/features/trip-detail/types/trip-detail";
+import { tripSearchAnchors } from "@/features/trip-detail/utils/trip-search-anchors";
 import {
   countPersonallyPackedItems,
   countUnassignedExpenses,
@@ -101,7 +102,7 @@ export function PersistedTripOverview({
         tripDocumentCount={travelLinks.length}
         tripDocumentsError={travelLinksError}
       />
-      <div id="trip-important-info" className="scroll-mt-6">
+      <div id={tripSearchAnchors.importantInfo} className="scroll-mt-24">
         <PersistedImportantInfoCard
           tripId={tripId}
           importantInfo={importantInfo}
@@ -109,7 +110,7 @@ export function PersistedTripOverview({
           canEditTrip={canEditTrip}
         />
       </div>
-      <div id="trip-travel-links" className="scroll-mt-6">
+      <div id={tripSearchAnchors.travelLinks} className="scroll-mt-24">
         <TravelLinksCard
           tripId={tripId}
           links={travelLinks}

@@ -7,6 +7,7 @@ import type {
   PlacePriority,
   PlaceStatus,
 } from "@/features/places/types/place";
+import { tripSearchAnchors } from "@/features/trip-detail/utils/trip-search-anchors";
 
 const priorityDetails: Record<
   PlacePriority,
@@ -81,7 +82,11 @@ export function PlaceCard({
   }
 
   return (
-    <Card padding="none" className="overflow-hidden">
+    <Card
+      id={tripSearchAnchors.place(place.id)}
+      padding="none"
+      className="scroll-mt-24 overflow-hidden"
+    >
       <div className="space-y-2.5 p-3.5">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">

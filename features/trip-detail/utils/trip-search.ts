@@ -5,6 +5,7 @@ import type { PersistedPlannerItem } from "@/features/planner/types/persisted-pl
 import type { PersistedReservation } from "@/features/reservations/types/persisted-reservation";
 import type { TripImportantInfo } from "@/features/trip-detail/types/important-info";
 import type { TripDetailTabId } from "@/features/trip-detail/types/trip-detail";
+import { tripSearchAnchors } from "@/features/trip-detail/utils/trip-search-anchors";
 import type { PersistedTravelLink } from "@/features/travel-links/types/travel-link";
 import { getTravelLinkTypeLabel } from "@/features/travel-links/utils/travel-link-display";
 
@@ -82,6 +83,7 @@ function createResult(
 
 export function buildTripSearchIndex(data: TripSearchData): TripSearchResult[] {
   const placeNames = new Map(data.places.map((place) => [place.id, place.title]));
+  const reservationIds = new Set(data.reservations.map((reservation) => reservation.id));
 
   const planner = data.plannerItems.map((item, index) => createResult(
     "planner",
@@ -91,6 +93,7 @@ export function buildTripSearchIndex(data: TripSearchData): TripSearchResult[] {
     [item.description, item.end_time, item.type, item.status],
     "plan",
     0,
+    tripSearchAnchors.plannerItem(item.id),
   ));
   const places = data.places.map((place, index) => createResult(
     "places",
@@ -100,6 +103,7 @@ export function buildTripSearchIndex(data: TripSearchData): TripSearchResult[] {
     [place.address, place.status, place.priority, place.notes],
     "places",
     1,
+    tripSearchAnchors.place(place.id),
   ));
   const reservations = data.reservations.map((reservation, index) => createResult(
     "reservations",
@@ -115,6 +119,7 @@ export function buildTripSearchIndex(data: TripSearchData): TripSearchResult[] {
     ],
     "reservations",
     2,
+    tripSearchAnchors.reservation(reservation.id),
   ));
   const budget = data.budgetExpenses.map((expense, index) => createResult(
     "budget",
@@ -124,6 +129,7 @@ export function buildTripSearchIndex(data: TripSearchData): TripSearchResult[] {
     [expense.status, expense.expense_date, expense.notes],
     "budget",
     3,
+    tripSearchAnchors.budgetExpense(expense.id),
   ));
   const packing = data.packingItems.map((item, index) => createResult(
     "packing",
@@ -133,6 +139,7 @@ export function buildTripSearchIndex(data: TripSearchData): TripSearchResult[] {
     [item.notes, item.is_shared ? "shared" : "personal"],
     "packing",
     4,
+    tripSearchAnchors.packingItem(item.id),
   ));
   const travelLinks = data.travelLinks.map((link, index) => createResult(
     "travel-links",
@@ -142,7 +149,11 @@ export function buildTripSearchIndex(data: TripSearchData): TripSearchResult[] {
     [link.note],
     link.reservation_id ? "reservations" : "overview",
     5,
-    link.reservation_id ? undefined : "trip-travel-links",
+    link.reservation_id && reservationIds.has(link.reservation_id)
+      ? tripSearchAnchors.reservation(link.reservation_id)
+      : link.reservation_id
+        ? undefined
+        : tripSearchAnchors.travelLinks,
   ));
   const importantInfo = data.importantInfo?.content?.trim()
     ? [createResult(
@@ -153,7 +164,7 @@ export function buildTripSearchIndex(data: TripSearchData): TripSearchResult[] {
         [data.importantInfo.content],
         "overview",
         6,
-        "trip-important-info",
+        tripSearchAnchors.importantInfo,
       )]
     : [];
 

@@ -5,6 +5,7 @@ import type {
   BudgetParticipantOption,
   PersistedBudgetExpense,
 } from "@/features/budget/types/persisted-budget";
+import { tripSearchAnchors } from "@/features/trip-detail/utils/trip-search-anchors";
 
 type PersistedBudgetExpenseCardProps = {
   expense: PersistedBudgetExpense;
@@ -60,7 +61,11 @@ export function PersistedBudgetExpenseCard({
   const canEdit = Boolean(onEdit && onDelete);
 
   return (
-    <Card padding="sm">
+    <Card
+      id={tripSearchAnchors.budgetExpense(expense.id)}
+      padding="sm"
+      className="scroll-mt-24"
+    >
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-2">

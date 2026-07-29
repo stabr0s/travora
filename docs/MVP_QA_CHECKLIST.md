@@ -140,6 +140,16 @@ Production URL: https://travora-theta.vercel.app
 - [ ] Travel Link title, type, note, or URL domain returns a Travel Links result
 - [ ] Important Info content returns an Important Info result
 - [ ] Clicking a result switches to the correct existing tab or Overview section
+- [ ] Planner result scrolls to the exact Planner item
+- [ ] Place result scrolls to the exact Place card
+- [ ] Reservation result scrolls to the exact Reservation card
+- [ ] Budget result scrolls to the exact expense
+- [ ] Packing result scrolls to the exact Packing item
+- [ ] Important Info result scrolls to the Overview section
+- [ ] Trip-level Travel Link result scrolls to the Overview Travel Links section
+- [ ] Reservation-level Travel Link opens Reservations and targets its Reservation card when available
+- [ ] Missing search anchor falls back to tab switching without an error
+- [ ] Matched content receives a subtle highlight that disappears after about two seconds
 - [ ] Queries shorter than two characters do not show results
 - [ ] Search clear button resets the query
 - [ ] Empty search result shows `No results in this trip.`
@@ -147,7 +157,7 @@ Production URL: https://travora-theta.vercel.app
 - [ ] Participants, emails, invites, tokens, personal states, and internal IDs are not searched or displayed
 - [ ] Public share has no search and remains unchanged
 - [ ] Mock trips render without persisted quick search
-- [ ] Trip search has no mobile overflow
+- [ ] Trip search and result scrolling are acceptable on mobile without overflow
 - [ ] No migration, dependency, or backend search was added
 - [ ] Persisted Overview shows the next Planner items
 - [ ] Persisted Overview shows upcoming Reservations

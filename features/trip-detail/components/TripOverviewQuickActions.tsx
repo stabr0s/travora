@@ -3,6 +3,7 @@ import { ArrowUpRight, FileText, Info, ListChecks, ReceiptText, Share2, WalletCa
 
 import { Button, Card } from "@/components/ui";
 import type { TripDetailTabId } from "@/features/trip-detail/types/trip-detail";
+import { tripSearchAnchors } from "@/features/trip-detail/utils/trip-search-anchors";
 
 type TripOverviewQuickActionsProps = {
   canEditTrip: boolean;
@@ -21,14 +22,14 @@ export function TripOverviewQuickActions({
   onNavigate,
 }: TripOverviewQuickActionsProps) {
   function scrollToImportantInfo() {
-    document.getElementById("trip-important-info")?.scrollIntoView({
+    document.getElementById(tripSearchAnchors.importantInfo)?.scrollIntoView({
       behavior: "smooth",
       block: "start",
     });
   }
 
   function scrollToTravelLinks() {
-    document.getElementById("trip-travel-links")?.scrollIntoView({
+    document.getElementById(tripSearchAnchors.travelLinks)?.scrollIntoView({
       behavior: "smooth",
       block: "start",
     });

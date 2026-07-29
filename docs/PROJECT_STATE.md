@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 76 — Template Date Shift
+Sprint 77 — Search Result Anchors Polish
 
 Status: IN PROGRESS
 
@@ -1016,6 +1016,16 @@ Status: IN PROGRESS
 - Existing module defaults, copy relationships, rollback behavior, and permissions remain unchanged
 - No migrations, dependencies, schema, RLS, RPC, auth, or backend architecture changes were added
 
+## Search Result Anchors Polish
+
+- Trip Quick Search result clicks now switch tabs and scroll to exact cards or sections when possible
+- Stable anchors were added for Planner, Places, Reservations, Budget, Packing, Important Info, and Travel Links
+- Pending anchor scrolling is handled after the target tab renders
+- Matched content receives a subtle temporary highlight without changing layout
+- Missing anchors fall back safely to the requested tab without an error
+- Viewer read-only behavior, mock trips, and public share remain unchanged
+- No migrations, dependencies, backend search, schema, RLS, RPC, or auth changes were added
+
 ## Manual Backend Test Checklist
 
 - Login and logout
@@ -1096,19 +1106,19 @@ Principles:
 
 ## Next Task
 
-Task #076 — Template Date Shift
+Task #077 — Search Result Anchors Polish
 
 Goal:
 
-Make copied trip content optionally follow the new trip dates.
+Make Trip Quick Search navigation precise across persisted trip content.
 
 The task includes:
 
-- An optional date-shift control in Use as template
-- A safe day offset based on original and new trip start dates
-- Shifted Planner, Reservation, and Budget dates
-- Preserved times, durations, module defaults, and rollback behavior
+- Stable DOM anchors for searchable persisted records
+- Tab switching followed by post-render smooth scrolling
+- A subtle temporary highlight for the matched card or section
+- Safe tab-only fallback when an anchor is unavailable
 
 Important:
 
-No migrations, dependencies, schema, RLS, RPC, auth, or public-share changes are added.
+No migrations, dependencies, backend search, schema, RLS, RPC, auth, or public-share changes are added.

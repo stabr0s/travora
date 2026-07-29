@@ -14,7 +14,7 @@ import {
 } from "@/features/trip-detail/utils/trip-search";
 
 type TripQuickSearchProps = TripSearchData & {
-  onNavigate: (tab: TripDetailTabId) => void;
+  onNavigate: (tab: TripDetailTabId, anchor?: string) => void;
 };
 
 const moduleLabels: Record<TripSearchModule, string> = {
@@ -67,15 +67,7 @@ export function TripQuickSearch({
 
   function handleResultClick(result: TripSearchResult) {
     setQuery("");
-    onNavigate(result.targetTab);
-    if (!result.targetAnchor) return;
-
-    window.setTimeout(() => {
-      document.getElementById(result.targetAnchor || "")?.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-    }, 0);
+    onNavigate(result.targetTab, result.targetAnchor);
   }
 
   return (
