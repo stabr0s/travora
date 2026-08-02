@@ -6,8 +6,9 @@ export type NextTrip = {
   id: string;
   title: string;
   country: string;
-  startDate: string;
+  startDate: string | null;
   endDate: string | null;
+  timing?: "ongoing" | "upcoming";
   participants: number | null;
   costPerPerson: number | null;
   currency: string;

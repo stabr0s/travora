@@ -2,40 +2,62 @@ import Link from "next/link";
 import { EmptyState } from "@/components/ui";
 import { NewTripCard } from "@/features/trips/components/NewTripCard";
 import { TripCard } from "@/features/trips/components/TripCard";
-import type { Trip } from "@/features/trips/types/trip";
+import type { OrganizedTripGroup } from "@/features/trips/utils/trip-organization";
 import { SearchX } from "lucide-react";
 
 type TripsGridProps = {
-  trips: Trip[];
+  groups: OrganizedTripGroup[];
+  showNewTripCard?: boolean;
   emptyTitle?: string;
   emptyDescription?: string;
   emptyAction?: React.ReactNode;
 };
 
 export function TripsGrid({
-  trips,
+  groups,
+  showNewTripCard = true,
   emptyTitle = "No trips in this view",
   emptyDescription = "Try another filter or create a new trip to get started.",
   emptyAction,
 }: TripsGridProps) {
+  const tripCount = groups.reduce((total, group) => total + group.trips.length, 0);
+
   return (
-    <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-      {trips.map((trip) => (
-        <TripCard key={trip.id} trip={trip} />
+    <div className="space-y-6">
+      {groups.map((group) => (
+        <section key={group.id} aria-labelledby={`trip-group-${group.id}`}>
+          <div className="mb-3 flex items-center gap-2">
+            <h2
+              id={`trip-group-${group.id}`}
+              className="text-base font-semibold tracking-tight text-foreground"
+            >
+              {group.label}
+            </h2>
+            <span className="rounded-full bg-surface px-2 py-0.5 text-xs font-medium text-muted">
+              {group.trips.length}
+            </span>
+          </div>
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {group.trips.map((trip) => <TripCard key={trip.id} trip={trip} />)}
+          </div>
+        </section>
       ))}
 
-      {trips.length === 0 ? (
+      {tripCount === 0 ? (
         <EmptyState
           icon={SearchX}
           title={emptyTitle}
           description={emptyDescription}
-          className="md:col-span-2 xl:col-span-2"
           action={emptyAction}
         />
       ) : null}
 
-      <NewTripCard />
-    </section>
+      {showNewTripCard ? (
+        <section className="grid md:grid-cols-2 xl:grid-cols-3" aria-label="Create trip">
+          <NewTripCard />
+        </section>
+      ) : null}
+    </div>
   );
 }
 

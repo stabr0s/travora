@@ -7,12 +7,14 @@ import { getTripCardsForCurrentUser } from "@/features/trips/services/trips-serv
 
 export default async function TripsPage() {
   const result = await getTripCardsForCurrentUser();
+  const today = new Date().toISOString().slice(0, 10);
 
   if (result.data) {
     return (
       <TripsScreen
         trips={result.data.map((card) => mapPersistedTripToTrip(card.trip, card.role))}
         mode="saved"
+        today={today}
       />
     );
   }
@@ -25,6 +27,7 @@ export default async function TripsPage() {
     <TripsScreen
       trips={mockTrips.map((trip) => ({ ...trip, isDemo: true }))}
       mode="fallback"
+      today={today}
     />
   );
 }

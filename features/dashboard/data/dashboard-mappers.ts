@@ -2,6 +2,7 @@ import type { DashboardData, NextTrip } from "@/features/dashboard/types/dashboa
 import { mapPersistedTripToTrip } from "@/features/trips/data/trip-mappers";
 import type { PersistedTripCard } from "@/features/trips/types/persisted-trip";
 import type { Trip } from "@/features/trips/types/trip";
+import { getTodayUtc, organizeTrips } from "@/features/trips/utils/trip-organization";
 
 function formatDate(value: string) {
   return new Intl.DateTimeFormat("en-US", {
@@ -29,13 +30,14 @@ function getDaysUntil(startDate: string | null) {
   return Math.max(0, Math.ceil(diff / 86_400_000));
 }
 
-function mapNextTrip(trip: Trip): NextTrip {
+function mapNextTrip(trip: Trip, timing: "ongoing" | "upcoming"): NextTrip {
   return {
     id: trip.id,
     title: trip.title,
     country: trip.country,
-    startDate: trip.startDate || new Date().toISOString().slice(0, 10),
+    startDate: trip.startDate,
     endDate: trip.endDate,
+    timing,
     participants: trip.participants,
     costPerPerson: trip.costPerPerson,
     currency: trip.currency,
@@ -50,9 +52,15 @@ export function mapPersistedTripCardsToDashboard(
   cards: PersistedTripCard[],
 ): DashboardData {
   const trips = cards.map((card) => mapPersistedTripToTrip(card.trip, card.role));
-  const upcomingTrips = trips
-    .filter((trip) => trip.startDate && trip.status !== "archived")
-    .sort((a, b) => String(a.startDate).localeCompare(String(b.startDate)));
+  const activeGroups = organizeTrips(
+    trips.filter((trip) => trip.status !== "archived"),
+    getTodayUtc(),
+  );
+  const ongoingTrips = activeGroups.find((group) => group.id === "ongoing")?.trips || [];
+  const upcomingTrips = activeGroups.find((group) => group.id === "upcoming")?.trips || [];
+  const nextTrip = ongoingTrips[0]
+    ? mapNextTrip(ongoingTrips[0], "ongoing")
+    : upcomingTrips[0] ? mapNextTrip(upcomingTrips[0], "upcoming") : null;
   const recentTrips = [...trips].sort((a, b) =>
     String(b.updatedAt || b.createdAt || "").localeCompare(String(a.updatedAt || a.createdAt || "")),
   );
@@ -60,11 +68,11 @@ export function mapPersistedTripCardsToDashboard(
 
   return {
     user: { name: "traveler" },
-    nextTrip: upcomingTrips[0] ? mapNextTrip(upcomingTrips[0]) : null,
+    nextTrip,
     stats: [
       { id: "total", label: "Saved trips", value: String(trips.length), change: "Available from your account" },
-      { id: "planning", label: "Planning", value: String(trips.filter((trip) => trip.status === "planning").length) },
-      { id: "upcoming", label: "Upcoming", value: String(trips.filter((trip) => trip.status === "upcoming").length) },
+      { id: "ongoing", label: "Ongoing", value: String(ongoingTrips.length) },
+      { id: "upcoming", label: "Upcoming", value: String(upcomingTrips.length) },
       { id: "shared", label: "Shared with you", value: String(sharedTrips), change: "Editor or viewer access" },
     ],
     quickActions: [

@@ -39,7 +39,7 @@ export function DashboardScreen({ data = mockDashboardData }: DashboardScreenPro
         ) : (
           <EmptyState
             icon={Plane}
-            title="No upcoming trips yet"
+            title="No current or upcoming trips"
             description="Create a trip with dates to make it your next adventure."
             className="min-h-44"
             action={

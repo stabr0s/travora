@@ -8,7 +8,7 @@ The project is currently in early MVP development.
 
 ## Current Sprint
 
-Sprint 77 — Search Result Anchors Polish
+Sprint 78 — Dashboard Trip Organization Polish
 
 Status: IN PROGRESS
 
@@ -1026,6 +1026,17 @@ Status: IN PROGRESS
 - Viewer read-only behavior, mock trips, and public share remain unchanged
 - No migrations, dependencies, backend search, schema, RLS, RPC, or auth changes were added
 
+## Dashboard Trip Organization Polish
+
+- The main Trips list groups saved trips into Ongoing, Upcoming, Drafts, and Past sections
+- Client-side trip search filters already-loaded data by title and destination
+- Empty states distinguish an empty account, filtered views, and no search matches
+- Dashboard Next Trip selection now prefers Ongoing and then the nearest Upcoming trip
+- Finished, archived, and undated trips are no longer selected as the next trip
+- Existing card actions, role/status metadata, logged-out demo redirects, and mock trips remain unchanged
+- Recently opened tracking was intentionally postponed because no existing local persistence pattern is available
+- No migrations, dependencies, backend queries, schema, RLS, RPC, or auth changes were added
+
 ## Manual Backend Test Checklist
 
 - Login and logout
@@ -1106,19 +1117,19 @@ Principles:
 
 ## Next Task
 
-Task #077 — Search Result Anchors Polish
+Task #078 — Dashboard Trip Organization Polish
 
 Goal:
 
-Make Trip Quick Search navigation precise across persisted trip content.
+Make larger trip collections easier to scan and search.
 
 The task includes:
 
-- Stable DOM anchors for searchable persisted records
-- Tab switching followed by post-render smooth scrolling
-- A subtle temporary highlight for the matched card or section
-- Safe tab-only fallback when an anchor is unavailable
+- Ongoing, Upcoming, Drafts, and Past groups on the main Trips list
+- Client-side filtering by trip title and destination
+- Clear empty and no-results states
+- A compact dashboard that excludes finished trips from Next Trip
 
 Important:
 
-No migrations, dependencies, backend search, schema, RLS, RPC, auth, or public-share changes are added.
+No migrations, dependencies, backend queries, schema, RLS, RPC, auth, or public-share changes are added.

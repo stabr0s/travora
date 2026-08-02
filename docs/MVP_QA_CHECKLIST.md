@@ -45,10 +45,22 @@ Production URL: https://travora-theta.vercel.app
 ## Dashboard and trips list
 
 - [ ] Signed-in `/dashboard` shows persisted trip summary
+- [ ] Dashboard Next Trip prefers an ongoing trip
+- [ ] Dashboard Next Trip otherwise shows the nearest upcoming trip
+- [ ] Dashboard Next Trip never selects a finished, archived, or undated trip
 - [ ] Dashboard shows useful trip information above the fold
 - [ ] Dashboard empty state works for user with no trips
 - [ ] Dashboard getting started card is visible and useful
 - [ ] Signed-in `/trips` shows persisted trips
+- [ ] Trips list groups ongoing trips correctly
+- [ ] Trips list groups upcoming trips correctly
+- [ ] Trips list groups past trips correctly
+- [ ] Trips list groups draft/no-date trips correctly
+- [ ] Empty timing groups stay hidden
+- [ ] Trip search filters by title/name
+- [ ] Trip search filters by destination when available
+- [ ] No-results search shows a clear empty state
+- [ ] Clearing search restores grouped trips
 - [ ] Trips shows more cards above the fold after strong hierarchy pass
 - [ ] Trips cards are compact and readable on desktop/mobile
 - [ ] Trip cards show role/status/date metadata
@@ -57,6 +69,8 @@ Production URL: https://travora-theta.vercel.app
 - [ ] Deleted trips disappear after refresh
 - [ ] Logged-out `/dashboard` redirects safely to public demo
 - [ ] Logged-out `/trips` redirects safely to public demo
+- [ ] Grouping and search have no mobile overflow
+- [ ] No migration or dependency was added for trip organization
 
 ## Trip lifecycle
 

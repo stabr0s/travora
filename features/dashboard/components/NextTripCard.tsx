@@ -8,14 +8,21 @@ type NextTripCardProps = {
   trip: NextTrip;
 };
 
-function formatDateRange(startDate: string, endDate: string | null): string {
-  const start = new Date(startDate);
+function formatDateRange(startDate: string | null, endDate: string | null): string {
   const formatter = new Intl.DateTimeFormat("en-US", {
     month: "short",
     day: "numeric",
+    timeZone: "UTC",
   });
   const yearFormatter = new Intl.DateTimeFormat("en-US", { year: "numeric", timeZone: "UTC" });
 
+  if (!startDate && !endDate) return "Dates not set";
+  if (!startDate && endDate) {
+    const end = new Date(endDate);
+    return `Until ${formatter.format(end)}, ${yearFormatter.format(end)}`;
+  }
+
+  const start = new Date(String(startDate));
   if (!endDate) return `From ${formatter.format(start)}, ${yearFormatter.format(start)}`;
 
   const end = new Date(endDate);
@@ -49,7 +56,9 @@ export function NextTripCard({ trip }: NextTripCardProps) {
         <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-2">
-              <Badge variant="default">Current trip</Badge>
+              <Badge variant="default">
+                {trip.timing === "ongoing" ? "Ongoing trip" : "Next trip"}
+              </Badge>
               <span className="text-xs font-medium text-muted">{trip.country}</span>
             </div>
             <h3 className="mt-2 break-words text-xl font-semibold tracking-tight text-foreground">
@@ -110,7 +119,9 @@ export function NextTripCard({ trip }: NextTripCardProps) {
               {formatCurrency(trip.costPerPerson, trip.currency)}
             </p>
             <p className="mt-0.5 text-xs text-muted">
-              {trip.daysUntil === null ? "Flexible dates" : `${trip.daysUntil} days until departure`}
+              {trip.timing === "ongoing"
+                ? "Happening now"
+                : trip.daysUntil === null ? "Flexible dates" : `${trip.daysUntil} days until departure`}
             </p>
           </div>
         </div>
